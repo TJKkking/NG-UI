@@ -1,0 +1,81 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<div *ngIf="topologyType === 'Add'">
+  <form [formGroup]="addConfirmationForm" (ngSubmit)="addConfirmation()" autocomplete="off">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{'CREATE' | translate}}
+        {{ topologytitle | translate}}
+      </h4>
+      <button class="button-xs" type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+        <i class="fas fa-times-circle text-danger"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="topologyType === 'Add'">
+        <p [innerHTML]="topologyname"></p>
+        <ng-select placeholder="{{'SELECT' | translate}}" formControlName="cpName" [items]="cpDetails" bindLabel="name"
+          bindValue="name" [(ngModel)]="connectionPointInput"
+          [ngClass]="{ 'is-invalid': submitted && f.cpName.errors }"></ng-select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="activeModal.close()">{{'CANCEL' | translate}}</button>
+      <button type="submit" class="btn btn-primary">{{'OK' | translate }}</button>
+    </div>
+  </form>
+</div>
+<div *ngIf="topologyType !== 'Add'">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      {{(topologyType === 'Delete' ? 'DELETE' : (topologyType === 'Add' ? 'CREATE' : '')) | translate}}
+      {{ topologytitle | translate}}
+    </h4>
+    <button class="button-xs" type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+      <i class="fas fa-times-circle text-danger"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <span *ngIf="topologyType === 'Delete'">{{'DELETECONFIRMPOPUPMESSAGE' | translate}} {{ topologyname }} ?</span>
+    <ul *ngIf="topologyType === 'Info'">
+      <li>
+        <p><b>{{'PAGE.TOPOLOGY.HELPINFO.CREATEEDGE' | translate}}</b>:
+          {{'PAGE.TOPOLOGY.HELPINFO.CREATEEDGEFIRSTSETENCE' | translate}} <span class="help-key">Shift</span> + <span
+            class="help-key">Drag</span> {{'PAGE.TOPOLOGY.HELPINFO.CREATEEDGESECONDSETENCE' | translate}}</p>
+      </li>
+      <li>
+        <p><b>{{'PAGE.TOPOLOGY.HELPINFO.DELETEEDGEVERTEX' | translate}}</b>:
+          {{'PAGE.TOPOLOGY.HELPINFO.DELETEEDGEVERTEXSENTENCE' | translate}}</p>
+      </li>
+      <li>
+        <p><b>{{'PAGE.TOPOLOGY.HELPINFO.SPREADEDGE' | translate}}</b>:
+          {{'PAGE.TOPOLOGY.HELPINFO.SPREADEDGESENTENCE' | translate}} <span class="help-key">ctrl</span> + <span
+            class="help-key">Drag</span></p>
+      </li>
+      <li>
+        <p><b>{{'PAGE.TOPOLOGY.HELPINFO.EDGEINFO' | translate}}</b>:
+          {{'PAGE.TOPOLOGY.HELPINFO.EDGEINFOSENTENCE' | translate}}</p>
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="activeModal.close()">{{'CANCEL' | translate}}</button>
+    <button type="button" *ngIf="topologyType !== 'Info'" (click)="confirmation();"
+      class="btn btn-primary">{{'OK' | translate }}</button>
+  </div>
+</div>

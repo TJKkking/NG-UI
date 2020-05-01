@@ -1,0 +1,160 @@
+/*
+ Copyright 2020 TATA ELXSI
+
+ Licensed under the Apache License, Version 2.0 (the 'License');
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+ */
+ @import "../../assets/scss/mixins/mixin";
+ @import "../../assets/scss/variable";
+ $min-height-set: 200px;
+ .dashboard {
+   .custom-card {
+     word-wrap: break-word;
+     @include box-shadow(0px, 1px, 15px, 0px, rgba(69, 90, 100, 0.1));
+     @include transition(all, 0.2s, null, null);
+     @include roundedCorners(5);
+     @include border(all, 1, solid, rgba(238, 238, 238, 0.75));
+     color: $white;
+     &.card-hover {
+       @include transition(all, 0.25s, ease, null);
+       &:hover {
+         -moz-transform: translateY(-4px) scale(1.01);
+         -ms-transform: translateY(-4px) scale(1.01);
+         -o-transform: translateY(-4px) scale(1.01);
+         transform: translateY(-4px) scale(1.01);
+       }
+     }
+     &.pink-card {
+       @include background(
+         linear-gradient(to left top, #d81b60, #e0306d, #e7407a, #ee4f87, #f55c94),
+         null,
+         null,
+         null,
+         null
+       );
+     }
+     &.purple-card {
+       @include background(
+         linear-gradient(to left top, #605ca8, #736ebb, #8681ce, #9994e2, #aca7f6),
+         null,
+         null,
+         null,
+         null
+       );
+     }
+     &.aqua-card {
+       @include background(
+         linear-gradient(to left top, #00c0ef, #00cdf5, #00dafa, #00e6fd, #0af3ff),
+         null,
+         null,
+         null,
+         null
+       );
+     }
+     .custom-card-header {
+       @include background(null, $primary, null, null, null);
+       @include roundedTop(5);
+       a {
+         color: $white;
+         @include flexbox(flex, space-between, null, null, center, null);
+         @include padding-value(12, 20, 12, 20);
+       }
+     }
+     .card-body {
+       @include padding-value(5, 5, 5, 10);
+       &.list-overflow {
+         overflow-y: scroll;
+         .list-group {
+           .list-group-item {
+             cursor: default;
+             @include border(all, 0, solid, $black-coral);
+             @include border(bottom, 1, solid, rgba(0, 0, 0, 0.125));
+             @include padding-value(10, 0, 10, 0);
+             @include margin-value(0, 0, 0, 0);
+             color: $gray-600;
+             i {
+               cursor: pointer;
+               @include font(null, 14px, null);
+               &.activeProjectLink {
+                 cursor: default;
+               }
+             }
+             &:last-child {
+               @include border(bottom, 0, solid, rgba(0, 0, 0, 0.125));
+             }
+           }
+         }
+         &.failed-instances {
+           max-height: $min-height-set;
+         }
+         &.project-list {
+           max-height: 65vh;
+         }
+       }
+     }
+   }
+   .instances {
+     .graph-section {
+       min-height: $min-height-set;
+       @include flexbox(null, center, null, null, null, null);
+       @include padding-value(10, 10, 10, 10);
+       .card-title {
+         color: $gray-600;
+       }
+       .instances-canvas {
+         @include flexbox(none !important, null, null, null, null, null);
+         &.show-canvas {
+           @include flexbox(block !important, null, null, null, null, null);
+         }
+         #canvas{
+          @include wh-value(100%, $min-height-set);
+        }
+       }
+     }
+   }
+   .module-counts {
+     .status-card {
+       overflow: hidden;
+       @include wh-value(null, 130px);
+       @include roundedCorners(4);
+       @include box-shadow(0px, 5px, 20px, 2px, $transparent-dark-bg);
+       cursor: pointer;
+       @include flexbox(null, null, null, null, center, null);
+       @include padding-value(20, 20, 20, 20);
+       @include border(all, 0, solid, $gray-80);
+       i {
+         @include font(null, 2rem, null);
+         @include margin-value(0, 0, 8, 0);
+       }
+       h6 {
+         @include font(null, 0.8rem, null);
+       }
+       &:hover .link-icon {
+         @include position_value(null, null, -60px, null, null);
+       }
+       .link-icon {
+         @include background(null, rgba(255, 255, 255, 0.5), null, null, null);
+         @include position_value(absolute, 0px, -130px, null, null);
+         @include wh-value(130px, 130px);
+         @include font(null, 30px, null);
+         @include padding-value(40, 20, 40, 20);
+         @include roundedCornersPercentage(50%);
+         @include transition(all, 0.3s, ease-in-out, null);
+         i {
+           @include font(null, 1.875rem, null);
+         }
+       }
+     }
+   }
+ }

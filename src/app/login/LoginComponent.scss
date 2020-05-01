@@ -1,0 +1,156 @@
+/*
+ Copyright 2020 TATA ELXSI
+
+ Licensed under the Apache License, Version 2.0 (the 'License');
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+*/
+@import "../../assets/scss/mixins/mixin";
+@import "../../assets/scss/variable";
+
+.login-container {
+  @include wh-value(100%, 100vh);
+  @include flexbox(flex, center, null, null, center, null);
+  @include background(url("../../assets/images/login_background.jpg"), null, cover, no-repeat, center);
+  background-attachment: fixed;
+  flex-wrap: wrap;
+  .wrap-login {
+    @include background(
+      linear-gradient(
+        to left bottom,
+        #00c0ef,
+        #00b3f9,
+        #3ea3fd,
+        #7190f8,
+        #9c78e8,
+        #a86cdd,
+        #b25fd1,
+        #bb51c3,
+        #b151c4,
+        #a652c6,
+        #9b53c6,
+        #9053c7
+      ),
+      null,
+      null,
+      null,
+      null
+    );
+    @include roundedCorners(15);
+    @include flexbox(flex, space-between, null, null, null, null);
+    @include position_value(relative, null, null, null, null);
+    @include box-shadow(0px, 3px, 10px, 0px, rgba($black, 0.5));
+    @include padding-value(20, 30, 20, 30);
+    flex-wrap: wrap;
+    color: $white;
+    overflow: visible;
+    .login-logo {
+      @include flexbox(flex, center, null, null, center, null);
+      @include position_value(absolute, -80px, null, null, 95px);
+      @include box-shadow(1px, 2px, 0px, 0px, $cerise-pink);
+      @include margin-value(0, 0, 10, 0);
+      @include wh-value(160px, 150px);
+      @include background(null, $white, null, null, null);
+      @include roundedCornersPercentage(50%);
+      img {
+        @include wh-value(130px, auto);
+        @include position_value(null, 50px, null, null, null);
+      }
+    }
+    .login-form {
+      @include wh-value(290px, null);
+      @include padding-value(70, 0, 0, 0);
+      text-align: center;
+      .wrap-input {
+        @include position_value(relative, null, null, null, null);
+        @include wh-value(100%, null);
+        @include margin-value(0, 0, 10, 0);
+        z-index: 1;
+        .input-control {
+          @include font(null, 15px, null);
+          @include line-height(1.5);
+          @include wh-value(100%, 42px);
+          @include padding-value(0, 30, 0, 65);
+          @include flexbox(block, null, null, null, null, null);
+          @include roundedCorners(25);
+          @include border(all, 0, solid, $gray-80);
+          @include background(null, $white, null, null, null);
+          &:focus + .input-icon {
+            color: $cerise-pink;
+            @include padding-value(0, 0, 0, 25);
+          }
+        }
+        .input-icon {
+          @include font(null, 13px, null);
+          @include flexbox(flex, null, null, null, center, null);
+          @include position_value(absolute, null, null, 0, 0);
+          @include wh-value(100%, 100%);
+          @include padding-value(0, 0, 0, 35);
+          @include roundedCorners(25);
+          @include transition(all, 0.5s, null, null);
+          pointer-events: none;
+          color: $gray-600;
+        }
+      }
+      .submit-btn {
+        @include background(null, $white, null, null, null);
+        @include roundedCornersPercentage(50%);
+        @include border(all, 0, solid, $gray-80);
+        @include transition(all, 0.3s, null, null);
+        @include box-shadow(1px, 5px, 5px, 0px, rgba($black, 0.3), inset);
+        cursor: pointer;
+        @include font(null, 25px, null);
+        @include wh-value(60px, 60px);
+        @include margin-value(0, 0, 10, 0);
+        @include padding-value(0, 0, 0, 0);
+        color: $cerise-pink;
+        &:hover {
+          @include box-shadow(1px, 5px, 10px, 0px, rgba($black, 0.3));
+        }
+        .fa {
+          @include transition(all, 0.4s, null, null);
+          @include flexbox(block, null, null, null, null, null);
+          @include padding-value(18, 18, 18, 18);
+          &:hover {
+            transform: scale(1.2);
+          }
+        }
+      }
+      .input-validation-msg {
+        @include roundedCorners(25);
+        @include background(null, $cerise-pink, null, null, null);
+        @include margin-value(0, 0, 10, 0);
+        @include padding-value(1, 0, 1, 15);
+        @include font(null, 11px, null);
+        color: $white;
+        text-align: left;
+      }
+    }
+  }
+}
+.login-footer {
+  @include flexbox(flex, space-between, null, null, center, null);
+  @include position_value(fixed, null, null, 0px, null);
+  @include background(null, $purple, null, null, null);
+  @include wh-value(100%, 40px);
+  @include padding-value(0, 10, 0, 10);
+  color: $white;
+  opacity: 0.9;
+  a {
+    @include font(null, null, bold);
+    color: $white;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

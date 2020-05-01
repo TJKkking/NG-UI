@@ -1,0 +1,42 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<div class="btn-group list action" role="group">
+    <div ngbDropdown class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle action-button" ngbDropdownToggle>
+            {{'ACTION' | translate}}
+        </button>
+        <div class="dropdown-menu" ngbDropdownMenu>
+            <button type="button" class="btn btn-primary dropdown-item" (click)="editUserModal('editPassword')" placement="left" container="body"
+                ngbTooltip="{{'PAGE.USERS.EDITCREDENTIALS' | translate}}">
+                <i class="fa fa-edit icons"></i> {{'PAGE.USERS.EDITCREDENTIALS' | translate}}
+            </button>
+            <button type="button" class="btn btn-primary dropdown-item" (click)="editUserModal('editUserName')" placement="left" container="body"
+                ngbTooltip="{{'PAGE.USERS.EDITUSERNAME' | translate}}">
+                <i class="fas fa-user-edit"></i> {{'PAGE.USERS.EDITUSERNAME' | translate}}
+            </button>
+            <button type="button" class="btn btn-primary dropdown-item" (click)="projectRolesModal()" placement="left" container="body"
+                ngbTooltip="{{'PAGE.USERS.PROJECTSROLES' | translate}}">
+                <i class="fas fa-user-check"></i> {{'PAGE.USERS.PROJECTSROLES' | translate}}
+            </button>
+            <button type="button" class="btn btn-primary dropdown-item" (click)="deleteUser()" placement="left" container="body"
+                ngbTooltip="{{'DELETE' | translate}}">
+                <i class="far fa-trash-alt icons" title="delete"></i> {{'DELETE' | translate}}
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,92 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{'PERFORMACTION' | translate}}</h4>
+    <button class="button-xs" type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+        <i class="fas fa-times-circle text-danger"></i>
+    </button>
+</div>
+<form [formGroup]="primitiveForm" (ngSubmit)="execNSPrimitive()">
+    <div class="modal-body">
+        <div class="form-group row">
+            <label class="col-sm-4 col-form-label">{{'PRIMITIVETYPE' | translate}}*</label>
+            <div class="col-sm-8">
+                <ng-select (change)="primitiveTypeChange($event)" [clearable]="false"
+                    placeholder="{{'SELECT' | translate}}" [items]="primitiveTypeList" bindLabel="title"
+                    bindValue="value" [(ngModel)]="primitiveType" id="primitiveType"
+                    [ngModelOptions]="{standalone: true}"></ng-select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <ng-container *ngIf="primitiveType == 'VNF_Primitive'">
+                <label class="col-sm-4 col-form-label">VNF {{'MEMBERINDEX' | translate}}*</label>
+                <div class="col-sm-3">
+                    <ng-select (change)="indexChange($event)" [clearable]="false" placeholder="{{'SELECT' | translate}}"
+                        [items]="params.memberIndex" bindLabel="member-vnf-index" bindValue="member-vnf-index"
+                        formControlName="vnf_member_index" id="vnf_member_index"
+                        [ngClass]="{ 'is-invalid': submitted && f.vnf_member_index.errors }"></ng-select>
+                </div>
+            </ng-container>
+            <label [ngClass]="{ 'col-sm-4': primitiveType != 'VNF_Primitive', 'col-sm-2': primitiveType == 'VNF_Primitive' }" class="col-form-label">
+                {{'PAGE.NSPRIMITIVE.PRIMITIVE' | translate}}*</label>
+            <div [ngClass]="{ 'col-sm-8': primitiveType != 'VNF_Primitive', 'col-sm-3': primitiveType == 'VNF_Primitive' }" class="col-sm-3">
+                <ng-select (change)="primitiveChange($event)" [clearable]="false" placeholder="{{'SELECT' | translate}}"
+                    [items]="primitiveList" bindLabel="name" bindValue="name" formControlName="primitive" id="primitive"
+                    [ngClass]="{ 'is-invalid': submitted && f.primitive.errors }"></ng-select>
+            </div>
+        </div>
+        <ng-container *ngIf="primitiveParameter.length > 0">
+            <div class="form-group row p-2 bg-light text-white justify-content-end">
+                <div class="col-5">
+                    <button type="button" class="btn btn-primary" (click)="createPrimitiveParams()">
+                        <i class="fas fa-plus-circle"></i>
+                        {{'PAGE.NSPRIMITIVE.ADDPRIMITIVEPARAMS' | translate}}</button>
+                </div>
+            </div>
+            <div formArrayName="primitive_params" *ngFor="let params of getControls(); let i = index;">
+                <div class="form-group row" [formGroupName]="i">
+                    <label class="col-sm-2 col-form-label">{{'NAME' | translate}}:</label>
+                    <div class="col-sm-3">
+                        <ng-select placeholder="{{'SELECT' | translate}}" [clearable]="false"
+                            [items]="primitiveParameter" bindLabel="name" bindValue="name"
+                            formControlName="primitive_params_name" id="parameter{{i}}"
+                            [ngClass]="{ 'is-invalid': submitted && params.controls.primitive_params_name.errors }">
+                        </ng-select>
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <label class="col-sm-2 col-form-label">{{'VALUE' | translate}}:</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" formControlName="primitive_params_value"
+                            [ngClass]="{ 'is-invalid': submitted && params.controls.primitive_params_value.errors }">
+                    </div>
+                    <div class="col-sm-1" [hidden]="i==0">
+                        <button type="button" class="btn btn-sm btn-danger remove-mapping"
+                            (click)="removePrimitiveParams(i)">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="activeModal.close()">{{'CANCEL' | translate}}</button>
+        <button type="submit" class="btn btn-primary">{{'EXECUTE' | translate}}</button>
+    </div>
+</form>
+<app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>

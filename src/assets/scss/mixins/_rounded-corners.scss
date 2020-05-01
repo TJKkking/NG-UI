@@ -1,0 +1,96 @@
+/*
+ Copyright 2020 TATA ELXSI
+
+ Licensed under the Apache License, Version 2.0 (the 'License');
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+ */
+/**
+ * @ file contains @mixin functions for border radius
+ * example: @include roundedCorners(10);
+ */
+
+// Rounded Corner has equal radius
+@mixin roundedCorners($size) {
+    border-radius: $size + px;
+}
+
+// Rounded Corner for percentage values
+@mixin roundedCornersPercentage($size) {
+    border-radius: $size;
+}
+
+// Rounded Corner for Top left/right
+@mixin roundedTop($size) {
+    border-radius: $size + px $size + px 0 0;
+}
+
+// Rounded Corner for Top Left alone
+@mixin roundedTopLeft($size) {
+    border-radius: $size + px 0 0 0;
+}
+
+// Rounded Corner for Top Right alone
+@mixin roundedTopRight($size) {
+    border-radius: 0 $size + px 0 0;
+}
+
+// Rounded Corner for Bottom left/right
+@mixin roundedBottom($size) {
+    border-radius: 0 0 $size + px $size + px;
+}
+
+// Rounded Corner  for Bottom Left alone
+@mixin roundedBottomLeft($size) {
+    border-radius: 0 0 0 $size + px;
+}
+
+// Rounded Corner for Bottom Right alone
+@mixin roundedBottomRight($size) {
+    border-radius: 0 0 $size + px 0;
+}
+
+// Rounded Corner for Left Top/Bottom
+@mixin roundedLeft($size) {
+    border-radius: $size + px 0 0 $size + px;
+}
+
+// Rounded Corner for Right Top/Bottom
+@mixin roundedRight($size) {
+    border-radius: 0 $size + px $size + px 0;
+}
+
+// Shorthand for all four corners rounded equally
+@mixin circularCorners($size) {
+    border-radius: $size;
+}
+
+// Border bottom left radius
+@mixin roundedBottomLeftRadius($sive) {
+    border-bottom-left-radius: $sive + px;
+}
+
+// Border bottom right radius
+@mixin roundedBottomRightRadius($sive) {
+    border-bottom-right-radius: $sive + px;
+}
+
+// Border top left radius
+@mixin roundedTopLeftRadius($sive) {
+    border-top-left-radius: $sive + px;
+}
+
+// Border top right radius
+@mixin roundedTopRightRadius($sive) {
+    border-top-right-radius: $sive + px;
+}

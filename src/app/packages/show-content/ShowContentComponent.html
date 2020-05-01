@@ -1,0 +1,44 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">{{'FILES' | translate}} {{'IN' | translate}}
+    {{(params.id)?params.id:'-'}}</h4>
+  <button class="button-xs" type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times-circle text-danger"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <table class="table table-bored show-content" *ngIf="contents else noData">
+    <tr>
+      <th># {{'FILES' | translate}} {{'NAME' | translate}}</th>
+      <th>{{'ACTIONS' | translate }}</th>
+    </tr>
+    <tr *ngFor="let data of contents">
+      <td>- {{(data)?data:'-'}}</td>
+      <td>
+        <button class="btn btn-xs">
+          <i class="far fa-folder-open icons"></i>
+        </button>
+      </td>
+    </tr>
+  </table>
+  <ng-template #noData>{{'NODATAERROR' | translate}}</ng-template>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-danger" (click)="activeModal.close()">{{'CANCEL' | translate}}</button>
+</div>

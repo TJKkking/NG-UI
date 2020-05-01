@@ -1,0 +1,57 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<div class="login-container">
+    <div class="wrap-login">
+        <div class="login-logo">
+            <img src="assets/images/logo.png" alt="Logo">
+        </div>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" autocomplete="off">
+            <div class="wrap-input">
+                <input autocomplete="off" class="input-control" type="text" formControlName="userName" placeholder="{{ 'PAGE.LOGIN.USERNAME' | translate }}"
+                />
+                <span class="input-icon">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </span>
+            </div>
+            <div *ngIf="submitted && loginForm.controls['userName'].errors" class="input-validation-msg">
+                <div *ngIf="loginForm.controls['userName'].errors.required">{{'PAGE.LOGIN.USERNAMEVALIDMESSAGE' | translate}}</div>
+            </div>
+            <div class="wrap-input">
+                <input autocomplete="off" class="input-control" type="password" formControlName="password" placeholder="{{ 'PAGE.LOGIN.PASSWORD' | translate }}"
+                />
+                <span class="input-icon">
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                </span>
+            </div>
+            <div *ngIf="submitted && loginForm.controls['password'].errors" class="input-validation-msg">
+                <div *ngIf="loginForm.controls['password'].errors.required">{{'PAGE.LOGIN.PASSWORDVALIDMESSAGE' | translate}}</div>
+            </div>
+            <button type="submit" class="submit-btn">
+                <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </button>
+            <div class="signup-text-center">
+                <span class="caret">{{'PAGE.LOGIN.SIGNINMSG' | translate}}</span>
+            </div>
+
+        </form>
+    </div>
+</div>
+<app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>
+<div class="login-footer">
+   <a href="https://osm.etsi.org" target="_blank">{{'OSMSOURCEMANO' | translate}} {{sharedService.osmVersion}}</a>
+</div>

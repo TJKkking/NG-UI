@@ -1,0 +1,52 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<div id="sidebar" class="p-2 sidebar-mini" [class.sidebar-collapse]="classAppliedForDesktop" [class.sidebar-open]="classAppliedForMobile">
+    <div class="custom-menu" (click)="sideBarOpenClose()">
+        <button type="button" id="sidebarCollapse" class="btn btn-primary">
+            <i class="fa fa-bars"></i>
+        </button>
+    </div>
+    <nav>
+        <ul class="scrollable-menu">
+            <li *ngFor="let menu of getMenus; let i = index" [ngClass]="{'hasChild': menu.isChildExists }"
+                class="{{menu.liClass}}" id="{{menu.clickFunction}}{{i}}"
+                (click)="handleMenuFunction(i, menu.clickFunction, 'menu-open', menu.isChildExists)"
+                [routerLinkActiveOptions]="{exact: menu.routerLinkActiveOptions !== undefined ? menu.routerLinkActiveOptions : false}"
+                [routerLinkActive]="menu.routerLinkActive !== undefined ? menu.routerLinkActive : ''">
+                <a *ngIf="menu.isChildExists" class="{{menu.anchorTagClass}}">
+                    <i class="{{menu.icon}}"></i>
+                    <span>{{ menu.menuName | translate}}</span>
+                </a>
+                <a *ngIf="!menu.isChildExists" class="{{menu.anchorTagClass}}" [routerLink]="menu.routerLink">
+                    <i class="{{menu.icon}}"></i>
+                    <span>{{ menu.menuName | translate}}</span>
+                </a>
+                <ul *ngIf="menu.isChildExists" class="{{menu.ulClass}}">
+                    <li *ngFor="let childMenu of menu.childItems"
+                        [routerLinkActiveOptions]="{exact: childMenu.routerLinkActiveOptions}"
+                        [routerLinkActive]="childMenu.routerLinkActive" (click)="checkAndCloseSideBar(childMenu.isChildExists)">
+                        <a class="{{childMenu.anchorTagClass}}" [routerLink]="childMenu.routerLink">
+                            <i class="{{childMenu.icon}}"></i>
+                            <span>{{childMenu.menuName | translate}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>

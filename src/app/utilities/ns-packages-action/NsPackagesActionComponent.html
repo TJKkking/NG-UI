@@ -1,0 +1,55 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<div class="btn-group list action" role="group">
+  <button type="button" class="btn btn-primary" (click)="instantiateNS()" placement="top" container="body"
+    ngbTooltip="{{'INSTANTIATE' | translate}} NS">
+    <i class="fa fa-paper-plane icons"></i>
+  </button>
+  <button type="button" class="btn btn-primary" (click)="composeNSPackages()" placement="top" container="body"
+    ngbTooltip="{{'TOPOLOGY' | translate}}">
+    <i class="fa fa-sitemap fa-fw Icon"></i>
+  </button>
+  <button type="button" class="btn btn-primary" (click)="deleteNSPackage()" placement="top" container="body"
+    ngbTooltip="{{'DELETE' | translate}}">
+    <i class="far fa-trash-alt icons"></i>
+  </button>
+  <div ngbDropdown class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle action-button" ngbDropdownToggle>
+      {{'ACTION' | translate}}
+    </button>
+    <div class="dropdown-menu" ngbDropdownMenu>
+      <button type="button" class="btn btn-primary dropdown-item" (click)="nsdEdit()" placement="left"
+        container="body" ngbTooltip="{{'EDIT' | translate}}">
+        <i class="fa fa-edit icons"></i> {{'EDIT' | translate}}
+      </button>
+      <button type="button" class="btn btn-primary dropdown-item" (click)="downloadNSPackage()" placement="left"
+        container="body" ngbTooltip="{{'DOWNLOAD' | translate}}">
+        <i class="fas fa-download icons"></i> {{'DOWNLOAD' | translate}}
+      </button>
+      <button type="button" class="btn btn-primary dropdown-item" (click)="cloneNSPackage()" placement="left"
+        container="body" ngbTooltip="{{'CLONE' | translate}}">
+        <i class="fa fa-clone icons"></i> {{'CLONE' | translate}}
+      </button>
+      <button type="button" class="btn btn-primary dropdown-item" (click)="showContent()" placement="left"
+        container="body" ngbTooltip="{{'CONTENT' | translate}}">
+        <i class="far fa-folder-open icons"></i> {{'CONTENT' | translate}}
+      </button>
+    </div>
+  </div>
+</div>
+<app-loader [waitingMessage]="message" *ngIf="isLoadingDownloadResult"></app-loader>

@@ -1,0 +1,47 @@
+/*
+ Copyright 2020 TATA ELXSI
+
+ Licensed under the Apache License, Version 2.0 (the 'License');
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+ */
+/**
+ * @ file contains @mixin function for flex properties
+ * example: @include flexbox(flex, flex-start, row-reverse, center, center, flex-end);
+ * 1. display: flex | inline-flex
+ * 2. justify-content : flex-start | flex-end | center | space-between | space-around
+ * 3. flex-direction: row | row-reverse | column | column-reverse
+ * 4. align-content: flex-start | flex-end | center | space-between | space-around | stretch
+ * 5. align-items: flex-start | flex-end | center | baseline | stretch
+ * 6. align-self: auto | flex-start | flex-end | center | baseline | stretch
+ */
+
+@mixin flexbox($display: null, $justify: null, $direction: null, $aligncontent: null, $alignitems: null, $alignself: null) {
+display: $display;
+justify-content: $justify;
+flex-direction: $direction;
+align-content: $aligncontent;
+align-items: $alignitems;
+align-self: $alignself;
+}
+
+/** To set flexible length for items
+ * flex-grow: how much an item will grow relative to the rest of the flexible items
+   flex-shrink: how much an item will shrink relative to the rest of the flexible items
+   flex-basis: The length of the item. Legal values: "auto", "inherit", or a number followed by "%", "px", "em"
+ */
+@mixin flex($flex-grow: null, $flex-shrink: null, $flex-basis: null){
+    flex-grow: $flex-grow;
+    flex-shrink: $flex-shrink;
+    flex-basis: $flex-basis;
+}

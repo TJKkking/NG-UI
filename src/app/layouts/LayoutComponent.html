@@ -1,0 +1,37 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<app-header></app-header>
+<div id="main-wrapper" class="container-fluid" dir="ltr" appGottoTop>
+    <div class="layout-wrapper mt-2">
+        <app-sidebar></app-sidebar>
+        <div class="content-section pl-4">
+            <app-breadcrumb></app-breadcrumb>
+            <div class="mt-2">
+                <div class="card custom-card shadow">
+                    <div class="card-body custom-card-body">
+                        <router-outlet></router-outlet>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-sm btn-primary border border-radius-default goto-top" type="button"
+        *ngIf="sharedService.showGotoTop" (click)="gotoTop()">
+        <i class="fas fa-angle-up"></i>
+    </button>
+</div>

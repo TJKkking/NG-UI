@@ -1,0 +1,26 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg version="1.1" id="IconsRepoEditor" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="64px" height="64px" viewBox="-45.25 -45.25 279.05 279.05" style="enable-background:new 0 0 188.547 188.547;" xml:space="preserve" fill="#ffffff" stroke="#ffffff" stroke-width="0">
+
+<g id="IconsRepo_bgCarrier">
+
+<rect x="-45.25" y="-45.25" width="279.05" height="279.05" rx="139.525" fill="#cf1c24" stroke-width="0"/>
+
+</g> <path d="M94.589,145.478v13.019h46.765l6.235,6.235v6.235H29.118v-6.235l6.235-6.235h46.765v-13.025H15.281 C6.884,145.471,0,138.584,0,130.188V32.861c0-8.397,6.877-15.281,15.281-15.281h146.143c8.415,0,15.284,6.875,15.284,15.281V64.05 c-1.925-2.125-3.964-4.125-6.235-5.849v-25.34c0-4.987-4.056-9.045-9.049-9.045H15.281c-4.993,0-9.045,4.058-9.045,9.045v78.626 c0,4.993,4.052,9.049,9.045,9.049h90.184c8.476,12.124,22.426,19.57,37.405,19.57c2.49,0,4.957-0.268,7.398-0.676l3.508,6.053 H94.589V145.478z M176.951,74.77c10.863,18.816,4.396,42.977-14.432,53.822c-18.815,10.863-42.965,4.415-53.828-14.425 c-10.859-18.804-4.396-42.953,14.42-53.813C141.919,49.491,166.082,55.951,176.951,74.77z M171.3,78.043 c-9.073-15.707-29.222-21.099-44.926-12.054c-15.704,9.073-21.111,29.216-12.026,44.92c9.066,15.704,29.21,21.136,44.907,12.062 C174.965,113.887,180.355,93.744,171.3,78.043z M172.42,126.162l-16.94,9.792l13.056,22.566l16.94-9.792L172.42,126.162z M187.229,151.834l-16.952,9.779c2.716,4.689,8.695,6.284,13.378,3.593S189.939,156.523,187.229,151.834z M108.058,45.64H26v6.235 h82.058V45.64z M86.795,60.366H26v6.235h60.794V60.366z M86.795,75.099H26v6.235h60.794V75.099z M26,96.063h60.794v-6.235H26 V96.063z"/> </svg>

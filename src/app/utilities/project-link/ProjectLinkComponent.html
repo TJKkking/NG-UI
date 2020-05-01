@@ -1,0 +1,25 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<a *ngIf="isPresent" class="link" [ngClass]="value.projectName === selectedProject ? 'activeProject' : ''"
+  href="javascript:void(0);"
+  (click)="value.projectName === selectedProject ? '' : this.projectService.switchProjectModal(value)"  placement="right" container="body" ngbTooltip="{{ (value.projectName === selectedProject ? 'CURRENTPROJECT' : 'SWITCHPROJECT') | translate}}">
+  <span>{{value.projectName}}</span>&nbsp;
+  <i *ngIf="value.projectName === selectedProject" class="fas fa-check-circle text-success"></i>
+  <i *ngIf="value.projectName !== selectedProject" class="fas fa-exchange-alt text-danger"></i>
+</a>
+<span *ngIf="!isPresent">{{value.projectName}}</span>

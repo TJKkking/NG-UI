@@ -1,0 +1,661 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<form [formGroup]="vimNewAccountForm" (ngSubmit)="newVimAccountSubmit()" autocomplete="off">
+    <div class="row d-flex flex-row justify-content-between">
+        <div class="d-flex align-items-center header-style">{{'PAGE.VIMDETAILS.NEWVIMACCOUNT' | translate}} </div>
+    </div>
+    <div class="context-style bg-white p-3">
+        <div class="row form-group content-style">
+            <label class="col-sm-12 col-form-label mandatory-label"
+                [ngClass]="{'text-danger': vimNewAccountForm.invalid === true && submitted === true}">{{'MANDATORYCHECK' | translate}}</label>
+            <div class="col-sm-3">
+                <label for="name">{{'PAGE.VIMDETAILS.NAME' | translate}}*</label>
+            </div>
+            <div class="col-sm-3">
+                <input autocomplete="off" class="form-control" placeholder="{{'PAGE.VIMDETAILS.NAME' | translate}}"
+                    type="text" formControlName="name" id="name"
+                    [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
+            </div>
+            <div class="col-sm-3">
+                <label for="vim_tenant_name">{{'PAGE.VIMDETAILS.TENANTNAME' | translate}}*</label>
+            </div>
+            <div class="col-sm-3">
+                <input autocomplete="off" class="form-control"
+                    placeholder="{{'PAGE.VIMDETAILS.TENANTNAME' | translate}}" type="text"
+                    formControlName="vim_tenant_name" id="vim_tenant_name"
+                    [ngClass]="{ 'is-invalid': submitted && f.vim_tenant_name.errors }">
+            </div>
+        </div>
+        <div class="row form-group content-style">
+            <div class="col-sm-3">
+                <label for="vim_type">{{'PAGE.VIMDETAILS.VIMTYPE' | translate}}*</label>
+            </div>
+            <div class="col-sm-3">
+                <ng-select bindLabel="title" bindValue="value" [items]="vimType" placeholder="{{'SELECT' | translate}}"
+                    formControlName="vim_type" id="vim_type" [(ngModel)]="selectedVimType"
+                    [ngClass]="{ 'is-invalid': submitted && f.vim_type.errors }">
+                </ng-select>
+            </div>
+            <div class="col-sm-3">
+                <label for="description">{{'PAGE.VIMDETAILS.DESCRIPTION' | translate}}</label>
+            </div>
+            <div class="col-sm-3">
+                <textarea class="form-control" placeholder="{{'PAGE.VIMDETAILS.DESCRIPTION' | translate}}" type="text"
+                    formControlName="description" id="description"></textarea>
+            </div>
+        </div>
+        <div class="row form-group content-style">
+            <div class="col-sm-3">
+                <label for="vim_url">{{'PAGE.VIMDETAILS.VIMURL' | translate}}*</label>
+            </div>
+            <div class="col-sm-3">
+                <input autocomplete="off" class="form-control" placeholder="{{'PAGE.VIMDETAILS.VIMURL' | translate}}"
+                    type="url" formControlName="vim_url" id="vim_url"
+                    [ngClass]="{ 'is-invalid': submitted && f.vim_url.errors }">
+                <div *ngIf="vimNewAccountForm.invalid" class="invalid-feedback">
+                    <div *ngIf="f.vim_url.errors && f.vim_url.value">{{'DOMVALIDATIONS.INVALIDURL' | translate}}</div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <label for="schema_type">{{'PAGE.VIMDETAILS.SCHEMATYPE' | translate}}</label>
+            </div>
+            <div class="col-sm-3">
+                <input autocomplete="off" class="form-control"
+                    placeholder="{{'PAGE.VIMDETAILS.SCHEMATYPE' | translate}}" type="text" formControlName="schema_type"
+                    id="schema_type">
+            </div>
+        </div>
+        <div class="row form-group content-style">
+            <div class="col-sm-3">
+                <label for="vim_user">{{'PAGE.VIMDETAILS.VIMUSERNAME' | translate}}*</label>
+            </div>
+            <div class="col-sm-3">
+                <input autocomplete="off" class="form-control"
+                    placeholder="{{'PAGE.VIMDETAILS.VIMUSERNAME' | translate}}" type="text" formControlName="vim_user"
+                    id="vim_user" [ngClass]="{ 'is-invalid': submitted && f.vim_user.errors }">
+            </div>
+        </div>
+        <div class="row form-group content-style">
+            <div class="col-sm-3">
+                <label for="vim_password">{{'PAGE.VIMDETAILS.VIMPASSWORD' | translate}}*</label>
+            </div>
+            <div class="col-sm-3">
+                <input autocomplete="off" class="form-control" placeholder="VIM Password" type="password"
+                    formControlName="vim_password" id="vim_password"
+                    [ngClass]="{ 'is-invalid': submitted && f.vim_password.errors }">
+            </div>
+        </div>
+        <div class="row" [hidden]="!selectedVimType">
+            <div class="col-12">
+                <button type="button" class="btn btn-block border-0 bg-light text-dark"
+                    (click)="isCollapsed = !isCollapsed"
+                    [attr.aria-expanded]="!isCollapsed">{{'PAGE.VIMDETAILS.CONFIGPARAMETERS' | translate}}</button>
+            </div>
+        </div>
+        <div formGroupName="vimconfig" id="configurationparameters" class="collapse mt-3" [ngbCollapse]="isCollapsed">
+            <div class="row" [hidden]="!selectedVimType">
+                <div class="col-sm-3">
+                    <label>{{'UPLOADCONFIG' | translate}}</label>
+                </div>
+                <div class="col-sm-3 form-group">
+                    <div class="custom-file">
+                        <input type="file" #fileInput class="custom-file-input"
+                            (change)="filesDropped($event.target.files)" id="customFile">
+                        <label class="custom-file-label" #fileInputLabel
+                            for="customFile">{{'CHOOSEFILE' | translate}}</label>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="selectedVimType == 'openstack'">
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="sdn_controller">{{'PAGE.VIMDETAILS.SDNCONTROLLER' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.SDNCONTROLLER' | translate}}" type="text"
+                            formControlName="sdn_controller" id="sdn_controller">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="APIversion">{{'PAGE.VIMDETAILS.APIVERSION' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.APIVERSION' | translate}}" type="text"
+                            formControlName="APIversion" id="APIversion">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="sdn_port_mapping">{{'PAGE.VIMDETAILS.SDNPORTMAPPING' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.SDNPORTMAPPING' | translate}}" type="text"
+                            formControlName="sdn_port_mapping" id="sdn_port_mapping">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="project_domain_id">{{'PAGE.VIMDETAILS.PROJECTDOMAINID' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.PROJECTDOMAINID' | translate}}" type="text"
+                            formControlName="project_domain_id" id="project_domain_id">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="vim_network_name">{{'PAGE.VIMDETAILS.VIMNETWORKNAME' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.VIMNETWORKNAME' | translate}}" type="text"
+                            formControlName="vim_network_name" id="vim_network_name">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="project_domain_name">{{'PAGE.VIMDETAILS.PROJECTDOMAINNAME' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.PROJECTDOMAINNAME' | translate}}" type="text"
+                            formControlName="project_domain_name" id="project_domain_name">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="config_vim_ype">{{'PAGE.VIMDETAILS.VIMTYPE' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.VIM_TYPE' | translate}}" type="text"
+                            formControlName="config_vim_ype" id="config_vim_ype">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="user_domain_id">{{'PAGE.VIMDETAILS.USERDOMAINID' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.USERDOMAINID' | translate}}" type="text"
+                            formControlName="user_domain_id" id="user_domain_id">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="security_groups">{{'PAGE.VIMDETAILS.SECURITYGROUPS' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.SECURITYGROUPS' | translate}}" type="text"
+                            formControlName="security_groups" id="security_groups">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="user_domain_name">{{'PAGE.VIMDETAILS.USERDOMAINUSER' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.USERDOMAINUSER' | translate}}" type="text"
+                            formControlName="user_domain_name" id="user_domain_name">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="availabilityZone">{{'PAGE.VIMDETAILS.AVAILABILITYZONE' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.AVAILABILITYZONE' | translate}}" type="text"
+                            formControlName="availabilityZone" id="availabilityZone">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="keypair">{{'PAGE.VIMDETAILS.KEYPAIR' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.KEYPAIR' | translate}}" type="text"
+                            formControlName="keypair" id="keypair">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="region_name">{{'PAGE.VIMDETAILS.REGIONALNAME' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.REGIONALNAME' | translate}}" type="text"
+                            formControlName="region_name" id="region_name">
+                    </div>
+                    <div class="col-sm-3">
+                        <label
+                            for="dataplane_physical_net">{{'PAGE.VIMDETAILS.DATAPLANEPHYSICALNET' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.DATAPLANEPHYSICALNET' | translate}}" type="text"
+                            formControlName="dataplane_physical_net" id="dataplane_physical_net">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="insecure">{{'PAGE.VIMDETAILS.INSECURE' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <ng-select [items]="boolValue" bindLabel="name" bindValue="id"
+                            placeholder="{{'PAGE.VIMDETAILS.INSECURE' | translate}}" formControlName="insecure"
+                            id="insecure">
+                        </ng-select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="use_floating_ip">{{'PAGE.VIMDETAILS.USEFLOATINGIP' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <ng-select [items]="boolValue" bindLabel="name" bindValue="id" id="use_floating_ip"
+                            placeholder="{{'PAGE.VIMDETAILS.USEFLOATINGIP' | translate}}"
+                            formControlName="use_floating_ip">
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="use_internal_endpoint">{{'PAGE.VIMDETAILS.USEINTERNALENDPOINT' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <ng-select [items]="boolValue" bindLabel="name" bindValue="id"
+                            placeholder="{{'PAGE.VIMDETAILS.USEINTERNALENDPOINT' | translate}}"
+                            formControlName="use_internal_endpoint" id="use_internal_endpoint">
+                        </ng-select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="microversion">{{'PAGE.VIMDETAILS.MICROVERSION' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.MICROVERSION' | translate}}" type="text"
+                            formControlName="microversion" id="microversion">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="additional_conf">{{'PAGE.VIMDETAILS.ADDITIONALCONFIG' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.ADDITIONALCONFIGPLACEHOLDER' | translate}}" type="text"
+                            formControlName="additional_conf" id="additional_conf">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="use_existing_flavors">{{'PAGE.VIMDETAILS.USEEXISTINGFLAVOURS' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <ng-select [items]="boolValue" bindLabel="name" bindValue="id"
+                            placeholder="{{'PAGE.VIMDETAILS.USEEXISTINGFLAVOURS' | translate}}"
+                            formControlName="use_existing_flavors" id="use_existing_flavors">
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="location">{{'PAGE.VIMDETAILS.VIMLOCATION' | translate}}</label>
+                    </div>
+                    <div class="col-sm-9">
+                        <ng-select [items]="getVIMLocation" bindLabel="label" bindValue="value"
+                            placeholder="{{'PAGE.VIMDETAILS.VIMLOCATION' | translate}}" formControlName="location"
+                            id="location" (keydown.enter)="fetchLocationLatLong($event.target.value)">
+                        </ng-select>
+                        <small>{{'PAGE.VIM.LOACTIONINFO' | translate}}</small>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="selectedVimType == 'openvim' || selectedVimType == 'opennebula'">
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="sdn_controller">{{'PAGE.VIMDETAILS.SDNCONTROLLER' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.SDNCONTROLLER' | translate}}" type="text"
+                            formControlName="sdn_controller" id="sdn_controller">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="sdn_port_mapping">{{'PAGE.VIMDETAILS.SDNPORTMAPPING' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.SDNPORTMAPPING' | translate}}" type="text"
+                            formControlName="sdn_port_mapping" id="sdn_port_mapping">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="vim_network_name">{{'PAGE.VIMDETAILS.VIMNETWORKNAME' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.VIMNETWORKNAME' | translate}}" type="text"
+                            formControlName="vim_network_name" id="vim_network_name">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="additional_conf">{{'PAGE.VIMDETAILS.ADDITIONALCONFIG' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.ADDITIONALCONFIGPLACEHOLDER' | translate}}" type="text"
+                            formControlName="additional_conf" id="additional_conf">
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="selectedVimType == 'vmware'">
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="sdn_controller">{{'PAGE.VIMDETAILS.SDNCONTROLLER' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.SDNCONTROLLER' | translate}}" type="text"
+                            formControlName="sdn_controller" id="sdn_controller">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="orgname">{{'PAGE.VIMDETAILS.ORGNAME' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.ORGNAME' | translate}}" type="text"
+                            formControlName="orgname" id="orgname">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="sdn_port_mapping">{{'PAGE.VIMDETAILS.SDNPORTMAPPING' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.SDNPORTMAPPING' | translate}}" type="text"
+                            formControlName="sdn_port_mapping" id="sdn_port_mapping">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="vcenter_ip">{{'PAGE.VIMDETAILS.VCENTERIP' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.VCENTERIP' | translate}}" type="text"
+                            formControlName="vcenter_ip" id="vcenter_ip">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="vim_network_name">{{'PAGE.VIMDETAILS.VIMNETWORKNAME' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.VIMNETWORKNAME' | translate}}" type="text"
+                            formControlName="vim_network_name" id="vim_network_name">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="vcenter_port">{{'PAGE.VIMDETAILS.VCENTERPORT' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.VCENTERPORT' | translate}}" type="text"
+                            formControlName="vcenter_port" id="vcenter_port">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="admin_username">{{'PAGE.VIMDETAILS.ADMINUSERNAME' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.ADMINUSERNAME' | translate}}" type="text"
+                            formControlName="admin_username" id="admin_username">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="vcenter_user">{{'PAGE.VIMDETAILS.VCENTERUSER' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.VCENTERUSER' | translate}}" type="text"
+                            formControlName="vcenter_user" id="vcenter_user">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="admin_password">{{'PAGE.VIMDETAILS.ADMINPASSWORD' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.ADMINPASSWORD' | translate}}" type="text"
+                            formControlName="admin_password" id="admin_password">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="vcenter_password">{{'PAGE.VIMDETAILS.VCENTERPASSWORD' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.VCENTERPASSWORD' | translate}}" type="text"
+                            formControlName="vcenter_password" id="vcenter_password">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="nsx_manager">{{'PAGE.VIMDETAILS.NSXMANAGER' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.NSXMANAGER' | translate}}" type="text"
+                            formControlName="nsx_manager" id="nsx_manager">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="vrops_site">{{'PAGE.VIMDETAILS.VROPSSITE' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.VROPSSITE' | translate}}" type="text"
+                            formControlName="vrops_site" id="vrops_site">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="nsx_user">{{'PAGE.VIMDETAILS.NSXUSER' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.NSXUSER' | translate}}" type="text"
+                            formControlName="nsx_user" id="nsx_user">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="vrops_user">{{'PAGE.VIMDETAILS.VROPSUSER' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.VROPSUSER' | translate}}" type="text"
+                            formControlName="vrops_user" id="vrops_user">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="nsx_password">{{'PAGE.VIMDETAILS.NSXPASSWORD' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.NSXPASSWORD' | translate}}" type="text"
+                            formControlName="nsx_password" id="nsx_password">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="vrops_password">{{'PAGE.VIMDETAILS.VROPSPASSWORD' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.VROPSPASSWORD' | translate}}" type="text"
+                            formControlName="vrops_password" id="vrops_password">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="additional_conf">{{'PAGE.VIMDETAILS.ADDITIONALCONFIG' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.ADDITIONALCONFIGPLACEHOLDER' | translate}}" type="text"
+                            formControlName="additional_conf" id="additional_conf">
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="selectedVimType == 'aws'">
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="sdn_controller">{{'PAGE.VIMDETAILS.SDNCONTROLLER' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.SDNCONTROLLER' | translate}}" type="text"
+                            formControlName="sdn_controller" id="sdn_controller">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="vpc_cidr_block">{{'PAGE.VIMDETAILS.VPCCIDRBLOCK' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.VPCCIDRBLOCK' | translate}}" type="text"
+                            formControlName="vpc_cidr_block" id="vpc_cidr_block">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="sdn_port_mapping">{{'PAGE.VIMDETAILS.SDNPORTMAPPING' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.SDNPORTMAPPING' | translate}}" type="text"
+                            formControlName="sdn_port_mapping" id="sdn_port_mapping">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="security_groups">{{'PAGE.VIMDETAILS.SECURITYGROUPS' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.SECURITYGROUPS' | translate}}" type="text"
+                            formControlName="security_groups" id="security_groups">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="vim_network_name">{{'PAGE.VIMDETAILS.VIMNETWORKNAME' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.VIMNETWORKNAME' | translate}}" type="text"
+                            formControlName="vim_network_name" id="vim_network_name">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="keypair">{{'PAGE.VIMDETAILS.KEYPAIR' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.KEYPAIR' | translate}}" type="text"
+                            formControlName="keypair" id="keypair">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="region_name">{{'PAGE.VIMDETAILS.REGIONALNAME' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.REGIONALNAME' | translate}}" type="text"
+                            formControlName="region_name" id="region_name">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="flavor_info">{{'PAGE.VIMDETAILS.FLAVORIINFO' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.FLAVORIINFO' | translate}}" type="text"
+                            formControlName="flavor_info" id="flavor_info">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="additional_conf">{{'PAGE.VIMDETAILS.ADDITIONALCONFIG' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.ADDITIONALCONFIGPLACEHOLDER' | translate}}" type="text"
+                            formControlName="additional_conf" id="additional_conf">
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="selectedVimType == 'azure'">
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="subscription_id">{{'PAGE.VIMDETAILS.SUBSCRIPTIONID' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.SUBSCRIPTIONID' | translate}}" type="text"
+                            formControlName="subscription_id" id="subscription_id">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="region_name">{{'PAGE.VIMDETAILS.REGIONALNAME' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.REGIONALNAME' | translate}}" type="text"
+                            formControlName="region_name" id="region_name">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="resource_group">{{'PAGE.VIMDETAILS.RESOURCEGROUP' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.RESOURCEGROUP' | translate}}" type="text"
+                            formControlName="resource_group" id="resource_group">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="vnet_name">{{'PAGE.VIMDETAILS.VNETNAME' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.VNETNAME' | translate}}" type="text"
+                            formControlName="vnet_name" id="vnet_name">
+                    </div>
+                </div>
+                <div class="row form-group content-style">
+                    <div class="col-sm-3">
+                        <label for="flavors_pattern">{{'PAGE.VIMDETAILS.FLAVORSPATTERN' | translate}}</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input autocomplete="off" class="form-control"
+                            placeholder="{{'PAGE.VIMDETAILS.FLAVORSPATTERN' | translate}}" type="text"
+                            formControlName="flavors_pattern" id="flavors_pattern">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" (click)="onVimAccountBack()"
+            class="btn btn-danger">{{'PAGE.VIMDETAILS.BACKTOVIMACCOUNTS' | translate}}</button>
+        <button type="submit" class="btn btn-primary">{{'CREATE' | translate}}</button>
+    </div>
+</form>
+<app-loader [waitingMessage]="message" *ngIf="isLocationLoadingResults"></app-loader>

@@ -1,0 +1,692 @@
+{
+    "rolePermissions": [
+        {
+            "title": "Default",
+            "permissions": [
+                {
+                    "operation": "default",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "Admin",
+            "permissions": [
+                {
+                    "operation": "admin",
+                    "value": "NA"
+                },
+                {
+                    "operation": "admin:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "admin:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "admin:patch",
+                    "value": "NA"
+                },
+                {
+                    "operation": "admin:put",
+                    "value": "NA"
+                },
+                {
+                    "operation": "admin:delete",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "NS Descriptors",
+            "permissions": [
+                {
+                    "operation": "nsds",
+                    "value": "NA"
+                },
+                {
+                    "operation": "nsds:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "nsds:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "nsds:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "nsds:id:put",
+                    "value": "NA"
+                },
+                {
+                    "operation": "nsds:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "nsds:id:patch",
+                    "value": "NA"
+                },
+                {
+                    "operation": "nsds:content:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "nsds:id:content:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "nsds:id:content:put",
+                    "value": "NA"
+                },
+                {
+                    "operation": "nsds:id:nsd:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "nsds:id:nsd_artifact:get",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "VNF Descriptors",
+            "permissions": [
+                {
+                    "operation": "vnfds",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnfds:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnfds:content:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnfds:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnfds:id:put",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnfds:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnfds:id:patch",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnfds:id:content:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnfds:id:content:put",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnfds:id:vnfd:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnfds:id:vnfd_artifact:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnfds:id:action:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnfds:vnfpkgops:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnfds:vnfpkgops:id:get",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "NS Instances",
+            "permissions": [
+                {
+                    "operation": "ns_instances",
+                    "value": "NA"
+                },
+                {
+                    "operation": "ns_instances:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "ns_instances:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "ns_instances:content:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "ns_instances:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "ns_instances:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "ns_instances:id:instantiate:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "ns_instances:id:terminate:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "ns_instances:id:action:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "ns_instances:id:scale:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "ns_instances:opps:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "ns_instances:opps:id:get",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "VNF Instances",
+            "permissions": [
+                {
+                    "operation": "vnf_instances",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnf_instances:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vnf_instances:id:get",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "VIMs",
+            "permissions": [
+                {
+                    "operation": "vims",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vims:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vims:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vims:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vims:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vims:id:patch",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "VIMs Accounts",
+            "permissions": [
+                {
+                    "operation": "vim_accounts",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vim_accounts:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vim_accounts:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vim_accounts:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vim_accounts:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "vim_accounts:id:patch",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "SDN Controllers",
+            "permissions": [
+                {
+                    "operation": "sdn_controllers",
+                    "value": "NA"
+                },
+                {
+                    "operation": "sdn_controllers:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "sdn_controllers:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "sdn_controllers:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "sdn_controllers:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "sdn_controllers:id:patch",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "WIMs",
+            "permissions": [
+                {
+                    "operation": "wims",
+                    "value": "NA"
+                },
+                {
+                    "operation": "wims:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "wims:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "wims:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "wims:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "wims:id:patch",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "WIMs Accounts",
+            "permissions": [
+                {
+                    "operation": "wim_accounts",
+                    "value": "NA"
+                },
+                {
+                    "operation": "wim_accounts:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "wim_accounts:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "wim_accounts:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "wim_accounts:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "wim_accounts:id:patch",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "PDUDs",
+            "permissions": [
+                {
+                    "operation": "pduds",
+                    "value": "NA"
+                },
+                {
+                    "operation": "pduds:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "pduds:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "pduds:put",
+                    "value": "NA"
+                },
+                {
+                    "operation": "pduds:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "pduds:patch",
+                    "value": "NA"
+                },
+                {
+                    "operation": "pduds:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "pduds:id:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "pduds:id:put",
+                    "value": "NA"
+                },
+                {
+                    "operation": "pduds:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "pduds:id:patch",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "Network Slice Templates",
+            "permissions": [
+                {
+                    "operation": "slice_templates",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_templates:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_templates:content:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_templates:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_templates:id:put",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_templates:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_templates:id:patch",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_templates:content:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_templates:content:put",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_templates:id:nst:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_templates:id:nst_artifact:get",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "Network Slice Instances",
+            "permissions": [
+                {
+                    "operation": "slice_instances",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_instances:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_instances:content:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_instances:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_instances:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_instances:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_instances:id:instantiate:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_instances:id:terminate:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_instances:id:action:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_instances:opps:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "slice_instances:opps:id:get",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "K8 Clusters",
+            "permissions": [
+                {
+                    "operation": "k8sclusters",
+                    "value": "NA"
+                },
+                {
+                    "operation": "k8sclusters:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "k8sclusters:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "k8sclusters:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "k8sclusters:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "k8sclusters:id:patch",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "K8 Repos",
+            "permissions": [
+                {
+                    "operation": "k8srepos",
+                    "value": "NA"
+                },
+                {
+                    "operation": "k8srepos:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "k8srepos:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "k8srepos:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "k8srepos:id:delete",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "Users",
+            "permissions": [
+                {
+                    "operation": "users",
+                    "value": "NA"
+                },
+                {
+                    "operation": "users:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "users:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "users:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "users:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "users:id:patch",
+                    "value": "NA"
+                },
+                {
+                    "operation": "domains:get",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "Projects",
+            "permissions": [
+                {
+                    "operation": "projects",
+                    "value": "NA"
+                },
+                {
+                    "operation": "projects:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "projects:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "projects:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "projects:id:patch",
+                    "value": "NA"
+                },
+                {
+                    "operation": "projects:id:delete",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "Roles",
+            "permissions": [
+                {
+                    "operation": "roles",
+                    "value": "NA"
+                },
+                {
+                    "operation": "roles:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "roles:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "roles:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "roles:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "roles:id:patch",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
+            "title": "Tokens",
+            "permissions": [
+                {
+                    "operation": "tokens",
+                    "value": "NA"
+                },
+                {
+                    "operation": "tokens:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "tokens:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "tokens:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "tokens:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "tokens:id:delete",
+                    "value": "NA"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+{
+    "/osm/*": {
+        "target": "https://nbi:9999",
+        "secure": false,
+        "logLevel": "info"
+    }
+}

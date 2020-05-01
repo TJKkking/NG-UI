@@ -1,0 +1,92 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<form [formGroup]="k8sclusterForm" (ngSubmit)="k8sAddClusterSubmit();">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{'PAGE.K8S.NEWK8SCLUSTER' | translate}}</h4>
+    <button class="button-xs" type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+      <i class="fas fa-times-circle text-danger"></i>
+    </button>
+  </div>
+  <div class="modal-body modal-body-custom-height">
+    <div class="form-group row">
+      <label class="col-sm-12 col-form-label mandatory-label"
+        [ngClass]="{'text-danger': k8sclusterForm.invalid === true && submitted === true}">{{'MANDATORYCHECK' | translate}}</label>
+      <label class="col-sm-4 col-form-label" for="name">{{'PAGE.K8S.NAME' | translate}}*</label>
+      <div class="col-sm-8">
+        <input autocomplete="off" class="form-control" placeholder="{{'PAGE.K8S.NAME' | translate}}" type="text"
+          formControlName="name" id="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" required>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="k8s_version">{{'PAGE.K8S.K8SVERSION' | translate}}*</label>
+      <div class="col-sm-8">
+        <input autocomplete="off" class="form-control" placeholder="{{'PAGE.K8S.K8SVERSION' | translate}}" type="text"
+          formControlName="k8s_version" id="k8s_version" [ngClass]="{ 'is-invalid': submitted && f.k8s_version.errors }"
+          required>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="vim_account">{{'PAGE.K8S.VIMACCOUNT' | translate}}*</label>
+      <div class="col-sm-8">
+        <ng-select placeholder="{{'SELECT' | translate}} {{'PAGE.K8S.VIMACCOUNT' | translate}}"
+          [items]="vimAccountSelect" bindLabel="name" bindValue="_id" formControlName="vim_account" id="vimAccountId"
+          [ngClass]="{ 'is-invalid': submitted && f.vim_account.errors }" required>
+        </ng-select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="description">{{'PAGE.K8S.DESCRIPTION' | translate}}*</label>
+      <div class="col-sm-8">
+        <textarea class="form-control" placeholder="{{'PAGE.K8S.DESCRIPTION' | translate}}" type="text"
+          formControlName="description" id="description" [ngClass]="{ 'is-invalid': submitted && f.description.errors }"
+          required></textarea>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="nets">{{'PAGE.K8S.NETS' | translate}}*</label>
+      <div class="col-sm-8">
+        <textarea rows="5" cols="50" class="form-control" placeholder="{{'PAGE.K8S.NETSPLACEHOLDER' | translate}}"
+          formControlName="nets" id="nets" [ngClass]="{ 'is-invalid': submitted && f.nets.errors }" required></textarea>
+        <div class="fileupload-text mt-1 mb-1">{{'FILEUPLOADLABEL' | translate}}</div>
+        <div class="custom-file">
+          <input type="file" #fileInputNets class="custom-file-input" (change)="netsFile($event.target.files)"
+            id="customFileNets">
+          <label class="custom-file-label" #fileInputNetsLabel for="customFileNets">{{'CHOOSEFILE' | translate}}</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="credentials">{{'PAGE.K8S.CREDENTIALS' | translate}}*</label>
+      <div class="col-sm-8">
+        <textarea rows="5" cols="50" class="form-control" placeholder="{{'YAMLCONFIG' | translate}}" formControlName="credentials"
+          id="credentials" [ngClass]="{ 'is-invalid': submitted && f.credentials.errors }" required></textarea>
+        <div class="fileupload-text mt-1 mb-1">{{'FILEUPLOADLABEL' | translate}}</div>
+        <div class="custom-file">
+          <input type="file" #fileInputCredentials class="custom-file-input" (change)="credentialsFile($event.target.files)"
+            id="customFileCredentials">
+          <label class="custom-file-label" #fileInputCredentialsLabel for="customFileCredentials">{{'CHOOSEFILE' | translate}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="activeModal.close()">{{'CANCEL' | translate}}</button>
+    <button type="submit" class="btn btn-primary">{{'CREATE' | translate}}</button>
+  </div>
+</form>
+<app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>

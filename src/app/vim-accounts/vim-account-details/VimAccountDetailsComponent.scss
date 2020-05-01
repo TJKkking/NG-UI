@@ -1,0 +1,73 @@
+/*
+ Copyright 2020 TATA ELXSI
+
+ Licensed under the Apache License, Version 2.0 (the 'License');
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+*/
+@import '../../../assets/scss/mixins/mixin';
+@import '../../../assets/scss/variable';
+.map {
+    height: 60vh;
+    width: 100%;
+    .ol-popup {
+        @include background(null, $white, null, null, null);
+        -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+        filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+        @include border(all, 1, solid, $gray-80);
+        @include position_value(absolute, $top: null, $right: null, $bottom: 12px, $left: -50px);
+        @include wh-value(280px, null);
+        @include font-style(normal);
+        @include font(null, .765625rem, 400);
+        @include line-height(1.5);
+        text-align: start;
+        text-decoration: none;
+        letter-spacing: normal;
+        word-break: normal;
+        word-spacing: normal;
+        white-space: normal;
+        line-break: auto;
+        word-wrap: break-word;
+        @include roundedCorners(2px);
+        &:after, &:before{
+            top: 100%;
+            @include border(all, 1, solid, transparent);
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+        &:after {
+            border-top-color: $white;
+            border-width: 10px;
+            left: 48px;
+            margin-left: -10px;
+        }
+        &:before {
+            border-top-color: $gray-80;
+            border-width: 11px;
+            left: 48px;
+            margin-left: -11px;
+        }
+    }
+    .ol-popup-closer {
+        text-decoration: none;
+        position: absolute;
+        top: 2px;
+        right: 8px;
+        &:after {
+            content: "✖";
+        }
+    }
+}

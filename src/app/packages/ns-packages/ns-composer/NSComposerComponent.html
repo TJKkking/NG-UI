@@ -1,0 +1,264 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<ng-sidebar-container class="ns-topology-sidebar-container">
+  <!-- A sidebar -->
+  <ng-sidebar [(opened)]="sideBarOpened" position="left">
+    <div class="sidebar-header">
+      <span class="topology_title" *ngIf="isShowNSDDetails">{{'PAGE.TOPOLOGY.NSD' | translate}}</span>
+      <span class="topology_title" *ngIf="isShowVLDetails">{{'PAGE.TOPOLOGY.VIRTUALLINK' | translate}}</span>
+      <span class="topology_title" *ngIf="isShowVNFDetails">{{'PAGE.TOPOLOGY.VNF' | translate}}</span>
+      <span class="topology_title" *ngIf="isShowCPDetails">{{'PAGE.TOPOLOGY.CONNECTIONPOINT' | translate}}</span>
+      <button (click)="toggleSidebar()" class="close" type="button">
+        <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="sidebar-body">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-2" *ngIf="isShowNSDDetails">
+        <div class="row">
+          <div class="col-12 p-0">
+            <form autocomplete="off">
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">{{ 'SHORTNAME' | translate }}</label>
+                <div class="col-sm-8 p-0">
+                  <input type="text" class="form-control" placeholder="{{ 'SHORTNAME' | translate }}" name="shortName"
+                    [(ngModel)]="vnfdPackageDetails.shortName">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">{{ 'VENDOR' | translate }}</label>
+                <div class="col-sm-8 p-0">
+                  <input type="text" class="form-control" placeholder="{{ 'VENDOR' | translate }}" name="vendor"
+                    [(ngModel)]="vnfdPackageDetails.vendor">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">{{ 'DESCRIPTION' | translate }}</label>
+                <div class="col-sm-8 p-0">
+                  <textarea type="text" class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}"
+                    name="description" [(ngModel)]="vnfdPackageDetails.description"></textarea>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">{{ 'VERSION' | translate }}</label>
+                <div class="col-sm-8 p-0">
+                  <input type="text" class="form-control" placeholder="{{ 'VERSION' | translate }}" name="version"
+                    [(ngModel)]="vnfdPackageDetails.version">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">{{ 'ID' | translate }}</label>
+                <div class="col-sm-8 p-0">
+                  <input type="text" class="form-control" placeholder="{{ 'ID' | translate }}" name="id"
+                    [(ngModel)]="vnfdPackageDetails.id">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">{{ 'NAME' | translate }}</label>
+                <div class="col-sm-8 p-0">
+                  <input type="text" class="form-control" placeholder="{{ 'NAME' | translate }}" name="name"
+                    [(ngModel)]="vnfdPackageDetails.name">
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary" (click)="saveNSD()" placement="top"
+                ngbTooltip="Save">
+                <i class="fas fa-save"></i> {{'SAVE' | translate}}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-2" *ngIf="isShowVLDetails">
+        <div class="row">
+          <div class="col-12 p-0">
+            <form autocomplete="off">
+              <div class="form-group row">
+                <label class="col-sm-4 p-0 col-form-label">{{ 'NAME' | translate }}</label>
+                <div class="col-sm-8 p-0">
+                  <input type="text" class="form-control" placeholder="{{ 'NAME' | translate }}" name="name"
+                    [(ngModel)]="vlDetails.name">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4 p-0 col-form-label">{{'PAGE.NSPACKAGE.NSCOMPOSE.MGMTNETWORK' | translate}}</label>
+                <div class="col-sm-8 p-0">
+                  <select class="form-control custom-select" name="mgmt-network" [(ngModel)]="vlDetails['mgmt-network']">
+                    <option [value]="true">True</option>
+                    <option [value]="false">False</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4 p-0 col-form-label">{{'PAGE.NSPACKAGE.NSCOMPOSE.VIMNETWORKNAME' | translate}}</label>
+                <div class="col-sm-8 p-0">
+                  <input type="text" class="form-control" placeholder="Vim network name" name="vim-network-name"
+                    [(ngModel)]="vlDetails['vim-network-name']">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4 p-0 col-form-label">{{'TYPE' | translate}}</label>
+                <div class="col-sm-8 p-0">
+                  <input type="text" class="form-control" placeholder="Type" name="type" [(ngModel)]="vlDetails.type">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4 p-0 col-form-label">{{ 'ID' | translate }}</label>
+                <div class="col-sm-8 p-0">
+                  <input type="text" class="form-control" placeholder="{{ 'ID' | translate }}" name="id"
+                    [(ngModel)]="vlDetails.id">
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary" placement="top" ngbTooltip="Save"
+                (click)="saveVL(vlDetails.id)">
+                <i class="fas fa-save"></i> {{'SAVE' | translate}}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-2" *ngIf="isShowVNFDetails">
+        <div class="row">
+          <div class="col-12 p-0">
+            <table class="table table-bordered text-dark custom-table">
+              <tbody>
+                <tr>
+                  <td>{{'PAGE.NSPACKAGE.NSCOMPOSE.MEMBER-VNF-INDEX' | translate}}</td>
+                  <td>{{ vnfData['member-vnf-index'] }}</td>
+                </tr>
+                <tr>
+                  <td>{{'PAGE.NSPACKAGE.NSCOMPOSE.VNFD-ID-REF' | translate}}</td>
+                  <td>{{ vnfData['vnfd-id-ref'] }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-2" *ngIf="isShowCPDetails">
+        <div class="row">
+          <div class="col-12 p-0">
+            <table class="table table-bordered text-dark custom-table">
+              <tbody>
+                <tr>
+                  <td>{{'PAGE.NSPACKAGE.NSCOMPOSE.VLD-ID' | translate}}</td>
+                  <td>{{ vlDetails['name'] }}</td>
+                </tr>
+                <tr>
+                  <td>{{'PAGE.NSPACKAGE.NSCOMPOSE.VNFD-CP-REF' | translate}}</td>
+                  <td>{{ cpData['vnfd-connection-point-ref'] }}</td>
+                </tr>
+                <tr>
+                  <td>{{'MEMBERINDEX' | translate}}</td>
+                  <td>{{ cpData['member-vnf-index-ref'] }}</td>
+                </tr>
+                <tr>
+                  <td>{{'PAGE.NSPACKAGE.NSCOMPOSE.VNFD-ID-REF' | translate}}</td>
+                  <td>{{ cpData['vnfd-id-ref'] }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-sidebar>
+  <!-- Page content -->
+  <div ng-sidebar-content>
+    <button (click)="toggleSidebar()" class="btn btn-default" placement="right" ngbTooltip="{{'OPEN' | translate }}">
+      <i class="fa fa-arrow-right detail-sidebar" aria-hidden="true"></i>
+    </button>
+  </div>
+</ng-sidebar-container>
+<div class="container-fluid text-dark">
+  <div class="row bg-white ns-composer-form">
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 pl-0 px-0">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-2">
+          <fieldset class="p-2">
+            <legend class="vl-legend">
+              {{'PAGE.TOPOLOGY.SELECTELEMENT' | translate}}
+            </legend>
+            <ul class="list-group list-group-flush dragable">
+              <li class="list-group-item" draggable="true" (dragstart)="drag($event)" id="vl">
+                <img src="assets/images/VL.svg" class="ns-svg" draggable="false"/>
+                &nbsp;<span class="span-overflow-text font-weight-bold">{{'PAGE.TOPOLOGY.VL' | translate}}</span>
+                <span class="drag-icon pull-right"><i class="fas fa-arrows-alt"></i></span>
+              </li>
+            </ul>
+          </fieldset>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <fieldset class="p-2">
+            <legend class="vnfd-legend">
+              {{'PAGE.TOPOLOGY.VNFD' | translate}}
+            </legend>
+            <ul class="list-group list-group-flush dragable scroll-box">
+              <li id="list['id']" class="list-group-item" draggable="true" (dragstart)="drag($event)"
+                [attr.data-id]="list['id']" *ngFor="let list of vnfList" placement="top"
+              container="body" ngbTooltip="{{ list['short-name'] }}">
+                <img src="assets/images/VNFD.svg" class="ns-svg" draggable="false"/>
+                &nbsp;<span class="span-overflow-text font-weight-bold">{{ list['short-name'] }}</span>
+                <span class="drag-icon pull-right"><i class="fas fa-arrows-alt"></i></span>
+              </li>
+            </ul>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+      <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 pl-0">
+          <div class="btn-group list" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-primary topology-btn" (click)="onFreeze()"
+              [class.pinned]="classApplied" placement="top" container="body" ngbTooltip="{{(classApplied ? 'UNFREEZE' : 'FREEZE') | translate}}">
+              <i class="fas fa-thumbtack"></i>
+            </button>
+            <button type="button" class="btn btn-primary topology-btn" (click)="onEdit()" placement="top"
+              container="body" ngbTooltip="{{'EDIT' | translate}}">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-primary topology-btn" (click)="showInfo()" placement="top"
+              container="body" ngbTooltip="{{'PAGE.TOPOLOGY.HELP' | translate}}">
+              <i class="fas fa-info"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right pr-0 badgegroup">
+          <span class="badge badge-primary badge-pill bg-white text-body font-weight-bold">
+            <img src="assets/images/VNFD.svg" class="ns-svg" draggable="false"/>
+            <br>{{'PAGE.TOPOLOGY.VNF' | translate}}</span>
+          <span class="badge badge-primary badge-pill bg-white text-body font-weight-bold">
+            <img src="assets/images/VL.svg" class="ns-svg" draggable="false"/>
+            <br>{{'PAGE.TOPOLOGY.VL' | translate}}</span>
+          <span class="badge badge-primary badge-pill bg-white text-body font-weight-bold">
+            <img src="assets/images/CP.svg" class="ns-svg" draggable="false"/>
+            <br>{{'PAGE.TOPOLOGY.CP' | translate}}</span>
+        </div>
+      </div>
+      <div class="row border-all">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 svg-container">
+          <svg preserveAspectRatio="xMidYMin slice" (drop)="drop($event)" (dragover)="allowDrop($event)"
+            id="graphContainer" #graphContainer>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>

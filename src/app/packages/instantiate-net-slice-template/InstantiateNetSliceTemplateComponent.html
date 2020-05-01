@@ -1,0 +1,98 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<form [formGroup]="netSliceInstantiateForm" (ngSubmit)="instantiateNSTSubmit()">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{'NEW' | translate}} NSI</h4>
+    <button class="button-xs" type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+      <i class="fas fa-times-circle text-danger"></i>
+    </button>
+  </div>
+  <div class="modal-body modal-body-custom-height netsliceinstantiate-ns">
+    <div class="form-group row">
+      <label class="col-sm-12 col-form-label mandatory-label"
+        [ngClass]="{'text-danger': netSliceInstantiateForm.invalid === true && submitted === true}">{{'MANDATORYCHECK' | translate}}</label>
+      <label class="col-sm-4 col-form-label" for="nsiName">{{'PAGE.NSTINSTANCEINSTANTIATE.NSNAME' | translate}}*</label>
+      <div class="col-sm-8">
+        <input autocomplete="off" class="form-control"
+          placeholder="{{'PAGE.NSTINSTANCEINSTANTIATE.NSNAME' | translate}}" type="text" formControlName="nsiName"
+          id="nsiName" [ngClass]="{ 'is-invalid': submitted && f.nsiName.errors }" required>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label"
+        for="nsiDescription">{{'PAGE.NSTINSTANCEINSTANTIATE.DESCRIPTION' | translate}}*</label>
+      <div class="col-sm-8">
+        <textarea class="form-control" placeholder="{{'PAGE.NSTINSTANCEINSTANTIATE.DESCRIPTION' | translate}}"
+          type="text" formControlName="nsiDescription" id="nsiDescription"
+          [ngClass]="{ 'is-invalid': submitted && f.nsiDescription.errors }" required></textarea>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="nstId">{{'PAGE.NSTINSTANCEINSTANTIATE.NSTID' | translate}}*</label>
+      <div class="col-sm-8">
+        <ng-select [items]="netSliceSelect" bindLabel="name" bindValue="_id"
+          placeholder="{{'SELECT' | translate}} {{'PAGE.NSTINSTANCEINSTANTIATE.NSTID' | translate}}"
+          formControlName="nstId" [(ngModel)]="netsliceNstId" id="nstId"
+          [ngClass]="{ 'is-invalid': submitted && f.nstId.errors }" required>
+        </ng-select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label"
+        for="vimAccountId">{{'PAGE.NSTINSTANCEINSTANTIATE.VIMACCOUNT' | translate}}*</label>
+      <div class="col-sm-8">
+        <ng-select [items]="vimDetailsSelect" bindLabel="name" bindValue="_id"
+          placeholder="{{'SELECT' | translate}} {{'PAGE.NSTINSTANCEINSTANTIATE.VIMACCOUNT' | translate}}"
+          formControlName="vimAccountId" [(ngModel)]="vimAccountId" id="vimAccountId"
+          [ngClass]="{ 'is-invalid': submitted && f.vimAccountId.errors }" required>
+        </ng-select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="ssh_keys">{{'PAGE.NSTINSTANCEINSTANTIATE.SSHKEY' | translate}}</label>
+      <div class="col-sm-8">
+        <textarea class="form-control" placeholder="{{'PAGE.NSTINSTANCEINSTANTIATE.SSHKEYMSG' | translate}}"
+          formControlName="ssh_keys" id="ssh_keys"></textarea>
+        <div class="fileupload-text mt-1 mb-1">{{'FILEUPLOADLABEL' | translate}}</div>
+        <div class="custom-file">
+          <input type="file" #fileInputSSH class="custom-file-input" (change)="sshFile($event.target.files)"
+            id="customSSHFile">
+          <label class="custom-file-label" #fileInputSSHLabel for="customSSHFile">{{'CHOOSEFILE' | translate}}</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="config">{{'CONFIG' | translate}}</label>
+      <div class="col-sm-8">
+        <textarea class="form-control" placeholder="{{'YAMLCONFIG' | translate}}" formControlName="config"
+          id="config"></textarea>
+        <div class="fileupload-text mt-1 mb-1">{{'FILEUPLOADLABEL' | translate}}</div>
+        <div class="custom-file">
+          <input type="file" #fileInputConfig class="custom-file-input" (change)="configFile($event.target.files)"
+            id="customConfigFile">
+          <label class="custom-file-label" #fileInputConfigLabel for="customConfigFile">{{'CHOOSEFILE' | translate}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="activeModal.close()">{{'CANCEL' | translate}}</button>
+    <button type="submit" class="btn btn-primary">{{'CREATE' | translate}}</button>
+  </div>
+</form>
+<app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>

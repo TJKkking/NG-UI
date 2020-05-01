@@ -1,0 +1,108 @@
+/*
+ Copyright 2020 TATA ELXSI
+
+ Licensed under the Apache License, Version 2.0 (the 'License');
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+ */
+/**
+ * @ file contains custom @mixin functions
+ */
+
+// @mixin for container width and height
+@mixin wh-value($width, $height) {
+    width: $width;
+    height: $height;
+}
+
+// @mixin for padding values
+@mixin padding-value($top, $right, $bottom, $left) {
+    padding: $top+px $right+px $bottom+px $left+px;
+}
+
+// @mixin for any padding values
+@mixin padding-percentage-value($top: null, $right: null, $bottom: null, $left: null) {
+    padding: $top $right $bottom $left;
+}
+
+// @mixin for margin values
+@mixin margin-value($top, $right, $bottom, $left) {
+    margin: $top+px $right+px $bottom+px $left+px;
+}
+
+// @mixin for margin values in percentage
+@mixin margin-value-percentage($top: null, $right: null, $bottom: null, $left: null) {
+    margin: $top $right $bottom $left;
+}
+
+// @mixin for center-align element/container
+@mixin align-center($topbottom, $width) {
+    margin: $topbottom auto;
+    width: $width;
+}
+
+// @mixin for center-align with top and bottom margin element/container
+@mixin tband-align-center($topbottom, $width, $bottommargin) {
+    margin: $topbottom auto $bottommargin;
+    width: $width;
+}
+
+// @mixin for transform style
+@mixin transform($x, $y, $z)
+{
+    transform: translate3d($x+px, $y+px, $z+px);
+    -webkit-transform: translate3d($x+px, $y+px, $z+px);
+}
+
+// @mixin for font-family setting
+@mixin font-family($font){
+    font-family: $font;
+}
+
+// @mixin for font-style setting
+@mixin font-style($font-style){
+    font-style: $font-style;
+}
+
+// Mixin for font & its attributes
+@mixin font($family, $size, $weight) {
+    font-family: $family;
+    font-size: $size;
+    font-weight: $weight;
+}
+
+// @mixin for line-height setting
+@mixin line-height($line-height){
+    line-height: $line-height;
+}
+
+// @mixin for letter-spacing setting
+@mixin letter-spacing($letter-spacing){
+    letter-spacing: $letter-spacing;
+}
+
+// @mixin to manipulate placeholder attribute in input element
+@mixin placeholder {
+  ::-webkit-input-placeholder {@content}
+  :-moz-placeholder           {@content}
+  ::-moz-placeholder          {@content}
+  :-ms-input-placeholder      {@content}
+}
+
+// mixins for user-select
+@mixin user-select($select) {
+    @each $pre in -webkit-, -moz-, -ms-, -o- {
+      #{$pre + user-select}: #{$select};
+    } 
+    #{user-select}: #{$select};
+  }

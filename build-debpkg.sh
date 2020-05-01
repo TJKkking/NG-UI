@@ -15,8 +15,8 @@
 #    under the License.
 
 
-PKG_DIRECTORIES="lib static template"
-PKG_FILES="LICENSE README.md"
+PKG_DIRECTORIES="nginx src"
+PKG_FILES="angular.json browserslist CONTRIBUTING.md package.json proxy.conf.json tsconfig.json tslint.json LICENSE README.md"
 MDG_NAME=ngui
 DEB_INSTALL=debian/osm-${MDG_NAME}.install
 export DEBEMAIL="gerardo.garciadeblas@telefonica.com"
@@ -52,5 +52,3 @@ pushd $PKG_DIR
 dh_make -y --indep --createorig --a -c apache
 dpkg-buildpackage -uc -us -tc -rfakeroot
 popd
-
-

@@ -1,0 +1,68 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<form [formGroup]="k8srepoForm" (ngSubmit)="k8sAddRepoSubmit();">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{'PAGE.K8S.NEWK8SREPO' | translate}}</h4>
+    <button class="button-xs" type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+      <i class="fas fa-times-circle text-danger"></i>
+    </button>
+  </div>
+  <div class="modal-body k8saddrepo">
+    <div class="form-group row">
+      <label class="col-sm-12 col-form-label mandatory-label"
+        [ngClass]="{'text-danger': k8srepoForm.invalid === true && submitted === true}">{{'MANDATORYCHECK' | translate}}</label>
+      <label class="col-sm-4 col-form-label" for="name">{{'PAGE.K8S.NAME' | translate}}*</label>
+      <div class="col-sm-8">
+        <input autocomplete="off" class="form-control" placeholder="{{'PAGE.K8S.NAME' | translate}}" type="text"
+          formControlName="name" id="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" required>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="type">{{'PAGE.K8S.TYPE' | translate}}*</label>
+      <div class="col-sm-8">
+        <ng-select [items]="repoTypeSelect" bindLabel="name" bindValue="id"
+          placeholder="{{'SELECT' | translate}} {{'PAGE.K8S.TYPE' | translate}}" formControlName="type" id="type"
+          [ngClass]="{ 'is-invalid': submitted && f.type.errors }" required>
+        </ng-select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="url">{{'PAGE.K8S.URL' | translate}}*</label>
+      <div class="col-sm-8">
+        <input autocomplete="off" class="form-control" placeholder="{{'PAGE.K8S.URL' | translate}}" type="url"
+          formControlName="url" id="url" [ngClass]="{ 'is-invalid': submitted && f.url.errors }" required>
+        <div *ngIf="k8srepoForm.invalid" class="invalid-feedback">
+          <div *ngIf="f.url.errors && f.url.value">{{'DOMVALIDATIONS.INVALIDURL' | translate}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="description">{{'PAGE.K8S.DESCRIPTION' | translate}}*</label>
+      <div class="col-sm-8">
+        <textarea class="form-control" placeholder="{{'PAGE.K8S.DESCRIPTION' | translate}}" type="text"
+          formControlName="description" id="description" [ngClass]="{ 'is-invalid': submitted && f.description.errors }"
+          required></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="activeModal.close()">{{'CANCEL' | translate}}</button>
+    <button type="submit" class="btn btn-primary">{{'CREATE' | translate}}</button>
+  </div>
+</form>
+<app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>

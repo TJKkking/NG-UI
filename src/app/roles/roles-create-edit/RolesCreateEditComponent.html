@@ -1,0 +1,92 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<div class="row d-flex flex-row justify-content-between">
+  <div class="d-flex align-items-center header-style">
+    {{ (getRoleType == 'Add' ? 'PAGE.ROLES.CREATEROLE' : 'PAGE.ROLES.EDITROLE') | translate}}</div>
+  <span class="button">
+    <button class="btn btn-primary" type="button" (click)="viewSelection()" placement="top" container="body"
+      ngbTooltip="{{ (viewMode == 'text' ? 'PAGE.ROLES.PREVIEW' : 'PAGE.ROLES.TEXTVIEW') | translate}}"> <i
+        [ngClass]="{ 'fa': 'true', 'fa-comment': viewMode == 'text', 'fa-edit': viewMode == 'preview' }"></i>&nbsp;{{ (viewMode == 'text' ? 'PAGE.ROLES.PREVIEW' : 'PAGE.ROLES.TEXTVIEW') | translate}}
+    </button>
+  </span>
+</div>
+<form [formGroup]="roleForm" (ngSubmit)="roleCheck()" autocomplete="off">
+  <div class="form-group row">
+    <label class="col-sm-12 col-form-label mandatory-label"
+      [ngClass]="{'text-danger': roleForm.invalid === true && submitted === true}">{{'MANDATORYCHECK' | translate}}</label>
+    <label class="col-sm-2 col-form-label">{{'NAME' | translate}}*</label>
+    <div class="col-sm-5">
+      <input placeholder="{{'NAME' | translate}}" type="text" class="form-control" maxlength="30"
+        formControlName="roleName" [ngClass]="{ 'is-invalid': submitted && f.roleName.errors }" required>
+    </div>
+  </div>
+  <div class="form-group row" *ngIf="viewMode == 'text'">
+    <label class="col-sm-2 col-form-label">{{'PAGE.ROLES.PERMISSIONS' | translate}}</label>
+    <div class="col-sm-5">
+      <textarea placeholder="{{'PAGE.ROLES.YAMLPERMISSIONS' | translate}}" rows="10" cols="50" type="text"
+        class="form-control" formControlName="permissions"></textarea>
+    </div>
+  </div>
+  <div class="form-group row" [ngClass]="{ 'justify-content-end': viewMode == 'text' }">
+    <div class="col-sm-6">
+      <button type="button" class="btn btn-danger" routerLink="/roles/details">{{'CANCEL' | translate}}</button>
+      <button class="btn btn-primary ml-3"
+        type="submit">{{ (getRoleType == 'Add' ? 'CREATE' : 'APPLY') | translate}}</button>
+    </div>
+  </div>
+</form>
+<ngb-accordion class="roles-section" [closeOthers]="true" type="secondary" *ngIf="rolePermissions && viewMode == 'preview'">
+  <ngb-panel *ngFor="let permissionGroup of rolePermissions; let i = index">
+    <ng-template ngbPanelHeader let-opened="opened">
+      <div class="d-flex align-items-center justify-content-between">
+        <button ngbPanelToggle class="btn text-dark container-fluid text-left pl-0"><i
+          [ngClass]="{ 'fas': true, 'fa-angle-down': opened, 'fa-angle-right': !opened }"></i> {{permissionGroup.title}}</button>
+      </div>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let permission of permissionGroup.permissions">
+          <div class="row">
+            <div class="col-md-6 col-sm-6 p-2">{{permission.operation}}</div>
+            <div class="btn-group btn-group-toggle custom-button col-md-6 col-sm-6" ngbRadioGroup name="permission"
+              [(ngModel)]="permission.value">
+              <label ngbButtonLabel ngbTooltip="true">
+                <input ngbButton type="radio" [value]="true">
+                <span class="bg-success"><img src="assets/images/TICK.svg" alt="Checked Icon" /></span>
+              </label>
+              <label ngbButtonLabel ngbTooltip="NA">
+                <input ngbButton type="radio" value="NA">
+                <span class="bg-warning"><img src="assets/images/TICK.svg" alt="Checked Icon" /></span>
+              </label>
+              <label ngbButtonLabel ngbTooltip="false">
+                <input ngbButton type="radio" [value]="false">
+                <span class="bg-danger"><img src="assets/images/TICK.svg" alt="Checked Icon" /></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
+<div class="float-right" *ngIf="viewMode == 'preview'">
+  <button type="button" class="btn btn-danger" routerLink="/roles/details">{{'CANCEL' | translate}}</button>
+  <button class="btn btn-primary ml-3"
+    (click)="roleCheck()">{{ (getRoleType == 'Add' ? 'CREATE' : 'APPLY') | translate}}</button>
+</div>
+<app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>

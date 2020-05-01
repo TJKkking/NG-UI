@@ -1,0 +1,60 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{userTitle}}</h4>
+    <button class="button-xs" type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+        <i class="fas fa-times-circle text-danger"></i>
+    </button>
+</div>
+<form [formGroup]="projectRoleForm" (ngSubmit)="addProjectRole()">
+    <div class="modal-body" *ngIf="userDetails" formArrayName="project_role_mappings">
+        <div class="form-group row p-2 bg-light text-white projects-roles-head text-white justify-content-end">
+            <div class="col-4">
+                <button type="button" class="btn btn-primary" (click)="addMapping()">
+                    <i class="fas fa-plus-circle"></i> {{'PAGE.USERS.ADDMAPPINGS' | translate}}</button>
+            </div>
+        </div>
+        <label class="col-sm-12 col-form-label mandatory-label" [ngClass]="{'text-danger': projectRoleForm.invalid === true && submitted === true}">{{'MANDATORYCHECK' | translate}}</label>
+        <div *ngFor="let params of getControls(); let i = index;" [formGroupName]="i">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" for="project_{{i}}">{{'PROJECT' | translate}}*</label>
+                <div class="col-sm-3">
+                    <ng-select placeholder="{{'SELECT' | translate}}" [items]="projects" bindLabel="name"
+                        bindValue="name" formControlName="project_name" id="project_{{i}}"
+                        [ngClass]="{ 'is-invalid': submitted && params.controls.project_name.errors }"></ng-select>
+                </div>
+                <label class="col-sm-2 col-form-label" for="roles_{{i}}">{{'ROLES' | translate}}*</label>
+                <div class="col-sm-4">
+                    <ng-select placeholder="{{'SELECT' | translate}}" [items]="roles" bindLabel="name" bindValue="name"
+                        formControlName="role_name" id="roles_{{i}}"
+                        [ngClass]="{ 'is-invalid': submitted && params.controls.role_name.errors }"></ng-select>
+                </div>
+                <div class="col-sm-1">
+                    <button type="button" class="btn btn-sm btn-danger remove-mapping" (click)="removeMapping(i)">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="activeModal.close()">{{'CANCEL' | translate}}</button>
+        <button type="submit" class="btn btn-primary">{{'APPLY' | translate}}</button>
+    </div>
+</form>
+<app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>

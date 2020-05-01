@@ -1,0 +1,688 @@
+/*
+ Copyright 2020 TATA ELXSI
+
+ Licensed under the Apache License, Version 2.0 (the 'License');
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+ */
+/** Styles for the application **/
+@import "../../assets/scss/mixins/mixin";
+@import "../../assets/scss/variable";
+$customnavbar-padding-x: ($spacer / 0.5) !default;
+* {
+  outline: 0;
+}
+button[type=submit]:focus, .sidebar-body button[type=button]:focus {
+  @include box-shadow(0, 0, 0, 0.2rem, lighten($primary, 50%) !important);
+}
+.btn-danger:focus{
+  @include box-shadow(0, 0, 0, 0.2rem, lighten($danger, 30%) !important);
+}
+body,
+.list-overflow,
+.scroll-box,
+.smarttable-style,
+.modal-body-custom-height,
+.layout-wrapper, .CodeMirror-vscrollbar, .ng-sidebar, .runninginstances .popover-body {
+  &::-webkit-scrollbar {
+    @include wh-value(10px, null);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-clip: content-box;
+    @include border(all, 3, solid, transparent);
+    @include roundedCorners(7);
+    @include box-shadow(0, 0, 0, 10px, rgba($black, 0.8), inset);
+  }
+  &::-webkit-scrollbar-button {
+    @include wh-value(0, 0);
+    @include flexbox(none, null, null, null, null, null);
+  }
+  &::-webkit-scrollbar-corner {
+    @include background(null, transparent, null, null, null);
+  }
+}
+body {
+  @include font-family("Roboto");
+  @include background(null, $theme-bg-color, null, null, null);
+  overflow-x: hidden;
+  .osm-logo {
+    @include wh-value(100px, auto);
+  }
+  .bg-light {
+    @include background(null, $theme-bg-color !important, null, null, null);
+  }
+  a {
+    color: $primary;
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }
+  .badge {
+    @include line-height(normal);
+    &.badge-pill {
+      @include padding-percentage-value(0.2em, 0.6em, 0.2em, 0.6em);
+    }
+  }
+  button {
+    outline: none;
+    @include box-shadow(0, 0, 0, 0, transparent);
+    &:hover,
+    &:focus,
+    &:active {
+      outline: none;
+      @include box-shadow(0, 0, 0, 0, transparent !important);
+    }
+    &.btn-primary,
+    &.btn-default,
+    &.btn-warning,
+    &.btn-outline-primary:hover,
+    &.btn-outline-warning:hover {
+      color: $white;
+      &:hover,
+      &:focus,
+      &:not(:disabled):not(.disabled):active {
+        color: $white;
+        @include background(null, $primary, null, null, null);
+        border-color: $primary;
+      }
+      &:disabled {
+        cursor: not-allowed;
+      }
+    }
+  }
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .navbar {
+    @include padding-percentage-value(
+      $navbar-padding-y,
+      $customnavbar-padding-x,
+      $navbar-padding-y,
+      $customnavbar-padding-x
+    );
+  }
+  .form-control {
+    @include roundedCorners(4);
+    @include font(null, 12px, null);
+    &::placeholder {
+      color: $gray-400;
+    }
+  }
+  .modal-dialog {
+    max-width: 600px;
+  }
+  .header-style {
+    @include font(null, 1.2rem, 700);
+    color: $primary;
+    @include line-height(1.25);
+  }
+  .cursor-default {
+    cursor: default;
+  }
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  .mr-top-5 {
+    @include margin-value-percentage(5px, auto, auto, auto);
+  }
+  .padLeft0 {
+    padding-left: 0px;
+  }
+  .padRight0 {
+    padding-right: 0px;
+  }
+  .mandatory-label {
+    @include font(null, 10px, null);
+  }
+  .dropzone {
+    min-height: 50px;
+    @include flexbox(table, null, null, null, null, null);
+    @include wh-value(100%, 50px);
+    @include border(all, 1, dashed, $secondary);
+    cursor: pointer;
+    .text-wrapper {
+      @include padding-value(5, 5, 5, 5);
+      @include flexbox(table-cell, null, null, null, null, null);
+      vertical-align: middle;
+    }
+    .file-drop-title {
+      @include font(null, 16px, null);
+    }
+  }
+  .close {
+    opacity: 1 !important;
+  }
+  .roles-section {
+    .card {
+      .bg-secondary {
+        @include background(null, $gray-400 !important, null, null, null);
+      }
+    }
+  }
+  .card {
+    margin-bottom: 1rem;
+  }
+  .custom-card {
+    @include border(top, 3, solid, $primary);
+    @include roundedCorners(3);
+    .custom-card-body {
+      @include padding-value(15, 15, 15, 15);
+    }
+  }
+  table-cell-default-editor select-editor select {
+    @include wh-value(null, calc(2rem + 8px) !important);
+    @include padding-value(0, 10, 0, 10);
+  }
+  .CodeMirror {
+    min-height: 400px !important;
+  }
+  .table-layout-fixed {
+    table-layout: fixed;
+    word-wrap: break-word;
+  }
+  .border-radius-default {
+    @include roundedCorners(3);
+  }
+  /** Model Popup-Design **/
+  .modal-body-custom-height {
+    max-height: 65vh;
+    overflow-y: auto;
+  }
+  /** Hide input clear icon in IE */
+  input::-ms-clear {
+    @include flexbox(none, null, null, null, null, null);
+  }
+  /** Overwrite the tooltip z-index */
+  .tooltip {
+    z-index: 1010;
+  }
+  /** Popover Header **/
+  .popover-header {
+    color: $primary;
+    @include background(null, $theme-bg-color, null, null, null);
+  }
+  /** Vim Show running instance Details **/
+  .runninginstances{
+     width:200px;
+     .popover-body{
+      max-height: 200px;
+      overflow-y: scroll;
+     }
+  }
+  /****************************************************************************/
+  /************************** Smart table custom design ***********************/
+  /****************************************************************************/
+  ng2-smart-table {
+    @include font(null, 15px, null);
+    color: $gray-700;
+    .form-control {
+      @include wh-value(null, auto);
+    }
+    &.dataTables_empty td {
+      text-align: center;
+    }
+    ng2-smart-table-title {
+      * {
+        @include font(null, 12px, null);
+      }
+      a {
+        color: $gray-700 !important;
+        @include flexbox(block, null, null, null, null, null);
+        text-decoration: none;
+        &::after {
+          content: "\f0dc" !important;
+          @include font-family("Font Awesome 5 Free");
+          float: right;
+          color: $gray-500;
+          @include wh-value(0, 0);
+        }
+        &.asc::after {
+          content: "\f0de" !important;
+          @include font-family("Font Awesome 5 Free");
+          float: right;
+          color: $gray-500;
+        }
+        &.desc::after {
+          content: "\f0dd" !important;
+          @include font-family("Font Awesome 5 Free");
+          float: right;
+          color: $gray-500;
+        }
+        &:hover {
+          text-decoration: none !important;
+        }
+        &.sort.desc::after {
+          transform: none !important;
+          margin-bottom: 0;
+        }
+        &.sort.asc::after,
+        &.sort.desc::after {
+          content: "";
+          @include flexbox(inline-block, null, null, null, null, null);
+          @include wh-value(0, 0);
+          @include border(all, 0, solid, transparent !important);
+          margin-bottom: 0 !important;
+        }
+      }
+      span {
+        color: $gray-700;
+      }
+    }
+    ng2-smart-table-cell {
+      word-break: break-word;
+      table-cell-view-mode {
+        @include font(null, 12px, null);
+        .icon-label {
+          @include font(null, 20px, null);
+          @include flexbox(inline-block, null, null, null, null, null);
+          @include wh-value(100px, 0);
+          text-align: center;
+          cursor: default;
+        }
+      }
+    }
+    .ng2-smart-filter {
+      @include wh-value(null, calc(2rem + 2px) !important);
+      @include font(null, 12px, null);
+      margin-top: 6px;
+    }
+    table.list-data {
+      tr td,
+      tr th {
+        @include padding-value(2, 10, 2, 10);
+        vertical-align: middle !important;
+      }
+      tbody {
+        tr.selected {
+          background: none !important;
+        }
+      }
+    }
+    default-table-filter {
+      select-filter {
+        select.form-control {
+          @include flexbox(inline-block, null, null, null, null, null);
+          @include wh-value(null, calc(1.5rem + 2px) !important);
+          vertical-align: middle;
+          background: $white
+            url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E")
+            no-repeat right 0.75rem center;
+          background-size: 8px 10px;
+          @include border(all, 1, solid, $gray-200);
+          @include roundedCorners(2);
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          &::-ms-expand {
+            visibility: hidden;
+          }
+        }
+      }
+      select-filter {
+        select {
+          @include roundedCorners(4);
+        }
+      }
+      input-filter {
+        input[type="text"] {
+          @include position_value(relative, null, null, null, null);
+        }
+        &:after {
+          @include position_value(relative, -26px, null, null, 100%);
+          content: "\f002";
+          @include font("Font Awesome 5 Free", 10px, null);
+          @include padding-value(0, 0, 0, 2);
+          color: $gray-500;
+        }
+      }
+    }
+    ng2-smart-table-pager {
+      @include flexbox(null, null, row-reverse, null, null, null);
+      @include padding-value(5, 20, 5, 20);
+      .ng2-smart-pagination {
+        .ng2-smart-page-item {
+          @include font(null, 10px, null);
+          a {
+            &:hover {
+              text-decoration: none;
+            }
+          }
+          .ng2-smart-page-link {
+            @include font(null, 12px !important, null);
+            &.page-link {
+              text-align: center;
+              vertical-align: middle;
+              color: $primary;
+              @include border(all, 1, solid, $primary !important);
+              &:hover {
+                @include background(null, $primary !important, null, null, null);
+                color: $white;
+              }
+            }
+          }
+          span.ng2-smart-page-link.page-link {
+            color: $white;
+            @include background(null, $primary !important, null, null, null);
+            @include border(all, 1, solid, $primary !important);
+          }
+        }
+      }
+    }
+  }
+  /****************************************************************************/
+  /*********************** Button styles under list class *********************/
+  /****************************************************************************/
+  .list {
+    &.action {
+      button.btn.btn-primary {
+        @include padding-value(2, 8, 2, 8);
+      }
+    }
+    button:focus {
+      outline: 0;
+      @include box-shadow(0, 0, 0, 0, transparent);
+    }
+    button.btn.btn-primary {
+      color: $primary;
+      @include background(null, $white, null, null, null);
+      &:not(.active:hover) {
+        @include background(null, $white, null, null, null);
+      }
+      &:active {
+        color: $primary;
+        @include background(null, $white, null, null, null);
+      }
+      &.action-button {
+        color: $white;
+        @include background(null, $primary !important, null, null, null);
+        &:hover {
+          @include background(null, $primary, null, null, null);
+        }
+      }
+    }
+    .dropdown-menu {
+      @include border(all, 1, solid, $primary);
+      @include padding-value(0, 0, 0, 0);
+      button.btn.btn-primary {
+        @include background(null, transparent, null, null, null);
+        @include padding-value(8, 8, 8, 8);
+        @include roundedCorners(0);
+        &:hover {
+          @include background(null, $primary, null, null, null);
+          color: $white;
+        }
+        &:not(:last-child) {
+          @include border(bottom, 1, solid, $primary);
+        }
+      }
+    }
+  }
+  /****************************************************************************/
+  /*********************** Custom tabel design in topology ********************/
+  /****************************************************************************/
+  .custom-table {
+    td:first-child {
+      @include font(null, null, bold);
+      text-align: right;
+    }
+    th,
+    td {
+      @include padding-value(5, 7, 5, 7);
+      @include font(null, 10px, null);
+      @include line-height(15px);
+    }
+  }
+  /****************************************************************************/
+  /************************** Ng select custom design *************************/
+  /****************************************************************************/
+  .ng-select {
+    &.is-invalid .ng-select-container {
+      @include border(all, 1, solid, $red);
+    }
+    .ng-select-container {
+      @include border(all, 1, solid, $gray-200);
+      .ng-value-container .ng-placeholder {
+        color: $gray-80;
+      }
+    }
+  }
+  /****************************************************************************/
+  /******************** Custom nav section for default status *****************/
+  /****************************************************************************/
+  .list-utilites-actions {
+    @include flexbox(flex, null, row, null, center, null);
+    nav.custom-items-config {
+      @include position_value(relative, null, null, null, null);
+      @include roundedCorners(3);
+      span {
+        @include font(null, 13px, 600);
+        @include flexbox(inline-block, null, null, null, null, null);
+        @include position_value(relative, null, null, null, null);
+        text-decoration: none;
+        text-align: center;
+        @include margin-value(0, 0, 0, 10);
+        &:first-child {
+          @include margin-value(0, 0, 0, 0);
+        }
+        i {
+          @include font(null, 14px, null);
+          @include margin-value(0, 5, 0, 0);
+        }
+      }
+    }
+  }
+  /****************************************************************************/
+  /************************* File upload custom design ************************/
+  /****************************************************************************/
+  .custom-file-label {
+    color: $primary;
+    @include roundedCorners(4);
+    @include border(all, 1, solid, $primary);
+    overflow: hidden;
+    @include margin-value(0, 0, 0, 0);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 80px;
+    &::after {
+      color: $white;
+      @include background(null, $primary, null, null, null);
+    }
+  }
+  /****************************************************************************/
+  /************************* Notifier Container Design ************************/
+  /****************************************************************************/
+  .notifier__container {
+    ul {
+      @include margin-value(0, 0, 0, 0);
+    }
+  }
+  /***************************************************************************/
+  /************************* Topology Common Design **************************/
+  /****************************************************************************/
+  .ns-composer-form,
+  .vnf-composer-form,
+  .ns-instance-form {
+    @include font(null, 12px, null);
+    .ns-svg,
+    .vnf-svg {
+      @include wh-value(30px, 25px);
+    }
+    .svg-container {
+      min-height: 60vh;
+    }
+    .form-control {
+      @include font(null, 10px, null);
+    }
+    .scroll-box {
+      max-height: 285px;
+      overflow-y: scroll;
+    }
+    .border-all {
+      @include border(all, 1, solid, $primary);
+    }
+    .list-group {
+      &.inside-svg {
+        .list-group-item {
+          @include padding-value(3.2, 8, 3.2, 8);
+        }
+      }
+      &.dragable {
+        .list-group-item {
+          cursor: move;
+          @include padding-value(4.8, 4.8, 4.8, 4.8);
+          @include margin-value(0, 0, 5, 0);
+          @include background(null, $gray-200, null, null, null);
+          @include flexbox(flex, null, null, null, center, null);
+          border: none;
+          .span-overflow-text {
+            @include wh-value(90%, null);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            @include line-height(25px);
+          }
+        }
+      }
+    }
+    .drag-icon {
+      color: $gray-600;
+      @include font(null, 15px, null);
+    }
+    .ctrl {
+      cursor: move;
+    }
+    svg {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      -o-user-select: none;
+      user-select: none;
+      image.node:hover,
+      circle.node:hover {
+        opacity: 0.7 !important;
+      }
+      image.active,
+      circle.active {
+        opacity: 0.7 !important;
+      }
+      path.link {
+        stroke: $dark-gray;
+        stroke-width: 2px;
+        fill: none;
+        &:hover {
+          stroke-width: 4px;
+        }
+        .dragline {
+          pointer-events: none;
+        }
+      }
+      .node_text {
+        text-anchor: middle;
+        pointer-events: none;
+      }
+      :not(.ctrl) {
+        cursor: pointer;
+      }
+    }
+    fieldset {
+      @include border(all, 1, solid, $primary);
+      legend {
+        @include padding-value(0, 5, 0, 5);
+        @include font(null, 15px, null);
+        color: $primary;
+        &.vl-legend,
+        &.element-legend {
+          @include wh-value(55%, null);
+        }
+        &.vnfd-legend {
+          @include wh-value(25%, null);
+        }
+      }
+    }
+    .btn-icon {
+      @include wh-value(36px, 36px);
+      text-align: center;
+      @include margin-value(0, 10, 10, 0);
+    }
+    .topology-btn {
+      color: $primary;
+      border-color: $primary;
+      &:hover,
+      &.pinned {
+        color: $white !important;
+        @include background(null, $primary !important, null, null, null);
+      }
+    }
+    .badgegroup {
+      @include flexbox(flex, flex-end, row, center, center, null);
+    }
+  }
+  .ns-topology-sidebar-container,
+  .vnf-topology-sidebar-container,
+  .ns-instance-topology-sidebar-container {
+    @include position_value(absolute !important, 0px, null, null, 0px);
+    .ng-sidebar {
+      @include wh-value(27%, null);
+      @include background(null, $white, null, null, null);
+      @include border(all, 1, solid, $gray-300);
+      .sidebar-header {
+        @include background(null, $modalheader-gray, null, null, null);
+        @include padding-value(5, 10, 5, 10);
+        @include border(bottom, 1, solid, $gray-300);
+        @include flexbox(flex, space-between, null, center, center, null);
+        .topology_title {
+          color: $primary;
+        }
+      }
+      .sidebar-body {
+        @include padding-value(10, 5, 10, 5);
+      }
+    }
+    .ng-sidebar__content {
+      button {
+        @include position_value(absolute, 45%, null, null, 0px);
+        @include background(null, $primary, null, null, null);
+      }
+      .detail-sidebar {
+        @include flexbox(inline-block, null, null, null, null, null);
+        @include position_value(relative, null, null, null, null);
+        animation: push 0.5s infinite linear;
+      }
+    }
+    @keyframes push {
+      0% {
+        right: 0;
+      }
+      50% {
+        right: -0.2em;
+      }
+      70% {
+        right: -0.3em;
+      }
+      100% {
+        right: 0;
+      }
+    }
+  }
+}
+/****************************************************************************/
+/************************** MEDIA QUERIES ***********************************/
+/****************************************************************************/
+@media (max-width: map-get($grid-breakpoints, md)) {
+  .smarttable-style {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}

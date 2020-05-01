@@ -1,0 +1,173 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<ng-sidebar-container class="ns-instance-topology-sidebar-container">
+    <!-- A sidebar -->
+    <ng-sidebar [(opened)]="sideBarOpened" position="left">
+        <div class="sidebar-header">
+            <span class="topology_title" *ngIf="isShowNSDetails">{{'NS' | translate}} {{'VIEW' | translate}}</span>
+            <span class="topology_title" *ngIf="isShowVLetails">{{'PAGE.TOPOLOGY.VIRTUALLINK' | translate}}</span>
+            <span class="topology_title" *ngIf="isShowVNFRDetails">{{'PAGE.TOPOLOGY.VNF' | translate}}</span>
+        </div>
+        <div class="sidebar-body">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-2" *ngIf="isShowNSDetails && nsInfo">
+                <div class="row">
+                    <div class="col-12 p-0">
+                        <table class="table table-bordered text-dark custom-table">
+                            <tr>
+                                <td>{{'NS' | translate}} {{'INSTANCE' | translate}} Id</td>
+                                <td>{{(nsInfo.nsInstanceID)?nsInfo.nsInstanceID:'-'}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{'NSDNAME' | translate}}</td>
+                                <td>{{(nsInfo.nsName)?nsInfo.nsName:'-'}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{'OPERATIONALSTATUS' | translate}}</td>
+                                <td>{{(nsInfo.nsOperationalStatus)?nsInfo.nsOperationalStatus:'-'}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{'CONFIGSTATUS' | translate}}</td>
+                                <td>{{(nsInfo.nsConfigStatus)?nsInfo.nsConfigStatus:'-'}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{'DETAILEDSTATUS' | translate}}</td>
+                                <td>{{(nsInfo.nsDetailedStatus)?nsInfo.nsDetailedStatus:'-'}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{'RESOURCEORCHESTRATOR' | translate}}</td>
+                                <td>{{(nsInfo.nsResourceOrchestrator)?nsInfo.nsResourceOrchestrator:'-'}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-2" *ngIf="isShowVLetails && virtualLink">
+                <div class="row">
+                    <div class="col-12 p-0">
+                        <table class="table table-bordered text-dark custom-table">
+                            <tbody>
+                                <tr>
+                                    <td>short-name</td>
+                                    <td>{{(virtualLink.shortName)?virtualLink.shortName:'-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>{{(virtualLink.name)?virtualLink.name:'-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Vim network name</td>
+                                    <td>{{(virtualLink.vimNetworkName)?virtualLink.vimNetworkName:'-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Type</td>
+                                    <td>{{(virtualLink.type)?virtualLink.type:'-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Id</td>
+                                    <td>{{(virtualLink.id)?virtualLink.id:'-'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-2" *ngIf="isShowVNFRDetails && vnfr">
+                <div class="row">
+                    <div class="col-12 p-0">
+                        <table class="table table-bordered text-dark custom-table">
+                            <tbody>
+                                <tr>
+                                    <td>VIM Id</td>
+                                    <td>{{(vnfr.vimID)?vnfr.vimID:'-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>_id</td>
+                                    <td>{{(vnfr._id)?vnfr._id:'-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>IP</td>
+                                    <td>{{(vnfr.ip)?vnfr.ip:'-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Nsr Id</td>
+                                    <td>{{(vnfr.nsrID)?vnfr.nsrID:'-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Id</td>
+                                    <td>{{(vnfr.id)?vnfr.id:'-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Vnfd Ref</td>
+                                    <td>{{(vnfr.vnfdRef)?vnfr.vnfdRef:'-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Vnfd Id</td>
+                                    <td>{{(vnfr.vnfdID)?vnfr.vnfdID:'-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Member index</td>
+                                    <td>{{(vnfr.memberIndex)?vnfr.memberIndex:'-'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-sidebar>
+    <!-- Page content -->
+    <div ng-sidebar-content>
+        <button (click)="toggleSidebar()" class="btn btn-default" placement="right" ngbTooltip="{{'OPEN' | translate }}">
+            <i class="fa fa-arrow-right detail-sidebar" aria-hidden="true"></i>
+        </button>
+    </div>
+</ng-sidebar-container>
+<div class="container-fluid text-dark">
+    <div class="row ns-instance-form justify-content-end ">
+        <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 pl-0">
+                    <div class="btn-group list" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-primary topology-btn" (click)="onFreeze()"
+                            [class.pinned]="classApplied" placement="top" container="body"
+                            ngbTooltip="{{(classApplied ? 'UNFREEZE' : 'FREEZE') | translate}}">
+                            <i class="fas fa-thumbtack"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right pr-0 badgegroup">
+                    <span class="badge badge-primary badge-pill bg-white text-body font-weight-bold">
+                        <img src="assets/images/VNFD.svg" class="ns-svg" draggable="false"/>
+                        <br>VNFR</span>
+                    <span class="badge badge-primary badge-pill bg-white text-body font-weight-bold">
+                        <img src="assets/images/VL.svg" class="ns-svg" draggable="false"/>
+                        <br>VL</span>
+                    <span class="badge badge-primary badge-pill bg-white text-body font-weight-bold">
+                        <img src="assets/images/CP.svg" class="ns-svg" draggable="false"/>
+                        <br>CP</span>
+                </div>
+            </div>
+            <div class="row border-all">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 svg-container">
+                    <svg preserveAspectRatio="xMidYMin slice" id="graphContainer" #graphContainer></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>
