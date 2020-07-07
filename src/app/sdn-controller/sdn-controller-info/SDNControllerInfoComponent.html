@@ -31,7 +31,7 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
     <tr>
       <td>
         <b>{{'OPERATIONALSTATE' | translate}}:</b>
-        <span class="badge ml-1" [ngClass]="{'badge-info':sdnDetails._admin.operationalState === operationalStateFirstStep,
+        <span class="badge ml-1" [ngClass]="{'badge-warning text-white':sdnDetails._admin.operationalState === operationalStateFirstStep,
           'badge-success':sdnDetails._admin.operationalState === operationalStateSecondStep,
           'badge-danger':sdnDetails._admin.operationalState === operationalStateThirdStep}">
           {{(sdnDetails._admin.operationalState)?sdnDetails._admin.operationalState:''}}</span>

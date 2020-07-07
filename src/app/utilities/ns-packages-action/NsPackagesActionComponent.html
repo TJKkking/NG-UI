@@ -28,11 +28,11 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
     ngbTooltip="{{'DELETE' | translate}}">
     <i class="far fa-trash-alt icons"></i>
   </button>
-  <div ngbDropdown class="btn-group">
+  <div class="btn-group" ngbDropdown display="dynamic" container="body">
     <button type="button" class="btn btn-primary dropdown-toggle action-button" ngbDropdownToggle>
       {{'ACTION' | translate}}
     </button>
-    <div class="dropdown-menu" ngbDropdownMenu>
+    <div class="dropdown-menu list-action-dropdown" ngbDropdownMenu>
       <button type="button" class="btn btn-primary dropdown-item" (click)="nsdEdit()" placement="left"
         container="body" ngbTooltip="{{'EDIT' | translate}}">
         <i class="fa fa-edit icons"></i> {{'EDIT' | translate}}

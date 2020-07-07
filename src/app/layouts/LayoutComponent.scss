@@ -24,6 +24,7 @@
     .content-section {
       @include wh-value(100%, null);
       @include transition(all, 0.3s, null, null);
+      @include flexbox(block, null, null, null, null, null);
       overflow-x: auto;
     }
   }

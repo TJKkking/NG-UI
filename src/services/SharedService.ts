@@ -88,6 +88,9 @@ export class SharedService {
     /** Service holds the router information @private */
     private router: Router;
 
+    /** Random color string generator length @private */
+    private colorStringLength: number = 256;
+
     /** Check for the root directory @private */
     private directoryCount: number = 2;
 
@@ -273,6 +276,13 @@ export class SharedService {
             this.osmVersion = null;
             this.restService.handleError(error, 'get');
         });
+    }
+    /** Random RGB color code generator @public */
+    public generateColor(): string {
+        const x: number = Math.floor(Math.random() * this.colorStringLength);
+        const y: number = Math.floor(Math.random() * this.colorStringLength);
+        const z: number = Math.floor(Math.random() * this.colorStringLength);
+        return 'rgb(' + x + ',' + y + ',' + z + ')';
     }
     /** Method to validate file extension and size @private */
     private vaildataFileInfo(fileInfo: File, fileType: string): boolean {

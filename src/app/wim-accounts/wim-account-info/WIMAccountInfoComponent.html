@@ -35,7 +35,7 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
     </tr>
     <tr>
       <td>
-        <b>{{'OPERATIONALSTATE' | translate}}:</b><span class="ml-1 badge" [ngClass]="{'badge-info':wimDetails._admin.operationalState === operationalStateFirstStep,
+        <b>{{'OPERATIONALSTATE' | translate}}:</b><span class="ml-1 badge" [ngClass]="{'badge-warning text-white':wimDetails._admin.operationalState === operationalStateFirstStep,
         'badge-success':wimDetails._admin.operationalState === operationalStateSecondStep,
         'badge-danger':wimDetails._admin.operationalState === operationalStateThirdStep}">
           {{(wimDetails._admin.operationalState)?wimDetails._admin.operationalState:''}}

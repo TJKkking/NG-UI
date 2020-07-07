@@ -106,8 +106,11 @@ export class DashboardComponent implements OnInit {
     /** Give the message for the loading @public */
     public message: string = 'PLEASEWAIT';
 
-    /** List of NS Success Instances @private */
-    public nsRunningInstance: string[] = [];
+    /** List of NS Success Instances @public */
+    public nsRunningInstance: {}[] = [];
+
+    /** List of color for Instances @private */
+    private backgroundColor: string[] = [];
 
     /** Utilizes rest service for any CRUD operations @private */
     private restService: RestService;
@@ -156,21 +159,6 @@ export class DashboardComponent implements OnInit {
 
     /** Contians hour converter @private */
     private hourConverter: number = 3600;
-
-    /** Contians color code for chart @private */
-    private chartColorPink: string = '#e4397c';
-
-    /** Contians color code for chart @private */
-    private chartColorPurple: string = '#605ca8';
-
-    /** Contians color code for chart @private */
-    private chartColorCyan: string = '#00c0ef';
-
-    /** Contians color code for chart @private */
-    private chartColorBlue: string = '#054C8C';
-
-    /** Contians color code for chart @private */
-    private chartColorYellow: string = '#ffce56';
 
     constructor(injector: Injector) {
         this.injector = injector;
@@ -254,20 +242,20 @@ export class DashboardComponent implements OnInit {
     public getVnfdPackageCount(): void {
         this.vnfdPackageCountSub = this.restService.getResource(environment.VNFPACKAGESCONTENT_URL)
             .subscribe((vnfdPackageData: VNFDDetails[]) => {
-            this.vnfdPackageCount = vnfdPackageData.length;
-        }, (error: ERRORDATA) => {
-            this.restService.handleError(error, 'get');
-        });
+                this.vnfdPackageCount = vnfdPackageData.length;
+            }, (error: ERRORDATA) => {
+                this.restService.handleError(error, 'get');
+            });
     }
 
     /** Get NSD Package details @public */
     public getNsdPackageCount(): void {
         this.nsdPackageCountSub = this.restService.getResource(environment.NSDESCRIPTORSCONTENT_URL)
             .subscribe((nsdPackageData: NSDDetails[]) => {
-            this.nsdPackageCount = nsdPackageData.length;
-        }, (error: ERRORDATA) => {
-            this.restService.handleError(error, 'get');
-        });
+                this.nsdPackageCount = nsdPackageData.length;
+            }, (error: ERRORDATA) => {
+                this.restService.handleError(error, 'get');
+            });
     }
 
     /** Get NS Instance details @public */
@@ -293,7 +281,8 @@ export class DashboardComponent implements OnInit {
             if (operationalStatus === 'failed' || configStatus === 'failed') {
                 this.nsFailedInstances.push(nsdInstanceData);
             } else if (operationalStatus === 'running' && configStatus === 'configured') {
-                this.nsRunningInstance.push(nsdInstanceData.name);
+                this.nsRunningInstance.push({ name: nsdInstanceData.name, id: nsdInstanceData.id });
+                this.backgroundColor.push(this.sharedService.generateColor());
                 this.createdTimes.push(((nsdInstanceData._admin.created).toString()).slice(0, this.sliceLimit));
             }
         });
@@ -314,14 +303,24 @@ export class DashboardComponent implements OnInit {
                 datasets: [{
                     data: this.noOfHours,
                     label: this.translateService.instant('NOOFHOURS'),
-                    borderColor: [this.chartColorPurple, this.chartColorPink, this.chartColorCyan,
-                    this.chartColorBlue, this.chartColorYellow],
+                    borderColor: this.backgroundColor,
                     fill: false,
-                    backgroundColor: [this.chartColorPurple, this.chartColorPink, this.chartColorCyan,
-                    this.chartColorBlue, this.chartColorYellow]
+                    backgroundColor: this.backgroundColor
                 }]
             },
             options: {
+                hover: {
+                    onHover(evt: Event, item: {}): void {
+                        const el: HTMLElement = document.getElementById('canvas');
+                        el.style.cursor = item[0] ? 'pointer' : 'default';
+                    }
+                },
+                onClick(evt: Event, item: {}): void {
+                    if (item[0] !== undefined) {
+                        const location: string = '/instances/ns/' + item[0]._chart.data.labels[item[0]._index].id;
+                        window.open(location);
+                    }
+                },
                 legend: { display: false },
                 scales: {
                     xAxes: [{
@@ -331,10 +330,10 @@ export class DashboardComponent implements OnInit {
                             callback: (label: any, index: number, labels: string): string => {
                                 const length: number = 20;
                                 const ending: string = '...';
-                                if (label.length > length) {
-                                    return label.substring(0, length - ending.length) + ending;
+                                if (label.name.length > length) {
+                                    return label.name.substring(0, length - ending.length) + ending;
                                 } else {
-                                    return label;
+                                    return label.name;
                                 }
                             }
                         },
