@@ -349,7 +349,12 @@
                 "CANNOTLINKVNFVLANDCP": "No puedes vincular vnf_vl con cp",
                 "CANNOTLINKINTCPANDCP": "No puedes vincular intcp con cp",
                 "CANNOTLINKCPANDINTCP": "No puedes vincular cp con int_cp",
-                "CANNOTLINKVDUANDVDU": "No puedes vincular un vdu con un vdu"
+                "CANNOTLINKVDUANDVDU": "No puedes vincular un vdu con un vdu",
+                "CANNOTLINKCPANDCP": "No puedes vincular una cp con una cp",
+                "CANNOTLINKVNFVLANDVNFVL": "No puede vincular vnf_vl con vnf_vl",
+                "CANNOTLINKVNFVLANDONTCP": "No puede vincular vnf_vl con int_cp",
+                "CANNOTLINKINTCPANDVNFVL": "No puedes vincular intcp con vnf_vl",
+                "CANNOTLINKINTCPANDINTCP": "No puede vincular intcp con intcp"
             }
         },
         "NETSLICE": {

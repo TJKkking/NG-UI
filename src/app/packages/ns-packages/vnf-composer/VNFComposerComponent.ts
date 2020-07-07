@@ -706,90 +706,140 @@ export class VNFComposerComponent {
     if (!this.mousedownNode) { return; }
     this.dragLine.classed('hidden', true);
     this.mouseupNode = d;
-    if (this.mousedownNode.nodeTypeRef === 'vdu' && this.mouseupNode.nodeTypeRef === 'intcp') {
-      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKVDUANDINTCP'));
-      this.deselectPath();
-    }
-    else if (this.mousedownNode.nodeTypeRef === 'vdu' && this.mouseupNode.nodeTypeRef === 'vdu') {
-      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKVDUANDVDU'));
-      this.deselectPath();
-    }
-    else if (this.mousedownNode.nodeTypeRef === 'intcp' && this.mouseupNode.nodeTypeRef === 'vdu') {
-      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKINTCPANDVDU'));
-      this.deselectPath();
-    }
-    else if (this.mousedownNode.nodeTypeRef === 'cp' && this.mouseupNode.nodeTypeRef === 'intvl') {
-      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKCPANDVNFVL'));
-      this.deselectPath();
-    }
-    else if (this.mousedownNode.nodeTypeRef === 'intvl' && this.mouseupNode.nodeTypeRef === 'cp') {
-      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKVNFVLANDCP'));
-      this.deselectPath();
-    }
-    else if (this.mousedownNode.nodeTypeRef === 'intcp' && this.mouseupNode.nodeTypeRef === 'cp') {
-      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKINTCPANDCP'));
-      this.deselectPath();
-    }
-    else if (this.mousedownNode.nodeTypeRef === 'cp' && this.mouseupNode.nodeTypeRef === 'intcp') {
-      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKCPANDINTCP'));
-      this.deselectPath();
-    } else if (this.mousedownNode.nodeTypeRef === 'vdu' && this.mouseupNode.nodeTypeRef === 'cp') {
-      this.vnfdPackageDetails.vdu.forEach((vduDetails: VDU) => {
-        if (vduDetails.id === this.mousedownNode.id) {
-          if (vduDetails.interface === undefined) { vduDetails.interface = []; }
-          vduDetails.interface.push({
-            'external-connection-point-ref': this.mouseupNode.id, 'mgmt-interface': true,
-            name: 'eth_' + this.sharedService.randomString(),
-            'virtual-interface': { type: 'VIRTIO' },
-            type: 'EXTERNAL'
-          });
-          if (vduDetails['internal-connection-point'] === undefined) {
-            vduDetails['internal-connection-point'] = [];
-          }
-          if (vduDetails['monitoring-param'] === undefined) {
-            vduDetails['monitoring-param'] = [];
-          }
-          if (vduDetails['vm-flavor'] === undefined) {
-            vduDetails['vm-flavor'] = {};
-          }
-        }
-      });
-      this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
-      this.deselectPath();
-    } else if (this.mousedownNode.nodeTypeRef === 'vdu' && this.mouseupNode.nodeTypeRef === 'intvl') {
-      const setIntCP: string = 'intcp_' + this.sharedService.randomString();
-      this.vnfdPackageDetails['internal-vld'].forEach((vldInternal: InternalVLD) => {
-        if (vldInternal.id === this.mouseupNode.id) {
-          if (vldInternal['internal-connection-point'] === undefined) { vldInternal['internal-connection-point'] = []; }
-          vldInternal['internal-connection-point'].push({ 'id-ref': setIntCP });
-        }
-      });
-      this.vnfdPackageDetails.vdu.forEach((vduDetails: VDU) => {
-        if (vduDetails.id === this.mousedownNode.id) {
-          if (vduDetails.interface === undefined) {
-            vduDetails.interface = [];
-          }
-          vduDetails.interface.push({
-            'internal-connection-point-ref': setIntCP, name: 'int_' + setIntCP, type: 'INTERNAL', 'virtual-interface': { type: 'VIRTIO' }
-          });
-          if (vduDetails['internal-connection-point'] === undefined) {
-            vduDetails['internal-connection-point'] = [];
-          }
-          vduDetails['internal-connection-point'].push({
-            id: setIntCP, name: setIntCP, 'short-name': setIntCP, type: 'VPORT'
-          });
-        }
-      });
-      this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
-      this.deselectPath();
-    }
-    else {
+    if (this.mousedownNode.nodeTypeRef === 'vdu') {
+      this.vduMouseDownNode();
+    } else if (this.mousedownNode.nodeTypeRef === 'cp') {
+      this.cpMouseDownNode();
+    } else if (this.mousedownNode.nodeTypeRef === 'intvl') {
+      this.intVLMouseDownNode();
+    } else if (this.mousedownNode.nodeTypeRef === 'intcp') {
+      this.intCPMouseDownNode();
+    } else {
       this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.INVALIDSELECTION'));
       this.deselectPath();
     }
     this.resetMouseActions();
     this.currentSelectedNode = null;
   }
+  /** Establish a connection point between vdu and other nodes @private */
+  private vduMouseDownNode(): void {
+    if (this.mousedownNode.nodeTypeRef === 'vdu' && this.mouseupNode.nodeTypeRef === 'cp') {
+      this.vduCPConnection(this.mousedownNode.id, this.mouseupNode.id);
+    } else if (this.mousedownNode.nodeTypeRef === 'vdu' && this.mouseupNode.nodeTypeRef === 'intcp') {
+      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKVDUANDINTCP'));
+      this.deselectPath();
+    } else if (this.mousedownNode.nodeTypeRef === 'vdu' && this.mouseupNode.nodeTypeRef === 'vdu') {
+      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKVDUANDVDU'));
+      this.deselectPath();
+    } else if (this.mousedownNode.nodeTypeRef === 'vdu' && this.mouseupNode.nodeTypeRef === 'intvl') {
+      this.vduIntvlConnection(this.mousedownNode.id, this.mouseupNode.id);
+    }
+  }
+
+  /** Establish a connection point between cp and other nodes @private */
+  private cpMouseDownNode(): void {
+    if (this.mousedownNode.nodeTypeRef === 'cp' && this.mouseupNode.nodeTypeRef === 'vdu') {
+      this.vduCPConnection(this.mouseupNode.id, this.mousedownNode.id);
+    } else if (this.mousedownNode.nodeTypeRef === 'cp' && this.mouseupNode.nodeTypeRef === 'intvl') {
+      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKCPANDVNFVL'));
+      this.deselectPath();
+    } else if (this.mousedownNode.nodeTypeRef === 'cp' && this.mouseupNode.nodeTypeRef === 'intcp') {
+      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKCPANDINTCP'));
+      this.deselectPath();
+    } else if (this.mousedownNode.nodeTypeRef === 'cp' && this.mouseupNode.nodeTypeRef === 'cp') {
+      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKCPANDCP'));
+      this.deselectPath();
+    }
+  }
+
+  /** Establish a connection piont between intvl and other nodes @private */
+  private intVLMouseDownNode(): void {
+    if (this.mousedownNode.nodeTypeRef === 'intvl' && this.mouseupNode.nodeTypeRef === 'cp') {
+      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKVNFVLANDCP'));
+      this.deselectPath();
+    } else if (this.mousedownNode.nodeTypeRef === 'intvl' && this.mouseupNode.nodeTypeRef === 'vdu') {
+      this.vduIntvlConnection(this.mouseupNode.id, this.mousedownNode.id);
+    } else if (this.mousedownNode.nodeTypeRef === 'intvl' && this.mouseupNode.nodeTypeRef === 'intvl') {
+      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKVNFVLANDVNFVL'));
+      this.deselectPath();
+    } else if (this.mousedownNode.nodeTypeRef === 'intvl' && this.mouseupNode.nodeTypeRef === 'intcp') {
+      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKVNFVLANDONTCP'));
+      this.deselectPath();
+    }
+  }
+
+  /** Establish a connection point between intcp and other nodes @private */
+  private intCPMouseDownNode(): void {
+    if (this.mousedownNode.nodeTypeRef === 'intcp' && this.mouseupNode.nodeTypeRef === 'vdu') {
+      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKINTCPANDVDU'));
+      this.deselectPath();
+    } else if (this.mousedownNode.nodeTypeRef === 'intcp' && this.mouseupNode.nodeTypeRef === 'cp') {
+      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKINTCPANDCP'));
+      this.deselectPath();
+    } else if (this.mousedownNode.nodeTypeRef === 'intcp' && this.mouseupNode.nodeTypeRef === 'intvl') {
+      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKINTCPANDVNFVL'));
+      this.deselectPath();
+    } else if (this.mousedownNode.nodeTypeRef === 'intcp' && this.mouseupNode.nodeTypeRef === 'intcp') {
+      this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKINTCPANDINTCP'));
+      this.deselectPath();
+    }
+  }
+
+  /** Establish a connection between VDU & CP vice versa @private */
+  private vduCPConnection(nodeA: string, nodeB: string): void {
+    this.vnfdPackageDetails.vdu.forEach((vduDetails: VDU) => {
+      if (vduDetails.id === nodeA) {
+        if (vduDetails.interface === undefined) { vduDetails.interface = []; }
+        vduDetails.interface.push({
+          'external-connection-point-ref': nodeB, 'mgmt-interface': true,
+          name: 'eth_' + this.sharedService.randomString(),
+          'virtual-interface': { type: 'VIRTIO' },
+          type: 'EXTERNAL'
+        });
+        if (vduDetails['internal-connection-point'] === undefined) {
+          vduDetails['internal-connection-point'] = [];
+        }
+        if (vduDetails['monitoring-param'] === undefined) {
+          vduDetails['monitoring-param'] = [];
+        }
+        if (vduDetails['vm-flavor'] === undefined) {
+          vduDetails['vm-flavor'] = {};
+        }
+      }
+    });
+    this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
+    this.deselectPath();
+  }
+
+  /** Establish a connection between vdu & intvl and vice versa @private */
+  private vduIntvlConnection(nodeA: string, nodeB: string): void {
+    const setIntCP: string = 'intcp_' + this.sharedService.randomString();
+    this.vnfdPackageDetails['internal-vld'].forEach((vldInternal: InternalVLD) => {
+      if (vldInternal.id === nodeB) {
+        if (vldInternal['internal-connection-point'] === undefined) { vldInternal['internal-connection-point'] = []; }
+        vldInternal['internal-connection-point'].push({ 'id-ref': setIntCP });
+      }
+    });
+    this.vnfdPackageDetails.vdu.forEach((vduDetails: VDU) => {
+      if (vduDetails.id === nodeA) {
+        if (vduDetails.interface === undefined) {
+          vduDetails.interface = [];
+        }
+        vduDetails.interface.push({
+          'internal-connection-point-ref': setIntCP, name: 'int_' + setIntCP, type: 'INTERNAL', 'virtual-interface': { type: 'VIRTIO' }
+        });
+        if (vduDetails['internal-connection-point'] === undefined) {
+          vduDetails['internal-connection-point'] = [];
+        }
+        vduDetails['internal-connection-point'].push({
+          id: setIntCP, name: setIntCP, 'short-name': setIntCP, type: 'VPORT'
+        });
+      }
+    });
+    this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
+    this.deselectPath();
+  }
+
   /** Events handles when mousemove it will capture the selected node data @private */
   private mousemove(): void {
     if (!this.mousedownNode) { return; }
