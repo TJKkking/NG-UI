@@ -202,6 +202,10 @@ export const WIM_TYPES: TYPESECTION[] = [
     { value: 'onos_vpls', title: 'ONOS vpls' },
     { value: 'tapi', title: 'TAPI' }
 ];
+/** Constants of the OSM Repo Types */
+export const OSMREPO_TYPES: TYPESECTION[] = [
+    { value: 'osm', title: 'OSM' }
+];
 /** Interface for List, Add WIM & SDN Types */
 export interface TYPESECTION {
     value: string;

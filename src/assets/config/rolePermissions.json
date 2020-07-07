@@ -569,6 +569,35 @@
             ]
         },
         {
+            "title": "OSM Repositories",
+            "permissions": [
+                {
+                    "operation": "osmrepos",
+                    "value": "NA"
+                },
+                {
+                    "operation": "osmrepos:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "osmrepos:post",
+                    "value": "NA"
+                },
+                {
+                    "operation": "osmrepos:id:get",
+                    "value": "NA"
+                },
+                {
+                    "operation": "osmrepos:id:delete",
+                    "value": "NA"
+                },
+                {
+                    "operation": "osmrepos:id:patch",
+                    "value": "NA"
+                }
+            ]
+        },
+        {
             "title": "Users",
             "permissions": [
                 {

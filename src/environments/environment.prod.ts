@@ -80,5 +80,6 @@ export const environment = {
     PERMISSIONS_CONFIG_FILE: ASSETS_PATH + 'config/rolePermissions.json',
     GRAFANA_URL: GRAFANA_ENDPOINT + '/d',
     DOMAIN_URL: OSM_ADMIN_ENDPOINT + 'domains',
-    OSM_VERSION_URL: OSM_VERSION
+    OSM_VERSION_URL: OSM_VERSION,
+    OSMREPOS_URL: OSM_ADMIN_ENDPOINT + 'osmrepos'
 };

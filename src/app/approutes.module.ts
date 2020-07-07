@@ -104,6 +104,13 @@ export const appRoutes: Routes = [
                 loadChildren: async (): Promise<any> => import('./k8s/K8sModule')
                     .then((m: typeof import('./k8s/K8sModule')) => m.K8sModule),
                 canActivate: [AuthGuardService]
+            },
+            {
+                path: 'repos',
+                // tslint:disable-next-line: no-any
+                loadChildren: async (): Promise<any> => import('./osm-repositories/OsmRepositoriesModule')
+                    .then((m: typeof import('./osm-repositories/OsmRepositoriesModule')) => m.OsmRepositoriesModule),
+                canActivate: [AuthGuardService]
             }
         ]
     },

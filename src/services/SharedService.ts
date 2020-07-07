@@ -64,6 +64,12 @@ export class SharedService {
     // tslint:disable-next-line: max-line-length
     public REGX_PASSWORD_PATTERN: RegExp = new RegExp(/^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/);
 
+    /** Variables to hold maxlength for the description @public */
+    public MAX_LENGTH_DESCRIPTION: number = 500;
+
+    /** Variables to hold maxlength for the name @public */
+    public MAX_LENGTH_NAME: number = 50;
+
     /** FormGroup instance added to the form @ html @public */
     public formGroup: FormGroup;
 

@@ -1,0 +1,70 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<form [formGroup]="osmrepoForm" (ngSubmit)="osmRepoSubmit();">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{(getCreateupdateType === 'Add' ? 'PAGE.OSMREPO.NEWOSMREPO' : 'PAGE.OSMREPO.EDITOSMREPO') | translate }}</h4>
+    <button class="button-xs" type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+      <i class="fas fa-times-circle text-danger"></i>
+    </button>
+  </div>
+  <div class="modal-body osmrepoadd">
+    <div class="form-group row">
+      <label class="col-sm-12 col-form-label mandatory-label"
+        [ngClass]="{'text-danger': osmrepoForm.invalid === true && submitted === true}">{{'MANDATORYCHECK' | translate}}</label>
+      <label class="col-sm-4 col-form-label" for="name">{{'NAME' | translate}}*</label>
+      <div class="col-sm-8">
+        <input autocomplete="off" class="form-control" placeholder="{{'NAME' | translate}}" type="text"
+          formControlName="name" id="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+          maxlength="{{sharedService.MAX_LENGTH_NAME}}" required>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="type">{{'TYPE' | translate}}*</label>
+      <div class="col-sm-8">
+        <ng-select bindLabel="title" bindValue="value" [items]="osmrepoType"
+          placeholder="{{'SELECT' | translate}} {{'TYPE' | translate}}" formControlName="type" id="type"
+          [ngClass]="{ 'is-invalid': submitted && f.type.errors }" required>
+        </ng-select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="url">{{'URL' | translate}}*</label>
+      <div class="col-sm-8">
+        <input autocomplete="off" class="form-control" placeholder="{{'URL' | translate}}" type="url"
+          formControlName="url" id="url" [ngClass]="{ 'is-invalid': submitted && f.url.errors }" required>
+        <div *ngIf="osmrepoForm.invalid" class="invalid-feedback">
+          <div *ngIf="f.url.errors && f.url.value">{{'DOMVALIDATIONS.INVALIDURL' | translate}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="description">{{'DESCRIPTION' | translate}}*</label>
+      <div class="col-sm-8">
+        <textarea rows="5" cols="50" class="form-control" placeholder="{{'DESCRIPTION' | translate}}" type="text"
+          formControlName="description" id="description" [ngClass]="{ 'is-invalid': submitted && f.description.errors }"
+          maxlength="{{sharedService.MAX_LENGTH_DESCRIPTION}}" required></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="activeModal.close()">{{'CANCEL' | translate}}</button>
+    <button type="submit"
+      class="btn btn-primary">{{(getCreateupdateType === 'Add' ? 'ADD' : 'UPDATE') | translate}}</button>
+  </div>
+</form>
+<app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>

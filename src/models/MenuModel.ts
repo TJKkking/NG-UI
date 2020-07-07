@@ -197,6 +197,17 @@ export const MENU_ITEMS: MENUITEMS[] = [
         liClass: 'round-edge-top-3 round-edge-bottom-3 mr-top-5',
         anchorTagClass: 'link round-edge-top-3 round-edge-bottom-3 individual',
         clickFunction: 'nosubmenu',
+        routerLink: '/repos/details',
+        routerLinkActive: ['parentactive'],
+        routerLinkActiveOptions: true,
+        icon: 'fas fa-fas fa-cloud-download-alt',
+        menuName: 'PAGE.OSMREPO.MENUOSMREPO',
+        isChildExists: false
+    },
+    {
+        liClass: 'round-edge-top-3 round-edge-bottom-3 mr-top-5',
+        anchorTagClass: 'link round-edge-top-3 round-edge-bottom-3 individual',
+        clickFunction: 'nosubmenu',
         routerLink: '/wim/details',
         routerLinkActive: ['parentactive'],
         routerLinkActiveOptions: true,

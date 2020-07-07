@@ -415,6 +415,15 @@
             "NEWK8SREPO": "New K8s Repository",
             "TYPE": "Type",
             "URL": "URL"
+        },
+        "OSMREPO": {
+            "MENUOSMREPO": "OSM Repositories",
+            "ADDOSMREPO": "Add OSM Repositories",
+            "NEWOSMREPO": "New OSM Repositories",
+            "EDITOSMREPO": "Edit OSM Repositories",
+            "OSMREPOTITLE": "Registered OSM repository",
+            "CREATEDSUCCESSFULLY": "OSM Repository Added Successfully",
+            "UPDATEDSUCCESSFULLY" : "OSM Repository Updated Successfully"
         }
     },
     "HTTPERROR": {
