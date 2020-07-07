@@ -189,8 +189,11 @@ body {
     @include wh-value(null, calc(2rem + 8px) !important);
     @include padding-value(0, 10, 0, 10);
   }
-  .CodeMirror {
+  .edit-packages .CodeMirror {
     min-height: 400px !important;
+  }
+  .new-vim .CodeMirror {
+    @include border(all, 1, solid, #eee !important);
   }
   .table-layout-fixed {
     table-layout: fixed;
@@ -694,4 +697,8 @@ body {
     overflow-x: auto;
     white-space: nowrap;
   }
+}
+
+.text-captilize {
+  text-transform: capitalize;
 }

@@ -24,6 +24,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TranslateModule } from '@ngx-translate/core';
@@ -80,7 +81,7 @@ const routes: Routes = [
 @NgModule({
     imports: [ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: 'never' }), FormsModule, CommonModule,
         HttpClientModule, NgSelectModule, Ng2SmartTableModule, TranslateModule, RouterModule.forChild(routes), NgbModule,
-        PagePerRowModule, LoaderModule, PageReloadModule],
+        PagePerRowModule, LoaderModule, PageReloadModule, CodemirrorModule],
     declarations: [VimAccountsComponent, InfoVimComponent, VimAccountDetailsComponent, NewVimaccountComponent],
     providers: [DataService],
     entryComponents: [InfoVimComponent]

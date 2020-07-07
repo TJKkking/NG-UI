@@ -221,21 +221,21 @@ export class SharedService {
         return true;
     }
     /** Clean the form before submit @public */
-    public cleanForm(formGroup: FormGroup): void {
+    public cleanForm(formGroup: FormGroup, formName?: String): void {
         Object.keys(formGroup.controls).forEach((key: string) => {
-            if ((!isNullOrUndefined((formGroup.get(key) as FormArray | FormGroup).controls)) && key !== 'vimconfig') {
+            if ((!isNullOrUndefined((formGroup.get(key) as FormArray | FormGroup).controls)) && key !== 'config') {
                 // tslint:disable-next-line: no-shadowed-variable
                 for (const { item, index } of (formGroup.get(key).value).map((item: {}, index: number) => ({ item, index }))) {
                     const newFormGroup: FormGroup = (formGroup.get(key) as FormArray).controls[index] as FormGroup;
                     this.cleanForm(newFormGroup);
                 }
-            } else if (formGroup.get(key).value !== undefined && formGroup.get(key).value !== null && key !== 'vimconfig') {
+            } else if (formGroup.get(key).value !== undefined && formGroup.get(key).value !== null && key !== 'config') {
                 if (!Array.isArray(formGroup.get(key).value)) {
                     if (typeof formGroup.get(key).value === 'string') {
                         formGroup.get(key).setValue(formGroup.get(key).value.trim());
                     }
                 }
-            } else if (key === 'vimconfig') {
+            } else if (key === 'config' && formName === 'vim') {
                 const newFormGroup: FormGroup = formGroup.get(key) as FormGroup;
                 this.cleanForm(newFormGroup);
             }
@@ -284,11 +284,20 @@ export class SharedService {
         const z: number = Math.floor(Math.random() * this.colorStringLength);
         return 'rgb(' + x + ',' + y + ',' + z + ')';
     }
+
+    /** Add custom name/tag to the dropdown @public */
+    public addCustomTag(tag: string): string {
+        return tag;
+    }
+
     /** Method to validate file extension and size @private */
     private vaildataFileInfo(fileInfo: File, fileType: string): boolean {
         const extension: string = fileInfo.name.substring(fileInfo.name.lastIndexOf('.') + 1);
         const packageSize: number = CONSTANTNUMBER.oneMB * environment.packageSize;
-        if (extension.toLowerCase() === fileType && fileInfo.size <= packageSize) {
+        if (fileType === 'yaml' && (extension.toLowerCase() === 'yaml' || extension.toLowerCase() === 'yml')
+            && fileInfo.size <= packageSize) {
+            return true;
+        } else if (extension.toLowerCase() === fileType && fileInfo.size <= packageSize) {
             return true;
         }
         return false;

@@ -36,9 +36,10 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
             <label class="col-sm-4 col-form-label" for="wim_type">{{'TYPE' | translate}}*</label>
             <div class="col-sm-8">
                 <ng-select bindLabel="title" bindValue="value" [items]="wimType" placeholder="{{'SELECT' | translate}}"
-                    formControlName="wim_type" id="wim_type" [(ngModel)]="wimTypeMod"
+                    formControlName="wim_type" id="wim_type" [(ngModel)]="wimTypeMod" [addTag]="sharedService.addCustomTag"
                     [ngClass]="{ 'is-invalid': submitted && f.wim_type.errors }" required>
                 </ng-select>
+                <small class="text-info">{{'TYPEINFO' | translate}}</small>
             </div>
         </div>
         <div class="form-group row">

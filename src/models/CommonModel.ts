@@ -150,6 +150,8 @@ export interface TARSETTINGS {
     'type'?: string;
     readAsString?: Function;
     buffer: ArrayBuffer;
+    header_offset?: Number;
+    size?: number;
 }
 /** Interface for Package information */
 export interface PACKAGEINFO {
@@ -205,3 +207,83 @@ export interface TYPESECTION {
     value: string;
     title: string;
 }
+/** Interface for VIM type Openstack's Config */
+export const TYPEOPENSTACK: {} = {
+    sdn_controller: '',
+    APIversion: '',
+    sdn_port_mapping: '',
+    project_domain_id: '',
+    vim_network_name: '',
+    project_domain_name: '',
+    config_vim_ype: '',
+    user_domain_id: '',
+    security_groups: '',
+    user_domain_name: '',
+    availabilityZone: '',
+    keypair: '',
+    region_name: '',
+    dataplane_physical_net: '',
+    insecure: '',
+    use_floating_ip: '',
+    use_internal_endpoint: '',
+    microversion: '',
+    additional_conf: '',
+    use_existing_flavors: ''
+};
+/** Interface for VIM type AWS's Config */
+export const TYPEAWS: {} = {
+    sdn_controller: '',
+    vpc_cidr_block: '',
+    sdn_port_mapping: '',
+    security_groups: '',
+    vim_network_name: '',
+    keypair: '',
+    region_name: '',
+    flavor_info: '',
+    additional_conf: ''
+};
+/** Interface for VIM type VMWARE's Config */
+export const TYPEVMWARE: {} = {
+    sdn_controller: '',
+    orgname: '',
+    sdn_port_mapping: '',
+    vcenter_ip: '',
+    vim_network_name: '',
+    admin_username: '',
+    admin_password: '',
+    vcenter_port: '',
+    vcenter_user: '',
+    vcenter_password: '',
+    nsx_manager: '',
+    nsx_user: '',
+    nsx_password: '',
+    vrops_site: '',
+    vrops_user: '',
+    vrops_password: '',
+    additional_conf: ''
+};
+/** Interface for VIM type OPENVIMNEBULA's Config */
+export const TYPEOPENVIMNEBULA: {} = {
+    sdn_controller: '',
+    sdn_port_mapping: '',
+    vim_network_name: '',
+    additional_conf: ''
+};
+/** Interface for VIM type AZURE's Config */
+export const TYPEAZURE: {} = {
+    subscription_id: '',
+    region_name: '',
+    resource_group: '',
+    vnet_name: '',
+    flavors_pattern: ''
+};
+/** Interface for VIM other type Config */
+export const TYPEOTERS: {} = {
+    sdn_controller: '',
+    sdn_port_mapping: '',
+    vim_network_name: '',
+    use_floating_ip: '',
+    use_internal_endpoint: '',
+    additional_conf: '',
+    use_existing_flavors: ''
+};
