@@ -30,6 +30,7 @@ import { RolesActionComponent } from 'RolesAction';
 import { RoleData, RoleDetails } from 'RolesModel';
 import { Subscription } from 'rxjs';
 import { SharedService } from 'SharedService';
+import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component
@@ -170,8 +171,8 @@ export class RolesDetailsComponent implements OnInit {
     return {
       name: roleData.name,
       identifier: roleData._id,
-      modified: this.sharedService.convertEpochTime(Number(roleData._admin.modified)),
-      created: this.sharedService.convertEpochTime(Number(roleData._admin.created)),
+      modified: this.sharedService.convertEpochTime(!isNullOrUndefined(roleData._admin) ? Number(roleData._admin.modified) : null),
+      created: this.sharedService.convertEpochTime(!isNullOrUndefined(roleData._admin) ? Number(roleData._admin.created) : null),
       permissions: roleData.permissions
     };
   }

@@ -144,6 +144,7 @@
     "YAMLCONFIG": "Yaml Config",
     "CHOOSEFILE": "Escolher arquivo",
     "INVALIDCONFIG": "Configuração inválida",
+    "NODATE": "Nenhuma informação de data encontrada",
     "TYPEINFO": "Para adicionar um novo TIPO, insira a entrada acima",
     "UPLOADCONFIGLABEL": "Faça o upload do arquivo no formato .yaml ou .yml",
     "PAGE": {
@@ -304,7 +305,8 @@
         "PROJECT": {
             "NEWPROJECT": "Novo projeto",
             "CREATEDSUCCESSFULLY": "Projeto criado com sucesso",
-            "UPDATEDSUCCESSFULLY": "Projeto atualizado com sucesso"
+            "UPDATEDSUCCESSFULLY": "Projeto atualizado com sucesso",
+            "QUOTA": "Limite de cota"
         },
         "NSPACKAGE": {
             "ADDNSPACKAGE": "Componha um novo NS",

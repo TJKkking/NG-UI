@@ -144,6 +144,7 @@
     "YAMLCONFIG": "Yaml Config",
     "CHOOSEFILE": "Choose File",
     "INVALIDCONFIG": "Invalid configuration",
+    "NODATE": "No date information found",
     "TYPEINFO": "To add a new TYPE, Please enter input above",
     "UPLOADCONFIGLABEL": "Please upload file with .yaml or .yml format",
     "PAGE": {
@@ -304,7 +305,8 @@
         "PROJECT": {
             "NEWPROJECT": "New Project",
             "CREATEDSUCCESSFULLY": "Project Created Successfully",
-            "UPDATEDSUCCESSFULLY": "Project Updated Successfully"
+            "UPDATEDSUCCESSFULLY": "Project Updated Successfully",
+            "QUOTA": "Quota Limit"
         },
         "NSPACKAGE": {
             "ADDNSPACKAGE": "Compose a new NS",

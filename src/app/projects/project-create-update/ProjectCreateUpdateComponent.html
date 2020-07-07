@@ -17,30 +17,51 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
 -->
 <form [formGroup]="projectForm" (ngSubmit)="projectAction(getProjectType)">
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{ (getProjectType == 'Add' ? 'NEW' : 'EDIT') | translate}} {{'PROJECT' | translate}}</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{ (getProjectType == 'Add' ? 'NEW' : 'EDIT') | translate}}
+      {{'PROJECT' | translate}}</h4>
     <button class="button-xs" type="button" class="close" aria-label="Close" (click)="activeModal.close()">
       <i class="fas fa-times-circle text-danger"></i>
     </button>
   </div>
-  <div class="modal-body project-create-update">
+  <div class="modal-body modal-body-custom-height">
+    <div class="row" *ngIf="getProjectType === 'Add'">
+      <label class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">{{'RECENTLY' | translate}}
+        {{'CREATED' | translate}} {{'PROJECT' | translate}}:
+        <b>{{(recentProject)?recentProject.name:''}}</b>
+      </label>
+    </div>
     <div class="form-group row">
-      <label class="col-sm-12 col-form-label mandatory-label" [ngClass]="{'text-danger': projectForm.invalid === true && submitted === true}">{{'MANDATORYCHECK' | translate}}</label>
+      <label class="col-sm-12 col-form-label mandatory-label"
+        [ngClass]="{'text-danger': projectForm.invalid === true && submitted === true}">{{'MANDATORYCHECK' | translate}}</label>
       <label class="col-sm-4 col-form-label">{{'PROJECT' | translate}} {{'NAME' | translate}}*</label>
       <div class="col-sm-8">
-        <input placeholder="{{'PROJECT' | translate}} {{'NAME' | translate}}" type="text" class="form-control" formControlName="project_name" [(ngModel)]="projectName" [ngClass]="{ 'is-invalid': submitted && f.project_name.errors }" required>
+        <input placeholder="{{'PROJECT' | translate}} {{'NAME' | translate}}" type="text" class="form-control"
+          formControlName="project_name" [ngClass]="{ 'is-invalid': submitted && f.project_name.errors }" required>
       </div>
     </div>
     <div class="form-group row" *ngIf="getProjectType === 'Add'">
       <label class="col-sm-4 col-form-label">{{'DOMAIN' | translate}} {{'NAME' | translate}}</label>
       <div class="col-sm-8">
-        <ng-select [clearable]="false" placeholder="{{'SELECT' | translate}}"
-        [items]="domains" bindLabel="text" bindValue="id" formControlName="domain_name" id="domain_name"
-        [ngClass]="{ 'is-invalid': submitted && f.domain_name.errors }"></ng-select>      </div>
+        <ng-select [clearable]="false" placeholder="{{'SELECT' | translate}}" [items]="domains" bindLabel="text"
+          bindValue="id" formControlName="domain_name" id="domain_name"
+          [ngClass]="{ 'is-invalid': submitted && f.domain_name.errors }"></ng-select>
+      </div>
     </div>
-    <div class="form-group row" *ngIf="getProjectType === 'Add'">
-      <label class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">{{'RECENTLY' | translate}} {{'CREATED' | translate}} {{'PROJECT' | translate}}:
-        <b>{{(recentProject)?recentProject.name:''}}</b>
-      </label>
+    <div class="form-check form-check-inline ml-2">
+      <input class="form-check-input" type="checkbox" formControlName="enable_quota" (change)="checkQuota()"
+        id="quotaCheck" *ngIf="getProjectType === 'Add' || quotaRefs === null">
+      <label class="form-check-label" for="quotaCheck">{{'PAGE.PROJECT.QUOTA' | translate}}</label>
+    </div>
+    <div class="row mt-1" [ngbCollapse]="!f.enable_quota.value">
+      <div class="form-group col-sm-6" *ngFor="let quota of quotaItems;">
+        <div class="row">
+          <label class="col-sm-7 col-form-label">{{quota.title | translate}}*</label>
+          <div class="col-sm-5">
+            <input placeholder="{{'COUNT' | translate}}" type="number" min="{{quota.minValue}}"
+              class="form-control" [formControlName]="quota.value" [ngClass]="{ 'is-invalid': submitted && f[quota.value].errors }" required>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="modal-footer">

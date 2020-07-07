@@ -22,6 +22,7 @@ import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { CONSTANTNUMBER, ERRORDATA, GETAPIURLHEADER, PACKAGEINFO, PAGERSMARTTABLE, SMARTTABLECLASS, TARSETTINGS } from 'CommonModel';
 import { environment } from 'environment';
 import * as HttpStatus from 'http-status-codes';
@@ -100,24 +101,31 @@ export class SharedService {
     /** Check for the root directory @private */
     private directoryCount: number = 2;
 
-    constructor(restService: RestService, router: Router) {
+    /** Contains tranlsate instance @private */
+    private translateService: TranslateService;
+
+    constructor(restService: RestService, router: Router, translateService: TranslateService) {
         this.restService = restService;
         this.router = router;
+        this.translateService = translateService;
     }
 
     /** convert epoch time function @public */
     public convertEpochTime(unixtimestamp: number): string {
-        const monthsArr: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const date: Date = new Date(unixtimestamp * this.epochTime1000);
-        const year: number = date.getFullYear();
-        const month: string = monthsArr[date.getMonth()];
-        const day: number = date.getDate();
-        const hours: number = date.getHours();
-        const minutes: string = '0' + date.getMinutes();
-        const seconds: string = '0' + date.getSeconds();
-        return month + '-' + day + '-' + year + ' ' + hours + ':' + minutes.substr(this.epochTimeMinus2) + ':'
-            + seconds.substr(this.epochTimeMinus2);
+        if (!isNullOrUndefined(unixtimestamp)) {
+            const monthsArr: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const date: Date = new Date(unixtimestamp * this.epochTime1000);
+            const year: number = date.getFullYear();
+            const month: string = monthsArr[date.getMonth()];
+            const day: number = date.getDate();
+            const hours: number = date.getHours();
+            const minutes: string = '0' + date.getMinutes();
+            const seconds: string = '0' + date.getSeconds();
+            return month + '-' + day + '-' + year + ' ' + hours + ':' + minutes.substr(this.epochTimeMinus2) + ':'
+                + seconds.substr(this.epochTimeMinus2);
+        }
+        return this.translateService.instant('NODATE');
     }
 
     /** Download Files function @public */

@@ -19,14 +19,14 @@
  * @file Project Add Modal
  */
 import { Component, Injector, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { NotifierService } from 'angular-notifier';
 import { APIURLHEADER, ERRORDATA, MODALCLOSERESPONSEDATA } from 'CommonModel';
 import { DataService } from 'DataService';
 import { environment } from 'environment';
-import { ProjectData, ProjectDetails } from 'ProjectModel';
+import { ProjectData, ProjectDetails, QUOTA_ITEMS, QUOTAITEM} from 'ProjectModel';
 import { ProjectService } from 'ProjectService';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
@@ -55,9 +55,6 @@ export class ProjectCreateUpdateComponent implements OnInit {
   /** Contains the recently created project details @public */
   public recentProject: ProjectDetails;
 
-  /** Contains project name @public */
-  public projectName: string;
-
   /** Contains project create or edit @public */
   public getProjectType: string;
 
@@ -78,6 +75,12 @@ export class ProjectCreateUpdateComponent implements OnInit {
 
   /** Holds list of domains @public */
   public domains: {}[] = [];
+
+  /** Holds list of quota items @public */
+  public quotaItems: QUOTAITEM[] = QUOTA_ITEMS;
+
+  /** Holds project reference from response  @public */
+  public quotaRefs: {} = null;
 
   /** FormBuilder instance added to the formBuilder @private */
   private formBuilder: FormBuilder;
@@ -116,7 +119,8 @@ export class ProjectCreateUpdateComponent implements OnInit {
     /** Initializing Form Action */
     this.projectForm = this.formBuilder.group({
       project_name: ['', Validators.required],
-      domain_name: [null]
+      domain_name: [null],
+      enable_quota: [false, Validators.required]
     });
   }
 
@@ -129,11 +133,14 @@ export class ProjectCreateUpdateComponent implements OnInit {
     if (this.getProjectType === 'Edit') {
       this.dataService.currentMessage.subscribe((data: ProjectData) => {
         if (data.projectName !== undefined || data.projectName !== '' || data.projectName !== null) {
-          this.projectName = data.projectName;
+          this.projectForm.patchValue({ project_name: data.projectName });
           this.projectRef = data.id;
+          this.quotaRefs = data.quotas;
+          this.patchQuotaInfo(this.quotaRefs);
         }
       });
     } else {
+      this.patchQuotaInfo();
       this.getProjects();
     }
   }
@@ -172,10 +179,11 @@ export class ProjectCreateUpdateComponent implements OnInit {
     const apiURLHeader: APIURLHEADER = {
       url: environment.PROJECTS_URL
     };
-    const projectPayload: {} = {
+    const projectPayload: ProjectDetails = {
       name: this.projectForm.value.project_name,
       domain_name: !isNullOrUndefined(this.projectForm.value.domain_name) ? this.projectForm.value.domain_name : undefined
     };
+    this.addQuotaLimit(projectPayload);
     this.restService.postResource(apiURLHeader, projectPayload).subscribe(() => {
       this.activeModal.close(this.modalData);
       this.isLoadingResults = false;
@@ -185,13 +193,29 @@ export class ProjectCreateUpdateComponent implements OnInit {
       this.isLoadingResults = false;
     });
   }
+  /** Handle enable quota limit checkbox event @public */
+  public checkQuota(): void {
+    if (this.getFormControl('enable_quota').value) {
+      this.quotaItems.forEach((quotaItem: QUOTAITEM): void => {
+        this.projectForm.addControl(quotaItem.value, new FormControl(quotaItem.minValue, Validators.required));
+      });
+    } else {
+      this.quotaItems.forEach((quotaItem: QUOTAITEM): void => {
+        this.getFormControl(quotaItem.value).setValue(quotaItem.minValue);
+      });
+    }
+  }
   /** Edit project @public */
   public editProject(): void {
     this.isLoadingResults = true;
     const apiURLHeader: APIURLHEADER = {
       url: environment.PROJECTS_URL + '/' + this.projectRef
     };
-    this.restService.patchResource(apiURLHeader, { name: this.projectForm.value.project_name }).subscribe(() => {
+    const projectPayload: ProjectDetails = {
+      name: this.projectForm.value.project_name
+    };
+    this.addQuotaLimit(projectPayload);
+    this.restService.patchResource(apiURLHeader, projectPayload).subscribe(() => {
       this.activeModal.close(this.modalData);
       this.isLoadingResults = false;
       this.projectService.setHeaderProjects();
@@ -227,6 +251,42 @@ export class ProjectCreateUpdateComponent implements OnInit {
         if (!domainName.endsWith(':ro')) {
           this.domains.push({ id: domainName, text: domainName });
         }
+      });
+    }
+  }
+
+  /** Used to get the AbstractControl of controlName passed @private */
+  private getFormControl(controlName: string): AbstractControl {
+    return this.projectForm.controls[controlName];
+  }
+
+  /** Add quota information to payload @private */
+  private addQuotaLimit(payload: ProjectDetails): void {
+    if (this.getFormControl('enable_quota').value) {
+      payload.quotas = {};
+      this.quotaItems.forEach((quotaItem: QUOTAITEM): void => {
+        payload.quotas[quotaItem.value] = this.getFormControl(quotaItem.value).value;
+      });
+    }
+  }
+
+  /** Set quota information in project form model @private */
+  private patchQuotaInfo(quotaRef?: {}): void {
+    if (quotaRef !== null && this.getProjectType === 'Edit') {
+      this.getFormControl('enable_quota').setValue(true);
+      this.quotaItems.forEach((quotaItem: QUOTAITEM): void => {
+        if (!isNullOrUndefined(quotaRef[quotaItem.value])) {
+          this.projectForm.addControl(quotaItem.value, new FormControl(quotaRef[quotaItem.value],
+            [Validators.required, Validators.min(quotaItem.minValue), Validators.max(quotaItem.maxValue)]));
+        } else {
+          this.projectForm.addControl(quotaItem.value, new FormControl(quotaItem.minValue, [Validators.required,
+          Validators.min(quotaItem.minValue), Validators.max(quotaItem.maxValue)]));
+        }
+      });
+    } else {
+      this.quotaItems.forEach((quotaItem: QUOTAITEM): void => {
+        this.projectForm.addControl(quotaItem.value, new FormControl(quotaItem.minValue, [Validators.required,
+        Validators.min(quotaItem.minValue), Validators.max(quotaItem.maxValue)]));
       });
     }
   }

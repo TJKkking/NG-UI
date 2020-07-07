@@ -144,6 +144,7 @@
     "YAMLCONFIG": "Yaml Konfig",
     "CHOOSEFILE": "Datei wählen",
     "INVALIDCONFIG": "Ungültige Konfiguration",
+    "NODATE": "Keine Datumsinformationen gefunden",
     "TYPEINFO": "Um einen neuen TYPW hinzuzufügen, geben Sie oben die Eingabe ein",
     "UPLOADCONFIGLABEL": "Bitte laden Sie eine Datei im .yaml- oder .yml-Format hoch",
     "PAGE": {
@@ -304,7 +305,8 @@
         "PROJECT": {
             "NEWPROJECT": "Nieuw project",
             "CREATEDSUCCESSFULLY": "Projekt erfolgreich erstellt",
-            "UPDATEDSUCCESSFULLY": "Projekt erfolgreich aktualisiert"
+            "UPDATEDSUCCESSFULLY": "Projekt erfolgreich aktualisiert",
+            "QUOTA": "Kontingentlimit"
         },
         "NSPACKAGE": {
             "ADDNSPACKAGE": "Verfassen Sie eine neue NS",
