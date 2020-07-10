@@ -26,7 +26,7 @@ import { NotifierService } from 'angular-notifier';
 import { APIURLHEADER, ERRORDATA, URLPARAMS } from 'CommonModel';
 import { DataService } from 'DataService';
 import { environment } from 'environment';
-import { NSData } from 'NSDModel';
+import { NSData, VDUPRIMITIVELEVEL } from 'NSDModel';
 import { NSPrimitiveParams } from 'NSInstanceModel';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
@@ -81,6 +81,9 @@ export class NSPrimitiveComponent implements OnInit {
     /** Model value used to hold selected primitive type @public */
     public primitiveType: string;
 
+    /** Contains list of VDU primitive lists @public */
+    public vduList: {}[];
+
     /** FormBuilder instance added to the formBuilder @private */
     private formBuilder: FormBuilder;
 
@@ -111,7 +114,16 @@ export class NSPrimitiveComponent implements OnInit {
         this.sharedService = this.injector.get(SharedService);
         this.activeModal = this.injector.get(NgbActiveModal);
         this.formBuilder = this.injector.get(FormBuilder);
-        this.primitiveTypeList = [{ title: this.translateService.instant('VNFPRIMITIVE'), value: 'VNF_Primitive' }];
+        this.primitiveTypeList = [
+            {
+                title: this.translateService.instant('VNFPRIMITIVE'),
+                value: 'VNF_Primitive'
+            },
+            {
+                title: this.translateService.instant('VDUPRIMITIVE'),
+                value: 'VDU_Primitive'
+            }
+        ];
         this.primitiveType = 'VNF_Primitive';
     }
 
@@ -139,6 +151,7 @@ export class NSPrimitiveComponent implements OnInit {
         this.primitiveForm = this.formBuilder.group({
             primitive: [null, [Validators.required]],
             vnf_member_index: [null, [Validators.required]],
+            vdu_id: [null, [Validators.required]],
             primitive_params: this.formBuilder.array([this.primitiveParamsBuilder()])
         });
     }
@@ -187,6 +200,12 @@ export class NSPrimitiveComponent implements OnInit {
             // tslint:disable-next-line: no-string-literal
             primitiveParamsPayLoads['vnf_member_index'] = this.primitiveForm.value.vnf_member_index;
         }
+        if (this.primitiveType === 'VDU_Primitive') {
+            // tslint:disable-next-line: no-string-literal
+            primitiveParamsPayLoads['vnf_member_index'] = this.primitiveForm.value.vnf_member_index;
+            // tslint:disable-next-line: no-string-literal
+            primitiveParamsPayLoads['vdu_id'] = this.primitiveForm.value.vdu_id;
+        }
         const apiURLHeader: APIURLHEADER = {
             url: environment.NSDINSTANCES_URL + '/' + this.nsdId + '/action'
         };
@@ -209,17 +228,23 @@ export class NSPrimitiveComponent implements OnInit {
             this.primitiveList = !isNullOrUndefined(this.params.nsConfig['config-primitive']) ?
                 this.params.nsConfig['config-primitive'] : [];
             this.getFormControl('vnf_member_index').setValidators([]);
+            this.getFormControl('vdu_id').setValidators([]);
         }
     }
     /** Member index change event */
-    public indexChange(data: {}): void {
+    public indexChange(data: {}, getType?: string): void {
+        this.getFormControl('vdu_id').setValue(null);
         if (data) {
-            this.getVnfdInfo(data['vnfd-id-ref']);
+            this.getVnfdInfo(data['vnfd-id-ref'], getType);
         } else {
             this.primitiveList = [];
             this.getFormControl('primitive').setValue(null);
             this.primitiveParameter = [];
         }
+    }
+    /** Get VDU Primitive from selected VDU id/name change event */
+    public getVDUPrimitive(data: {}): void {
+        this.primitiveList = data['vdu-configuration']['config-primitive'];
     }
     /** Primivtive change event */
     public primitiveChange(data: { parameter: {}[] }): void {
@@ -230,6 +255,14 @@ export class NSPrimitiveComponent implements OnInit {
         if (data) {
             this.updatePrimitive(data);
         }
+    }
+    /** Generate vdu section @public */
+    public generateVDUData(vduData: VDUPRIMITIVELEVEL): VDUPRIMITIVELEVEL {
+        return {
+            id: vduData.id,
+            name: vduData.name,
+            'vdu-configuration': vduData['vdu-configuration']
+        };
     }
     /** Update primitive value based on parameter */
     private updatePrimitive(primitive: { parameter: {}[] }): void {
@@ -247,7 +280,7 @@ export class NSPrimitiveComponent implements OnInit {
         }
     }
     /** Get primivitive actions from vnfd data */
-    private getVnfdInfo(vnfdRef: string): void {
+    private getVnfdInfo(vnfdRef: string, getType?: string): void {
         this.primitiveList = [];
         this.primitiveParameter = [];
         this.getFormControl('primitive').setValue(null);
@@ -256,7 +289,17 @@ export class NSPrimitiveComponent implements OnInit {
         this.restService.getResource(apiUrl)
             .subscribe((vnfdInfo: {}) => {
                 if (vnfdInfo[0]['vnf-configuration']) {
+                    this.getFormControl('vdu_id').setValidators([]);
                     this.primitiveList = vnfdInfo[0]['vnf-configuration']['config-primitive'];
+                }
+                if (getType === 'VDU_Primitive') {
+                    this.vduList = [];
+                    vnfdInfo[0].vdu.forEach((vduData: VDUPRIMITIVELEVEL) => {
+                        if (vduData['vdu-configuration']) {
+                            const vduDataObj: VDUPRIMITIVELEVEL = this.generateVDUData(vduData);
+                            this.vduList.push(vduDataObj);
+                        }
+                    });
                 }
                 this.isLoadingResults = false;
             }, (error: ERRORDATA) => {

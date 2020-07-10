@@ -97,6 +97,7 @@
     "EXECUTE": "Executar",
     "EXECNSPRIMITIVE": "Exec NS Primitive",
     "PRIMITIVETYPE": "Tipo primitivo",
+    "VDUPRIMITIVE": "Primitivo de nível VDU",
     "VNFPRIMITIVE": "Primitivo de nível VNF",
     "NSPRIMITIVE": "NS Level Primitive",
     "DESCRIPTOR": "Descritora",
