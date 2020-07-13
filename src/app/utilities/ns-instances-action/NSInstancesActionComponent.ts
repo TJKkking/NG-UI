@@ -146,7 +146,8 @@ export class NSInstancesActionComponent {
   public execNSPrimitiveModal(): void {
     this.modalService.open(NSPrimitiveComponent).componentInstance.params = {
       memberIndex: this.value.memberIndex,
-      nsConfig: this.value.nsConfig
+      nsConfig: this.value.nsConfig,
+      name: this.value.NsdName
     };
   }
 

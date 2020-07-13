@@ -116,6 +116,10 @@ export class NSPrimitiveComponent implements OnInit {
         this.formBuilder = this.injector.get(FormBuilder);
         this.primitiveTypeList = [
             {
+                title: this.translateService.instant('NSPRIMITIVE'),
+                value: 'NS_Primitive'
+            },
+            {
                 title: this.translateService.instant('VNFPRIMITIVE'),
                 value: 'VNF_Primitive'
             },
@@ -124,7 +128,6 @@ export class NSPrimitiveComponent implements OnInit {
                 value: 'VDU_Primitive'
             }
         ];
-        this.primitiveType = 'VNF_Primitive';
     }
 
     /**
@@ -137,9 +140,6 @@ export class NSPrimitiveComponent implements OnInit {
                 this.nsdId = event.identifier;
             }
         });
-        if (!isNullOrUndefined(this.params.nsConfig)) {
-            this.primitiveTypeList.push({ title: this.translateService.instant('NSPRIMITIVE'), value: 'NS_Primitive' });
-        }
         this.initializeForm();
     }
 
@@ -225,10 +225,11 @@ export class NSPrimitiveComponent implements OnInit {
         this.primitiveParameter = [];
         this.initializeForm();
         if (data.value === 'NS_Primitive') {
-            this.primitiveList = !isNullOrUndefined(this.params.nsConfig['config-primitive']) ?
-                this.params.nsConfig['config-primitive'] : [];
+            this.getNSInfo(this.params.name);
             this.getFormControl('vnf_member_index').setValidators([]);
+            this.getFormControl('vnf_member_index').updateValueAndValidity();
             this.getFormControl('vdu_id').setValidators([]);
+            this.getFormControl('vdu_id').updateValueAndValidity();
         }
     }
     /** Member index change event */
@@ -301,6 +302,23 @@ export class NSPrimitiveComponent implements OnInit {
                         }
                     });
                 }
+                this.isLoadingResults = false;
+            }, (error: ERRORDATA) => {
+                this.isLoadingResults = false;
+                this.restService.handleError(error, 'get');
+            });
+    }
+    /** Get primivitive actions from NSD data */
+    private getNSInfo(nsdRef: string): void {
+        this.primitiveList = [];
+        this.primitiveParameter = [];
+        this.getFormControl('primitive').setValue(null);
+        const apiUrl: string = environment.NSDESCRIPTORS_URL + '?short-name=' + nsdRef;
+        this.isLoadingResults = true;
+        this.restService.getResource(apiUrl)
+            .subscribe((nsdInfo: {}) => {
+                this.primitiveList = !isNullOrUndefined(nsdInfo[0]['ns-configuration']['config-primitive']) ?
+                nsdInfo[0]['ns-configuration']['config-primitive'] : [];
                 this.isLoadingResults = false;
             }, (error: ERRORDATA) => {
                 this.isLoadingResults = false;
