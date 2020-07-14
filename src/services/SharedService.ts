@@ -304,6 +304,11 @@ export class SharedService {
         return tag;
     }
 
+    /** Fetch file extension @public */
+    public fetchFileExtension(fileInfo: FileList): string {
+        return fileInfo[0].name.substring(fileInfo[0].name.lastIndexOf('.') + 1);
+    }
+
     /** Method to validate file extension and size @private */
     private vaildataFileInfo(fileInfo: File, fileType: string): boolean {
         const extension: string = fileInfo.name.substring(fileInfo.name.lastIndexOf('.') + 1);
