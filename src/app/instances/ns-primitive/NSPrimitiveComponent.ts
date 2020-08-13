@@ -230,6 +230,9 @@ export class NSPrimitiveComponent implements OnInit {
             this.getFormControl('vnf_member_index').updateValueAndValidity();
             this.getFormControl('vdu_id').setValidators([]);
             this.getFormControl('vdu_id').updateValueAndValidity();
+        } else if (data.value === 'VNF_Primitive') {
+            this.getFormControl('vdu_id').setValidators([]);
+            this.getFormControl('vdu_id').updateValueAndValidity();
         }
     }
     /** Member index change event */
@@ -289,12 +292,13 @@ export class NSPrimitiveComponent implements OnInit {
         this.isLoadingResults = true;
         this.restService.getResource(apiUrl)
             .subscribe((vnfdInfo: {}) => {
-                if (vnfdInfo[0]['vnf-configuration']) {
+                if (vnfdInfo[0]['vnf-configuration'] !== undefined && vnfdInfo[0]['vnf-configuration']) {
                     this.getFormControl('vdu_id').setValidators([]);
                     this.primitiveList = vnfdInfo[0]['vnf-configuration']['config-primitive'];
                 }
                 if (getType === 'VDU_Primitive') {
                     this.vduList = [];
+                    this.primitiveList = [];
                     vnfdInfo[0].vdu.forEach((vduData: VDUPRIMITIVELEVEL) => {
                         if (vduData['vdu-configuration']) {
                             const vduDataObj: VDUPRIMITIVELEVEL = this.generateVDUData(vduData);
@@ -317,8 +321,12 @@ export class NSPrimitiveComponent implements OnInit {
         this.isLoadingResults = true;
         this.restService.getResource(apiUrl)
             .subscribe((nsdInfo: {}) => {
-                this.primitiveList = !isNullOrUndefined(nsdInfo[0]['ns-configuration']['config-primitive']) ?
-                nsdInfo[0]['ns-configuration']['config-primitive'] : [];
+                if (!isNullOrUndefined(nsdInfo[0]['ns-configuration'])) {
+                    this.primitiveList = !isNullOrUndefined(nsdInfo[0]['ns-configuration']['config-primitive']) ?
+                    nsdInfo[0]['ns-configuration']['config-primitive'] : [];
+                } else {
+                    this.primitiveList = [];
+                }
                 this.isLoadingResults = false;
             }, (error: ERRORDATA) => {
                 this.isLoadingResults = false;

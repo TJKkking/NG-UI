@@ -29,7 +29,8 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
                 <ng-select (change)="primitiveTypeChange($event)" [clearable]="false"
                     placeholder="{{'SELECT' | translate}}" [items]="primitiveTypeList" bindLabel="title"
                     bindValue="value" [(ngModel)]="primitiveType" id="primitiveType"
-                    [ngModelOptions]="{standalone: true}"></ng-select>
+                    [ngModelOptions]="{standalone: true}"
+                    [ngClass]="{ 'is-invalid': submitted && !primitiveType }"></ng-select>
             </div>
         </div>
         <div class="form-group row" *ngIf="primitiveType === 'VNF_Primitive' || primitiveType === 'VDU_Primitive'">
