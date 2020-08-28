@@ -34,13 +34,13 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
 </div>
 <div id="demo" class="collapse context-style p-2" [ngbCollapse]="isCollapsed">
   <div class="row">
-    <div class="col-sm-6 text-dark mb-2 font-weight-bold" *ngFor="let details of configParams">
-      <label class="col-sm-5 col-form-label">{{ details.title | translate}}:</label>
-      <span class="col-sm-5"> {{(details.value !== undefined)?details.value : '--'}} </span>
+    <div class="col-sm-6 text-dark mb-2 font-weight-bold" *ngFor="let details of configParams | keyvalue">
+      <label class="col-sm-5 col-form-label text-captilize">{{ details.key}}:</label>
+      <span class="col-sm-5">{{(details.value !== null && details.value !== '' && details.value !== undefined)?details.value : '--'}}</span>
     </div>
   </div>
 </div>
-<div class="modal-footer list">
+<div class="modal-footer list border-0">
   <button (click)="onVimAccountBack()"
     class="btn btn-danger pull-right">{{'PAGE.VIMDETAILS.BACKTOVIMACCOUNTS' | translate}}</button>
 </div>

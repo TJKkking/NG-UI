@@ -14,24 +14,33 @@
  limitations under the License.
 
  Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
-*/
-@import "../../assets/scss/mixins/mixin";
-@import "../../assets/scss/variable";
-#main-wrapper {
-  @include wh-value(100%, null);
-  .layout-wrapper {
-    @include flexbox(flex, null, null, null, stretch, null);
-    .content-section {
-      @include wh-value(100%, null);
-      @include transition(all, 0.3s, null, null);
-      @include flexbox(block, null, null, null, null, null);
-      overflow-x: auto;
-    }
-  }
-  .goto-top {
-    @include position_value(fixed, null, 30px, 10px, null);
-    @include font(null, 20px, null);
-    outline: none;
-    @include wh-value(40px, 40px);
-  }
+ */
+/**
+ * @file  Model for OSM Repo related information.
+ */
+
+/** Interface for OSM Repo Details */
+export interface OSMRepoDetails {
+    _admin: Admin;
+    _id: string;
+    name: string;
+    url: string;
+    'type': string;
+    project_id?: string;
+    description?: string;
+}
+/** Interface for Admin */
+interface Admin {
+    created: number;
+    modified: number;
+}
+/** Interface for OSM Repo data in smarttable */
+export interface OSMRepoData {
+    name: string;
+    identifier: string;
+    url: string;
+    'type': string;
+    modified: string;
+    created: string;
+    description: string;
 }

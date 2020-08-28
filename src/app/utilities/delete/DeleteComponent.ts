@@ -171,6 +171,9 @@ export class DeleteComponent {
     } else if (data.page === 'k8-repo') {
       this.deleteURL = environment.K8REPOS_URL;
       this.notifyMessage = 'DELETEDSUCCESSFULLY';
+    } else if (data.page === 'osmrepo') {
+      this.deleteURL = environment.OSMREPOS_URL;
+      this.notifyMessage = 'DELETEDSUCCESSFULLY';
     }
   }
   /** Generate Data function @public */

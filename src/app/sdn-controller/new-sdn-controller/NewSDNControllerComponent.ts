@@ -63,6 +63,9 @@ export class NewSDNControllerComponent implements OnInit {
   /** Give the message for the loading @public */
   public message: string = 'PLEASEWAIT';
 
+  /** Contains all methods related to shared @private */
+  public sharedService: SharedService;
+
   /** Instance of the rest service @private */
   private restService: RestService;
 
@@ -78,8 +81,8 @@ export class NewSDNControllerComponent implements OnInit {
   /** Contains tranlsate instance @private */
   private translateService: TranslateService;
 
-  /** Contains all methods related to shared @private */
-  private sharedService: SharedService;
+  /** convenience getter for easy access to form fields */
+  get f(): FormGroup['controls'] { return this.sdnControllerForm.controls; }
 
   constructor(injector: Injector) {
     this.injector = injector;
@@ -102,9 +105,6 @@ export class NewSDNControllerComponent implements OnInit {
       version: ['']
     });
   }
-
-  /** convenience getter for easy access to form fields */
-  get f(): FormGroup['controls'] { return this.sdnControllerForm.controls; }
 
   /**
    * Lifecyle Hooks the trigger before component is instantiate

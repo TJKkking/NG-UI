@@ -97,6 +97,7 @@
     "EXECUTE": "Execute",
     "EXECNSPRIMITIVE": "Exec NS Primitive",
     "PRIMITIVETYPE": "Primitiver Typ",
+    "VDUPRIMITIVE": "VDU Level Primitive",
     "VNFPRIMITIVE": "VNF Level Primitive",
     "NSPRIMITIVE": "NS Level Primitive",
     "DESCRIPTOR": "Deskriptor",
@@ -144,6 +145,9 @@
     "YAMLCONFIG": "Yaml Konfig",
     "CHOOSEFILE": "Datei wählen",
     "INVALIDCONFIG": "Ungültige Konfiguration",
+    "NODATE": "Keine Datumsinformationen gefunden",
+    "TYPEINFO": "Um einen neuen TYPW hinzuzufügen, geben Sie oben die Eingabe ein",
+    "UPLOADCONFIGLABEL": "Bitte laden Sie eine Datei im .yaml- oder .yml-Format hoch",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Instrumententafel",
@@ -190,7 +194,7 @@
         },
         "VIM": {
             "CREATEDSUCCESSFULLY": "VIM erfolgreich erstellt",
-            "LOACTIONINFO": "Geben Sie den Standortnamen ein und klicken Sie auf die Eingabetaste, um den Standort aus der Liste auszuwählen"
+            "LOCATIONINFO": "Geben Sie den Standortnamen ein und klicken Sie auf die Eingabetaste"
         },
         "VIMDETAILS": {
             "NEWVIM": "Nieuwe VIM",
@@ -204,51 +208,13 @@
             "SCHEMATYPE": "Schematyp",
             "SCHEMAVERSION": "Schema-Version",
             "CONFIGPARAMETERS": "KONFIG-PARAMETER",
-            "SDNCONTROLLER": "SDN-Controller",
-            "SDNPORTMAPPING": "SDN-Port-Zuordnung",
-            "VIMNETWORKNAME": "VIM-Netzwerkname",
-            "SECURITYGROUPS": "Sicherheitsgruppen",
-            "AVAILABILITYZONE": "Verfügbarkeitszone",
-            "REGIONALNAME": "Name der Region",
-            "INSECURE": "Unsicher",
-            "USEEXISTINGFLAVOURS": "Verwenden Sie vorhandene Aromen",
-            "USEINTERNALENDPOINT": "Verwenden Sie den internen Endpunkt",
-            "APIVERSION": "API-Version",
-            "PROJECTDOMAINID": "Projektdomänen-ID",
-            "PROJECTDOMAINNAME": "Projektdomänenname",
-            "USERDOMAINID": "Benutzer-Domain-ID",
-            "USERDOMAINUSER": "Benutzer-Domainname",
-            "KEYPAIR": "Schlüsselpaar",
-            "DATAPLANEPHYSICALNET": "Dataplane physikalisches Netz",
-            "USEFLOATINGIP": "Verwenden Sie Floating IP",
-            "DATAPLANENETVLANRANGE": "Dataplane Net VLAN-Bereich",
-            "MICROVERSION": "Mikroversion",
-            "BACKTOVIMACCOUNTS": "Zurück zu VimAccounts",
-            "VIMPASSWORD": "VIM-Passwort",
-            "ADDITIONALCONFIG": "Zusätzliche Konfiguration",
-            "ADDITIONALCONFIGPLACEHOLDER": "{'key1':[...],'key2':{},'key3':''}",
             "NEWVIMACCOUNT": "Neues VIM-Konto",
-            "ORGNAME": "Orgname",
-            "VCENTERIP": "Vcenter ip",
-            "VCENTERPORT": "Vcenter-Anschluss",
-            "ADMINUSERNAME": "Admin-Benutzername",
-            "VCENTERUSER": "Vcenter-Benutzer",
-            "ADMINPASSWORD": "Administrator-Passwort",
-            "VCENTERPASSWORD": "Vcenter Passwort",
-            "NSXMANAGER": "Nsx Manager",
-            "VROPSSITE": "Vrops Seite",
-            "NSXUSER": "Nsx Benutzer",
-            "VROPSUSER": "Vrops Benutzer",
-            "NSXPASSWORD": "Nsx Passwort",
-            "VROPSPASSWORD": "Vrops Passwort",
-            "VPCCIDRBLOCK": "VPC-CIDR-Block",
-            "FLAVORIINFO": "Geschmacksinfo",
-            "VIM_TYPE": "VIM-Typ",
+            "VIMPASSWORD": "VIM-Passwort",
             "VIMLOCATION": "VIM-Speicherort",
-            "SUBSCRIPTIONID": "Abonnement-ID",
-            "RESOURCEGROUP": "Ressourcengruppe",
-            "VNETNAME": "VNet Name",
-            "FLAVORSPATTERN": "Geschmacksmuster"
+            "BACKTOVIMACCOUNTS": "Zurück zu VimAccounts",
+            "LOCATIONERROR": "Das Datencenter ist bereits am ausgewählten Speicherort verfügbar",
+            "LOADSAMPLECONFIG": "Beispielkonfiguration laden",
+            "CLEARCONFIG": "Konfiguration löschen"
         },
         "WIMACCOUNTS": {
             "CREATEDSUCCESSFULLY": "WIM erfolgreich erstellt",
@@ -340,7 +306,8 @@
         "PROJECT": {
             "NEWPROJECT": "Nieuw project",
             "CREATEDSUCCESSFULLY": "Projekt erfolgreich erstellt",
-            "UPDATEDSUCCESSFULLY": "Projekt erfolgreich aktualisiert"
+            "UPDATEDSUCCESSFULLY": "Projekt erfolgreich aktualisiert",
+            "QUOTA": "Kontingentlimit"
         },
         "NSPACKAGE": {
             "ADDNSPACKAGE": "Verfassen Sie eine neue NS",
@@ -385,7 +352,12 @@
                 "CANNOTLINKVNFVLANDCP": "Sie können vnf_vl nicht mit cp verknüpfen",
                 "CANNOTLINKINTCPANDCP": "Sie können intcp nicht mit cp verknüpfen",
                 "CANNOTLINKCPANDINTCP": "Sie können cp nicht mit int_cp verknüpfen",
-                "CANNOTLINKVDUANDVDU": "Sie können ein vdu nicht mit einem vdu verknüpfen"
+                "CANNOTLINKVDUANDVDU": "Sie können ein vdu nicht mit einem vdu verknüpfen",
+                "CANNOTLINKCPANDCP": "Sie können ein CP nicht mit einem CP verknüpfen",
+                "CANNOTLINKVNFVLANDVNFVL": "Sie können vnf_vl nicht mit vnf_vl verknüpfen",
+                "CANNOTLINKVNFVLANDONTCP": "Sie können vnf_vl nicht mit int_cp verknüpfen",
+                "CANNOTLINKINTCPANDVNFVL": "Sie können intcp nicht mit vnf_vl verknüpfen",
+                "CANNOTLINKINTCPANDINTCP": "Sie können intcp nicht mit intcp verknüpfen"
             }
         },
         "NETSLICE": {
@@ -446,6 +418,15 @@
             "NEWK8SREPO": "Nieuwe K8s Repository",
             "TYPE": "Type",
             "URL": "URL"
+        },
+        "OSMREPO": {
+            "MENUOSMREPO": "OSM-Repositorys",
+            "ADDOSMREPO": "Fügen Sie OSM-Repositorys hinzu",
+            "NEWOSMREPO": "Neue OSM-Repositorys",
+            "EDITOSMREPO": "Bearbeiten Sie OSM-Repositorys",
+            "OSMREPOTITLE": "Registriertes OSM-Repository",
+            "CREATEDSUCCESSFULLY": "OSM-Repository erfolgreich hinzugefügt",
+            "UPDATEDSUCCESSFULLY" : "OSM-Repository erfolgreich aktualisiert"
         }
     },
     "HTTPERROR": {

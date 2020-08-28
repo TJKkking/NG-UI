@@ -166,3 +166,10 @@ export interface NSICREATEPARAMS {
     'netslice-vld': string;
     ssh_keys: string[];
 }
+
+/** Interface for the VDU Primitive Levels */
+export interface VDUPRIMITIVELEVEL {
+    id: string;
+    name: string;
+    'vdu-configuration': {};
+}

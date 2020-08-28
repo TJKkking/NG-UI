@@ -36,9 +36,10 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
             <label class="col-sm-4 col-form-label" for="sdn_type">{{'TYPE' | translate}}*</label>
             <div class="col-sm-8">
                 <ng-select [items]="sdnType" placeholder="{{'SELECT' | translate}}" bindLabel="title" bindValue="value"
-                    formControlName="type" id="sdn_type" [(ngModel)]="sdnTypeMod"
+                    formControlName="type" id="sdn_type" [(ngModel)]="sdnTypeMod" [addTag]="sharedService.addCustomTag"
                     [ngClass]="{ 'is-invalid': submitted && f.type.errors }" required>
                 </ng-select>
+                <small class="text-info">{{'TYPEINFO' | translate}}</small>
             </div>
         </div>
         <div class="form-group row">

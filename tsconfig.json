@@ -133,7 +133,12 @@
             "PageReloadModule": ["src/app/utilities/page-reload/PageReloadModule"],
             "GoToTopDirective": ["src/directive/GoToTopDirective"],
             "VNFLinkComponent": ["src/app/instances/vnf-instances/vnf-link/VNFLinkComponent"],
-            "PACKAGEJSON": ["package.json"]
+            "PACKAGEJSON": ["package.json"],
+            "OsmRepositories" : ["src/app/osm-repositories/OsmRepositoriesComponent"],
+            "OsmRepositoriesDetails":["src/app/osm-repositories/osm-repositories-details/OsmRepositoriesDetailsComponent"],
+            "OsmRepositoriesAction" : ["src/app/utilities/osm-repositories-action/OsmRepositoriesActionComponent"],
+            "OsmRepoModel": ["src/models/OsmRepoModel"],
+            "OsmRepoCreateUpdate": ["src/app/osm-repositories/osm-repo-create-update/OsmRepoCreateUpdateComponent"]
         }
     }
 }

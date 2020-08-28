@@ -46,7 +46,7 @@
     "VENDOR": "Vendedor",
     "VERSION": "Versión",
     "ACTIONS": "Comportamiento",
-    "NAME": "NOMBRE",
+    "NAME": "Nombre",
     "USAGESTATE": "Estado de uso",
     "MODIFICATIONDATE": "Fecha de modificación",
     "CREATEDDATE": "Fecha de creación",
@@ -97,6 +97,7 @@
     "EXECUTE": "Ejecutar",
     "EXECNSPRIMITIVE": "Ejecutar NS Primitiva",
     "PRIMITIVETYPE": "Tipo primitivo",
+    "VDUPRIMITIVE": "Primitiva a nivel de VDU",
     "VNFPRIMITIVE": "Nivel VNF Primitivo",
     "NSPRIMITIVE": "NS Level Primitive",
     "DESCRIPTOR": "Descriptora",
@@ -144,6 +145,9 @@
     "YAMLCONFIG": "Yaml Config",
     "CHOOSEFILE": "Elija el archivo",
     "INVALIDCONFIG": "Configuración inválida",
+    "NODATE": "No se encontró información de fecha",
+    "TYPEINFO": "Para agregar un nuevo TIPO, ingrese la entrada de arriba",
+    "UPLOADCONFIGLABEL": "Cargue el archivo con formato .yaml o .yml",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Tablero",
@@ -190,7 +194,7 @@
         },
         "VIM": {
             "CREATEDSUCCESSFULLY": "VIM Creada Exitosamente",
-            "LOACTIONINFO": "Escriba el nombre de la ubicación y haga clic en el botón Intro para seleccionar la ubicación de la lista"
+            "LOCATIONINFO": "Escriba el nombre de la ubicación y haga clic en ingresar"
         },
         "VIMDETAILS": {
             "NEWVIM": "Nuevo VIM",
@@ -204,51 +208,13 @@
             "SCHEMATYPE": "Tipo de esquema",
             "SCHEMAVERSION": "Versión de esquema",
             "CONFIGPARAMETERS": "CONFIGURAR PARÁMETROS",
-            "SDNCONTROLLER": "SDN Controladora",
-            "SDNPORTMAPPING": "SDN La asignación de puertos",
-            "VIMNETWORKNAME": "VIM Nombre de red",
-            "SECURITYGROUPS": "Grupos de seguridad",
-            "AVAILABILITYZONE": "Zona de disponibilidad",
-            "REGIONALNAME": "Nombre de región",
-            "INSECURE": "Insegura",
-            "USEEXISTINGFLAVOURS": "Usa sabores existentes",
-            "USEINTERNALENDPOINT": "Usar punto final interno",
-            "APIVERSION": "Versión API   ",
-            "PROJECTDOMAINID": "Proyecto dominio id",
-            "PROJECTDOMAINNAME": "Proyecto dominio name",
-            "USERDOMAINID": "Usuaria dominio id",
-            "USERDOMAINUSER": "Usuaria dominio nombre",
-            "KEYPAIR": "Par de claves",
-            "DATAPLANEPHYSICALNET": "Plano de datos physical net",
-            "USEFLOATINGIP": "Utilizar flotante ip",
-            "DATAPLANENETVLANRANGE": "Plano de datos net vlan range",
-            "MICROVERSION": "Microversión",
-            "BACKTOVIMACCOUNTS": "Atrás a VimAccounts",
-            "VIMPASSWORD": "VIM Contraseña",
-            "ADDITIONALCONFIG": "Adicional configuración",
-            "ADDITIONALCONFIGPLACEHOLDER": "{'key1': [...], 'key2': {}, 'key3': ''}",
             "NEWVIMACCOUNT": "Nueva VIM Cuenta",
-            "ORGNAME": "Orgnombre",
-            "VCENTERIP": "Vcenter ip",
-            "VCENTERPORT": "Vcenter Puerto",
-            "ADMINUSERNAME": "Administración nombre de usuario",
-            "VCENTERUSER": "Vcenter usuaria",
-            "ADMINPASSWORD": "Administración contraseña",
-            "VCENTERPASSWORD": "Vcenter contraseña",
-            "NSXMANAGER": "Nsx gerente",
-            "VROPSSITE": "Vrops sitio",
-            "NSXUSER": "Nsx usuaria",
-            "VROPSUSER": "Vrops usuaria",
-            "NSXPASSWORD": "Nsx contraseña",
-            "VROPSPASSWORD": "Vrops contraseña",
-            "VPCCIDRBLOCK": "VPC cidr bloquear",
-            "FLAVORIINFO": "Flavor informacion",
-            "VIM_TYPE": "VIM Tipo",
+            "VIMPASSWORD": "VIM Contraseña",
             "VIMLOCATION": "VIM Ubicación",
-            "SUBSCRIPTIONID": "ID de suscripción",
-            "RESOURCEGROUP": "Grupo de recursos",
-            "VNETNAME": "Nombre de red virtual",
-            "FLAVORSPATTERN": "Patrón de sabores"
+            "BACKTOVIMACCOUNTS": "Atrás a VimAccounts",
+            "LOCATIONERROR": "El centro de datos ya está disponible en la ubicación seleccionada",
+            "LOADSAMPLECONFIG": "Cargar configuración de muestra",
+            "CLEARCONFIG": "Borrar configuración"
         },
         "WIMACCOUNTS": {
             "CREATEDSUCCESSFULLY": "WIM Creado Exitosamente",
@@ -340,7 +306,8 @@
         "PROJECT": {
             "NEWPROJECT": "Nuevo proyecto",
             "CREATEDSUCCESSFULLY": "Proyecto Creada Exitosamente",
-            "UPDATEDSUCCESSFULLY": "Proyecto Actualizada Exitosamente"
+            "UPDATEDSUCCESSFULLY": "Proyecto Actualizada Exitosamente",
+            "QUOTA": "Límite de cuota"
         },
         "NSPACKAGE": {
             "ADDNSPACKAGE": "Componer un nuevo NS",
@@ -385,7 +352,12 @@
                 "CANNOTLINKVNFVLANDCP": "No puedes vincular vnf_vl con cp",
                 "CANNOTLINKINTCPANDCP": "No puedes vincular intcp con cp",
                 "CANNOTLINKCPANDINTCP": "No puedes vincular cp con int_cp",
-                "CANNOTLINKVDUANDVDU": "No puedes vincular un vdu con un vdu"
+                "CANNOTLINKVDUANDVDU": "No puedes vincular un vdu con un vdu",
+                "CANNOTLINKCPANDCP": "No puedes vincular una cp con una cp",
+                "CANNOTLINKVNFVLANDVNFVL": "No puede vincular vnf_vl con vnf_vl",
+                "CANNOTLINKVNFVLANDONTCP": "No puede vincular vnf_vl con int_cp",
+                "CANNOTLINKINTCPANDVNFVL": "No puedes vincular intcp con vnf_vl",
+                "CANNOTLINKINTCPANDINTCP": "No puede vincular intcp con intcp"
             }
         },
         "NETSLICE": {
@@ -446,6 +418,15 @@
             "NEWK8SREPO": "Nuevo repositorio K8s",
             "TYPE": "Tipo",
             "URL": "URL"
+        },
+        "OSMREPO": {
+            "MENUOSMREPO": "Repositorios OSM",
+            "ADDOSMREPO": "Agregar repositorios OSM",
+            "NEWOSMREPO": "Nuevos repositorios OSM",
+            "EDITOSMREPO": "Editar repositorios de OSM",
+            "OSMREPOTITLE": "Repositorio OSM registrado",
+            "CREATEDSUCCESSFULLY": "registrado OSM agregado con éxito",
+            "UPDATEDSUCCESSFULLY" : "El registrado de OSM se actualizó correctamente"
         }
     },
     "HTTPERROR": {

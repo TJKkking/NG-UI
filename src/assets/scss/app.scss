@@ -22,10 +22,11 @@ $customnavbar-padding-x: ($spacer / 0.5) !default;
 * {
   outline: 0;
 }
-button[type=submit]:focus, .sidebar-body button[type=button]:focus {
+button[type="submit"]:focus,
+.sidebar-body button[type="button"]:focus {
   @include box-shadow(0, 0, 0, 0.2rem, lighten($primary, 50%) !important);
 }
-.btn-danger:focus{
+.btn-danger:focus {
   @include box-shadow(0, 0, 0, 0.2rem, lighten($danger, 30%) !important);
 }
 body,
@@ -33,7 +34,10 @@ body,
 .scroll-box,
 .smarttable-style,
 .modal-body-custom-height,
-.layout-wrapper, .CodeMirror-vscrollbar, .ng-sidebar, .runninginstances .popover-body {
+.layout-wrapper,
+.CodeMirror-vscrollbar,
+.ng-sidebar,
+.runninginstances .popover-body {
   &::-webkit-scrollbar {
     @include wh-value(10px, null);
   }
@@ -185,8 +189,11 @@ body {
     @include wh-value(null, calc(2rem + 8px) !important);
     @include padding-value(0, 10, 0, 10);
   }
-  .CodeMirror {
+  .edit-packages .CodeMirror {
     min-height: 400px !important;
+  }
+  .new-vim .CodeMirror {
+    @include border(all, 1, solid, #eee !important);
   }
   .table-layout-fixed {
     table-layout: fixed;
@@ -214,12 +221,12 @@ body {
     @include background(null, $theme-bg-color, null, null, null);
   }
   /** Vim Show running instance Details **/
-  .runninginstances{
-     width:200px;
-     .popover-body{
+  .runninginstances {
+    width: 200px;
+    .popover-body {
       max-height: 200px;
       overflow-y: scroll;
-     }
+    }
   }
   /****************************************************************************/
   /************************** Smart table custom design ***********************/
@@ -412,20 +419,24 @@ body {
         }
       }
     }
-    .dropdown-menu {
-      @include border(all, 1, solid, $primary);
-      @include padding-value(0, 0, 0, 0);
-      button.btn.btn-primary {
-        @include background(null, transparent, null, null, null);
-        @include padding-value(8, 8, 8, 8);
-        @include roundedCorners(0);
-        &:hover {
-          @include background(null, $primary, null, null, null);
-          color: $white;
-        }
-        &:not(:last-child) {
-          @include border(bottom, 1, solid, $primary);
-        }
+  }
+  /****************************************************************************/
+  /*********************** List Action Dropdown section ***********************/
+  /****************************************************************************/
+  .list-action-dropdown {
+    @include border(all, 1, solid, $primary);
+    @include padding-value(0, 0, 0, 0);
+    button.btn.btn-primary {
+      @include background(null, transparent, null, null, null);
+      @include padding-value(8, 8, 8, 8);
+      @include roundedCorners(0);
+      color: $primary;
+      &:hover {
+        @include background(null, $primary, null, null, null);
+        color: $white;
+      }
+      &:not(:last-child) {
+        @include border(bottom, 1, solid, $primary);
       }
     }
   }
@@ -682,7 +693,12 @@ body {
 /****************************************************************************/
 @media (max-width: map-get($grid-breakpoints, md)) {
   .smarttable-style {
+    @include flexbox(block, null, null, null, null, null);
     overflow-x: auto;
     white-space: nowrap;
   }
+}
+
+.text-captilize {
+  text-transform: capitalize;
 }

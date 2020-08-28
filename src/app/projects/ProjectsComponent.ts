@@ -32,6 +32,7 @@ import { ProjectsActionComponent } from 'ProjectsAction';
 import { RestService } from 'RestService';
 import { Subscription } from 'rxjs';
 import { SharedService } from 'SharedService';
+import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component
@@ -169,10 +170,12 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     public generateProjectData(projectData: ProjectDetails): ProjectData {
         return {
             projectName: projectData.name,
-            modificationDate: this.sharedService.convertEpochTime(projectData._admin.modified),
-            creationDate: this.sharedService.convertEpochTime(projectData._admin.created),
+            modificationDate: this.sharedService.convertEpochTime(!isNullOrUndefined(projectData._admin)
+                ? projectData._admin.modified : null),
+            creationDate: this.sharedService.convertEpochTime(!isNullOrUndefined(projectData._admin) ? projectData._admin.created : null),
             id: projectData._id,
-            project: projectData._id
+            project: projectData._id,
+            quotas: !isNullOrUndefined(projectData.quotas) ? projectData.quotas : null
         };
     }
 

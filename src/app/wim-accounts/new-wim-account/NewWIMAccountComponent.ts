@@ -71,6 +71,9 @@ export class NewWIMAccountComponent implements OnInit {
   /** Element ref for fileInputConfig @public */
   @ViewChild('fileInputConfigLabel', { static: true }) public fileInputConfigLabel: ElementRef;
 
+  /** Contains all methods related to shared @private */
+  public sharedService: SharedService;
+
   /** Instance of the rest service @private */
   private restService: RestService;
 
@@ -86,8 +89,8 @@ export class NewWIMAccountComponent implements OnInit {
   /** Contains tranlsate instance @private */
   private translateService: TranslateService;
 
-  /** Contains all methods related to shared @private */
-  private sharedService: SharedService;
+  /** convenience getter for easy access to form fields */
+  get f(): FormGroup['controls'] { return this.wimNewAccountForm.controls; }
 
   constructor(injector: Injector) {
     this.injector = injector;
@@ -109,9 +112,6 @@ export class NewWIMAccountComponent implements OnInit {
       config: [null]
     });
   }
-
-  /** convenience getter for easy access to form fields */
-  get f(): FormGroup['controls'] { return this.wimNewAccountForm.controls; }
 
   /**
    * Lifecyle Hooks the trigger before component is instantiate

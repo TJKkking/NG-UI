@@ -51,7 +51,7 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
     </div>
   </div>
 </form>
-<div class="ngx-codemirror" *ngIf="defaults[mode] else noData">
+<div class="ngx-codemirror edit-packages" *ngIf="defaults[mode] else noData">
   <ngx-codemirror [options]="options" [ngModel]="defaults[mode]" [disabled]="readOnly" [autoFocus]="true"
     (ngModelChange)="handleChange($event)"></ngx-codemirror>
 </div>

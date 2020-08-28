@@ -24,13 +24,32 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { NotifierService } from 'angular-notifier';
-import { APIURLHEADER, ERRORDATA, TYPESECTION, VIM_TYPES } from 'CommonModel';
+import 'codemirror/addon/dialog/dialog';
+import 'codemirror/addon/display/autorefresh';
+import 'codemirror/addon/display/fullscreen';
+import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/addon/edit/matchbrackets';
+import 'codemirror/addon/fold/brace-fold';
+import 'codemirror/addon/fold/foldcode';
+import 'codemirror/addon/fold/foldgutter';
+import 'codemirror/addon/search/search';
+import 'codemirror/addon/search/searchcursor';
+import 'codemirror/keymap/sublime';
+import 'codemirror/lib/codemirror';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/markdown/markdown';
+import 'codemirror/mode/yaml/yaml';
+import {
+  APIURLHEADER, ERRORDATA, TYPEAWS, TYPEAZURE, TYPEOPENSTACK, TYPEOPENVIMNEBULA, TYPEOTERS,
+  TYPESECTION, TYPEVMWARE, VIM_TYPES
+} from 'CommonModel';
 import { environment } from 'environment';
 import * as jsyaml from 'js-yaml';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
 import { isNullOrUndefined } from 'util';
 import { FEATURES, VIMLOCATION, VIMLOCATIONDATA } from 'VimAccountModel';
+import { VimAccountDetails, VIMData } from 'VimAccountModel';
 
 /**
  * Creating component
@@ -79,11 +98,47 @@ export class NewVimaccountComponent implements OnInit {
   /** set the latitude value of the selected place @public */
   public setLat: number;
 
+  /** Handle the formate Change @public */
+  public defaults: {} = {
+    'text/x-yaml': ''
+  };
+
+  /** To Set Mode @public */
+  public mode: string = 'text/x-yaml';
+
+  /** To Set Mode @public */
+  public modeDefault: string = 'yaml';
+
+  /** options @public */
+  public options: {} = {
+    mode: this.modeDefault,
+    showCursorWhenSelecting: true,
+    autofocus: true,
+    autoRefresh: true,
+    lineNumbers: true,
+    lineWrapping: true,
+    foldGutter: true,
+    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+    autoCloseBrackets: true,
+    matchBrackets: true,
+    theme: 'neat',
+    keyMap: 'sublime'
+  };
+
+  /** Data @public */
+  public data: string = '';
+
+  /** Controls the File Type List form @public */
+  public fileTypes: { value: string; viewValue: string; }[] = [];
+
   /** Element ref for fileInput @public */
   @ViewChild('fileInput', { static: true }) public fileInput: ElementRef;
 
   /** Element ref for fileInput @public */
   @ViewChild('fileInputLabel', { static: true }) public fileInputLabel: ElementRef;
+
+  /** Contains all methods related to shared @private */
+  public sharedService: SharedService;
 
   /** Instance of the rest service @private */
   private restService: RestService;
@@ -103,11 +158,11 @@ export class NewVimaccountComponent implements OnInit {
   /** Contains tranlsate instance @private */
   private translateService: TranslateService;
 
-  /** Contains all methods related to shared @private */
-  private sharedService: SharedService;
+  /** VIM Details @private */
+  private vimDetail: VimAccountDetails[];
 
-  /** Contains configuration key variables @private */
-  private configKeys: string[] = [];
+  /** convenience getter for easy access to form fields */
+  get f(): FormGroup['controls'] { return this.vimNewAccountForm.controls; }
 
   constructor(injector: Injector) {
     this.injector = injector;
@@ -128,63 +183,22 @@ export class NewVimaccountComponent implements OnInit {
       schema_type: [''],
       vim_user: [null, Validators.required],
       vim_password: [null, Validators.required],
-      vimconfig: this.paramsBuilder()
+      config: this.paramsBuilder()
     });
   }
 
   /** Generate params for config @public */
   public paramsBuilder(): FormGroup {
     return this.formBuilder.group({
-      use_existing_flavors: [null],
-      location: [null],
-      sdn_controller: [null],
-      APIversion: [null],
-      sdn_port_mapping: [null],
-      project_domain_id: [null],
-      vim_network_name: [null],
-      project_domain_name: [null],
-      config_vim_ype: [null],
-      user_domain_id: [null],
-      security_groups: [null],
-      user_domain_name: [null],
-      availabilityZone: [null],
-      keypair: [null],
-      region_name: [null],
-      dataplane_physical_net: [null],
-      insecure: [null],
-      use_floating_ip: [null],
-      microversion: [null],
-      use_internal_endpoint: [null],
-      additional_conf: [null],
-      orgname: [null],
-      vcenter_ip: [null],
-      vcenter_port: [null],
-      admin_username: [null],
-      vcenter_user: [null],
-      admin_password: [null],
-      vcenter_password: [null],
-      nsx_manager: [null],
-      vrops_site: [null],
-      nsx_user: [null],
-      vrops_user: [null],
-      nsx_password: [null],
-      vrops_password: [null],
-      vpc_cidr_block: [null],
-      flavor_info: [null],
-      subscription_id: [null],
-      resource_group: [null],
-      vnet_name: [null],
-      flavors_pattern: [null]
+      location: [null]
     });
   }
-
-  /** convenience getter for easy access to form fields */
-  get f(): FormGroup['controls'] { return this.vimNewAccountForm.controls; }
 
   /**
    * Lifecyle Hooks the trigger before component is instantiate
    */
   public ngOnInit(): void {
+    this.fileTypes = [{ value: 'text/x-yaml', viewValue: 'yaml' }];
     this.vimType = VIM_TYPES;
     this.boolValue = [
       { id: '', name: 'None' },
@@ -196,6 +210,7 @@ export class NewVimaccountComponent implements OnInit {
       'Content-Type': 'application/json',
       'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0'
     });
+    this.getVIMDetails();
   }
 
   /** On modal submit newVimAccountSubmit will called @public */
@@ -203,18 +218,25 @@ export class NewVimaccountComponent implements OnInit {
     this.submitted = true;
     if (!this.vimNewAccountForm.invalid) {
       this.isLocationLoadingResults = true;
-      this.configKeys.forEach((key: string) => {
-        this.vimNewAccountForm.controls.vimconfig.get(key).setValue(JSON.parse(this.vimNewAccountForm.controls.vimconfig.get(key).value));
-      });
-      this.sharedService.cleanForm(this.vimNewAccountForm);
-      Object.keys(this.vimNewAccountForm.value.vimconfig).forEach((key: string) => {
-        if (this.vimNewAccountForm.value.vimconfig[key] === undefined || this.vimNewAccountForm.value.vimconfig[key] === null ||
-          this.vimNewAccountForm.value.vimconfig[key] === '') {
-          delete this.vimNewAccountForm.value.vimconfig[key];
+      this.sharedService.cleanForm(this.vimNewAccountForm, 'vim');
+      if (!isNullOrUndefined(this.data) && this.data !== '') {
+        Object.assign(this.vimNewAccountForm.value.config, jsyaml.load(this.data.toString(), { json: true }));
+      } else {
+        Object.keys(this.vimNewAccountForm.value.config).forEach((res: string) => {
+          if (res !== 'location') {
+            delete this.vimNewAccountForm.value.config[res];
+          }
+        });
+      }
+
+      if (isNullOrUndefined(this.vimNewAccountForm.value.config.location)) {
+        delete this.vimNewAccountForm.value.config.location;
+      }
+      Object.keys(this.vimNewAccountForm.value.config).forEach((res: string) => {
+        if (isNullOrUndefined(this.vimNewAccountForm.value.config[res]) || this.vimNewAccountForm.value.config[res] === '') {
+          delete this.vimNewAccountForm.value.config[res];
         }
       });
-      this.vimNewAccountForm.value.config = this.vimNewAccountForm.value.vimconfig;
-      delete this.vimNewAccountForm.value.vimconfig;
       const apiURLHeader: APIURLHEADER = {
         url: environment.VIMACCOUNTS_URL,
         httpOptions: { headers: this.headers }
@@ -228,14 +250,15 @@ export class NewVimaccountComponent implements OnInit {
           });
           // Post the New Vim data and reflect in the VIM Details Page.
         }, (error: ERRORDATA) => {
-          this.configKeys.forEach((key: string) => {
-            this.vimNewAccountForm.controls.vimconfig.get(key)
-              .setValue(JSON.stringify(this.vimNewAccountForm.controls.vimconfig.get(key).value));
-          });
           this.restService.handleError(error, 'post');
           this.isLocationLoadingResults = false;
         });
     }
+  }
+
+  /** HandleChange function @public */
+  public handleChange($event: string): void {
+    this.data = $event;
   }
 
   /** Routing to VIM Account Details Page @public */
@@ -287,22 +310,11 @@ export class NewVimaccountComponent implements OnInit {
 
   /** Drag and drop feature and fetchind the details of files  @private */
   public filesDropped(files: FileList): void {
-    this.configKeys = [];
     if (files && files.length === 1) {
       this.sharedService.getFileString(files, 'yaml').then((fileContent: string): void => {
         const getJson: string = jsyaml.load(fileContent, { json: true });
-        Object.keys(getJson).forEach((item: string) => {
-          if (!isNullOrUndefined(this.vimNewAccountForm.controls.vimconfig.get(item))) {
-            if (typeof getJson[item] === 'object') {
-              // tslint:disable-next-line: no-backbone-get-set-outside-model
-              this.vimNewAccountForm.controls.vimconfig.get(item).setValue(JSON.stringify(getJson[item]));
-              this.configKeys.push(item);
-            } else {
-              // tslint:disable-next-line: no-backbone-get-set-outside-model
-              this.vimNewAccountForm.controls.vimconfig.get(item).setValue(getJson[item]);
-            }
-          }
-        });
+        this.defaults['text/x-yaml'] = fileContent;
+        this.data = fileContent;
       }).catch((err: string): void => {
         if (err === 'typeError') {
           this.notifierService.notify('error', this.translateService.instant('YAMLFILETYPEERRROR'));
@@ -317,5 +329,61 @@ export class NewVimaccountComponent implements OnInit {
     }
     this.fileInputLabel.nativeElement.innerText = files[0].name;
     this.fileInput.nativeElement.value = null;
+  }
+
+  /** Location chnage event in select box @public */
+  public locationChange(data: { value: string }): void {
+    this.vimDetail.forEach((vimAccountData: VimAccountDetails) => {
+      if (!isNullOrUndefined(vimAccountData.config.location) && !isNullOrUndefined(data)) {
+        if (vimAccountData.config.location === data.value) {
+          this.notifierService.notify('error', this.translateService.instant('PAGE.VIMDETAILS.LOCATIONERROR'));
+          // tslint:disable-next-line: no-backbone-get-set-outside-model
+          this.vimNewAccountForm.controls.config.get('location').setValue(null);
+        }
+      }
+    });
+  }
+
+  /** Load sample config based on VIM type @public */
+  public loadSampleConfig(): void {
+    this.clearConfig();
+    if (this.selectedVimType === 'openstack') {
+      this.defaults['text/x-yaml'] = jsyaml.dump(TYPEOPENSTACK);
+      this.data = JSON.stringify(TYPEOPENSTACK, null, '\t');
+    } else if (this.selectedVimType === 'aws') {
+      this.defaults['text/x-yaml'] = jsyaml.dump(TYPEAWS);
+      this.data = JSON.stringify(TYPEAWS, null, '\t');
+    } else if (this.selectedVimType === 'vmware') {
+      this.defaults['text/x-yaml'] = jsyaml.dump(TYPEVMWARE);
+      this.data = JSON.stringify(TYPEVMWARE, null, '\t');
+    } else if (this.selectedVimType === 'openvim' || this.selectedVimType === 'opennebula') {
+      this.defaults['text/x-yaml'] = jsyaml.dump(TYPEOPENVIMNEBULA);
+      this.data = JSON.stringify(TYPEOPENVIMNEBULA, null, '\t');
+    } else if (this.selectedVimType === 'azure' || this.selectedVimType === 'opennebula') {
+      this.defaults['text/x-yaml'] = jsyaml.dump(TYPEAZURE);
+      this.data = JSON.stringify(TYPEAZURE, null, '\t');
+    } else {
+      this.defaults['text/x-yaml'] = jsyaml.dump(TYPEOTERS);
+      this.data = JSON.stringify(TYPEOTERS, null, '\t');
+    }
+  }
+
+  /** Clear config parameters @public */
+  public clearConfig(): void {
+    this.defaults['text/x-yaml'] = '';
+    this.data = '';
+    this.fileInput.nativeElement.value = null;
+  }
+
+  /** Method to get VIM details @private */
+  private getVIMDetails(): void {
+    this.isLocationLoadingResults = true;
+    this.restService.getResource(environment.VIMACCOUNTS_URL).subscribe((vimAccountsData: VimAccountDetails[]) => {
+      this.vimDetail = vimAccountsData;
+      this.isLocationLoadingResults = false;
+    }, (error: ERRORDATA) => {
+      this.restService.handleError(error, 'get');
+      this.isLocationLoadingResults = false;
+    });
   }
 }

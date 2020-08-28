@@ -47,7 +47,7 @@ export class InfoVimComponent implements OnInit {
   public vimAccountDetails: VimAccountDetails;
 
   /** Information Top Left @public */
-  public configParams: {}[] = [];
+  public configParams: {} = {};
 
   /** Showing more details of collapase */
   public isCollapsed: boolean = true;
@@ -116,19 +116,23 @@ export class InfoVimComponent implements OnInit {
     this.restService.getResource(environment.VIMACCOUNTS_URL + '/' + this.paramsID)
       .subscribe((vimAccountsData: VimAccountDetails) => {
         this.showDetails(vimAccountsData);
-        if (vimAccountsData.config !== undefined) {
-          if (vimAccountsData.vim_type === 'openstack') {
-            this.showOpenstackConfig(vimAccountsData.config);
-          } else if (vimAccountsData.vim_type === 'aws') {
-            this.awsConfig(vimAccountsData.config);
-          } else if (vimAccountsData.vim_type === 'openvim' || vimAccountsData.vim_type === 'opennebula') {
-            this.openVIMOpenNebulaConfig(vimAccountsData.config);
-          } else if (vimAccountsData.vim_type === 'vmware') {
-            this.vmwareConfig(vimAccountsData.config);
-          } else if (vimAccountsData.vim_type === 'azure') {
-            this.azureConfig(vimAccountsData.config);
+        if (vimAccountsData.config.location !== undefined) {
+          const locationArr: string[] = vimAccountsData.config.location.split(',');
+          if (Array.isArray(locationArr)) {
+            vimAccountsData.config.location = locationArr[0];
           }
         }
+        Object.keys(vimAccountsData.config).forEach((key: string) => {
+          if (Array.isArray(vimAccountsData.config[key]) || typeof vimAccountsData.config[key] === 'object') {
+            vimAccountsData.config[key] = JSON.stringify(vimAccountsData.config[key]);
+          }
+          const keyArr: string[] = key.split('_');
+          if (keyArr.length > 1 ) {
+            vimAccountsData.config[key.split('_').join(' ')] = vimAccountsData.config[key];
+            delete vimAccountsData.config[key];
+          }
+        });
+        this.configParams = vimAccountsData.config;
         this.isLoadingResults = false;
       }, (error: ERRORDATA) => {
         this.isLoadingResults = false;
@@ -174,271 +178,6 @@ export class InfoVimComponent implements OnInit {
       {
         title: 'PAGE.VIMDETAILS.SCHEMAVERSION',
         value: vimAccountsData.schema_version
-      }
-    ];
-  }
-
-  /** Openstack Config @public */
-  public showOpenstackConfig(config: CONFIG): void {
-    if (!isNullOrUndefined(config)) {
-      Object.keys(config).forEach((key: string) => {
-        if (Array.isArray(config[key])) {
-          config[key] = JSON.stringify(config[key]);
-        }
-      });
-    }
-    let location: string = config.location;
-    if (!isNullOrUndefined(location)) {
-      const locationArr: string[] = config.location.split(',');
-      if (Array.isArray(locationArr)) {
-        location = locationArr[0];
-      }
-    }
-
-    this.configParams = [
-      {
-        title: 'PAGE.VIMDETAILS.SDNCONTROLLER',
-        value: config.sdn_controller
-      },
-      {
-        title: 'PAGE.VIMDETAILS.SDNPORTMAPPING',
-        value: config.sdn_port_mapping
-      },
-      {
-        title: 'PAGE.VIMDETAILS.VIMNETWORKNAME',
-        value: config.vim_network_name
-      },
-      {
-        title: 'PAGE.VIMDETAILS.SECURITYGROUPS',
-        value: config.security_groups
-      },
-      {
-        title: 'PAGE.VIMDETAILS.AVAILABILITYZONE',
-        value: config.availabilityZone
-      },
-      {
-        title: 'PAGE.VIMDETAILS.REGIONALNAME',
-        value: config.region_name
-      },
-      {
-        title: 'PAGE.VIMDETAILS.INSECURE',
-        value: config.insecure
-      },
-      {
-        title: 'PAGE.VIMDETAILS.USEEXISTINGFLAVOURS',
-        value: config.use_existing_flavors
-      },
-      {
-        title: 'PAGE.VIMDETAILS.USEINTERNALENDPOINT',
-        value: config.use_internal_endpoint
-      },
-      {
-        title: 'PAGE.VIMDETAILS.ADDITIONALCONFIG',
-        value: config.additional_conf
-      },
-      {
-        title: 'PAGE.VIMDETAILS.APIVERSION',
-        value: config.APIversion
-      },
-      {
-        title: 'PAGE.VIMDETAILS.PROJECTDOMAINID',
-        value: config.project_domain_id
-      },
-      {
-        title: 'PAGE.VIMDETAILS.PROJECTDOMAINNAME',
-        value: config.project_domain_name
-      },
-      {
-        title: 'PAGE.VIMDETAILS.USERDOMAINID',
-        value: config.user_domain_id
-      },
-      {
-        title: 'PAGE.VIMDETAILS.USERDOMAINUSER',
-        value: config.user_domain_name
-      },
-      {
-        title: 'PAGE.VIMDETAILS.KEYPAIR',
-        value: config.keypair
-      },
-      {
-        title: 'PAGE.VIMDETAILS.DATAPLANEPHYSICALNET',
-        value: config.dataplane_physical_net
-      },
-      {
-        title: 'PAGE.VIMDETAILS.USEFLOATINGIP',
-        value: config.use_floating_ip
-      },
-      {
-        title: 'PAGE.VIMDETAILS.MICROVERSION',
-        value: config.microversion
-      },
-      {
-        title: 'PAGE.VIMDETAILS.VIMLOCATION',
-        value: location
-      }
-    ];
-  }
-
-  /** AWS Config @public */
-  public awsConfig(config: CONFIG): void {
-    this.configParams = [
-      {
-        title: 'PAGE.VIMDETAILS.SDNCONTROLLER',
-        value: config.sdn_controller
-      },
-      {
-        title: 'PAGE.VIMDETAILS.VPCCIDRBLOCK',
-        value: config.vpc_cidr_block
-      },
-      {
-        title: 'PAGE.VIMDETAILS.SDNPORTMAPPING',
-        value: config.sdn_port_mapping
-      },
-      {
-        title: 'PAGE.VIMDETAILS.SECURITYGROUPS',
-        value: config.security_groups
-      },
-      {
-        title: 'PAGE.VIMDETAILS.VIMNETWORKNAME',
-        value: config.vim_network_name
-      },
-      {
-        title: 'PAGE.VIMDETAILS.KEYPAIR',
-        value: config.keypair
-      },
-      {
-        title: 'PAGE.VIMDETAILS.REGIONALNAME',
-        value: config.region_name
-      },
-      {
-        title: 'PAGE.VIMDETAILS.FLAVORIINFO',
-        value: config.flavor_info
-      },
-      {
-        title: 'PAGE.VIMDETAILS.ADDITIONALCONFIG',
-        value: config.additional_conf
-      }
-    ];
-  }
-
-  /** Open vim and open nebula config @public */
-  public openVIMOpenNebulaConfig(config: CONFIG): void {
-    this.configParams = [
-      {
-        title: 'PAGE.VIMDETAILS.SDNCONTROLLER',
-        value: config.sdn_controller
-      },
-      {
-        title: 'PAGE.VIMDETAILS.SDNPORTMAPPING',
-        value: config.sdn_port_mapping
-      },
-      {
-        title: 'PAGE.VIMDETAILS.VIMNETWORKNAME',
-        value: config.vim_network_name
-      },
-      {
-        title: 'PAGE.VIMDETAILS.ADDITIONALCONFIG',
-        value: config.additional_conf
-      }
-    ];
-  }
-
-  /** vmware config @public */
-  public vmwareConfig(config: CONFIG): void {
-    this.configParams = [
-      {
-        title: 'PAGE.VIMDETAILS.SDNCONTROLLER',
-        value: config.sdn_controller
-      },
-      {
-        title: 'PAGE.VIMDETAILS.ORGNAME',
-        value: config.orgname
-      },
-      {
-        title: 'PAGE.VIMDETAILS.SDNPORTMAPPING',
-        value: config.sdn_port_mapping
-      },
-      {
-        title: 'PAGE.VIMDETAILS.VCENTERIP',
-        value: config.vcenter_ip
-      },
-      {
-        title: 'PAGE.VIMDETAILS.VIMNETWORKNAME',
-        value: config.vim_network_name
-      },
-      {
-        title: 'PAGE.VIMDETAILS.VCENTERPORT',
-        value: config.vcenter_port
-      },
-      {
-        title: 'PAGE.VIMDETAILS.ADMINUSERNAME',
-        value: config.admin_username
-      },
-      {
-        title: 'PAGE.VIMDETAILS.VCENTERUSER',
-        value: config.vcenter_user
-      },
-      {
-        title: 'PAGE.VIMDETAILS.ADMINPASSWORD',
-        value: config.admin_password
-      },
-      {
-        title: 'PAGE.VIMDETAILS.VCENTERPASSWORD',
-        value: config.vcenter_password
-      },
-      {
-        title: 'PAGE.VIMDETAILS.NSXMANAGER',
-        value: config.nsx_manager
-      },
-      {
-        title: 'PAGE.VIMDETAILS.VROPSSITE',
-        value: config.vrops_site
-      },
-      {
-        title: 'PAGE.VIMDETAILS.NSXUSER',
-        value: config.nsx_user
-      },
-      {
-        title: 'PAGE.VIMDETAILS.VROPSUSER',
-        value: config.vrops_user
-      },
-      {
-        title: 'PAGE.VIMDETAILS.NSXPASSWORD',
-        value: config.nsx_password
-      },
-      {
-        title: 'PAGE.VIMDETAILS.VROPSPASSWORD',
-        value: config.vrops_password
-      },
-      {
-        title: 'PAGE.VIMDETAILS.ADDITIONALCONFIG',
-        value: config.additional_conf
-      }
-    ];
-  }
-
-  /** Azure Config @public */
-  public azureConfig(config: CONFIG): void {
-    this.configParams = [
-      {
-        title: 'PAGE.VIMDETAILS.SUBSCRIPTIONID',
-        value: config.subscription_id
-      },
-      {
-        title: 'PAGE.VIMDETAILS.REGIONALNAME',
-        value: config.region_name
-      },
-      {
-        title: 'PAGE.VIMDETAILS.RESOURCEGROUP',
-        value: config.resource_group
-      },
-      {
-        title: 'PAGE.VIMDETAILS.VNETNAME',
-        value: config.vnet_name
-      },
-      {
-        title: 'PAGE.VIMDETAILS.FLAVORSPATTERN',
-        value: config.flavors_pattern
       }
     ];
   }

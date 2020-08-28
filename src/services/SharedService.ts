@@ -22,6 +22,7 @@ import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { CONSTANTNUMBER, ERRORDATA, GETAPIURLHEADER, PACKAGEINFO, PAGERSMARTTABLE, SMARTTABLECLASS, TARSETTINGS } from 'CommonModel';
 import { environment } from 'environment';
 import * as HttpStatus from 'http-status-codes';
@@ -64,6 +65,12 @@ export class SharedService {
     // tslint:disable-next-line: max-line-length
     public REGX_PASSWORD_PATTERN: RegExp = new RegExp(/^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/);
 
+    /** Variables to hold maxlength for the description @public */
+    public MAX_LENGTH_DESCRIPTION: number = 500;
+
+    /** Variables to hold maxlength for the name @public */
+    public MAX_LENGTH_NAME: number = 50;
+
     /** FormGroup instance added to the form @ html @public */
     public formGroup: FormGroup;
 
@@ -88,27 +95,37 @@ export class SharedService {
     /** Service holds the router information @private */
     private router: Router;
 
+    /** Random color string generator length @private */
+    private colorStringLength: number = 256;
+
     /** Check for the root directory @private */
     private directoryCount: number = 2;
 
-    constructor(restService: RestService, router: Router) {
+    /** Contains tranlsate instance @private */
+    private translateService: TranslateService;
+
+    constructor(restService: RestService, router: Router, translateService: TranslateService) {
         this.restService = restService;
         this.router = router;
+        this.translateService = translateService;
     }
 
     /** convert epoch time function @public */
     public convertEpochTime(unixtimestamp: number): string {
-        const monthsArr: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const date: Date = new Date(unixtimestamp * this.epochTime1000);
-        const year: number = date.getFullYear();
-        const month: string = monthsArr[date.getMonth()];
-        const day: number = date.getDate();
-        const hours: number = date.getHours();
-        const minutes: string = '0' + date.getMinutes();
-        const seconds: string = '0' + date.getSeconds();
-        return month + '-' + day + '-' + year + ' ' + hours + ':' + minutes.substr(this.epochTimeMinus2) + ':'
-            + seconds.substr(this.epochTimeMinus2);
+        if (!isNullOrUndefined(unixtimestamp)) {
+            const monthsArr: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const date: Date = new Date(unixtimestamp * this.epochTime1000);
+            const year: number = date.getFullYear();
+            const month: string = monthsArr[date.getMonth()];
+            const day: number = date.getDate();
+            const hours: number = date.getHours();
+            const minutes: string = '0' + date.getMinutes();
+            const seconds: string = '0' + date.getSeconds();
+            return month + '-' + day + '-' + year + ' ' + hours + ':' + minutes.substr(this.epochTimeMinus2) + ':'
+                + seconds.substr(this.epochTimeMinus2);
+        }
+        return this.translateService.instant('NODATE');
     }
 
     /** Download Files function @public */
@@ -218,21 +235,21 @@ export class SharedService {
         return true;
     }
     /** Clean the form before submit @public */
-    public cleanForm(formGroup: FormGroup): void {
+    public cleanForm(formGroup: FormGroup, formName?: String): void {
         Object.keys(formGroup.controls).forEach((key: string) => {
-            if ((!isNullOrUndefined((formGroup.get(key) as FormArray | FormGroup).controls)) && key !== 'vimconfig') {
+            if ((!isNullOrUndefined((formGroup.get(key) as FormArray | FormGroup).controls)) && key !== 'config') {
                 // tslint:disable-next-line: no-shadowed-variable
                 for (const { item, index } of (formGroup.get(key).value).map((item: {}, index: number) => ({ item, index }))) {
                     const newFormGroup: FormGroup = (formGroup.get(key) as FormArray).controls[index] as FormGroup;
                     this.cleanForm(newFormGroup);
                 }
-            } else if (formGroup.get(key).value !== undefined && formGroup.get(key).value !== null && key !== 'vimconfig') {
+            } else if (formGroup.get(key).value !== undefined && formGroup.get(key).value !== null && key !== 'config') {
                 if (!Array.isArray(formGroup.get(key).value)) {
                     if (typeof formGroup.get(key).value === 'string') {
                         formGroup.get(key).setValue(formGroup.get(key).value.trim());
                     }
                 }
-            } else if (key === 'vimconfig') {
+            } else if (key === 'config' && formName === 'vim') {
                 const newFormGroup: FormGroup = formGroup.get(key) as FormGroup;
                 this.cleanForm(newFormGroup);
             }
@@ -274,11 +291,32 @@ export class SharedService {
             this.restService.handleError(error, 'get');
         });
     }
+    /** Random RGB color code generator @public */
+    public generateColor(): string {
+        const x: number = Math.floor(Math.random() * this.colorStringLength);
+        const y: number = Math.floor(Math.random() * this.colorStringLength);
+        const z: number = Math.floor(Math.random() * this.colorStringLength);
+        return 'rgb(' + x + ',' + y + ',' + z + ')';
+    }
+
+    /** Add custom name/tag to the dropdown @public */
+    public addCustomTag(tag: string): string {
+        return tag;
+    }
+
+    /** Fetch file extension @public */
+    public fetchFileExtension(fileInfo: FileList): string {
+        return fileInfo[0].name.substring(fileInfo[0].name.lastIndexOf('.') + 1);
+    }
+
     /** Method to validate file extension and size @private */
     private vaildataFileInfo(fileInfo: File, fileType: string): boolean {
         const extension: string = fileInfo.name.substring(fileInfo.name.lastIndexOf('.') + 1);
         const packageSize: number = CONSTANTNUMBER.oneMB * environment.packageSize;
-        if (extension.toLowerCase() === fileType && fileInfo.size <= packageSize) {
+        if (fileType === 'yaml' && (extension.toLowerCase() === 'yaml' || extension.toLowerCase() === 'yml')
+            && fileInfo.size <= packageSize) {
+            return true;
+        } else if (extension.toLowerCase() === fileType && fileInfo.size <= packageSize) {
             return true;
         }
         return false;

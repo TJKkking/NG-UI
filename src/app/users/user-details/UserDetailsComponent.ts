@@ -32,6 +32,7 @@ import { Subscription } from 'rxjs';
 import { SharedService } from 'SharedService';
 import { UserData, UserDetail } from 'UserModel';
 import { UsersActionComponent } from 'UsersActionComponent';
+import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component
@@ -170,8 +171,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public setUserDetails(userData: UserDetail): void {
     const userDataObj: UserData = {
       username: userData.username,
-      modified: this.sharedService.convertEpochTime(userData._admin.modified),
-      created: this.sharedService.convertEpochTime(userData._admin.created),
+      modified: this.sharedService.convertEpochTime(!isNullOrUndefined(userData._admin) ? userData._admin.modified : null),
+      created: this.sharedService.convertEpochTime(!isNullOrUndefined(userData._admin) ? userData._admin.created : null),
       projects: userData.projectListName,
       identifier: userData._id
     };

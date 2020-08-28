@@ -309,7 +309,7 @@ export class VimAccountDetailsComponent implements OnInit {
             this.nsData = [];
             this.restService.getResource(environment.NSDINSTANCES_URL).subscribe((nsdInstancesData: NSInstanceDetails[]) => {
                 const nsRunningInstancesData: NSInstanceDetails[] = nsdInstancesData.filter((instancesData: NSInstanceDetails) =>
-                instancesData['operational-status'] === this.nsinstancesoperationalStateRunning);
+                    instancesData['operational-status'] === this.nsinstancesoperationalStateRunning);
                 this.nsData = nsRunningInstancesData;
                 resolve(true);
             }, (error: ERRORDATA) => {
@@ -331,7 +331,8 @@ export class VimAccountDetailsComponent implements OnInit {
             }),
             view: new View({
                 center: fromLonLat([CONSTANTNUMBER.osmapviewlong, CONSTANTNUMBER.osmapviewlat]),
-                zoom: 3
+                zoom: 3,
+                minZoom: 1.5
             })
         });
     }

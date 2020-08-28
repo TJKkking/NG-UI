@@ -197,8 +197,11 @@ export class InstantiateNsComponent implements OnInit {
         });
         delete this.instantiateForm.value.config;
       } else {
-        this.notifierService.notify('error', this.translateService.instant('INVALIDCONFIG'));
-        return;
+        const getConfigJson: string = jsyaml.load(this.instantiateForm.value.config, { json: true });
+        Object.keys(getConfigJson).forEach((item: string) => {
+          this.instantiateForm.value[item] = getConfigJson[item];
+        });
+        delete this.instantiateForm.value.config;
       }
     }
     const apiURLHeader: APIURLHEADER = {
@@ -246,19 +249,35 @@ export class InstantiateNsComponent implements OnInit {
   /** Config file process @private */
   public configFile(files: FileList): void {
     if (files && files.length === 1) {
-      this.sharedService.getFileString(files, 'yaml').then((fileContent: string): void => {
-        const getConfigJson: string = jsyaml.load(fileContent, { json: true });
-        // tslint:disable-next-line: no-backbone-get-set-outside-model
-        this.instantiateForm.get('config').setValue(JSON.stringify(getConfigJson));
-      }).catch((err: string): void => {
-        if (err === 'typeError') {
-          this.notifierService.notify('error', this.translateService.instant('YAMLFILETYPEERRROR'));
-        } else {
-          this.notifierService.notify('error', this.translateService.instant('ERROR'));
-        }
-        this.fileInputConfigLabel.nativeElement.innerText = this.translateService.instant('CHOOSEFILE');
-        this.fileInputConfig.nativeElement.value = null;
-      });
+      const fileFormat: string = this.sharedService.fetchFileExtension(files).toLocaleLowerCase();
+      if (fileFormat === 'yaml' || fileFormat === 'yml') {
+        this.sharedService.getFileString(files, 'yaml').then((fileContent: string): void => {
+          // tslint:disable-next-line: no-backbone-get-set-outside-model
+          this.instantiateForm.get('config').setValue(fileContent);
+        }).catch((err: string): void => {
+          if (err === 'typeError') {
+            this.notifierService.notify('error', this.translateService.instant('YAMLFILETYPEERRROR'));
+          } else {
+            this.notifierService.notify('error', this.translateService.instant('ERROR'));
+          }
+          this.fileInputConfigLabel.nativeElement.innerText = this.translateService.instant('CHOOSEFILE');
+          this.fileInputConfig.nativeElement.value = null;
+        });
+      } else if (fileFormat === 'json') {
+        this.sharedService.getFileString(files, 'json').then((fileContent: string): void => {
+          const getConfigJson: string = jsyaml.load(fileContent, { json: true });
+          // tslint:disable-next-line: no-backbone-get-set-outside-model
+          this.instantiateForm.get('config').setValue(JSON.stringify(getConfigJson));
+        }).catch((err: string): void => {
+          if (err === 'typeError') {
+            this.notifierService.notify('error', this.translateService.instant('JSONFILETYPEERRROR'));
+          } else {
+            this.notifierService.notify('error', this.translateService.instant('ERROR'));
+          }
+          this.fileInputConfigLabel.nativeElement.innerText = this.translateService.instant('CHOOSEFILE');
+          this.fileInputConfig.nativeElement.value = null;
+        });
+      }
     } else if (files && files.length > 1) {
       this.notifierService.notify('error', this.translateService.instant('DROPFILESVALIDATION'));
     }
