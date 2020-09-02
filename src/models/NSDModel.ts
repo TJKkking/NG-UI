@@ -174,3 +174,10 @@ export interface VDUPRIMITIVELEVEL {
     name: string;
     'vdu-configuration': {};
 }
+
+/** Interface for the KDU Primitive Levels */
+export interface KDUPRIMITIVELEVEL {
+    name: string;
+    'juju-bundle': string;
+    'kdu-configuration': {};
+}

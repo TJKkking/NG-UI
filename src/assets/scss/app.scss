@@ -71,6 +71,10 @@ body {
     &:focus {
       text-decoration: none;
     }
+    &:not([href]),
+    &:not([href]):hover {
+      color: inherit;
+    }
   }
   .badge {
     @include line-height(normal);

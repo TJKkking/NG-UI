@@ -95,11 +95,12 @@
     "VALUE": "Value",
     "PERFORMACTION": "Perform Action",
     "EXECUTE": "Execute",
-    "EXECNSPRIMITIVE": "Exec NS Primitive",
+    "EXECPRIMITIVE": "Exec Primitive",
     "PRIMITIVETYPE": "Primitive Type",
     "VDUPRIMITIVE": "VDU Level Primitive",
     "VNFPRIMITIVE": "VNF Level Primitive",
     "NSPRIMITIVE": "NS Level Primitive",
+    "KDUPRIMITIVE": "KDU Level Primitive",
     "DESCRIPTOR": "Descriptor",
     "ERROR": "Something Went wrong please try again",
     "SHOWGRAPH": "Show Graph",
@@ -426,7 +427,7 @@
             "EDITOSMREPO": "Edit OSM Repositories",
             "OSMREPOTITLE": "Registered OSM repository",
             "CREATEDSUCCESSFULLY": "OSM Repository Added Successfully",
-            "UPDATEDSUCCESSFULLY" : "OSM Repository Updated Successfully"
+            "UPDATEDSUCCESSFULLY": "OSM Repository Updated Successfully"
         }
     },
     "HTTPERROR": {

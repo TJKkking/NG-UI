@@ -127,6 +127,7 @@ export class RestService {
             return this.http.delete(getRequest.url, getRequest.httpOptions);
         }
     }
+
     /**
      * Handle Error response based on the status.
      * @param error The error response reecieved from API call.
