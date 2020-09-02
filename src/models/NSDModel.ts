@@ -49,6 +49,7 @@ export interface NSDDetails {
     vld: VLD[];
     _admin: VNFDAdminDetails;
     _id: string;
+    _links?: string;
     'constituent-vnfr-ref': string[];
 }
 
