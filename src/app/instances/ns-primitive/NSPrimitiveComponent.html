@@ -21,42 +21,39 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
         <i class="fas fa-times-circle text-danger"></i>
     </button>
 </div>
-<form [formGroup]="primitiveForm" (ngSubmit)="execNSPrimitive()">
+<form [formGroup]="primitiveForm" (ngSubmit)="execPrimitive()">
     <div class="modal-body">
         <div class="form-group row">
             <label class="col-sm-4 col-form-label">{{'PRIMITIVETYPE' | translate}}*</label>
             <div class="col-sm-8">
-                <ng-select (change)="primitiveTypeChange($event)" [clearable]="false"
-                    placeholder="{{'SELECT' | translate}}" [items]="primitiveTypeList" bindLabel="title"
-                    bindValue="value" [(ngModel)]="primitiveType" id="primitiveType"
-                    [ngModelOptions]="{standalone: true}"
+                <ng-select (change)="primitiveTypeChange($event)" [clearable]="false" placeholder="{{'SELECT' | translate}}" [items]="primitiveTypeList" bindLabel="title" bindValue="value" [(ngModel)]="primitiveType" id="primitiveType" [ngModelOptions]="{standalone: true}"
                     [ngClass]="{ 'is-invalid': submitted && !primitiveType }"></ng-select>
             </div>
         </div>
-        <div class="form-group row" *ngIf="primitiveType === 'VNF_Primitive' || primitiveType === 'VDU_Primitive'">
+        <div class="form-group row" *ngIf="primitiveType === 'VNF_Primitive' || primitiveType === 'VDU_Primitive' || primitiveType === 'KDU_Primitive'">
             <label class="col-sm-4 col-form-label">VNF {{'MEMBERINDEX' | translate}}*</label>
             <div class="col-sm-3">
-                <ng-select (change)="indexChange($event, primitiveType)" [clearable]="false" placeholder="{{'SELECT' | translate}}"
-                    [items]="params.memberIndex" bindLabel="member-vnf-index" bindValue="member-vnf-index"
-                    formControlName="vnf_member_index" id="vnf_member_index"
+                <ng-select (change)="indexChange($event, primitiveType)" [clearable]="false" placeholder="{{'SELECT' | translate}}" [items]="params.memberIndex" bindLabel="member-vnf-index" bindValue="member-vnf-index" formControlName="vnf_member_index" id="vnf_member_index"
                     [ngClass]="{ 'is-invalid': submitted && f.vnf_member_index.errors }"></ng-select>
             </div>
         </div>
         <div class="form-group row" *ngIf="primitiveType === 'VDU_Primitive'">
             <label class="col-sm-4 col-form-label">{{'SELECT' | translate}} VDU *</label>
             <div class="col-sm-8">
-                <ng-select (change)="getVDUPrimitive($event)" [clearable]="false" placeholder="{{'SELECT' | translate}}"
-                    [items]="vduList" bindLabel="name" bindValue="id" formControlName="vdu_id" id="vdu_id"
-                    [ngClass]="{ 'is-invalid': submitted && f.vdu_id.errors }"></ng-select>
+                <ng-select (change)="getPrimitiveList($event, 'vdu')" [clearable]="false" placeholder="{{'SELECT' | translate}}" [items]="vduList" bindLabel="name" bindValue="id" formControlName="vdu_id" id="vdu_id" [ngClass]="{ 'is-invalid': submitted && f.vdu_id.errors }"></ng-select>
+            </div>
+        </div>
+        <div class="form-group row" *ngIf="primitiveType === 'KDU_Primitive'">
+            <label class="col-sm-4 col-form-label">{{'SELECT' | translate}} KDU *</label>
+            <div class="col-sm-8">
+                <ng-select (change)="getPrimitiveList($event, 'kdu')" [clearable]="false" placeholder="{{'SELECT' | translate}}" [items]="kduList" bindLabel="name" bindValue="name" formControlName="kdu_name" id="kdu_name" [ngClass]="{ 'is-invalid': submitted && f.kdu_name.errors }"></ng-select>
             </div>
         </div>
         <div class="form-group row" *ngIf="primitiveType">
             <label class="col-sm-4 col-form-label">
                 {{'PAGE.NSPRIMITIVE.PRIMITIVE' | translate}}*</label>
             <div class="col-sm-8">
-                <ng-select (change)="primitiveChange($event)" [clearable]="false" placeholder="{{'SELECT' | translate}}"
-                    [items]="primitiveList" bindLabel="name" bindValue="name" formControlName="primitive" id="primitive"
-                    [ngClass]="{ 'is-invalid': submitted && f.primitive.errors }"></ng-select>
+                <ng-select (change)="primitiveChange($event)" [clearable]="false" placeholder="{{'SELECT' | translate}}" [items]="primitiveList" bindLabel="name" bindValue="name" formControlName="primitive" id="primitive" [ngClass]="{ 'is-invalid': submitted && f.primitive.errors }"></ng-select>
             </div>
         </div>
         <ng-container *ngIf="primitiveParameter.length > 0">
@@ -71,21 +68,16 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
                 <div class="form-group row" [formGroupName]="i">
                     <label class="col-sm-2 col-form-label">{{'NAME' | translate}}:</label>
                     <div class="col-sm-3">
-                        <ng-select placeholder="{{'SELECT' | translate}}" [clearable]="false"
-                            [items]="primitiveParameter" bindLabel="name" bindValue="name"
-                            formControlName="primitive_params_name" id="parameter{{i}}"
-                            [ngClass]="{ 'is-invalid': submitted && params.controls.primitive_params_name.errors }">
+                        <ng-select placeholder="{{'SELECT' | translate}}" [clearable]="false" [items]="primitiveParameter" bindLabel="name" bindValue="name" formControlName="primitive_params_name" id="parameter{{i}}" [ngClass]="{ 'is-invalid': submitted && params.controls.primitive_params_name.errors }">
                         </ng-select>
                     </div>
                     <div class="col-sm-1"></div>
                     <label class="col-sm-2 col-form-label">{{'VALUE' | translate}}:</label>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" formControlName="primitive_params_value"
-                            [ngClass]="{ 'is-invalid': submitted && params.controls.primitive_params_value.errors }">
+                        <input type="text" class="form-control" formControlName="primitive_params_value" [ngClass]="{ 'is-invalid': submitted && params.controls.primitive_params_value.errors }">
                     </div>
                     <div class="col-sm-1" [hidden]="i==0">
-                        <button type="button" class="btn btn-sm btn-danger remove-mapping"
-                            (click)="removePrimitiveParams(i)">
+                        <button type="button" class="btn btn-sm btn-danger remove-mapping" (click)="removePrimitiveParams(i)">
                             <i class="fas fa-times-circle"></i>
                         </button>
                     </div>

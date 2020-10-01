@@ -103,18 +103,23 @@ export class AuthInterceptorService implements HttpInterceptor {
     public errorRes(err: HttpErrorResponse, req: HttpRequest<{}>, next: HttpHandler): Observable<{}> {
         if (err instanceof HttpErrorResponse) {
             switch (err.status) {
-                case HttpStatus.UNAUTHORIZED || HttpStatus.FORBIDDEN:
+                case HttpStatus.UNAUTHORIZED:
+                case HttpStatus.FORBIDDEN:
                     this.handleError(err);
+                    break;
+                case HttpStatus.GATEWAY_TIMEOUT:
+                case HttpStatus.BAD_GATEWAY:
+                    this.notifierService.hideAll();
+                    this.authService.logoutResponse();
                     break;
                 default: return throwError(err);
             }
         } else { return throwError(err); }
     }
 
-    /** Method to handle  401 & 403 error */
+    /** Method to handle  401, 403 & 502 error */
     private handleError(err: HttpErrorResponse): void {
-        if (err.error.detail === 'Expired Token or Authorization HTTP header' ||
-            err.error.detail === 'Invalid Token or Authorization HTTP header') {
+        if (err.error.detail !== 'Access denied: lack of permissions.') {
             this.notifierService.hideAll();
             this.authService.logoutResponse();
             if (this.authService.handle401) {

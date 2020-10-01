@@ -49,6 +49,7 @@ export interface NSDDetails {
     vld: VLD[];
     _admin: VNFDAdminDetails;
     _id: string;
+    _links?: string;
     'constituent-vnfr-ref': string[];
 }
 
@@ -172,4 +173,11 @@ export interface VDUPRIMITIVELEVEL {
     id: string;
     name: string;
     'vdu-configuration': {};
+}
+
+/** Interface for the KDU Primitive Levels */
+export interface KDUPRIMITIVELEVEL {
+    name: string;
+    'juju-bundle': string;
+    'kdu-configuration': {};
 }

@@ -95,11 +95,12 @@
     "VALUE": "Valor",
     "PERFORMACTION": "Executar a ação",
     "EXECUTE": "Executar",
-    "EXECNSPRIMITIVE": "Exec NS Primitive",
+    "EXECPRIMITIVE": "Exec Primitive",
     "PRIMITIVETYPE": "Tipo primitivo",
     "VDUPRIMITIVE": "Primitivo de nível VDU",
     "VNFPRIMITIVE": "Primitivo de nível VNF",
     "NSPRIMITIVE": "NS Level Primitive",
+    "KDUPRIMITIVE": "Nível KDU Primitivo",
     "DESCRIPTOR": "Descritora",
     "ERROR": "Alguma coisa deu errado. Por favor tente outra vez",
     "SHOWGRAPH": "Mostrar gráfico",
@@ -426,7 +427,7 @@
             "EDITOSMREPO": "Editar repositórios OSM",
             "OSMREPOTITLE": "Repositório OSM registrado",
             "CREATEDSUCCESSFULLY": "registrado OSM adicionado com sucesso",
-            "UPDATEDSUCCESSFULLY" : "registrado OSM atualizado com sucesso"
+            "UPDATEDSUCCESSFULLY": "registrado OSM atualizado com sucesso"
         }
     },
     "HTTPERROR": {

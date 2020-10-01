@@ -445,6 +445,7 @@ export class NSComposerComponent {
     this.restService.getResource(environment.NSDESCRIPTORSCONTENT_URL + '/' + this.identifier).subscribe((nsData: NSDDetails) => {
       delete nsData._admin;
       delete nsData._id;
+      delete nsData._links;
       this.nsData = nsData;
       this.vnfdPackageDetails.shortName = nsData['short-name'];
       this.vnfdPackageDetails.vendor = nsData.vendor;

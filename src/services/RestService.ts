@@ -25,9 +25,10 @@ import { Injectable } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { NotifierService } from 'angular-notifier';
-import { ERRORDATA } from 'CommonModel';
+import { APIURLHEADER, ERRORDATA } from 'CommonModel';
 import * as HttpStatus from 'http-status-codes';
 import { Observable } from 'rxjs';
+import { isNullOrUndefined } from 'util';
 
 /**
  * An Injectable is a class adorned with the @Injectable decorator function.
@@ -60,7 +61,12 @@ export class RestService {
      */
 
     public getResource(apiURL: string, httpHeaders?: { headers: HttpHeaders }): Observable<{}> {
-        return this.http.get(apiURL, httpHeaders);
+        const getRequest: APIURLHEADER = this.getHttpoptions(apiURL);
+        if (!isNullOrUndefined(httpHeaders)) {
+            return this.http.get(apiURL, httpHeaders);
+        } else {
+            return this.http.get(getRequest.url, getRequest.httpOptions);
+        }
     }
 
     /**
@@ -70,7 +76,12 @@ export class RestService {
      */
 
     public postResource(apiURLHeader: { url: string, httpOptions?: { headers: HttpHeaders } }, payload: {}): Observable<{}> {
-        return this.http.post(apiURLHeader.url, payload, apiURLHeader.httpOptions);
+        const getRequest: APIURLHEADER = this.getHttpoptions(apiURLHeader.url);
+        if (!isNullOrUndefined(apiURLHeader.httpOptions)) {
+            return this.http.post(apiURLHeader.url, payload, apiURLHeader.httpOptions);
+        } else {
+            return this.http.post(getRequest.url, payload, getRequest.httpOptions);
+        }
     }
 
     /**
@@ -80,7 +91,12 @@ export class RestService {
      */
 
     public patchResource(apiURLHeader: { url: string, httpOptions?: { headers: HttpHeaders } }, payload: {}): Observable<object> {
-        return this.http.patch(apiURLHeader.url, payload, apiURLHeader.httpOptions);
+        const getRequest: APIURLHEADER = this.getHttpoptions(apiURLHeader.url);
+        if (!isNullOrUndefined(apiURLHeader.httpOptions)) {
+            return this.http.patch(apiURLHeader.url, payload, apiURLHeader.httpOptions);
+        } else {
+            return this.http.patch(getRequest.url, payload, getRequest.httpOptions);
+        }
     }
 
     /**
@@ -90,7 +106,12 @@ export class RestService {
      */
 
     public putResource(apiURLHeader: { url: string, httpOptions?: { headers: HttpHeaders } }, payload: {}): Observable<object> {
-        return this.http.put(apiURLHeader.url, payload, apiURLHeader.httpOptions);
+        const getRequest: APIURLHEADER = this.getHttpoptions(apiURLHeader.url);
+        if (!isNullOrUndefined(apiURLHeader.httpOptions)) {
+            return this.http.put(apiURLHeader.url, payload, apiURLHeader.httpOptions);
+        } else {
+            return this.http.put(getRequest.url, payload, getRequest.httpOptions);
+        }
     }
 
     /**
@@ -99,8 +120,14 @@ export class RestService {
      */
 
     public deleteResource(apiURL: string, httpHeaders?: { headers: HttpHeaders }): Observable<object> {
-        return this.http.delete(apiURL, httpHeaders);
+        const getRequest: APIURLHEADER = this.getHttpoptions(apiURL);
+        if (!isNullOrUndefined(httpHeaders)) {
+            return this.http.delete(apiURL, httpHeaders);
+        } else {
+            return this.http.delete(getRequest.url, getRequest.httpOptions);
+        }
     }
+
     /**
      * Handle Error response based on the status.
      * @param error The error response reecieved from API call.
@@ -140,5 +167,18 @@ export class RestService {
             this.notifierService.notify('error', err.error.detail !== undefined ?
                 err.error.detail : this.translateService.instant('ERROR'));
         }
+    }
+
+    /** Set headers for get Methods @public */
+    private getHttpoptions(apiURL: string): APIURLHEADER {
+        const apiHeaders: HttpHeaders = new HttpHeaders({
+            'Content-Type': 'application/json; charset=UTF-8',
+            Accept: 'application/json',
+            'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0'
+        });
+        return {
+            url: apiURL,
+            httpOptions: {headers : apiHeaders}
+        };
     }
 }

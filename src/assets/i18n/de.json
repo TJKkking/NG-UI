@@ -95,11 +95,12 @@
     "VALUE": "Wert",
     "PERFORMACTION": "Aktion ausführen",
     "EXECUTE": "Execute",
-    "EXECNSPRIMITIVE": "Exec NS Primitive",
+    "EXECPRIMITIVE": "Exec Primitive",
     "PRIMITIVETYPE": "Primitiver Typ",
     "VDUPRIMITIVE": "VDU Level Primitive",
     "VNFPRIMITIVE": "VNF Level Primitive",
     "NSPRIMITIVE": "NS Level Primitive",
+    "KDUPRIMITIVE": "KDU Level Primitive",
     "DESCRIPTOR": "Deskriptor",
     "ERROR": "Etwas ist schief gelaufen. Bitte versuche es erneut",
     "SHOWGRAPH": "Grafik anzeigen",
@@ -426,7 +427,7 @@
             "EDITOSMREPO": "Bearbeiten Sie OSM-Repositorys",
             "OSMREPOTITLE": "Registriertes OSM-Repository",
             "CREATEDSUCCESSFULLY": "OSM-Repository erfolgreich hinzugefügt",
-            "UPDATEDSUCCESSFULLY" : "OSM-Repository erfolgreich aktualisiert"
+            "UPDATEDSUCCESSFULLY": "OSM-Repository erfolgreich aktualisiert"
         }
     },
     "HTTPERROR": {
