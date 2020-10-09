@@ -204,7 +204,7 @@
             "VIMUSERNAME": "VIM Username",
             "VIMURL": "VIM URL",
             "VIMTYPE": "Type",
-            "TENANTNAME": "Tenant name",
+            "TENANTNAME": "VIM Project/Tenant Name",
             "DESCRIPTION": "Description",
             "SCHEMATYPE": "Schema Type",
             "SCHEMAVERSION": "Schema Version",

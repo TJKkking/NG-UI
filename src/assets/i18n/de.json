@@ -204,7 +204,7 @@
             "VIMUSERNAME": "VIM-Benutzername",
             "VIMURL": "VIM-URL",
             "VIMTYPE": "Art",
-            "TENANTNAME": "Name des Mieters",
+            "TENANTNAME": "Name des VIM-Projekts / Mandanten",
             "DESCRIPTION": "Beschreibung",
             "SCHEMATYPE": "Schematyp",
             "SCHEMAVERSION": "Schema-Version",
