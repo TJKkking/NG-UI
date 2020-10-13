@@ -50,7 +50,7 @@ const GRAFANA_ENDPOINT: string = 'http://' + window.location.hostname + ':3000';
 // tslint:disable-next-line: typedef
 export const environment = {
     production: false,
-    packageSize: 15,
+    packageSize: 50,
     paginationNumber: 10, //Possible values are 10, 25, 50, 100
     packageVersion: version,
     // tslint:disable-next-line: no-http-string

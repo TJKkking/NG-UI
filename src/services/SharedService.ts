@@ -23,7 +23,7 @@ import { EventEmitter, Injectable, Output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { CONSTANTNUMBER, ERRORDATA, GETAPIURLHEADER, PACKAGEINFO, PAGERSMARTTABLE, SMARTTABLECLASS, TARSETTINGS } from 'CommonModel';
+import { CONSTANTNUMBER, ERRORDATA, FILESETTINGS, GETAPIURLHEADER, PACKAGEINFO, PAGERSMARTTABLE, SMARTTABLECLASS, TARSETTINGS } from 'CommonModel';
 import { environment } from 'environment';
 import * as HttpStatus from 'http-status-codes';
 import * as untar from 'js-untar';
@@ -194,14 +194,15 @@ export class SharedService {
                         const getFoldersFiles: {}[] = extractedFiles;
                         const folderNameStr: string = extractedFiles[0].name;
                         getFoldersFiles.forEach((value: TARSETTINGS) => {
+                            const fileValueObj: FILESETTINGS = this.createFileValueObject(value);
                             const getRootFolder: string[] = value.name.split('/');
                             if (value.name.startsWith(folderNameStr) &&
                                 (value.name.endsWith('.yaml') || value.name.endsWith('.yml')) &&
                                 getRootFolder.length === this.directoryCount) {
-                                tar.append(value.name, packageInfo.descriptor, { type: value.type });
+                                tar.append(value.name, packageInfo.descriptor, fileValueObj);
                             } else {
                                 if (value.type !== 'L') {
-                                    tar.append(value.name, new Uint8Array(value.buffer), { type: value.type });
+                                    tar.append(value.name, new Uint8Array(value.buffer), fileValueObj);
                                 }
                             }
                         });
@@ -223,6 +224,15 @@ export class SharedService {
                 }
             });
         });
+    }
+    /** Method to return the file information @public */
+    public createFileValueObject(value: TARSETTINGS): FILESETTINGS {
+        return {
+            type: value.type,
+            linkname: value.linkname,
+            owner: value.uname,
+            group: value.gname
+        };
     }
     /** Method to check given string is JSON or not @public */
     public checkJson(jsonString: string): boolean {

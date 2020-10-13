@@ -152,6 +152,16 @@ export interface TARSETTINGS {
     buffer: ArrayBuffer;
     header_offset?: Number;
     size?: number;
+    linkname?: string;
+    uname?: string;
+    gname?: string;
+}
+/** Interface for File Settings */
+export interface FILESETTINGS {
+    'type'?: string;
+    linkname?: string;
+    owner?: string;
+    group?: string;
 }
 /** Interface for Package information */
 export interface PACKAGEINFO {
