@@ -15,13 +15,13 @@
 #
 # Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in), VIJAY NAG (vijaynag.bs@tataelxsi.co.in)
 
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 # Installing node dependencies.
 RUN apt-get update && apt-get install -y curl xz-utils gnupg2 \
     && apt-get update && apt-get install -y apt-transport-https \
     && curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
-    && echo "deb https://deb.nodesource.com/node_10.x xenial main" | tee -a /etc/apt/sources.list.d/nodesource.list \
-    && echo "deb-src https://deb.nodesource.com/node_10.x xenial main" | tee -a /etc/apt/sources.list.d/nodesource.list \
+    && echo "deb https://deb.nodesource.com/node_10.x bionic main" | tee -a /etc/apt/sources.list.d/nodesource.list \
+    && echo "deb-src https://deb.nodesource.com/node_10.x bionic main" | tee -a /etc/apt/sources.list.d/nodesource.list \
     && apt-get update && apt-get install -y nodejs \
     && apt-get install -y nginx
 
