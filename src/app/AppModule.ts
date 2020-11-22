@@ -19,7 +19,7 @@
  * @file Instance Module file
  */
 import { CommonModule, LOCATION_INITIALIZED } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, Injector, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -143,7 +143,7 @@ const customNotifierOptions: NotifierOptions = {
         }),
         NgbModule,
         NgSelectModule,
-        RouterModule.forRoot(appRoutes, { useHash: false }),
+        RouterModule.forRoot(appRoutes, { useHash: false, relativeLinkResolution: 'legacy' }),
         NgIdleKeepaliveModule.forRoot(),
         LoaderModule
     ],

@@ -107,7 +107,7 @@ export class DashboardComponent implements OnInit {
     public message: string = 'PLEASEWAIT';
 
     /** List of NS Success Instances @public */
-    public nsRunningInstance: {}[] = [];
+    public nsRunningInstance: string[] = [];
 
     /** List of color for Instances @private */
     private backgroundColor: string[] = [];
@@ -281,7 +281,7 @@ export class DashboardComponent implements OnInit {
             if (operationalStatus === 'failed' || configStatus === 'failed') {
                 this.nsFailedInstances.push(nsdInstanceData);
             } else if (operationalStatus === 'running' && configStatus === 'configured') {
-                this.nsRunningInstance.push({ name: nsdInstanceData.name, id: nsdInstanceData.id });
+                this.nsRunningInstance.push(nsdInstanceData.name);
                 this.backgroundColor.push(this.sharedService.generateColor());
                 this.createdTimes.push(((nsdInstanceData._admin.created).toString()).slice(0, this.sliceLimit));
             }
@@ -315,28 +315,10 @@ export class DashboardComponent implements OnInit {
                         el.style.cursor = item[0] ? 'pointer' : 'default';
                     }
                 },
-                onClick(evt: Event, item: {}): void {
-                    if (item[0] !== undefined) {
-                        const location: string = '/instances/ns/' + item[0]._chart.data.labels[item[0]._index].id;
-                        window.open(location);
-                    }
-                },
                 legend: { display: false },
                 scales: {
                     xAxes: [{
                         display: true,
-                        ticks: {
-                            // tslint:disable-next-line: no-any
-                            callback: (label: any, index: number, labels: string): string => {
-                                const length: number = 20;
-                                const ending: string = '...';
-                                if (label.name.length > length) {
-                                    return label.name.substring(0, length - ending.length) + ending;
-                                } else {
-                                    return label.name;
-                                }
-                            }
-                        },
                         scaleLabel: {
                             display: true,
                             labelString: this.translateService.instant('INSTANCES')

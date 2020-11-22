@@ -24,6 +24,9 @@
         "no-inner-html": true,
         "no-octal-literal": true,
         "no-reserved-keywords": true,
+        "deprecation": {
+          "severity": "warning"
+        },
         "no-string-based-set-immediate": true,
         "no-string-based-set-interval": true,
         "no-string-based-set-timeout": true,
@@ -245,14 +248,11 @@
         "no-missing-visibility-modifiers": false,
         "no-multiple-var-decl": false,
         "no-switch-case-fall-through": true,
-        //As of 2017-08-21 'no-unused-variable' doesn't work well with generics, disabled for now
-        "no-unused-variable": false,
         "typeof-compare": true,
         "no-inferred-empty-object-type": true,
         "await-promise": true,
         "no-floating-promises": true,
         "no-for-in-array": true,
-        "no-use-before-declare": true,
         "promise-function-async": true,
         "completed-docs": [
             true,
