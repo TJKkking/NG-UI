@@ -22,16 +22,15 @@
 /** Interface for SDNControllerModel */
 export interface SDNControllerModel {
     dpid: string;
-    ip: string;
     name: string;
     password: string;
-    port: string;
     schema_version: string;
     'type': string;
     user: string;
     version: string;
     _admin: ADMIN;
     _id: string;
+    url:string;
 }
 
 /** Interface for _ADMIN */
@@ -70,6 +69,5 @@ export interface SDNControllerList {
     identifier: string;
     'type': string;
     operationalState: string;
-    ip: string;
-    port: string;
+    url: string;
 }

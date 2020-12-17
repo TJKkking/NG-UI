@@ -16,75 +16,111 @@ limitations under the License.
 Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
 -->
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-basic-title">{{'PAGE.SDNCONTROLLER.DETAILS' | translate}}</h4>
-  <button class="button-xs" type="button" class="close" aria-label="Close" (click)="activeModal.close()">
-    <i class="fas fa-times-circle text-danger"></i>
-  </button>
+    <h4 class="modal-title" id="modal-basic-title">{{'PAGE.SDNCONTROLLER.DETAILS' | translate}}</h4>
+    <button class="button-xs" type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+        <i class="fas fa-times-circle text-danger"></i>
+    </button>
 </div>
 <div class="modal-body modal-body-custom-height p-0">
-  <table class="table table-striped table-layout-fixed mb-0" *ngIf="sdnDetails else noData">
-    <tr>
-      <td colspan="2">
-        <b>{{'ID' | translate}}:</b> {{(sdnDetails._id)?sdnDetails._id:''}}
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>{{'OPERATIONALSTATE' | translate}}:</b>
-        <span class="badge ml-1" [ngClass]="{'badge-warning text-white':sdnDetails._admin.operationalState === operationalStateFirstStep,
+    <table class="table table-sm table-hover table-layout-fixed mb-0" *ngIf="sdnDetails else noData">
+        <tbody>
+            <tr>
+                <th>
+                    {{'ID' | translate}}
+                </th>
+                <td>
+                    {{(sdnDetails._id)?sdnDetails._id:'-'}}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{'NAME' | translate}}
+                </th>
+                <td>
+                    {{(sdnDetails.name)?sdnDetails.name:'-'}}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{'TYPE' | translate}}
+                </th>
+                <td>
+                    {{(sdnDetails.type)?sdnDetails.type:'-'}}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{'OPERATIONALSTATE' | translate}}
+                </th>
+                <td>
+                    <span class="badge ml-1" [ngClass]="{'badge-warning text-white':sdnDetails._admin.operationalState === operationalStateFirstStep,
           'badge-success':sdnDetails._admin.operationalState === operationalStateSecondStep,
           'badge-danger':sdnDetails._admin.operationalState === operationalStateThirdStep}">
-          {{(sdnDetails._admin.operationalState)?sdnDetails._admin.operationalState:''}}</span>
-      </td>
-      <td>
-        <b>{{'IP' | translate}}:</b> {{(sdnDetails.ip)?sdnDetails.ip:''}}
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>{{'NAME' | translate}}:</b> {{(sdnDetails.name)?sdnDetails.name:''}}
-      </td>
-      <td>
-        <b>{{'PORT' | translate}}:</b> {{(sdnDetails.port)?sdnDetails.port:''}}
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>{{'TYPE' | translate}}:</b> {{(sdnDetails.type)?sdnDetails.type:''}}
-      </td>
-      <td>
-        <b>{{'VERSION' | translate}}:</b> {{(sdnDetails.version)?sdnDetails.version:''}}
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>{{'USER' | translate}}:</b> {{(sdnDetails.user)?sdnDetails.user:''}}
-      </td>
-      <td>
-        <b>{{'CREATED' | translate}}:</b>
-        {{(sdnDetails._admin.created)?this.sharedService.convertEpochTime(sdnDetails._admin.created):''}}
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <b>{{'PAGE.SDNCONTROLLER.DPID' | translate}}:</b> {{(sdnDetails.dpid)?sdnDetails.dpid:''}}
-      </td>
-      <td>
-        <b>{{'MODIFIED' | translate}}:</b>
-        {{(sdnDetails._admin.modified)?this.sharedService.convertEpochTime(sdnDetails._admin.modified):''}}
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <b>{{'DEPLOYED' | translate}}</b> <br>
-        <b>{{'PAGE.SDNCONTROLLER.RO' | translate}}:</b> {{(sdnDetails._admin.deployed.RO)?sdnDetails._admin.deployed.RO:''}}
-        <br>
-      </td>
-    </tr>
-  </table>
-  <ng-template #noData>{{'NODATAERROR' | translate}}</ng-template>
+                        {{(sdnDetails._admin.operationalState)?sdnDetails._admin.operationalState:'-'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{'URL' | translate}}
+                </th>
+                <td>
+                    {{(sdnDetails.url)?sdnDetails.url:'-'}}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{'USER' | translate}}
+                </th>
+                <td>
+                    {{(sdnDetails.user)?sdnDetails.user:'-'}}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{'VERSION' | translate}}
+                </th>
+                <td>
+                    {{(sdnDetails.version)?sdnDetails.version:'-'}}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{'PAGE.SDNCONTROLLER.DPID' | translate}}
+                </th>
+                <td>
+                    {{(sdnDetails.dpid)?sdnDetails.dpid:'-'}}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{'CREATED' | translate}}
+                </th>
+                <td>
+                    {{(sdnDetails._admin.created)?this.sharedService.convertEpochTime(sdnDetails._admin.created):'-'}}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{'MODIFIED' | translate}}
+                </th>
+                <td>
+                    {{(sdnDetails._admin.modified)?this.sharedService.convertEpochTime(sdnDetails._admin.modified):'-'}}
+                </td>
+            </tr>
+        </tbody>
+        <tr>
+            <th>
+                {{'DEPLOYED' | translate}}
+            </th>
+            <td>
+                <b>{{'PAGE.SDNCONTROLLER.RO' | translate}}:</b>
+                {{(sdnDetails._admin.deployed.RO)?sdnDetails._admin.deployed.RO:'-'}}
+            </td>
+        </tr>
+    </table>
+    <ng-template #noData>{{'NODATAERROR' | translate}}</ng-template>
 </div>
 <div class="modal-footer">
-  <button (click)="activeModal.close()" class="btn btn-danger">{{'CANCEL' | translate}}</button>
+    <button (click)="activeModal.close()" class="btn btn-danger">{{'CANCEL' | translate}}</button>
 </div>
 <app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>

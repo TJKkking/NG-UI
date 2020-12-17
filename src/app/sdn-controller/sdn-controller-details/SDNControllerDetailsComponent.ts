@@ -172,8 +172,7 @@ export class SDNControllerDetailsComponent implements OnInit, OnDestroy {
                     }
                 }
             },
-            ip: { title: this.translateService.instant('IP'), width: '15%' },
-            port: { title: this.translateService.instant('PORT'), width: '15%' },
+            url: { title: this.translateService.instant('URL'), width: '30%' },
             Actions: {
                 name: 'Action', width: '5%', filter: false, sort: false, type: 'custom',
                 title: this.translateService.instant('ACTIONS'),
@@ -201,8 +200,7 @@ export class SDNControllerDetailsComponent implements OnInit, OnDestroy {
             identifier: sdn._id,
             type: sdn.type,
             operationalState: sdn._admin.operationalState,
-            ip: sdn.ip,
-            port: sdn.port
+            url: sdn.url
         };
     }
 
