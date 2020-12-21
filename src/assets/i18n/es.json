@@ -41,6 +41,7 @@
     "MODIFIED": "Modificado",
     "NODATAMSG": "No hay datos disponibles en la tabla",
     "SHORTNAME": "Nombre corto",
+    "PRODUCTNAME":"Nombre del producto",
     "IDENTIFIER": "Identificador",
     "DESCRIPTION": "Descripción",
     "VENDOR": "Vendedor",

@@ -126,11 +126,10 @@ export class NSPackagesComponent implements OnInit {
     /** smart table Header Colums @public */
     public generateColumns(): void {
         this.columnLists = {
-            shortName: { title: this.translateService.instant('SHORTNAME'), width: '15%', sortDirection: 'asc' },
-            identifier: { title: this.translateService.instant('IDENTIFIER'), width: '20%' },
+            name: { title: this.translateService.instant('NAME'), width: '15%', sortDirection: 'asc' },
+            identifier: { title: this.translateService.instant('IDENTIFIER'), width: '30%' },
             description: { title: this.translateService.instant('DESCRIPTION'), width: '25%' },
-            vendor: { title: this.translateService.instant('VENDOR'), width: '15%' },
-            version: { title: this.translateService.instant('VERSION'), width: '10%' },
+            version: { title: this.translateService.instant('VERSION'), width: '15%' },
             Actions: {
                 name: 'Actions', width: '15%', filter: false, sort: false, type: 'custom',
                 title: this.translateService.instant('ACTIONS'),
@@ -212,10 +211,9 @@ export class NSPackagesComponent implements OnInit {
     /** Generate nsData object from loop and return for the datasource @public */
     public generateNSData(nsdpackagedata: NSDDetails): NSData {
         return {
-            shortName: nsdpackagedata['short-name'],
+            name: nsdpackagedata.name,
             identifier: nsdpackagedata._id,
             description: nsdpackagedata.description,
-            vendor: nsdpackagedata.vendor,
             version: nsdpackagedata.version
         };
     }

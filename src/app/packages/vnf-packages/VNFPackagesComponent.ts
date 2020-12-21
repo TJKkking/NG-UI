@@ -127,7 +127,7 @@ export class VNFPackagesComponent implements OnInit {
     /** smart table Header Colums @public */
     public generateColumns(): void {
         this.columnLists = {
-            shortName: { title: this.translateService.instant('SHORTNAME'), width: '15%', sortDirection: 'asc' },
+            productName: { title: this.translateService.instant('PRODUCTNAME'), width: '15%', sortDirection: 'asc' },
             identifier: { title: this.translateService.instant('IDENTIFIER'), width: '20%' },
             type: {
                 title: this.translateService.instant('TYPE'),
@@ -142,10 +142,9 @@ export class VNFPackagesComponent implements OnInit {
                         ]
                     }
                 },
-                width: '10%'
+                width: '15%'
             },
-            description: { title: this.translateService.instant('DESCRIPTION'), width: '20%' },
-            vendor: { title: this.translateService.instant('VENDOR'), width: '10%' },
+            description: { title: this.translateService.instant('DESCRIPTION'), width: '25%' },
             version: { title: this.translateService.instant('VERSION'), width: '10%' },
             Actions: {
                 name: 'Action', width: '15%', filter: false, sort: false, type: 'custom',
@@ -228,11 +227,10 @@ export class VNFPackagesComponent implements OnInit {
     /** Generate nsData object from loop and return for the datasource @public */
     public generatevnfdData(vnfdpackagedata: VNFDDetails): VNFData {
         return {
-            shortName: vnfdpackagedata['short-name'],
+            productName: vnfdpackagedata['product-name'],
             identifier: vnfdpackagedata._id,
             type: vnfdpackagedata._admin.type,
             description: vnfdpackagedata.description,
-            vendor: vnfdpackagedata.vendor,
             version: vnfdpackagedata.version
         };
     }

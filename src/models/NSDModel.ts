@@ -23,10 +23,10 @@ import { VNFDAdminDetails } from './VNFDModel';
 
 /** Interface for NSData */
 export interface NSData {
-    shortName: string;
+    shortName?: string;
     identifier: string;
     description: string;
-    vendor: string;
+    vendor?: string;
     version: string;
     page?: string;
     name?: string;

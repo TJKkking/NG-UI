@@ -41,6 +41,7 @@
     "PACKAGES": "Pacotes",
     "NODATAMSG": "Sem dados disponíveis na tabela",
     "SHORTNAME": "Nome curto",
+    "PRODUCTNAME":"Nome do Produto",
     "IDENTIFIER": "Identificador",
     "DESCRIPTION": "Descrição",
     "VENDOR": "Fornecedor",

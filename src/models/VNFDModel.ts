@@ -93,6 +93,7 @@ export interface VNFDDetails {
     _admin: VNFDAdminDetails;
     'short-name': string;
     vendor: string;
+    'product-name'?: string;
 }
 
 /** Interface for MGMT */
@@ -213,12 +214,13 @@ interface Storage {
 export interface VNFData {
     name?: string;
     id?: string;
-    shortName: string;
+    shortName?: string;
     identifier: string;
     description: string;
-    vendor: string;
+    vendor?: string;
     version: string;
     'type'?: string;
+    productName?: string;
 }
 
 /** Interface for the Tick */
