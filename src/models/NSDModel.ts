@@ -18,21 +18,17 @@
 /**
  * @file  Model for NSD related information.
  */
-
+// tslint:disable: completed-docs
 import { VNFDAdminDetails } from './VNFDModel';
 
 /** Interface for NSData */
 export interface NSData {
-    shortName?: string;
-    identifier: string;
-    description: string;
-    vendor?: string;
+    id?: string;
+    identifier?: string;
+    description?: string;
     version: string;
-    page?: string;
     name?: string;
-    projectName?: string;
-    userName?: string;
-    username?: string;
+    designer?: string;
 }
 
 /** Interface for the nscompose descriptors content */
@@ -43,14 +39,16 @@ export interface NSDDetails {
     id: string;
     logo: string;
     name: string;
-    'short-name': string;
-    vendor: string;
     version: string;
     vld: VLD[];
     _admin: VNFDAdminDetails;
     _id: string;
     _links?: string;
     'constituent-vnfr-ref': string[];
+    'virtual-link-desc': VLD[];
+    df: DF[];
+    'vnfd-id': string[];
+    designer?: string;
 }
 
 /** Interface for the connection-point */
@@ -68,27 +66,16 @@ export interface CONSTITUENTVNFD {
 /** Interface for the vld */
 export interface VLD {
     id: string;
-    'mgmt-network': boolean;
-    name: string;
-    'short-name'?: string;
-    'type': string;
-    'vnfd-connection-point-ref'?: VNFDCONNECTIONPOINTREF[];
-    'vim-network-name': string;
+    'mgmt-network'?: boolean;
 }
 
-/** Interface for VNFDCONNECTIONPOINTREF */
-export interface VNFDCONNECTIONPOINTREF {
-    'member-vnf-index-ref': number;
-    'vnfd-connection-point-ref': string;
-    'vnfd-id-ref': string;
-}
 /** Interface Nodes Creation */
 export interface COMPOSERNODES {
     id: string;
     reflexive: Boolean;
     'type': string;
     name?: string;
-    nodeIndex?: number;
+    nodeIndex?: string;
     selectorId?: string;
     x?: number;
     y?: number;
@@ -110,20 +97,8 @@ export interface TickPath {
     y: number;
     id: string;
     'type'?: string;
-}
-
-/** Interface for the NSD */
-interface NSD {
-    'constituent-vnfd': CONSTITUENTVNFD[];
-    description: string;
-    id: string;
-    name: string;
-    'short-name': string;
-    vendor: string;
-    version: string;
-    vld: VLD[];
-    _admin: VNFDAdminDetails;
-    _id: string;
+    name?: string;
+    nodeIndex?: string;
 }
 /** Interface for the GRAPHDETAILS */
 export interface GRAPHDETAILS {
@@ -180,4 +155,37 @@ export interface KDUPRIMITIVELEVEL {
     name: string;
     'juju-bundle': string;
     'kdu-configuration': {};
+}
+
+/** Interface for the DF */
+export interface DF {
+    id: string;
+    'vnf-profile': VNFPROFILE[];
+}
+
+/** Interface for the DF */
+export interface VNFPROFILE {
+    id: string;
+    'virtual-link-connectivity': VLC[];
+    'vnfd-id': string;
+}
+
+/** Interface for the VLC */
+export interface VLC {
+    'constituent-cpd-id': CCI[];
+    'virtual-link-profile-id': string;
+}
+
+/** Interface for the CCI */
+export interface CCI {
+    'constituent-base-element-id': string;
+    'constituent-cpd-id': string;
+}
+/** Interface for NSDATACREATION */
+export interface NSDATACREATION {
+    nsd: NSDETAILDATA;
+}
+/** Interface for NSDETAILDATA */
+export interface NSDETAILDATA {
+    nsd: NSDDetails[];
 }

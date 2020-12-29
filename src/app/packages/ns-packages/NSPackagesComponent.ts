@@ -127,11 +127,12 @@ export class NSPackagesComponent implements OnInit {
     public generateColumns(): void {
         this.columnLists = {
             name: { title: this.translateService.instant('NAME'), width: '15%', sortDirection: 'asc' },
-            identifier: { title: this.translateService.instant('IDENTIFIER'), width: '30%' },
+            identifier: { title: this.translateService.instant('IDENTIFIER'), width: '15%' },
+            version: { title: this.translateService.instant('VERSION'), width: '10%' },
+            designer: { title: this.translateService.instant('DESIGNER'), width: '15%' },
             description: { title: this.translateService.instant('DESCRIPTION'), width: '25%' },
-            version: { title: this.translateService.instant('VERSION'), width: '15%' },
             Actions: {
-                name: 'Actions', width: '15%', filter: false, sort: false, type: 'custom',
+                name: 'Actions', width: '20%', filter: false, sort: false, type: 'custom',
                 title: this.translateService.instant('ACTIONS'),
                 valuePrepareFunction: (cell: NSData, row: NSData): NSData => row, renderComponent: NsPackagesActionComponent
             }
@@ -214,7 +215,8 @@ export class NSPackagesComponent implements OnInit {
             name: nsdpackagedata.name,
             identifier: nsdpackagedata._id,
             description: nsdpackagedata.description,
-            version: nsdpackagedata.version
+            version: nsdpackagedata.version,
+            designer: nsdpackagedata.designer !== undefined ? nsdpackagedata.designer : '-'
         };
     }
 

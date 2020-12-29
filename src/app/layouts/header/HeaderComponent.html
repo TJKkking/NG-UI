@@ -15,13 +15,16 @@ limitations under the License.
 
 Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
 -->
-<span class="d-none px-3 py-2 text-center text-bold bg-primary text-white">Here is a newer {{'APPVERSION' | translate}} {{PACKAGEVERSION}}
-    of OSM!</span>
+<span [ngClass]="toShowNewTag ? 'd-block': 'd-none'" class="px-3 py-2 text-center text-bold bg-secondary text-white">
+    {{'NEWVERSIONTAG' | translate:{appVersion: sharedService.osmVersion} }}
+    <button type="button" class="close closeVersion" aria-label="Close" (click)="closeVersion();">
+        <i class="fas fa-times text-white"></i>
+    </button>
+</span>
 
 <nav class="navbar navbar-expand-md sticky-top bg-white" role="navigation">
     <a class="navbar-brand">
-        <img routerLink="/" src="assets/images/logo.png" class="osm-logo"
-            alt="OPEN SOURCE MANO" draggable="false">
+        <img routerLink="/" src="assets/images/logo.png" class="osm-logo" alt="OPEN SOURCE MANO" draggable="false">
     </a>
     <div class="nav navbar-nav nav-flex-icons ml-auto">
         <ul class="navbar-nav cursor-pointer" ngbDropdown display="dynamic" placement="bottom-right">
@@ -61,7 +64,8 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
                         <i class="fas fa-sign-out-alt"></i>
                     </a>
                     <div class="custom-divider"></div>
-                    <a *ngIf="sharedService.osmVersion" ngbDropdownItem class="dropdown-item project-item osm-version" href="javascript:void(0);">
+                    <a *ngIf="sharedService.osmVersion" ngbDropdownItem class="dropdown-item project-item osm-version"
+                        href="javascript:void(0);">
                         <span>{{'OSMVERSION' | translate}} {{sharedService.osmVersion}}</span>
                     </a>
                 </div>

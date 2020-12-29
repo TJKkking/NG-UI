@@ -18,7 +18,7 @@
 /**
  * @file  Model for VNFD related information.
  */
-
+// tslint:disable: completed-docs
 /** Interface for Project */
 export interface ProjectModel {
     project_id: string;
@@ -47,100 +47,150 @@ interface AdminDetails {
     created: string;
 }
 
-/** Interface for VNFD NODE Details */
-export interface VNFDNODE {
-    nodeTypeRef?: string;
-    'connection-point'?: CONNECTIONPOINT[];
+/** Interface for VNFD Details */
+export interface VNFD {
     description?: string;
+    df?: DF[];
+    'ext-cpd'?: EXTCPD[];
     id: string;
-    'internal-vld'?: InternalVLD[];
-    version?: string;
-    name?: string;
-    'mgmt-interface'?: MGMT;
-    _id?: string;
-    vdu?: VDU[];
-    _admin?: VNFDAdminDetails;
-    'short-name'?: string;
-    shortName?: string;
-    vendor?: string;
-    'type'?: string;
-    'cloud-init-file'?: string;
-    count?: number;
-    vduID?: string;
-    'interface'?: VNFDInterface[];
-    'vm-flavor'?: VMFlavor;
-    intVLID?: string;
-    'internal-connection-point'?: VLDInternalConnectionPoint[];
-    'monitoring-param'?: MonitoringParam[];
-    'ip-profile-ref'?: string;
-    'id-ref'?: string;
-    'ip-address'?: string;
-    reflexive?: boolean;
-    image?: string;
-}
-
-/** Interface for VNFDDetails */
-export interface VNFDDetails {
-    'connection-point': CONNECTIONPOINT[];
-    description: string;
-    id: string;
-    'internal-vld': InternalVLD[];
-    version: string;
-    name: string;
-    'mgmt-interface': MGMT;
-    _id: string;
-    vdu: VDU[];
-    _admin: VNFDAdminDetails;
-    'short-name': string;
-    vendor: string;
+    'int-virtual-link-desc'?: IVLD[];
+    'mgmt-cp'?: string;
+    onboardingState?: string;
+    operationalState?: string;
     'product-name'?: string;
+    provider?: string;
+    'sw-image-desc'?: SWIMAGEDESCRIPTION[];
+    usageState?: string;
+    vdu?: VDU[];
+    version?: string;
+    'virtual-compute-desc'?: string;
+    'virtual-storage-desc'?: string[];
+    _admin?: VNFDAdminDetails;
+    _id?: string;
+    _links?: string;
+    'vnf-configuration'?: VNFCONFIG[];
+    kdu?: [];
 }
-
-/** Interface for MGMT */
-interface MGMT {
-    cp: string;
+/** Interface for DF */
+export interface VNFCONFIG {
+    id: string;
+    'config-primitive'?: CONFIGPRIMITIVE[];
+    'initial-config-primitive'?: INITIALCONFIGPRIMITIVE[];
 }
-
+/** Interface for DF */
+export interface DF {
+    id: string;
+    'instantiation-level'?: INSTANTIATIONLEVEL[];
+    'vdu-profile'?: VDUPROFILE[];
+    'vnf-configuration-id'?: string;
+}
+/** Interface for INSTANTIATIONLEVEL */
+export interface INSTANTIATIONLEVEL {
+    id: string;
+    'vdu-level': VDULEVEL[];
+}
+/** Interface for VDULEVEL */
+export interface VDULEVEL {
+    'number-of-instances': number;
+    'vdu-id': string;
+}
+/** Interface for VDULEVEL */
+export interface VDUPROFILE {
+    id: string;
+    name?: string;
+    'min-number-of-instances'?: number;
+    'max-number-of-instances'?: number;
+    'vdu-configuration-id'?: string;
+    'vdu-configuration'?: VDUCONFIG;
+}
+/** Interface for VDUCONFIG */
+export interface VDUCONFIG {
+    id: string;
+    'config-primitive': CONFIGPRIMITIVE[];
+    'initial-config-primitive': INITIALCONFIGPRIMITIVE[];
+}
+/** Interface for CONFIGPRIMITIVE */
+export interface CONFIGPRIMITIVE {
+    name: string;
+}
+/** Interface for INITIALCONFIGPRIMITIVE */
+export interface INITIALCONFIGPRIMITIVE {
+    seq: string;
+    name: string;
+}
+/** Interface for the ext-cpd */
+export interface EXTCPD {
+    id?: string;
+    'int-cpd'?: INTCPD;
+}
+/** Interface for the int-cpd */
+export interface INTCPD {
+    cpd?: string;
+    'vdu-id'?: string;
+}
+/** Interface for IVLD */
+export interface IVLD {
+    id?: string;
+    description?: string;
+}
+/** Interface for SWIMAGEDESCRIPTION */
+export interface SWIMAGEDESCRIPTION {
+    id: string;
+    name: string;
+    version: string;
+}
 /** Interface for VDU */
 export interface VDU {
-    nodeTypeRef?: string;
     'cloud-init-file'?: string;
-    count?: number;
     description?: string;
     id?: string;
-    image?: string;
-    'interface'?: VNFDInterface[];
-    'internal-connection-point'?: VDUInternalConnectionPoint[];
+    'int-cpd'?: VDUINTCPD[];
+    'monitoring-parameter'?: MonitoringParam[];
     name?: string;
-    'vm-flavor'?: VMFlavor;
-    vduInterface?: string;
-    'monitoring-param'?: MonitoringParam[];
+    'sw-image-desc'?: string;
+    'virtual-compute-desc'?: string;
+    'virtual-storage-desc'?: string[];
 }
-
-/** Interface for VMFlavor */
-interface VMFlavor {
-    'storage-gb'?: string;
-    'memory-mb'?: string;
-    'vcpu-count'?: string;
+/** Interface for the vdu int-cpd */
+export interface VDUINTCPD {
+    id: string;
+    'int-virtual-link-desc'?: string;
+    'virtual-network-interface-requirement': VNIR[];
 }
-
-/** Interface for VNFDInterface */
-export interface VNFDInterface {
-    'external-connection-point-ref'?: string;
-    'internal-connection-point-ref'?: string;
-    'mgmt-interface'?: boolean;
-    name?: string;
-    'type'?: string;
-    position?: boolean;
-    'virtual-interface'?: VirtualInterface;
+/** Interface for the vdu int-cpd => VNIR */
+export interface VNIR {
+    name: string;
+    position: number;
+    'virtual-interface': VIRTUALINTERFACE;
 }
-
-/** Interface for VDU Internal Connection Point */
-export interface VDUInternalConnectionPoint {
+/** Interface for the VIRTUALINTERFACE */
+export interface VIRTUALINTERFACE {
+    'type': string;
+}
+/** Interface for monitoring params */
+export interface MonitoringParam {
     id: string;
     name?: string;
-    'short-name'?: string;
-    'type'?: string;
+    'performance-metric'?: string;
+    'collection-period'?: number;
+}
+/** Interface for VNFDATA */
+export interface VNFDATA {
+    vnfd?: VNFD;
+}
+
+/** Interface for VDU InternalCPD */
+export interface InternalCPD {
+    id: string;
+    'int-virtual-link-desc'?: string;
+    'virtual-network-interface-requirement'?: VIRTUALNETWORKINTERFACEREQUIREMENT;
+}
+
+/** Interface for VIRTUALNETWORKINTERFACEREQUIREMENT */
+export interface VIRTUALNETWORKINTERFACEREQUIREMENT {
+    name: string;
+    position?: number;
+    'virtual-interface'?: VirtualInterface;
 }
 
 /** Interface for VirutalInterface */
@@ -148,45 +198,7 @@ interface VirtualInterface {
     'type': string;
 }
 
-/** Interface for the connection-point */
-export interface CONNECTIONPOINT {
-    nodeTypeRef?: string;
-    'connection-point-id'?: string;
-    name?: string;
-    id: string;
-    'type'?: string;
-}
-
-/** Interface for Internal VLD */
-export interface InternalVLD {
-    nodeTypeRef?: string;
-    id?: string;
-    'internal-connection-point'?: VLDInternalConnectionPoint[];
-    'ip-profile-ref'?: string;
-    name?: string;
-    'short-name'?: string;
-    'type'?: string;
-    'shortName'?: string;
-    'ipProfileRef'?: string;
-}
-
-/** Interface for VLD Internal Connection Point */
-export interface VLDInternalConnectionPoint {
-    nodeTypeRef?: string;
-    'ip-address'?: string;
-    'id-ref'?: string;
-    'shortName'?: string;
-}
-
-/** Interface for monitoring params */
-export interface MonitoringParam {
-    id: string;
-    'nfvi-metric'?: string;
-    'interface-name-ref'?: string;
-}
-
 /** Interface for _AdminDetails */
-// tslint:disable-next-line:class-name
 export interface VNFDAdminDetails {
     created: number;
     modified: string;
@@ -212,15 +224,14 @@ interface Storage {
 
 /** Interface for VNFData */
 export interface VNFData {
-    name?: string;
+    identifier?: string;
     id?: string;
-    shortName?: string;
-    identifier: string;
+    name?: string;
     description: string;
-    vendor?: string;
     version: string;
     'type'?: string;
     productName?: string;
+    provider?: string;
 }
 
 /** Interface for the Tick */
@@ -242,10 +253,11 @@ export interface TickPath {
 /** Interface Nodes Creation */
 export interface COMPOSERNODES {
     id: string;
-    reflexive?: boolean;
-    'type'?: string;
+    reflexive: Boolean;
+    'type': string;
     name?: string;
-    nodeTypeRef?: string;
+    nodeIndex?: number;
+    selectorId?: string;
     x?: number;
     y?: number;
     fx?: number;

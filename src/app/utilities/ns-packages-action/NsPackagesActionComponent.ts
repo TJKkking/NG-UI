@@ -109,7 +109,7 @@ export class NsPackagesActionComponent {
       'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0'
     });
     this.nsdID = this.value.identifier;
-    this.nsdName = this.value.shortName;
+    this.nsdName = this.value.name;
   }
 
   /** Instantiate NS using modalservice @public */

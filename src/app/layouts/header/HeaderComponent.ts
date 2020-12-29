@@ -26,7 +26,6 @@ import { environment } from 'environment';
 import { ProjectService } from 'ProjectService';
 import { Observable } from 'rxjs';
 import { SharedService } from 'SharedService';
-import { ProjectRoleMappings, UserDetail } from 'UserModel';
 import { UserSettingsComponent } from 'UserSettingsComponent';
 
 /**
@@ -64,6 +63,9 @@ export class HeaderComponent implements OnInit {
     /** Contains all methods related to shared @public */
     public sharedService: SharedService;
 
+    /** Property contains to show new version tag shared @public */
+    public toShowNewTag: Boolean = false;
+
     /** Utilizes auth service for any auth operations @private */
     private authService: AuthenticationService;
 
@@ -85,18 +87,35 @@ export class HeaderComponent implements OnInit {
     public ngOnInit(): void {
         this.isAdmin = (localStorage.getItem('isAdmin') === 'true') ? true : false;
         this.selectedProject = this.authService.ProjectName;
-        this.authService.ProjectName.subscribe((projectNameFinal: string) => {
+        this.authService.ProjectName.subscribe((projectNameFinal: string): void => {
             this.getSelectedProject = projectNameFinal;
         });
         this.username$ = this.authService.username;
         this.projectService.setHeaderProjects();
         this.projectList$ = this.projectService.projectList;
         this.PACKAGEVERSION = environment.packageVersion;
+        const getLocalStorageVersion: string = localStorage.getItem('osmVersion');
+        if (getLocalStorageVersion === null) {
+            this.showNewVersion();
+        } else if (getLocalStorageVersion !== this.sharedService.osmVersion) {
+            this.showNewVersion();
+        }
     }
 
     /** Logout function  @public */
     public logout(): void {
         this.authService.logout();
+    }
+
+    /** Show Version function  @public */
+    public showNewVersion(): void {
+        this.toShowNewTag = true;
+    }
+
+    /** Close Version and add in local storage  @public */
+    public closeVersion(): void {
+        this.toShowNewTag = false;
+        localStorage.setItem('osmVersion', this.sharedService.osmVersion);
     }
 
     /** Implementation of model for UserSettings options.@public */

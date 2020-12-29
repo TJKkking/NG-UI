@@ -18,8 +18,8 @@
 /**
  * @file  Model for NS Instance related information.
  */
-
-import { CONSTITUENTVNFD, VLD, VNFDCONNECTIONPOINTREF } from 'NSDModel';
+// tslint:disable: completed-docs
+import { CONSTITUENTVNFD, DF, VLD } from 'NSDModel';
 import { VNFDAdminDetails } from 'VNFDModel';
 
 /** Interface for NSInstanceDetails */
@@ -36,7 +36,6 @@ export interface NSInstanceDetails {
     nsd: NSD;
     name: string;
     'name-ref': string;
-    'short-name': string;
     id: string;
     'nsd-name-ref': string;
     description: string;
@@ -100,17 +99,17 @@ interface VNFD {
 /** Interface for NSD */
 export interface NSD {
     description: string;
-    vld: NSDVLD[];
     _admin: VNFDAdminDetails;
     name: string;
     version: string;
     _id: string;
-    'short-name': string;
     id: string;
     'constituent-vnfd': CONSTITUENTVNFD[];
     vendor: string;
     vdur: string[];
     'connection-point': CONNECTIONPOINT[];
+    'virtual-link-desc': NSDVLD[];
+    df: DF[];
 }
 
 /** Interface for _AdminDetails */
@@ -146,8 +145,7 @@ export interface NSDVLD {
     'vim-network-name': string;
     id: string;
     'type': string;
-    'vnfd-connection-point-ref': VNFDCONNECTIONPOINTREF[];
-    'short-name': string;
+    df: DF[];
 }
 
 /** Interface for InstantiateParam */
@@ -179,7 +177,7 @@ export interface NSDInstanceData {
     ConfigStatus: string;
     DetailedStatus: string;
     state?: string;
-    memberIndex?: object;
+    memberIndex?: DF[];
     nsConfig?: object;
 }
 
@@ -199,7 +197,7 @@ export interface NSINSTANCENODES {
     nodeTypeRef?: string;
     name?: string;
     'type'?: string;
-    vnfdCP?: VNFDCONNECTIONPOINTREF[];
+    vnfdCP?: DF[];
     vimNetworkName?: string;
     shortName?: string;
     cp?: CONNECTIONPOINT[];
@@ -214,6 +212,8 @@ export interface NSINSTANCENODES {
     vnfdRef?: string;
     vndfCPRef?: string;
     selectorId?: string;
+    reflexive?: Boolean;
+    nodeIndex?: number;
 }
 
 /** Interface for the connection-point */

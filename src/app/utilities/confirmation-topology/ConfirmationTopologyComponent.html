@@ -29,8 +29,8 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
     <div class="modal-body">
       <div *ngIf="topologyType === 'Add'">
         <p [innerHTML]="topologyname"></p>
-        <ng-select placeholder="{{'SELECT' | translate}}" formControlName="cpName" [items]="cpDetails" bindLabel="name"
-          bindValue="name" [(ngModel)]="connectionPointInput"
+        <ng-select placeholder="{{'SELECT' | translate}}" formControlName="cpName" [items]="cpDetails" bindLabel="id"
+          bindValue="id" [(ngModel)]="connectionPointInput"
           [ngClass]="{ 'is-invalid': submitted && f.cpName.errors }"></ng-select>
       </div>
     </div>
@@ -51,7 +51,7 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
     </button>
   </div>
   <div class="modal-body">
-    <span *ngIf="topologyType === 'Delete'">{{'DELETECONFIRMPOPUPMESSAGE' | translate}} {{ topologyname }} ?</span>
+    <span *ngIf="topologyType === 'Delete'">{{'DELETECONFIRMPOPUPMESSAGE' | translate}} <b>{{ topologyname }}</b> ?</span>
     <ul *ngIf="topologyType === 'Info'">
       <li>
         <p><b>{{'PAGE.TOPOLOGY.HELPINFO.CREATEEDGE' | translate}}</b>:

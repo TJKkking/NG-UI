@@ -40,11 +40,11 @@
     "PACKAGES": "Paquetes",
     "MODIFIED": "Modificado",
     "NODATAMSG": "No hay datos disponibles en la tabla",
-    "SHORTNAME": "Nombre corto",
     "PRODUCTNAME":"Nombre del producto",
     "IDENTIFIER": "Identificador",
     "DESCRIPTION": "Descripción",
-    "VENDOR": "Vendedor",
+    "DESIGNER": "Diseñador",
+    "PROVIDER": "Proveedor",
     "VERSION": "Versión",
     "ACTIONS": "Comportamiento",
     "NAME": "Nombre",
@@ -150,6 +150,7 @@
     "NODATE": "No se encontró información de fecha",
     "TYPEINFO": "Para agregar un nuevo TIPO, ingrese la entrada de arriba",
     "UPLOADCONFIGLABEL": "Cargue el archivo con formato .yaml o .yml",
+    "NEWVERSIONTAG": "¡Aquí está la nueva versión {{appVersion}} de OSM!",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Tablero",
@@ -330,12 +331,7 @@
                 "DELETEVNFD": "VNFD eliminado correctamente",
                 "DELETENS": "Se eliminó correctamente el punto de conexión",
                 "DELETELINK": "Se eliminó el enlace correctamente",
-                "MGMTNETWORK": "Mgmt Network",
-                "VIMNETWORKNAME": "Vim Network Name",
-                "MEMBER-VNF-INDEX": "member-vnf-index",
-                "VNFD-ID-REF": "vnfd-id-ref",
-                "VLD-ID": "vld-id",
-                "VNFD-CP-REF": "vnfd-punto de conexión-ref"
+                "MGMTNETWORK": "Mgmt Network"
             },
             "EDITPACKAGES": {
                 "UPDATEDSUCCESSFULLY": "Descriptor actualizado correctamente"

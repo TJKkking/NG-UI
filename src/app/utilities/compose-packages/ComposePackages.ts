@@ -113,6 +113,9 @@ export class ComposePackages implements OnInit {
     this.sharedService = this.injector.get(SharedService);
   }
 
+  /** convenience getter for easy access to form fields */
+  get f(): FormGroup['controls'] { return this.packagesForm.controls; }
+
   /**
    * Lifecyle Hooks the trigger before component is instantiate
    */
@@ -131,9 +134,6 @@ export class ComposePackages implements OnInit {
       name: ['', [Validators.required]]
     });
   }
-
-  /** convenience getter for easy access to form fields */
-  get f(): FormGroup['controls'] { return this.packagesForm.controls; }
 
   /** Create packages @public */
   public createPackages(): void {
@@ -166,11 +166,12 @@ export class ComposePackages implements OnInit {
       url: this.endPoint,
       httpOptions: { headers: this.headers }
     };
-    this.restService.postResource(apiURLHeader, packageContent).subscribe((result: { id: string }) => {
+    // tslint:disable-next-line: completed-docs
+    this.restService.postResource(apiURLHeader, packageContent).subscribe((result: { id: string }): void => {
       this.isLoadingResults = false;
       this.activeModal.close();
       this.composeNSPackages(result.id);
-    }, (error: ERRORDATA) => {
+    }, (error: ERRORDATA): void => {
       this.isLoadingResults = false;
       this.restService.handleError(error, 'post');
     });
@@ -187,48 +188,54 @@ export class ComposePackages implements OnInit {
       this.notifierService.notify('success', this.packagesForm.value.name + ' ' +
         this.translateService.instant('PAGE.VNFPACKAGE.CREATEDSUCCESSFULLY'));
     }
-    this.router.navigate([packageUrl, id]).catch(() => {
+    this.router.navigate([packageUrl, id]).catch((): void => {
       // Catch Navigation Error
     });
   }
   /** Deafult template for NS and VNF Packages @private */
   private packageYaml(descriptorType: string): string {
     let packageYaml: {} = {};
+    const composerName: string = 'NGUI Composer';
+    const composerDefaultVersion: string = '1.0';
     if (descriptorType === 'ns-package') {
       packageYaml = {
-        'nsd:nsd-catalog': {
+        nsd: {
           nsd: [
             {
-              'short-name': this.packagesForm.value.name,
-              vendor: 'OSM Composer',
-              description: this.packagesForm.value.name + ' descriptor',
-              vld: [],
-              'constituent-vnfd': [],
-              version: '1.0',
               id: this.packagesForm.value.name,
-              name: this.packagesForm.value.name
+              name: this.packagesForm.value.name,
+              version: composerDefaultVersion,
+              description: this.packagesForm.value.name + ' descriptor',
+              designer: composerName,
+              df: [
+                {
+                  id: 'default-df',
+                  'vnf-profile': []
+                }
+              ]
             }
           ]
         }
       };
     } else {
       packageYaml = {
-        'vnfd:vnfd-catalog': {
-          vnfd: [
+        vnfd: {
+          id: this.packagesForm.value.name,
+          'product-name': this.packagesForm.value.name,
+          version: composerDefaultVersion,
+          description: this.packagesForm.value.name + ' descriptor',
+          provider: composerName,
+          df: [
             {
-              'short-name': this.packagesForm.value.name,
-              vdu: [],
-              description: '',
-              'mgmt-interface': {
-                cp: ''
-              },
-              id: this.packagesForm.value.name,
-              version: '1.0',
-              'internal-vld': [],
-              'connection-point': [],
-              name: this.packagesForm.value.name
+              id: 'default-df',
+              'instantiation-level': [],
+              'vdu-profile': []
             }
-          ]
+          ],
+          'ext-cpd': [],
+          vdu: [],
+          'sw-image-desc': [],
+          'virtual-storage-desc': []
         }
       };
     }

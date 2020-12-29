@@ -31,7 +31,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { RestService } from 'RestService';
 import { Subscription } from 'rxjs';
 import { SharedService } from 'SharedService';
-import { VNFData, VNFDDetails } from 'VNFDModel';
+import { VNFD, VNFData } from 'VNFDModel';
 import { VNFPackagesActionComponent } from 'VNFPackagesAction';
 
 /**
@@ -121,14 +121,16 @@ export class VNFPackagesComponent implements OnInit {
             Accept: 'application/json',
             'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0'
         });
-        this.generateDataSub = this.sharedService.dataEvent.subscribe(() => { this.generateData(); });
+        this.generateDataSub = this.sharedService.dataEvent.subscribe((): void => { this.generateData(); });
     }
 
     /** smart table Header Colums @public */
     public generateColumns(): void {
         this.columnLists = {
             productName: { title: this.translateService.instant('PRODUCTNAME'), width: '15%', sortDirection: 'asc' },
-            identifier: { title: this.translateService.instant('IDENTIFIER'), width: '20%' },
+            identifier: { title: this.translateService.instant('IDENTIFIER'), width: '15%' },
+            version: { title: this.translateService.instant('VERSION'), width: '10%' },
+            provider: { title: this.translateService.instant('PROVIDER'), width: '10%' },
             type: {
                 title: this.translateService.instant('TYPE'),
                 filter: {
@@ -142,10 +144,9 @@ export class VNFPackagesComponent implements OnInit {
                         ]
                     }
                 },
-                width: '15%'
+                width: '10%'
             },
             description: { title: this.translateService.instant('DESCRIPTION'), width: '25%' },
-            version: { title: this.translateService.instant('VERSION'), width: '10%' },
             Actions: {
                 name: 'Action', width: '15%', filter: false, sort: false, type: 'custom',
                 title: this.translateService.instant('ACTIONS'),
@@ -215,23 +216,24 @@ export class VNFPackagesComponent implements OnInit {
     /** Post the droped files and reload the page @public */
     public saveFileData(urlHeader: APIURLHEADER, fileData: {}): void {
         this.fileInput.nativeElement.value = null;
-        this.restService.postResource(urlHeader, fileData).subscribe((result: {}) => {
+        this.restService.postResource(urlHeader, fileData).subscribe((result: {}): void => {
             this.notifierService.notify('success', this.translateService.instant('PAGE.VNFPACKAGE.CREATEDSUCCESSFULLY'));
             this.generateData();
-        }, (error: ERRORDATA) => {
+        }, (error: ERRORDATA): void => {
             this.restService.handleError(error, 'post');
             this.isLoadingResults = false;
         });
     }
 
     /** Generate nsData object from loop and return for the datasource @public */
-    public generatevnfdData(vnfdpackagedata: VNFDDetails): VNFData {
+    public generatevnfdData(vnfdpackagedata: VNFD): VNFData {
         return {
             productName: vnfdpackagedata['product-name'],
             identifier: vnfdpackagedata._id,
             type: vnfdpackagedata._admin.type,
             description: vnfdpackagedata.description,
-            version: vnfdpackagedata.version
+            version: vnfdpackagedata.version,
+            provider: vnfdpackagedata.provider !== undefined ? vnfdpackagedata.provider : '-'
         };
     }
     /** Handle compose new ns package method  @public */
@@ -249,9 +251,9 @@ export class VNFPackagesComponent implements OnInit {
     /** Fetching the data from server to Load in the smarttable @protected */
     protected generateData(): void {
         this.isLoadingResults = true;
-        this.restService.getResource(environment.VNFPACKAGESCONTENT_URL).subscribe((vnfdPackageData: VNFDDetails[]) => {
+        this.restService.getResource(environment.VNFPACKAGESCONTENT_URL).subscribe((vnfdPackageData: VNFD[]): void => {
             this.vnfData = [];
-            vnfdPackageData.forEach((vnfdpackagedata: VNFDDetails) => {
+            vnfdPackageData.forEach((vnfdpackagedata: VNFD): void => {
                 const vnfDataObj: VNFData = this.generatevnfdData(vnfdpackagedata);
                 this.vnfData.push(vnfDataObj);
             });
@@ -260,12 +262,12 @@ export class VNFPackagesComponent implements OnInit {
             } else {
                 this.checkDataClass = 'dataTables_empty';
             }
-            this.dataSource.load(this.vnfData).then((data: boolean) => {
+            this.dataSource.load(this.vnfData).then((data: boolean): void => {
                 this.isLoadingResults = false;
-            }).catch(() => {
+            }).catch((): void => {
                 this.isLoadingResults = false;
             });
-        }, (error: ERRORDATA) => {
+        }, (error: ERRORDATA): void => {
             this.restService.handleError(error, 'get');
             this.isLoadingResults = false;
         });

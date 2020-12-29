@@ -129,14 +129,14 @@ export class SharedService {
     }
 
     /** Download Files function @public */
-    public downloadFiles(shortName: string, binaryData: Blob[], filetype: string): void {
+    public downloadFiles(name: string, binaryData: Blob[], filetype: string): void {
         const downloadLink: HTMLAnchorElement = document.createElement('a');
         downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: filetype }));
-        if (shortName !== undefined) {
+        if (name !== undefined) {
             if (window.navigator.msSaveOrOpenBlob) {
-                window.navigator.msSaveBlob(new Blob(binaryData, { type: filetype }), 'OSM_Export_' + shortName + '.tar.gz');
+                window.navigator.msSaveBlob(new Blob(binaryData, { type: filetype }), 'OSM_Export_' + name + '.tar.gz');
             } else {
-                downloadLink.setAttribute('download', 'OSM_Export_' + shortName + '.tar.gz');
+                downloadLink.setAttribute('download', 'OSM_Export_' + name + '.tar.gz');
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
             }

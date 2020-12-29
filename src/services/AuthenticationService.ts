@@ -164,10 +164,12 @@ export class AuthenticationService {
         this.loggedIn.next(false);
         const langCode: string = localStorage.getItem('languageCode');
         const redirecturl: string = isNullOrUndefined(localStorage.getItem('returnUrl')) ? '/' : localStorage.getItem('returnUrl');
+        const osmVersion: string = isNullOrUndefined(localStorage.getItem('osmVersion')) ? '' : localStorage.getItem('osmVersion');
         localStorage.clear();
         localStorage.setItem('languageCode', langCode);
         localStorage.setItem('returnUrl', redirecturl);
         localStorage.setItem('token_state', null);
+        localStorage.setItem('osmVersion', osmVersion);
         this.idle.stop();
         this.router.navigate(['login']).catch();
     }

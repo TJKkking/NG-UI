@@ -115,8 +115,6 @@ export class DeleteComponent {
     this.title = '';
     if (data.name !== undefined) {
       this.title = data.name;
-    } else if (data.shortName !== undefined) {
-      this.title = data.shortName;
     } else if (data.projectName !== undefined) {
       this.title = data.projectName;
       this.id = this.title;
@@ -124,6 +122,8 @@ export class DeleteComponent {
       this.title = data.userName;
     } else if (data.username !== undefined) {
       this.title = data.username;
+    } else if (data.productName !== undefined) {
+      this.title = data.productName;
     }
   }
   /** Generate Delete url from data @public */

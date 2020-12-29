@@ -31,10 +31,10 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
             </div>
         </div>
         <div class="form-group row" *ngIf="primitiveType === 'VNF_Primitive' || primitiveType === 'VDU_Primitive' || primitiveType === 'KDU_Primitive'">
-            <label class="col-sm-4 col-form-label">VNF {{'MEMBERINDEX' | translate}}*</label>
+            <label class="col-sm-4 col-form-label">VNF Profile ID *</label>
             <div class="col-sm-3">
-                <ng-select (change)="indexChange($event, primitiveType)" [clearable]="false" placeholder="{{'SELECT' | translate}}" [items]="params.memberIndex" bindLabel="member-vnf-index" bindValue="member-vnf-index" formControlName="vnf_member_index" id="vnf_member_index"
-                    [ngClass]="{ 'is-invalid': submitted && f.vnf_member_index.errors }"></ng-select>
+                <ng-select (change)="indexChange($event, primitiveType)" [clearable]="false" placeholder="{{'SELECT' | translate}}" [items]="params.memberIndex[0]['vnf-profile']" bindLabel="id" bindValue="id" formControlName="member_vnf_index" id="member_vnf_index"
+                    [ngClass]="{ 'is-invalid': submitted && f.member_vnf_index.errors }"></ng-select>
             </div>
         </div>
         <div class="form-group row" *ngIf="primitiveType === 'VDU_Primitive'">

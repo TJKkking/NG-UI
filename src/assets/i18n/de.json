@@ -40,11 +40,11 @@
     "PACKAGES": "Pakete",
     "MODIFIED": "Geändert",
     "NODATAMSG": "Keine Daten in der Tabelle verfügbar",
-    "SHORTNAME": "Kurzer Name",
     "PRODUCTNAME":"Produktname",
     "IDENTIFIER": "Kennung",
     "DESCRIPTION": "Beschreibung",
-    "VENDOR": "Verkäuferin",
+    "DESIGNER": "Designer",
+    "PROVIDER": "Anbieter",
     "VERSION": "Ausführung",
     "ACTIONS": "Aktionen",
     "NAME": "Name",
@@ -150,6 +150,7 @@
     "NODATE": "Keine Datumsinformationen gefunden",
     "TYPEINFO": "Um einen neuen TYPW hinzuzufügen, geben Sie oben die Eingabe ein",
     "UPLOADCONFIGLABEL": "Bitte laden Sie eine Datei im .yaml- oder .yml-Format hoch",
+    "NEWVERSIONTAG": "Hier ist die neue Version {{appVersion}} von OSM!",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Instrumententafel",
@@ -330,12 +331,7 @@
                 "DELETEVNFD": "VNF erfolgreich gelöscht",
                 "DELETENS": "Der Verbindungspunkt wurde erfolgreich gelöscht",
                 "DELETELINK": "Der Link wurde erfolgreich gelöscht",
-                "MGMTNETWORK": "Mgmt Network",
-                "VIMNETWORKNAME": "Vim Network Name",
-                "MEMBER-VNF-INDEX": "member-vnf-index",
-                "VNFD-ID-REF": "vnfd-id-ref",
-                "VLD-ID": "vld-id",
-                "VNFD-CP-REF": "vnfd-Verbindungspunkt-ref"
+                "MGMTNETWORK": "Mgmt Network"
             },
             "EDITPACKAGES": {
                 "UPDATEDSUCCESSFULLY": "Erfolgreich geupdated"

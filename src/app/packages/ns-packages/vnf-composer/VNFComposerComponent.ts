@@ -24,7 +24,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { NotifierService } from 'angular-notifier';
-import { APIURLHEADER, ERRORDATA, GETAPIURLHEADER, MODALCLOSERESPONSEDATA } from 'CommonModel';
+import { APIURLHEADER, ERRORDATA, MODALCLOSERESPONSEDATA } from 'CommonModel';
 import { ConfirmationTopologyComponent } from 'ConfirmationTopology';
 import * as d3 from 'd3';
 import { DataService } from 'DataService';
@@ -33,11 +33,7 @@ import * as HttpStatus from 'http-status-codes';
 import * as jsyaml from 'js-yaml';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
-import {
-  COMPOSERNODES, CONNECTIONPOINT, GRAPHDETAILS, InternalVLD, Tick, TickPath,
-  VDU, VDUInternalConnectionPoint, VLDInternalConnectionPoint, VNFDInterface, VNFDNODE
-} from 'VNFDModel';
+import { COMPOSERNODES, EXTCPD, GRAPHDETAILS, INTCPD, IVLD, Tick, TickPath, VDU, VDUINTCPD, VNFD, VNFDATA, VNIR } from 'VNFDModel';
 
 /**
  * Creating component
@@ -60,10 +56,8 @@ export class VNFComposerComponent {
   public randomNumberLength: number;
   /** Contains the vnfd information @public */
   public vnfList: string[] = [];
-  /** Contains node type @public */
-  public nodeTypeRef: string;
   /** Contains VNFD Information @public */
-  public vnfdInfo: VNFDNODE = { shortName: '', description: '', version: '', id: '', name: '' };
+  public vnfdInfo: VNFD = { 'product-name': '', description: '', version: '', id: '', provider: '' };
   /** Contains right panel box information @public */
   public showRightSideInfo: string = '';
   /** Add the fixed class for the freeze @public */
@@ -78,7 +72,6 @@ export class VNFComposerComponent {
   public classApplied: boolean = false;
   /** Contains sidebar open status @public */
   public sideBarOpened: boolean = false;
-
   /** Contains SVG attributes @private */
   // tslint:disable-next-line:no-any
   private svg: any;
@@ -106,7 +99,7 @@ export class VNFComposerComponent {
   // tslint:disable-next-line:no-any
   private intConnectionPoint: any;
   /** Contains the node information @private */
-  private nodes: VNFDNODE[] = [];
+  private nodes: COMPOSERNODES[] = [];
   /** Contains the link information of nodes @private */
   private links: {}[] = [];
   /** Instance of the rest service @private */
@@ -136,7 +129,7 @@ export class VNFComposerComponent {
   // tslint:disable-next-line:no-any
   private gIntConnectionPoint: any;
   /** Contains all the information about VNF Details @private */
-  private vnfdPackageDetails: VNFDNODE;
+  private vnfdPackageDetails: VNFD;
   /** Conatins mousedown action @private */
   private mousedownNode: COMPOSERNODES = null;
   /** Conatins mouseup action @private */
@@ -149,12 +142,18 @@ export class VNFComposerComponent {
   private lastKeyDown: number = -1;
   /** Contains VDU Information @private */
   private vduInfo: VDU;
+  /** Contains VDU Old value Information @private */
+  private oldVDUID: string;
   /** Contains Internal VL Information @private */
-  private intvlInfo: InternalVLD;
+  private intvlInfo: IVLD;
+  /** Contains Internal VL Old value Information @private */
+  private oldintVLID: string;
   /** Contains Connection Point Information @private */
-  private cpInfo: CONNECTIONPOINT;
+  private cpInfo: EXTCPD;
+  /** Contains Connection Point Old value Information @private */
+  private oldCPID: string;
   /** Contains Internal Connection Point Information @private */
-  private intcpInfo: VLDInternalConnectionPoint;
+  private intcpInfo: VNIR;
   /** Instance of the modal service @private */
   private modalService: NgbModal;
 
@@ -187,43 +186,26 @@ export class VNFComposerComponent {
   public generateData(): void {
     this.nodes = []; this.links = []; this.vnfdPackageDetails = null;
     this.showRightSideInfo = 'vnfdInfo';
-    const httpOptions: GETAPIURLHEADER = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/zip',
-        Accept: 'text/plain',
-        'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0'
-      }),
-      responseType: 'text'
-    };
-    this.restService.getResource(environment.VNFPACKAGES_URL + '/' + this.identifier + '/vnfd', httpOptions)
-      .subscribe((vnfdPackageDetails: VNFDNODE) => {
+    this.restService.getResource(environment.VNFPACKAGESCONTENT_URL + '/' + this.identifier)
+      .subscribe((vnfdPackageDetails: VNFD): void => {
         try {
-          const getJson: string = jsyaml.load(vnfdPackageDetails.toString(), { json: true });
-          if (getJson.hasOwnProperty('vnfd-catalog')) {
-            this.vnfdPackageDetails = getJson['vnfd-catalog'].vnfd[0];
-          } else if (getJson.hasOwnProperty('vnfd:vnfd-catalog')) {
-            this.vnfdPackageDetails = getJson['vnfd:vnfd-catalog'].vnfd[0];
-          } else if (getJson.hasOwnProperty('vnfd')) {
-            // tslint:disable-next-line: no-string-literal
-            this.vnfdPackageDetails = getJson['vnfd'][0];
-          }
-          this.generateCPPoint(this.vnfdPackageDetails);
-          this.generateVDU(this.vnfdPackageDetails);
-          this.generateInternalVLD(this.vnfdPackageDetails);
-          this.generateInternalCP(this.vnfdPackageDetails);
-          this.generateIntVLCPLinks(this.vnfdPackageDetails);
-          this.generateVDUCPLinks(this.vnfdPackageDetails);
+          delete vnfdPackageDetails._admin;
+          delete vnfdPackageDetails._id;
+          delete vnfdPackageDetails._links;
+          this.vnfdPackageDetails = vnfdPackageDetails;
+          this.generateVDU(vnfdPackageDetails);
+          this.generateCPPoint(vnfdPackageDetails);
+          this.generateInternalVLD(vnfdPackageDetails);
+          this.generateInternalCP(vnfdPackageDetails);
+          this.generateIntVLCPLinks(vnfdPackageDetails);
+          this.generateVDUCPLinks(vnfdPackageDetails);
           this.createNode(this.nodes);
-          this.vnfdInfo.shortName = this.vnfdPackageDetails['short-name'];
-          this.vnfdInfo.description = this.vnfdPackageDetails.description;
-          this.vnfdInfo.version = this.vnfdPackageDetails.version;
-          this.vnfdInfo.id = this.vnfdPackageDetails.id;
-          this.vnfdInfo.name = this.vnfdPackageDetails.name;
+          this.generateVNFInfo(vnfdPackageDetails);
         } catch (e) {
           this.notifierService.notify('error', this.translateService.instant('ERROR'));
         }
         this.isLoadingResults = false;
-      }, (error: ERRORDATA) => {
+      }, (error: ERRORDATA): void => {
         error.error = typeof error.error === 'string' ? jsyaml.load(error.error) : error.error;
         if (error.error.status === HttpStatus.NOT_FOUND || error.error.status === HttpStatus.UNAUTHORIZED) {
           this.router.navigateByUrl('404', { skipLocationChange: true }).catch();
@@ -234,6 +216,14 @@ export class VNFComposerComponent {
         this.showRightSideInfo = '';
       });
   }
+  /** Generate the VNF Package Information */
+  public generateVNFInfo(vnfdPackageDetails: VNFD): void {
+    this.vnfdInfo['product-name'] = vnfdPackageDetails['product-name'];
+    this.vnfdInfo.description = vnfdPackageDetails.description;
+    this.vnfdInfo.version = vnfdPackageDetails.version;
+    this.vnfdInfo.id = vnfdPackageDetails.id;
+    this.vnfdInfo.provider = vnfdPackageDetails.provider;
+  }
   /** Events handles at drag on D3 region @public */
   // tslint:disable-next-line:no-any
   public drag(ev: any): void {
@@ -242,14 +232,14 @@ export class VNFComposerComponent {
   /** Events handles drop at D3 region @public */
   public drop(ev: DragEvent): void {
     ev.preventDefault();
-    this.nodeTypeRef = ev.dataTransfer.getData('text');
-    if (this.nodeTypeRef === 'vdu') {
+    const getDropedName: string = ev.dataTransfer.getData('text');
+    if (getDropedName === 'vdu') {
       this.svg.selectAll('*').remove();
       this.vduDropCompose();
-    } else if (this.nodeTypeRef === 'cp') {
+    } else if (getDropedName === 'cp') {
       this.svg.selectAll('*').remove();
       this.cpDropCompose();
-    } else if (this.nodeTypeRef === 'intvl') {
+    } else if (getDropedName === 'intvl') {
       this.svg.selectAll('*').remove();
       this.intvlDropCompose();
     }
@@ -258,65 +248,79 @@ export class VNFComposerComponent {
   public allowDrop(ev: DragEvent): void {
     ev.preventDefault();
   }
-  /** Generate and list CP points @public */
-  public generateCPPoint(vnfdPackageDetails: VNFDNODE): void {
-    if (vnfdPackageDetails['connection-point'] !== undefined) {
-      vnfdPackageDetails['connection-point'].forEach((cp: CONNECTIONPOINT) => {
-        this.nodes.push({ id: cp.name, nodeTypeRef: 'cp', name: cp.name, type: cp.type });
+  /** Generate and list VDU @public */
+  public generateVDU(vnfdPackageDetails: VNFD): void {
+    if (vnfdPackageDetails.vdu !== undefined) {
+      vnfdPackageDetails.vdu.forEach((vdu: VDU): void => {
+        this.nodes.push({
+          id: vdu.id,
+          name: vdu.name,
+          reflexive: false,
+          type: 'vdu'
+        });
       });
     }
   }
-  /** Generate and list VDU @public */
-  public generateVDU(vnfdPackageDetails: VNFDNODE): void {
-    if (vnfdPackageDetails.vdu !== undefined) {
-      vnfdPackageDetails.vdu.forEach((vdu: VDU) => {
+  /** Generate and list CP points @public */
+  public generateCPPoint(vnfdPackageDetails: VNFD): void {
+    if (vnfdPackageDetails['ext-cpd'] !== undefined) {
+      vnfdPackageDetails['ext-cpd'].forEach((cp: EXTCPD): void => {
         this.nodes.push({
-          id: vdu.name, nodeTypeRef: 'vdu', 'cloud-init-file': vdu['cloud-init-file'], count: vdu.count, description: vdu.description,
-          vduID: vdu.id, name: vdu.name, interface: vdu.interface, 'vm-flavor': vdu['vm-flavor']
+          id: cp['int-cpd'] !== undefined ? cp['int-cpd'].cpd : cp.id,
+          name: cp.id,
+          reflexive: false,
+          type: 'cp'
         });
       });
     }
   }
   /** Generate and list Internal VLD @public */
-  public generateInternalVLD(vnfdPackageDetails: VNFDNODE): void {
-    if (vnfdPackageDetails['internal-vld'] !== undefined) {
-      vnfdPackageDetails['internal-vld'].forEach((internalVLD: InternalVLD) => {
+  public generateInternalVLD(vnfdPackageDetails: VNFD): void {
+    if (vnfdPackageDetails['int-virtual-link-desc'] !== undefined) {
+      vnfdPackageDetails['int-virtual-link-desc'].forEach((ivld: IVLD): void => {
         this.nodes.push({
-          id: internalVLD.name, nodeTypeRef: 'intvl', intVLID: internalVLD.id,
-          'internal-connection-point': internalVLD['internal-connection-point'],
-          'ip-profile-ref': internalVLD['ip-profile-ref'], name: internalVLD.name, 'short-name': internalVLD['short-name'],
-          type: internalVLD.type
+          id: ivld.id,
+          name: ivld.id,
+          reflexive: false,
+          type: 'intvl'
         });
       });
     }
   }
   /** Generate and list Internal CP @public */
-  public generateInternalCP(vnfdPackageDetails: VNFDNODE): void {
+  public generateInternalCP(vnfdPackageDetails: VNFD): void {
     if (vnfdPackageDetails.vdu !== undefined) {
-      vnfdPackageDetails.vdu.forEach((intCP: VDUInternalConnectionPoint) => {
-        if (intCP['internal-connection-point'] !== undefined) {
-          intCP['internal-connection-point'].forEach((internalCP: VDUInternalConnectionPoint) => {
-            this.nodes.push({
-              id: internalCP.name, nodeTypeRef: 'intcp', name: internalCP.name,
-              'short-name': internalCP['short-name'], type: internalCP.type
-            });
+      vnfdPackageDetails.vdu.forEach((vdu: VDU): void => {
+        if (vdu['int-cpd'] !== undefined) {
+          vdu['int-cpd'].forEach((intcpd: VDUINTCPD): void => {
+            if (intcpd['int-virtual-link-desc'] !== undefined) {
+              intcpd['virtual-network-interface-requirement'].forEach((vnir: VNIR): void => {
+                this.nodes.push({
+                  id: intcpd.id,
+                  name: vnir.name,
+                  reflexive: false,
+                  type: 'intcp'
+                });
+              });
+            }
           });
         }
       });
     }
   }
   /** Generate VDU External and Internal CP Links @public */
-  public generateVDUCPLinks(vnfdPackageDetails: VNFDNODE): void {
+  public generateVDUCPLinks(vnfdPackageDetails: VNFD): void {
     if (vnfdPackageDetails.vdu !== undefined) {
-      vnfdPackageDetails.vdu.forEach((vdu: VDU) => {
-        const vduLink: string = vdu.name;
-        if (vdu.interface !== undefined) {
-          vdu.interface.forEach((interfaceDetails: VNFDInterface) => {
-            if (interfaceDetails['external-connection-point-ref'] !== undefined) {
-              this.links.push({ source: vduLink, target: interfaceDetails['external-connection-point-ref'] });
-            }
-            if (interfaceDetails['internal-connection-point-ref'] !== undefined) {
-              this.links.push({ source: vduLink, target: interfaceDetails['internal-connection-point-ref'] });
+      vnfdPackageDetails.vdu.forEach((vdu: VDU): void => {
+        const vduLink: string = vdu.id;
+        if (vdu['int-cpd'] !== undefined) {
+          vdu['int-cpd'].forEach((intCPD: VDUINTCPD): void => {
+            if (intCPD['int-virtual-link-desc'] !== undefined) {
+              intCPD['virtual-network-interface-requirement'].forEach((vnir: VNIR): void => {
+                this.links.push({ source: vduLink, target: intCPD.id });
+              });
+            } else {
+              this.links.push({ source: vduLink, target: intCPD.id });
             }
           });
         }
@@ -324,13 +328,17 @@ export class VNFComposerComponent {
     }
   }
   /** Generate Network/VLD/Internal VirtualLink, CP Links @public */
-  public generateIntVLCPLinks(vnfdPackageDetails: VNFDNODE): void {
-    if (vnfdPackageDetails['internal-vld'] !== undefined) {
-      vnfdPackageDetails['internal-vld'].forEach((internalVLD: InternalVLD) => {
-        const vldName: string = internalVLD.name;
-        if (internalVLD['internal-connection-point'] !== undefined) {
-          internalVLD['internal-connection-point'].forEach((intCP: VLDInternalConnectionPoint) => {
-            this.links.push({ source: vldName, target: intCP['id-ref'] });
+  public generateIntVLCPLinks(vnfdPackageDetails: VNFD): void {
+    if (vnfdPackageDetails.vdu !== undefined) {
+      vnfdPackageDetails.vdu.forEach((vdu: VDU): void => {
+        if (vdu['int-cpd'] !== undefined) {
+          vdu['int-cpd'].forEach((intCPD: VDUINTCPD): void => {
+            const vldName: string = intCPD['int-virtual-link-desc'];
+            if (intCPD['int-virtual-link-desc'] !== undefined) {
+              intCPD['virtual-network-interface-requirement'].forEach((vnir: VNIR): void => {
+                this.links.push({ source: vldName, target: intCPD.id });
+              });
+            }
           });
         }
       });
@@ -338,52 +346,65 @@ export class VNFComposerComponent {
   }
   /** VNFD details can be saved on users inputs @public */
   public saveVNFD(): void {
-    this.vnfdPackageDetails['short-name'] = this.vnfdInfo.shortName;
+    this.vnfdPackageDetails['product-name'] = this.vnfdInfo['product-name'];
     this.vnfdPackageDetails.description = this.vnfdInfo.description;
     this.vnfdPackageDetails.version = this.vnfdInfo.version;
     this.vnfdPackageDetails.id = this.vnfdInfo.id;
-    this.vnfdPackageDetails.name = this.vnfdInfo.name;
+    this.vnfdPackageDetails.provider = this.vnfdInfo.provider;
     this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
-    delete this.vnfdPackageDetails.shortName;
   }
   /** VDU details can be saved on users inputs @public */
-  public saveVDU(vduID: string): void {
-    this.vnfdPackageDetails.vdu.forEach((ref: VDU) => {
-      if (ref.id === vduID) {
-        ref.count = this.vduInfo.count;
-        ref.description = this.vduInfo.description;
-        ref.image = this.vduInfo.image;
+  public saveVDU(getVDUID: string): void {
+    const getOLDVDUID: string = this.oldVDUID;
+    this.vnfdPackageDetails.vdu.forEach((ref: VDU): void => {
+      if (ref.id === getVDUID) {
         ref.id = this.vduInfo.id;
         ref.name = this.vduInfo.name;
+        ref.description = this.vduInfo.description !== undefined ? this.vduInfo.description : '';
+        ref['sw-image-desc'] = this.vduInfo['sw-image-desc'];
+      }
+    });
+    this.vnfdPackageDetails['ext-cpd'].forEach((extCPD: EXTCPD): void => {
+      if (extCPD['int-cpd'] !== undefined) {
+        if (extCPD['int-cpd']['vdu-id'] === getOLDVDUID) {
+          extCPD['int-cpd']['vdu-id'] = this.vduInfo.id;
+        }
       }
     });
     this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
   }
   /** IntVL details can be saved on users inputs @public */
   public saveIntVL(intVLID: string): void {
-    this.vnfdPackageDetails['internal-vld'].forEach((ref: InternalVLD) => {
-      if (ref.id === intVLID) {
-        ref['short-name'] = this.intvlInfo.shortName;
-        ref.name = this.intvlInfo.name;
-        ref.type = this.intvlInfo.type;
-        ref['ip-profile-ref'] = !isNullOrUndefined(this.intvlInfo.ipProfileRef) ? this.intvlInfo.ipProfileRef : '';
-        ref.id = this.intvlInfo.id;
-        delete ref.shortName;
-        delete ref.ipProfileRef;
+    const getOldID: string = this.oldintVLID;
+    this.vnfdPackageDetails['int-virtual-link-desc'].forEach((ivldDetails: IVLD): void => {
+      if (ivldDetails.id === intVLID) {
+        ivldDetails.id = this.intvlInfo.id;
+      }
+    });
+    this.vnfdPackageDetails.vdu.forEach((vduDetails: VDU): void => {
+      if (vduDetails['int-cpd'] !== undefined) {
+        vduDetails['int-cpd'].forEach((intCPDDetails: VDUINTCPD): void => {
+          if (intCPDDetails['int-virtual-link-desc'] !== undefined) {
+            if (intCPDDetails['int-virtual-link-desc'] === getOldID) {
+              intCPDDetails['int-virtual-link-desc'] = this.intvlInfo.id;
+            }
+          }
+        });
       }
     });
     this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
   }
   /** IntVL details can be saved on users inputs @public */
-  public saveCP(cpName: string): void {
-    this.vnfdPackageDetails['connection-point'].forEach((ref: CONNECTIONPOINT) => {
-      if (ref.name === cpName) {
-        if (!isNullOrUndefined(this.cpInfo.type)) {
-          ref.type = this.cpInfo.type;
-        }
-        ref.name = this.cpInfo.name;
+  public saveCP(cpID: string): void {
+    const getOldCP: string = this.oldCPID;
+    this.vnfdPackageDetails['ext-cpd'].forEach((ref: EXTCPD): void => {
+      if (ref.id === cpID) {
+        ref.id = this.cpInfo.id;
       }
     });
+    if (this.vnfdPackageDetails['mgmt-cp'] === getOldCP) {
+      this.vnfdPackageDetails['mgmt-cp'] = this.cpInfo.id;
+    }
     this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
   }
   /** Edit topology @public */
@@ -395,7 +416,7 @@ export class VNFComposerComponent {
     const modalRef: NgbModalRef = this.modalService.open(ConfirmationTopologyComponent, { backdrop: 'static' });
     modalRef.componentInstance.topologyType = 'Info';
     modalRef.componentInstance.topologytitle = this.translateService.instant('PAGE.TOPOLOGY.INFO');
-    modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
+    modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
       if (result) {
         // empty
       }
@@ -410,7 +431,7 @@ export class VNFComposerComponent {
       this.force.stop();
     }
     this.forceSimulationActive = alreadyFixedIsActive;
-    this.nodes.forEach((d: COMPOSERNODES) => {
+    this.nodes.forEach((d: COMPOSERNODES): void => {
       d.fx = (alreadyFixedIsActive) ? null : d.x;
       d.fy = (alreadyFixedIsActive) ? null : d.y;
     });
@@ -449,19 +470,21 @@ export class VNFComposerComponent {
     };
   }
   /** Node is created and render at D3 region @private */
-  private createNode(nodes: VNFDNODE[]): void {
+  private createNode(nodes: VNFD[]): void {
     const graphContainerAttr: GRAPHDETAILS = this.getGraphContainerAttr();
     d3.selectAll('svg#graphContainer > *').remove();
-    d3.select(window).on('keydown', () => { this.keyDown(); });
-    d3.select(window).on('keyup', () => { this.keyUp(); });
-    this.svg = d3.select('#graphContainer').attr('oncontextmenu', 'return false;').attr('width', graphContainerAttr.width)
-      .attr('height', graphContainerAttr.height).on('mousemove', () => { this.mousemove(); });
+    d3.select(window).on('keydown', (): void => { this.keyDown(); });
+    d3.select(window).on('keyup', (): void => { this.keyUp(); });
+    this.svg = d3.select('#graphContainer')
+      .attr('oncontextmenu', 'return false;')
+      .attr('viewBox', `0 0 ${graphContainerAttr.width} ${graphContainerAttr.height}`)
+      .on('mousemove', (): void => { this.mousemove(); });
     this.force = d3.forceSimulation()
-      .force('link', d3.forceLink().id((d: TickPath) => d.id).distance(graphContainerAttr.distance))
+      .force('link', d3.forceLink().id((d: TickPath): string => d.id).distance(graphContainerAttr.distance))
       .force('charge', d3.forceManyBody().strength(graphContainerAttr.strength))
       .force('x', d3.forceX(graphContainerAttr.width / graphContainerAttr.forcex))
       .force('y', d3.forceY(graphContainerAttr.height / graphContainerAttr.forcey))
-      .on('tick', () => { this.tick(); });
+      .on('tick', (): void => { this.tick(); });
     this.path = this.svg.append('svg:g').selectAll('path');
     this.dragLine = this.svg.append('svg:path').attr('class', 'link dragline hidden').attr('d', 'M0,0L0,0');
     this.network = this.svg.append('svg:g').selectAll('network');
@@ -473,7 +496,7 @@ export class VNFComposerComponent {
   /** Update force layout (called automatically each iteration) @private */
   private tick(): void {
     const graphContainerAttr: GRAPHDETAILS = this.getGraphContainerAttr();
-    this.path.attr('d', (d: Tick) => {
+    this.path.attr('d', (d: Tick): string => {
       const deltaX: number = d.target.x - d.source.x; const deltaY: number = d.target.y - d.source.y;
       const dist: number = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
       const normX: number = deltaX / dist; const normY: number = deltaY / dist;
@@ -482,27 +505,27 @@ export class VNFComposerComponent {
       const sourceX: number = d.source.x + (sourcePadding * normX); const sourceY: number = d.source.y + (sourcePadding * normY);
       const targetX: number = d.target.x - (targetPadding * normX); const targetY: number = d.target.y - (targetPadding * normY);
       return `M${sourceX},${sourceY}L${targetX},${targetY}`;
-    }).on('dblclick', (d: Tick) => { this.getDeleteLinkConfirmation(d); });
-    this.network.attr('transform', (d: TickPath) => `translate(${d.x},${d.y})`);
-    this.virutualDeploymentUnit.attr('transform', (d: TickPath) => `translate(${d.x},${d.y})`);
-    this.connectionPoint.attr('transform', (d: TickPath) => `translate(${d.x},${d.y})`);
-    this.intConnectionPoint.attr('transform', (d: TickPath) => `translate(${d.x},${d.y})`);
+    }).on('dblclick', (d: Tick): void => { this.getDeleteLinkConfirmation(d); });
+    this.network.attr('transform', (d: TickPath): string => `translate(${d.x},${d.y})`);
+    this.virutualDeploymentUnit.attr('transform', (d: TickPath): string => `translate(${d.x},${d.y})`);
+    this.connectionPoint.attr('transform', (d: TickPath): string => `translate(${d.x},${d.y})`);
+    this.intConnectionPoint.attr('transform', (d: TickPath): string => `translate(${d.x},${d.y})`);
   }
   /** Update graph (called when needed) @private */
-  private restart(nodes: VNFDNODE[]): void {
+  private restart(nodes: VNFD[]): void {
     const graphContainerAttr: GRAPHDETAILS = this.getGraphContainerAttr();
     this.path = this.path.data(this.links);
     const cpNodes: {}[] = []; const vduNodes: {}[] = []; const vlNodes: {}[] = []; const intcpNodes: {}[] = []; //Nodes are known by id
-    nodes.forEach((nodeList: VNFDNODE) => {
-      if (nodeList.nodeTypeRef === 'cp') { cpNodes.push(nodeList); }
-      else if (nodeList.nodeTypeRef === 'vdu') { vduNodes.push(nodeList); }
-      else if (nodeList.nodeTypeRef === 'intvl') { vlNodes.push(nodeList); }
-      else if (nodeList.nodeTypeRef === 'intcp') { intcpNodes.push(nodeList); }
+    nodes.forEach((nodeList: COMPOSERNODES): void => {
+      if (nodeList.type === 'cp') { cpNodes.push(nodeList); }
+      else if (nodeList.type === 'vdu') { vduNodes.push(nodeList); }
+      else if (nodeList.type === 'intvl') { vlNodes.push(nodeList); }
+      else if (nodeList.type === 'intcp') { intcpNodes.push(nodeList); }
     });
-    this.network = this.network.data(vlNodes, (d: { id: number }) => d.id);
-    this.virutualDeploymentUnit = this.virutualDeploymentUnit.data(vduNodes, (d: { id: number }) => d.id);
-    this.connectionPoint = this.connectionPoint.data(cpNodes, (d: { id: number }) => d.id);
-    this.intConnectionPoint = this.intConnectionPoint.data(intcpNodes, (d: { id: number }) => d.id);
+    this.network = this.network.data(vlNodes, (d: VNFD): string => d.id);
+    this.virutualDeploymentUnit = this.virutualDeploymentUnit.data(vduNodes, (d: VNFD): string => d.id);
+    this.connectionPoint = this.connectionPoint.data(cpNodes, (d: VNFD): string => d.id);
+    this.intConnectionPoint = this.intConnectionPoint.data(intcpNodes, (d: VNFD): string => d.id);
     this.resetAndCreateNodes();
     this.force.nodes(nodes).force('link').links(this.links); //Set the graph in motion
     this.force.alphaTarget(graphContainerAttr.alphaTarget).restart();
@@ -538,17 +561,18 @@ export class VNFComposerComponent {
       .style('opacity', 1)
       .attr('x', graphContainerAttr.imageX)
       .attr('y', graphContainerAttr.imageY)
-      .attr('id', (d: VNFDNODE) => { return d.id; })
+      .call(this.onDragDrop())
+      .attr('id', (d: COMPOSERNODES): string => { return d.id; })
       .attr('class', 'node').attr('width', graphContainerAttr.nodeWidth).attr('height', graphContainerAttr.nodeHeight)
       .attr('xlink:href', 'assets/images/INTVL.svg')
-      .on('mousedown', (d: VNFDNODE) => { this.mouseDown(d); })
-      .on('mouseup', (d: VNFDNODE) => { this.mouseUp(d); })
-      .on('click', (d: VNFDNODE) => { this.singleClick(this.network, d); this.onNodeClickToggleSidebar(); })
-      .on('dblclick', (d: VNFDNODE) => { this.getDeleteNodeConfirmation(d); this.onNodedblClickToggleSidebar(); });
+      .on('mousedown', (d: COMPOSERNODES): void => { this.mouseDown(d); })
+      .on('mouseup', (d: COMPOSERNODES): void => { this.mouseUp(d); })
+      .on('click', (d: COMPOSERNODES): void => { this.singleClick(this.network, d); this.onNodeClickToggleSidebar(); })
+      .on('dblclick', (d: COMPOSERNODES): void => { this.getDeleteNodeConfirmation(d); this.onNodedblClickToggleSidebar(); });
     this.gNetwork.append('svg:text')
       .attr('class', 'node_text')
       .attr('y', graphContainerAttr.textY)
-      .text((d: { id: number }) => d.id);
+      .text((d: COMPOSERNODES): string => d.id);
   }
   /** Settings all the connection point attributes of nodes @private */
   private getgVirutualDeploymentUnit(): void {
@@ -559,17 +583,18 @@ export class VNFComposerComponent {
       .style('opacity', 1)
       .attr('x', graphContainerAttr.imageX)
       .attr('y', graphContainerAttr.imageY)
-      .attr('id', (d: VNFDNODE) => { return d.id; })
+      .call(this.onDragDrop())
+      .attr('id', (d: COMPOSERNODES): string => { return d.id; })
       .attr('class', 'node').attr('width', graphContainerAttr.nodeWidth).attr('height', graphContainerAttr.nodeHeight)
       .attr('xlink:href', 'assets/images/VDU.svg')
-      .on('mousedown', (d: VNFDNODE) => { this.mouseDown(d); })
-      .on('mouseup', (d: VNFDNODE) => { this.mouseUp(d); })
-      .on('click', (d: VNFDNODE) => { this.singleClick(this.virutualDeploymentUnit, d); this.onNodeClickToggleSidebar(); })
-      .on('dblclick', (d: VNFDNODE) => { this.getDeleteNodeConfirmation(d); this.onNodedblClickToggleSidebar(); });
+      .on('mousedown', (d: COMPOSERNODES): void => { this.mouseDown(d); })
+      .on('mouseup', (d: COMPOSERNODES): void => { this.mouseUp(d); })
+      .on('click', (d: COMPOSERNODES): void => { this.singleClick(this.virutualDeploymentUnit, d); this.onNodeClickToggleSidebar(); })
+      .on('dblclick', (d: COMPOSERNODES): void => { this.getDeleteNodeConfirmation(d); this.onNodedblClickToggleSidebar(); });
     this.gVirutualDeploymentUnit.append('svg:text')
       .attr('class', 'node_text')
       .attr('y', graphContainerAttr.textY)
-      .text((d: { id: string }) => d.id);
+      .text((d: COMPOSERNODES): string => d.id);
   }
   /** Settings all the connection point attributes of nodes @private */
   private getgConnectionPoint(): void {
@@ -580,17 +605,18 @@ export class VNFComposerComponent {
       .style('opacity', 1)
       .attr('x', graphContainerAttr.imageX)
       .attr('y', graphContainerAttr.imageY)
-      .attr('id', (d: VNFDNODE) => { return d.id; })
+      .call(this.onDragDrop())
+      .attr('id', (d: COMPOSERNODES): string => { return d.id; })
       .attr('class', 'node').attr('width', graphContainerAttr.nodeWidth).attr('height', graphContainerAttr.nodeHeight)
       .attr('xlink:href', 'assets/images/CP-VNF.svg')
-      .on('mousedown', (d: VNFDNODE) => { this.mouseDown(d); })
-      .on('mouseup', (d: VNFDNODE) => { this.mouseUp(d); })
-      .on('click', (d: VNFDNODE) => { this.singleClick(this.connectionPoint, d); this.onNodeClickToggleSidebar(); })
-      .on('dblclick', (d: VNFDNODE) => { this.getDeleteNodeConfirmation(d); this.onNodedblClickToggleSidebar(); });
+      .on('mousedown', (d: COMPOSERNODES): void => { this.mouseDown(d); })
+      .on('mouseup', (d: COMPOSERNODES): void => { this.mouseUp(d); })
+      .on('click', (d: COMPOSERNODES): void => { this.singleClick(this.connectionPoint, d); this.onNodeClickToggleSidebar(); })
+      .on('dblclick', (d: COMPOSERNODES): void => { this.getDeleteNodeConfirmation(d); this.onNodedblClickToggleSidebar(); });
     this.gConnectionPoint.append('svg:text')
       .attr('class', 'node_text')
       .attr('y', graphContainerAttr.textY)
-      .text((d: { id: string }) => d.id);
+      .text((d: COMPOSERNODES): string => d.name);
   }
   /** Settings all the internal connection point attributes of nodes @private */
   private getgIntConnectionPoint(): void {
@@ -601,86 +627,78 @@ export class VNFComposerComponent {
       .style('opacity', 1)
       .attr('x', graphContainerAttr.imageX)
       .attr('y', graphContainerAttr.imageY)
-      .attr('id', (d: VNFDNODE) => { return d.id; })
+      .call(this.onDragDrop())
+      .attr('id', (d: COMPOSERNODES): string => { return d.id; })
       .attr('class', 'node').attr('width', graphContainerAttr.nodeWidth).attr('height', graphContainerAttr.nodeHeight)
       .attr('xlink:href', 'assets/images/INTCP.svg')
-      .on('mousedown', (d: VNFDNODE) => { this.mouseDown(d); })
-      .on('mouseup', (d: VNFDNODE) => { this.mouseUp(d); })
-      .on('click', (d: VNFDNODE) => { this.singleClick(this.intConnectionPoint, d); this.onNodeClickToggleSidebar(); })
-      .on('dblclick', (d: VNFDNODE) => { this.getDeleteNodeConfirmation(d); this.onNodedblClickToggleSidebar(); });
+      .on('mousedown', (d: COMPOSERNODES): void => { this.mouseDown(d); })
+      .on('mouseup', (d: COMPOSERNODES): void => { this.mouseUp(d); })
+      .on('click', (d: COMPOSERNODES): void => { this.singleClick(this.intConnectionPoint, d); this.onNodeClickToggleSidebar(); })
+      .on('dblclick', (d: COMPOSERNODES): void => { this.getDeleteNodeConfirmation(d); this.onNodedblClickToggleSidebar(); });
     this.gIntConnectionPoint.append('svg:text')
       .attr('class', 'node_text')
       .attr('y', graphContainerAttr.textY)
-      .text((d: { id: string }) => d.id);
+      .text((d: COMPOSERNODES): string => d.name);
   }
   /** Drop VDU Composer Data @private */
   private vduDropCompose(): void {
     const randomID: string = this.sharedService.randomString();
-    const vduNode: VNFDNODE[] = [{
-      nodeTypeRef: 'vdu', id: 'vdu_' + randomID, count: 1, description: '', name: 'vdu_' + randomID, image: 'ubuntu',
-      interface: [], 'internal-connection-point': [], 'monitoring-param': [], 'vm-flavor': {}
-    }];
-    const nodeCopy: VNFDNODE[] = this.nodes;
-    Array.prototype.push.apply(vduNode, nodeCopy);
-    this.nodes = vduNode;
-    if (this.vnfdPackageDetails.vdu === undefined) { this.vnfdPackageDetails.vdu = []; }
+    if (this.vnfdPackageDetails.vdu === undefined) {
+      this.vnfdPackageDetails.vdu = [];
+    }
     this.vnfdPackageDetails.vdu.push({
-      id: 'vdu_' + randomID, count: 1, description: '', name: 'vdu_' + randomID, image: 'ubuntu',
-      interface: [], 'internal-connection-point': [], 'monitoring-param': [], 'vm-flavor': {}
+      id: 'vdu_' + randomID,
+      name: 'vdu_' + randomID,
+      description: '',
+      'sw-image-desc': 'ubuntu',
+      'int-cpd': [],
+      'monitoring-parameter': [],
+      'virtual-compute-desc': '',
+      'virtual-storage-desc': []
     });
     this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
   }
   /** Drop CP Composer Data @private */
   private cpDropCompose(): void {
     const randomID: string = this.sharedService.randomString();
-    const cpNode: VNFDNODE[] = [{ nodeTypeRef: 'cp', id: 'cp_' + randomID, name: 'cp_' + randomID }];
-    const nodeCopy: VNFDNODE[] = this.nodes;
-    Array.prototype.push.apply(cpNode, nodeCopy);
-    this.nodes = cpNode;
-    if (this.vnfdPackageDetails['connection-point'] === undefined) {
-      this.vnfdPackageDetails['connection-point'] = [];
+    if (this.vnfdPackageDetails['ext-cpd'] === undefined) {
+      this.vnfdPackageDetails['ext-cpd'] = [];
+      this.vnfdPackageDetails['mgmt-cp'] = 'cp_' + randomID;
     }
-    this.vnfdPackageDetails['connection-point'].push({
-      id: 'cp_' + randomID, name: 'cp_' + randomID, type: 'VPORT'
+    this.vnfdPackageDetails['ext-cpd'].push({
+      id: 'cp_' + randomID,
+      'int-cpd': {}
     });
     this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
   }
   /** Drop IntVL Composer Data @private */
   private intvlDropCompose(): void {
     const randomID: string = this.sharedService.randomString();
-    const intvlNode: VNFDNODE[] = [{
-      nodeTypeRef: 'intvl', id: 'vnf_vl_' + randomID, name: 'vnf_vl_' + randomID, 'short-name': 'vnf_vl_' + randomID, 'ip-profile-ref': '',
-      type: 'ELAN'
-    }];
-    const nodeCopy: VNFDNODE[] = this.nodes;
-    Array.prototype.push.apply(intvlNode, nodeCopy);
-    this.nodes = intvlNode;
-    if (this.vnfdPackageDetails['internal-vld'] === undefined) { this.vnfdPackageDetails['internal-vld'] = []; }
-    this.vnfdPackageDetails['internal-vld'].push({
-      id: 'vnf_vl_' + randomID, name: 'vnf_vl_' + randomID, 'short-name': 'vnf_vl_' + randomID,
-      'ip-profile-ref': '', type: 'ELAN', 'internal-connection-point': []
+    if (this.vnfdPackageDetails['int-virtual-link-desc'] === undefined) {
+      this.vnfdPackageDetails['int-virtual-link-desc'] = [];
+    }
+    this.vnfdPackageDetails['int-virtual-link-desc'].push({
+      id: 'vnf_vl_' + randomID
     });
     this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
   }
   /** Add the Add Nodes Data @private */
-  private addNodes(apiURL: string, identifier: string, data: VNFDNODE): void {
+  private addNodes(apiURL: string, identifier: string, data: VNFD): void {
     this.isLoadingResults = true;
     const apiURLHeader: APIURLHEADER = {
       url: apiURL + '/' + identifier + '/package_content',
       httpOptions: { headers: this.headers }
     };
-    const vnfData: {} = {};
-    vnfData['vnfd:vnfd-catalog'] = {};
-    vnfData['vnfd:vnfd-catalog'].vnfd = [];
-    vnfData['vnfd:vnfd-catalog'].vnfd.push(data);
+    const vnfData: VNFDATA = {};
+    vnfData.vnfd = data;
     const descriptorInfo: string = jsyaml.dump(vnfData, { sortKeys: true });
     this.sharedService.targzFile({ packageType: 'vnfd', id: this.identifier, descriptor: descriptorInfo })
       .then((content: ArrayBuffer): void => {
-        this.restService.putResource(apiURLHeader, content).subscribe((res: {}) => {
+        this.restService.putResource(apiURLHeader, content).subscribe((res: {}): void => {
           this.generateData();
           this.notifierService.notify('success', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.UPDATEDSUCCESSFULLY'));
           this.isLoadingResults = false;
-        }, (error: ERRORDATA) => {
+        }, (error: ERRORDATA): void => {
           this.generateData();
           this.restService.handleError(error, 'put');
           this.isLoadingResults = false;
@@ -691,7 +709,7 @@ export class VNFComposerComponent {
       });
   }
   /** Events handles when mousedown click it will capture the selected node data @private */
-  private mouseDown(d: VNFDNODE): void {
+  private mouseDown(d: COMPOSERNODES): void {
     event.preventDefault();
     if (d3.event.ctrlKey) { return; }
     if (d3.event.shiftKey) {
@@ -702,17 +720,17 @@ export class VNFComposerComponent {
     }
   }
   /** Event handles when mouseup event occures @private */
-  private mouseUp(d: VNFDNODE): void {
+  private mouseUp(d: COMPOSERNODES): void {
     if (!this.mousedownNode) { return; }
     this.dragLine.classed('hidden', true);
     this.mouseupNode = d;
-    if (this.mousedownNode.nodeTypeRef === 'vdu') {
+    if (this.mousedownNode.type === 'vdu') {
       this.vduMouseDownNode();
-    } else if (this.mousedownNode.nodeTypeRef === 'cp') {
+    } else if (this.mousedownNode.type === 'cp') {
       this.cpMouseDownNode();
-    } else if (this.mousedownNode.nodeTypeRef === 'intvl') {
+    } else if (this.mousedownNode.type === 'intvl') {
       this.intVLMouseDownNode();
-    } else if (this.mousedownNode.nodeTypeRef === 'intcp') {
+    } else if (this.mousedownNode.type === 'intcp') {
       this.intCPMouseDownNode();
     } else {
       this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.INVALIDSELECTION'));
@@ -723,123 +741,131 @@ export class VNFComposerComponent {
   }
   /** Establish a connection point between vdu and other nodes @private */
   private vduMouseDownNode(): void {
-    if (this.mousedownNode.nodeTypeRef === 'vdu' && this.mouseupNode.nodeTypeRef === 'cp') {
+    if (this.mousedownNode.type === 'vdu' && this.mouseupNode.type === 'cp') {
       this.vduCPConnection(this.mousedownNode.id, this.mouseupNode.id);
-    } else if (this.mousedownNode.nodeTypeRef === 'vdu' && this.mouseupNode.nodeTypeRef === 'intcp') {
+    } else if (this.mousedownNode.type === 'vdu' && this.mouseupNode.type === 'intcp') {
       this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKVDUANDINTCP'));
       this.deselectPath();
-    } else if (this.mousedownNode.nodeTypeRef === 'vdu' && this.mouseupNode.nodeTypeRef === 'vdu') {
+    } else if (this.mousedownNode.type === 'vdu' && this.mouseupNode.type === 'vdu') {
       this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKVDUANDVDU'));
       this.deselectPath();
-    } else if (this.mousedownNode.nodeTypeRef === 'vdu' && this.mouseupNode.nodeTypeRef === 'intvl') {
+    } else if (this.mousedownNode.type === 'vdu' && this.mouseupNode.type === 'intvl') {
       this.vduIntvlConnection(this.mousedownNode.id, this.mouseupNode.id);
     }
   }
-
   /** Establish a connection point between cp and other nodes @private */
   private cpMouseDownNode(): void {
-    if (this.mousedownNode.nodeTypeRef === 'cp' && this.mouseupNode.nodeTypeRef === 'vdu') {
+    if (this.mousedownNode.type === 'cp' && this.mouseupNode.type === 'vdu') {
       this.vduCPConnection(this.mouseupNode.id, this.mousedownNode.id);
-    } else if (this.mousedownNode.nodeTypeRef === 'cp' && this.mouseupNode.nodeTypeRef === 'intvl') {
+    } else if (this.mousedownNode.type === 'cp' && this.mouseupNode.type === 'intvl') {
       this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKCPANDVNFVL'));
       this.deselectPath();
-    } else if (this.mousedownNode.nodeTypeRef === 'cp' && this.mouseupNode.nodeTypeRef === 'intcp') {
+    } else if (this.mousedownNode.type === 'cp' && this.mouseupNode.type === 'intcp') {
       this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKCPANDINTCP'));
       this.deselectPath();
-    } else if (this.mousedownNode.nodeTypeRef === 'cp' && this.mouseupNode.nodeTypeRef === 'cp') {
+    } else if (this.mousedownNode.type === 'cp' && this.mouseupNode.type === 'cp') {
       this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKCPANDCP'));
       this.deselectPath();
     }
   }
-
   /** Establish a connection piont between intvl and other nodes @private */
   private intVLMouseDownNode(): void {
-    if (this.mousedownNode.nodeTypeRef === 'intvl' && this.mouseupNode.nodeTypeRef === 'cp') {
+    if (this.mousedownNode.type === 'intvl' && this.mouseupNode.type === 'cp') {
       this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKVNFVLANDCP'));
       this.deselectPath();
-    } else if (this.mousedownNode.nodeTypeRef === 'intvl' && this.mouseupNode.nodeTypeRef === 'vdu') {
+    } else if (this.mousedownNode.type === 'intvl' && this.mouseupNode.type === 'vdu') {
       this.vduIntvlConnection(this.mouseupNode.id, this.mousedownNode.id);
-    } else if (this.mousedownNode.nodeTypeRef === 'intvl' && this.mouseupNode.nodeTypeRef === 'intvl') {
+    } else if (this.mousedownNode.type === 'intvl' && this.mouseupNode.type === 'intvl') {
       this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKVNFVLANDVNFVL'));
       this.deselectPath();
-    } else if (this.mousedownNode.nodeTypeRef === 'intvl' && this.mouseupNode.nodeTypeRef === 'intcp') {
+    } else if (this.mousedownNode.type === 'intvl' && this.mouseupNode.type === 'intcp') {
       this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKVNFVLANDONTCP'));
       this.deselectPath();
     }
   }
-
   /** Establish a connection point between intcp and other nodes @private */
   private intCPMouseDownNode(): void {
-    if (this.mousedownNode.nodeTypeRef === 'intcp' && this.mouseupNode.nodeTypeRef === 'vdu') {
+    if (this.mousedownNode.type === 'intcp' && this.mouseupNode.type === 'vdu') {
       this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKINTCPANDVDU'));
       this.deselectPath();
-    } else if (this.mousedownNode.nodeTypeRef === 'intcp' && this.mouseupNode.nodeTypeRef === 'cp') {
+    } else if (this.mousedownNode.type === 'intcp' && this.mouseupNode.type === 'cp') {
       this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKINTCPANDCP'));
       this.deselectPath();
-    } else if (this.mousedownNode.nodeTypeRef === 'intcp' && this.mouseupNode.nodeTypeRef === 'intvl') {
+    } else if (this.mousedownNode.type === 'intcp' && this.mouseupNode.type === 'intvl') {
       this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKINTCPANDVNFVL'));
       this.deselectPath();
-    } else if (this.mousedownNode.nodeTypeRef === 'intcp' && this.mouseupNode.nodeTypeRef === 'intcp') {
+    } else if (this.mousedownNode.type === 'intcp' && this.mouseupNode.type === 'intcp') {
       this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.CANNOTLINKINTCPANDINTCP'));
       this.deselectPath();
     }
   }
-
   /** Establish a connection between VDU & CP vice versa @private */
   private vduCPConnection(nodeA: string, nodeB: string): void {
-    this.vnfdPackageDetails.vdu.forEach((vduDetails: VDU) => {
-      if (vduDetails.id === nodeA) {
-        if (vduDetails.interface === undefined) { vduDetails.interface = []; }
-        vduDetails.interface.push({
-          'external-connection-point-ref': nodeB, 'mgmt-interface': true,
-          name: 'eth_' + this.sharedService.randomString(),
-          'virtual-interface': { type: 'VIRTIO' },
-          type: 'EXTERNAL'
-        });
-        if (vduDetails['internal-connection-point'] === undefined) {
-          vduDetails['internal-connection-point'] = [];
+    const vduExternalID: string = nodeA + '-eth_' + this.sharedService.randomString();
+    if (this.vnfdPackageDetails.vdu !== undefined) {
+      this.vnfdPackageDetails.vdu.forEach((vdu: VDU): void => {
+        const vduID: string = vdu.id;
+        if (vdu.id === nodeA) {
+          if (this.vnfdPackageDetails['ext-cpd'] !== undefined) {
+            this.vnfdPackageDetails['ext-cpd'].forEach((extcpd: EXTCPD, index: number): void => {
+              if (extcpd.id === nodeB) {
+                if (vdu['int-cpd'] === undefined) {
+                  vdu['int-cpd'] = [];
+                }
+                if (extcpd['int-cpd'] === undefined) {
+                  vdu['int-cpd'].push({
+                    id: vduExternalID,
+                    'virtual-network-interface-requirement': [
+                      {
+                        name: vduExternalID,
+                        position: 1,
+                        'virtual-interface': { type: 'PARAVIRT' }
+                      }
+                    ]
+                  });
+                  this.vnfdPackageDetails['ext-cpd'][index] = {
+                    id: extcpd.id,
+                    'int-cpd': {
+                      cpd: vduExternalID,
+                      'vdu-id': vduID
+                    }
+                  };
+                }
+              }
+            });
+          }
         }
-        if (vduDetails['monitoring-param'] === undefined) {
-          vduDetails['monitoring-param'] = [];
-        }
-        if (vduDetails['vm-flavor'] === undefined) {
-          vduDetails['vm-flavor'] = {};
-        }
-      }
-    });
+      });
+    }
     this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
     this.deselectPath();
   }
-
   /** Establish a connection between vdu & intvl and vice versa @private */
   private vduIntvlConnection(nodeA: string, nodeB: string): void {
-    const setIntCP: string = 'intcp_' + this.sharedService.randomString();
-    this.vnfdPackageDetails['internal-vld'].forEach((vldInternal: InternalVLD) => {
-      if (vldInternal.id === nodeB) {
-        if (vldInternal['internal-connection-point'] === undefined) { vldInternal['internal-connection-point'] = []; }
-        vldInternal['internal-connection-point'].push({ 'id-ref': setIntCP });
-      }
-    });
-    this.vnfdPackageDetails.vdu.forEach((vduDetails: VDU) => {
-      if (vduDetails.id === nodeA) {
-        if (vduDetails.interface === undefined) {
-          vduDetails.interface = [];
+    const vduInternalID: string = nodeA + '-eth_' + this.sharedService.randomString();
+    if (this.vnfdPackageDetails.vdu !== undefined) {
+      this.vnfdPackageDetails.vdu.forEach((vdu: VDU): void => {
+        if (vdu.id === nodeA) {
+          if (vdu['int-cpd'] === undefined) {
+            vdu['int-cpd'] = [];
+          }
+          vdu['int-cpd'].push({
+            id: vduInternalID,
+            'int-virtual-link-desc': nodeB,
+            'virtual-network-interface-requirement': [
+              {
+                name: vduInternalID,
+                position: 1,
+                'virtual-interface': { type: 'PARAVIRT' }
+              }
+            ]
+          });
         }
-        vduDetails.interface.push({
-          'internal-connection-point-ref': setIntCP, name: 'int_' + setIntCP, type: 'INTERNAL', 'virtual-interface': { type: 'VIRTIO' }
-        });
-        if (vduDetails['internal-connection-point'] === undefined) {
-          vduDetails['internal-connection-point'] = [];
-        }
-        vduDetails['internal-connection-point'].push({
-          id: setIntCP, name: setIntCP, 'short-name': setIntCP, type: 'VPORT'
-        });
-      }
-    });
+      });
+    }
     this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
     this.deselectPath();
   }
-
   /** Events handles when mousemove it will capture the selected node data @private */
   private mousemove(): void {
     if (!this.mousedownNode) { return; }
@@ -851,16 +877,20 @@ export class VNFComposerComponent {
     this.mousedownNode = null;
     this.mouseupNode = null;
   }
+  /** drag event @private */
+  // tslint:disable-next-line: no-any
+  private onDragDrop(): any {
+    return d3.drag().filter(this.dragFilter)
+      .on('start', this.dragstarted)
+      .on('drag', this.dragged)
+      .on('end', this.dragended);
+  }
   /** Key press event @private */
   private keyDown(): void {
     const graphContainerAttr: GRAPHDETAILS = this.getGraphContainerAttr();
     if (this.lastKeyDown !== -1) { return; }
     this.lastKeyDown = d3.event.keyCode;
     if (d3.event.keyCode === graphContainerAttr.shiftKeyCode) {
-      this.gNetwork.call(d3.drag().on('start', this.dragstarted).on('drag', this.dragged).on('end', this.dragended));
-      this.gVirutualDeploymentUnit.call(d3.drag().on('start', this.dragstarted).on('drag', this.dragged).on('end', this.dragended));
-      this.gConnectionPoint.call(d3.drag().on('start', this.dragstarted).on('drag', this.dragged).on('end', this.dragended));
-      this.gIntConnectionPoint.call(d3.drag().on('start', this.dragstarted).on('drag', this.dragged).on('end', this.dragended));
       this.svg.classed('ctrl', true);
     }
   }
@@ -882,106 +912,117 @@ export class VNFComposerComponent {
   }
   /** Events handles when Shift Click to perform create cp @private */
   // tslint:disable-next-line: no-any
-  private singleClick(nodeSelected: any, d: VNFDNODE): void {
+  private singleClick(nodeSelected: any, d: COMPOSERNODES): void {
     this.selectedNode(nodeSelected, d);
   }
   /** Get confirmation Before Deleting the Node in Topology @private */
-  private getDeleteNodeConfirmation(d: VNFDNODE): void {
+  private getDeleteNodeConfirmation(d: COMPOSERNODES): void {
     const modalRef: NgbModalRef = this.modalService.open(ConfirmationTopologyComponent, { backdrop: 'static' });
     modalRef.componentInstance.topologyType = 'Delete';
     modalRef.componentInstance.topologyname = d.name;
-    if (d.nodeTypeRef === 'vdu') {
+    if (d.type === 'vdu') {
       modalRef.componentInstance.topologytitle = 'PAGE.TOPOLOGY.VDU';
-    } else if (d.nodeTypeRef === 'intvl') {
+    } else if (d.type === 'intvl') {
       modalRef.componentInstance.topologytitle = 'PAGE.TOPOLOGY.INTVL';
-    } else if (d.nodeTypeRef === 'cp') {
+    } else if (d.type === 'cp') {
       modalRef.componentInstance.topologytitle = 'PAGE.TOPOLOGY.CONNECTIONPOINT';
-    } else if (d.nodeTypeRef === 'intcp') {
+    } else if (d.type === 'intcp') {
       modalRef.componentInstance.topologytitle = 'PAGE.TOPOLOGY.INTCP';
     }
-    modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
+    modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
       if (result) {
         this.deleteNode(d);
       }
     }).catch();
   }
   /** Delete nodes @private */
-  private deleteNode(d: VNFDNODE): void {
-    const deletedNode: VNFDNODE = d;
-    this.nodes.forEach((node: VNFDNODE) => {
+  private deleteNode(d: COMPOSERNODES): void {
+    // tslint:disable-next-line: max-func-body-length
+    this.nodes.forEach((node: VNFD): void => {
       if (node.id === d.id) {
-        if (deletedNode.nodeTypeRef === 'cp') {
-          if (this.vnfdPackageDetails.vdu !== undefined) {
-            this.vnfdPackageDetails.vdu.forEach((vduDetails: VDU) => {
-              if (vduDetails.interface !== undefined) {
-                const interfacePos: number = vduDetails.interface.map((e: VNFDInterface) => { return e['external-connection-point-ref']; })
-                  .indexOf(d.id);
-                if (interfacePos >= 0) {
-                  vduDetails.interface.splice(interfacePos, 1);
+        if (d.type === 'cp') {
+          if (this.vnfdPackageDetails['ext-cpd'] !== undefined) {
+            let getRelatedVDUCPD: string; let getRelatedVDUID: string;
+            const posExtCPD: number = this.vnfdPackageDetails['ext-cpd'].findIndex((e: EXTCPD): boolean => {
+              if (e.id === d.name) {
+                if (e['int-cpd'] !== undefined) {
+                  getRelatedVDUCPD = e['int-cpd'].cpd; getRelatedVDUID = e['int-cpd']['vdu-id'];
                 }
+                return true;
+              } else {
+                return false;
               }
             });
-          }
-          const cpPos: number = this.vnfdPackageDetails['connection-point'].map((e: CONNECTIONPOINT) => { return e.name; })
-            .indexOf(d.id);
-          if (cpPos >= 0) {
-            this.vnfdPackageDetails['connection-point'].splice(cpPos, 1);
-          }
-        } else if (deletedNode.nodeTypeRef === 'intcp') {
-          this.vnfdPackageDetails.vdu.forEach((vduDetails: VDU) => {
-            // Delete Interface
-            const interfacePos: number = vduDetails.interface.map((e: VNFDInterface) => { return e['internal-connection-point-ref']; })
-              .indexOf(d.id);
-            if (interfacePos >= 0) {
-              vduDetails.interface.splice(interfacePos, 1);
+            if (posExtCPD !== -1) {
+              this.vnfdPackageDetails['ext-cpd'].splice(posExtCPD, 1);
             }
-            // Delete Internal CP
-            const interCPPos: number = vduDetails['internal-connection-point']
-              .map((e: VDUInternalConnectionPoint) => { return e.id; })
-              .indexOf(d.id);
-            if (interCPPos >= 0) {
-              vduDetails['internal-connection-point'].splice(interCPPos, 1);
-            }
-          });
-          if (this.vnfdPackageDetails['internal-vld'] !== undefined && this.vnfdPackageDetails['internal-vld'].length > 0) {
-            this.vnfdPackageDetails['internal-vld'].forEach((internalVLD: InternalVLD) => {
-              const interfacePos: number = internalVLD['internal-connection-point']
-                .map((e: VLDInternalConnectionPoint) => { return e['id-ref']; }).indexOf(d.id);
-              if (interfacePos >= 0) {
-                internalVLD['internal-connection-point'].splice(interfacePos, 1);
-              }
-            });
-          }
-        } else if (deletedNode.nodeTypeRef === 'intvl') {
-          const intvlPos: number = this.vnfdPackageDetails['internal-vld']
-            .map((e: InternalVLD) => { return e.name; }).indexOf(d.id);
-          if (intvlPos >= 0) {
-            this.vnfdPackageDetails['internal-vld'].splice(intvlPos, 1);
-          }
-        } else if (deletedNode.nodeTypeRef === 'vdu') {
-          const internalCPList: string[] = [];
-          if (deletedNode.interface !== undefined && deletedNode.interface.length > 0) {
-            deletedNode.interface.forEach((interfaceNode: InternalVLD) => {
-              if (interfaceNode['internal-connection-point-ref'] !== undefined) {
-                internalCPList.push(interfaceNode['internal-connection-point-ref']);
-              }
-            });
-          }
-          internalCPList.forEach((list: string) => {
-            if (this.vnfdPackageDetails['internal-vld'] !== undefined && this.vnfdPackageDetails['internal-vld'].length > 0) {
-              this.vnfdPackageDetails['internal-vld'].forEach((internalVLD: InternalVLD) => {
-                const interfacePos: number = internalVLD['internal-connection-point']
-                  .map((e: VLDInternalConnectionPoint) => { return e['id-ref']; }).indexOf(list);
-                if (interfacePos >= 0) {
-                  internalVLD['internal-connection-point'].splice(interfacePos, 1);
+            if (getRelatedVDUCPD !== undefined && getRelatedVDUID !== undefined) {
+              this.vnfdPackageDetails.vdu.forEach((vdu: VDU): void => {
+                if (vdu.id === getRelatedVDUID) {
+                  const posINTCPD: number = vdu['int-cpd'].findIndex((intCPD: VDUINTCPD): boolean => {
+                    return intCPD.id === getRelatedVDUCPD;
+                  });
+                  if (posINTCPD !== -1) {
+                    vdu['int-cpd'].splice(posINTCPD, 1);
+                  }
                 }
               });
             }
-          });
-          const vduPos: number = this.vnfdPackageDetails.vdu.map((e: VDU) => { return e.id; }).indexOf(d.id);
-          if (vduPos >= 0) {
-            this.vnfdPackageDetails.vdu.splice(vduPos, 1);
           }
+        } else if (d.type === 'intcp') {
+          this.vnfdPackageDetails.vdu.forEach((vdu: VDU): void => {
+            const posINTCPD: number = vdu['int-cpd'].findIndex((intCPD: VDUINTCPD): boolean => {
+              return intCPD.id === d.id;
+            });
+            if (posINTCPD !== -1) {
+              vdu['int-cpd'].splice(posINTCPD, 1);
+            }
+          });
+        } else if (d.type === 'intvl') {
+          const posINTVLD: number = this.vnfdPackageDetails['int-virtual-link-desc'].findIndex((intVLD: IVLD): boolean => {
+            return intVLD.id === d.id;
+          });
+          if (posINTVLD !== -1) {
+            this.vnfdPackageDetails['int-virtual-link-desc'].splice(posINTVLD, 1);
+          }
+          if (this.vnfdPackageDetails.vdu !== undefined) {
+            this.vnfdPackageDetails.vdu.forEach((vduDetails: VDU): void => {
+              if (vduDetails['int-cpd'] !== undefined) {
+                const newVDUintCPDArray: VDUINTCPD[] = vduDetails['int-cpd'].filter((item: VDUINTCPD): boolean => {
+                  return item['int-virtual-link-desc'] !== undefined ? item['int-virtual-link-desc'] !== d.id ? true : false : true;
+                });
+                vduDetails['int-cpd'] = newVDUintCPDArray;
+              }
+            });
+          }
+        } else if (d.type === 'vdu') {
+          const getRelatedExtCPD: string[] = [];
+          const posVDU: number = this.vnfdPackageDetails.vdu.findIndex((vduDetails: VDU): boolean => {
+            if (vduDetails.id === d.id) {
+              if (vduDetails['int-cpd'] !== undefined) {
+                vduDetails['int-cpd'].forEach((intCPDDetails: VDUINTCPD): void => {
+                  if (intCPDDetails['int-virtual-link-desc'] === undefined) {
+                    getRelatedExtCPD.push(intCPDDetails.id);
+                  }
+                });
+              }
+              return true;
+            } else {
+              return false;
+            }
+          });
+          if (posVDU !== -1) {
+            this.vnfdPackageDetails.vdu.splice(posVDU, 1);
+          }
+          getRelatedExtCPD.forEach((CPDID: string, index: number): void => {
+            this.vnfdPackageDetails['ext-cpd'].forEach((extCPD: EXTCPD): void => {
+              if (extCPD['int-cpd'] !== undefined) {
+                if (extCPD['int-cpd'].cpd === CPDID) {
+                  delete extCPD['int-cpd'];
+                }
+              }
+            });
+          });
         } else {
           this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.INVALIDSELECTION'));
         }
@@ -995,38 +1036,48 @@ export class VNFComposerComponent {
   }
   /** Selected nodes @private */
   // tslint:disable-next-line: no-any
-  private selectedNode(nodeSeleced: any, d: VNFDNODE): void {
+  private selectedNode(nodeSeleced: any, d: COMPOSERNODES): void {
     const alreadyIsActive: boolean = nodeSeleced.select('#' + d.id).classed(this.activeNode);
     this.deselectAllNodes();
     nodeSeleced.select('#' + d.id).classed(this.activeNode, !alreadyIsActive);
-    if (d.nodeTypeRef === 'vdu' && !alreadyIsActive) {
-      this.vnfdPackageDetails.vdu.forEach((res: VDU) => {
-        if (res.name === d.id) {
+    if (d.type === 'vdu' && !alreadyIsActive) {
+      this.vnfdPackageDetails.vdu.forEach((res: VDU): void => {
+        if (res.id === d.id) {
           this.showRightSideInfo = 'vduInfo';
           this.vduInfo = res;
+          this.oldVDUID = res.id;
         }
       });
-    } else if (d.nodeTypeRef === 'intvl' && !alreadyIsActive) {
-      this.vnfdPackageDetails['internal-vld'].forEach((res: InternalVLD) => {
-        if (res.name === d.id) {
-          this.showRightSideInfo = 'intvlInfo';
-          this.intvlInfo = res;
-          this.intvlInfo.shortName = res['short-name'];
-          this.intvlInfo.ipProfileRef = res['ip-profile-ref'];
-        }
-      });
-    } else if (d.nodeTypeRef === 'cp' && !alreadyIsActive) {
-      this.vnfdPackageDetails['connection-point'].forEach((res: CONNECTIONPOINT) => {
-        if (res.name === d.id) {
+    } else if (d.type === 'cp' && !alreadyIsActive) {
+      this.vnfdPackageDetails['ext-cpd'].forEach((cp: EXTCPD): void => {
+        const getCPDID: string = cp['int-cpd'] !== undefined ? cp['int-cpd'].cpd : cp.id;
+        if (getCPDID === d.id) {
           this.showRightSideInfo = 'cpInfo';
-          this.cpInfo = res;
+          this.cpInfo = cp;
+          this.oldCPID = cp.id;
         }
       });
-    }
-    else if (d.nodeTypeRef === 'intcp' && !alreadyIsActive) {
-      this.intcpInfo = d;
-      this.showRightSideInfo = 'intcpInfo';
-      this.intcpInfo.shortName = d['short-name'];
+    } else if (d.type === 'intvl' && !alreadyIsActive) {
+      this.vnfdPackageDetails['int-virtual-link-desc'].forEach((ivld: IVLD): void => {
+        if (ivld.id === d.id) {
+          this.showRightSideInfo = 'intvlInfo';
+          this.intvlInfo = ivld;
+          this.oldintVLID = ivld.id;
+        }
+      });
+    } else if (d.type === 'intcp' && !alreadyIsActive) {
+      this.vnfdPackageDetails.vdu.forEach((vdu: VDU): void => {
+        vdu['int-cpd'].forEach((intcpd: VDUINTCPD): void => {
+          if (intcpd.id === d.id) {
+            if (intcpd['int-virtual-link-desc'] !== undefined) {
+              intcpd['virtual-network-interface-requirement'].forEach((vnir: VNIR): void => {
+                this.intcpInfo = vnir;
+                this.showRightSideInfo = 'intcpInfo';
+              });
+            }
+          }
+        });
+      });
     } else {
       this.showRightSideInfo = 'vnfdInfo';
     }
@@ -1037,6 +1088,10 @@ export class VNFComposerComponent {
     this.virutualDeploymentUnit.select('image').classed(this.activeNode, false);
     this.connectionPoint.select('image').classed(this.activeNode, false);
     this.intConnectionPoint.select('image').classed(this.activeNode, false);
+  }
+  /** Events handles when to drag using filter for the keys @private */
+  private dragFilter(): boolean {
+    return d3.event.ctrlKey && !d3.event.button;
   }
   /** Events handles when dragstarted @private */
   private dragstarted(d: COMPOSERNODES): void {

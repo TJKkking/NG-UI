@@ -23,14 +23,15 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { NotifierService } from 'angular-notifier';
-import { APIURLHEADER, ERRORDATA, URLPARAMS } from 'CommonModel';
+import { APIURLHEADER, ERRORDATA, PRIMITIVEDATA, PRIMITIVETYPES, URLPARAMS } from 'CommonModel';
 import { DataService } from 'DataService';
 import { environment } from 'environment';
-import { KDUPRIMITIVELEVEL, NSData, VDUPRIMITIVELEVEL } from 'NSDModel';
+import { KDUPRIMITIVELEVEL, NSData, VDUPRIMITIVELEVEL, VNFPROFILE } from 'NSDModel';
 import { NSPrimitiveParams } from 'NSInstanceModel';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
 import { isNullOrUndefined } from 'util';
+import { CONFIGPRIMITIVE, DF, VDUCONFIG, VDUPROFILE, VNFCONFIG, VNFD } from 'VNFDModel';
 
 /**
  * Creating component
@@ -76,13 +77,13 @@ export class NSPrimitiveComponent implements OnInit {
     public primitiveList: {}[];
 
     /** Contains objects that is used to hold types of primitive @public */
-    public primitiveTypeList: {}[] = [];
+    public primitiveTypeList: PRIMITIVETYPES[] = [];
 
     /** Model value used to hold selected primitive type @public */
     public primitiveType: string;
 
     /** Contains list of VDU primitive lists @public */
-    public vduList: {}[];
+    public vduList: VDUPROFILE[];
 
     /** Contains list of KDU primitive lists @public */
     public kduList: {}[];
@@ -137,12 +138,15 @@ export class NSPrimitiveComponent implements OnInit {
         ];
     }
 
+    /** convenience getter for easy access to form fields */
+    get f(): FormGroup['controls'] { return this.primitiveForm.controls; }
+
     /**
      * Lifecyle Hooks the trigger before component is instantiate
      */
     public ngOnInit(): void {
         /** Setting up initial value for NSD */
-        this.dataService.currentMessage.subscribe((event: NSData) => {
+        this.dataService.currentMessage.subscribe((event: NSData): void => {
             if (event.identifier !== undefined || event.identifier !== '' || event.identifier !== null) {
                 this.nsdId = event.identifier;
             }
@@ -150,14 +154,11 @@ export class NSPrimitiveComponent implements OnInit {
         this.initializeForm();
     }
 
-    /** convenience getter for easy access to form fields */
-    get f(): FormGroup['controls'] { return this.primitiveForm.controls; }
-
     /** initialize Forms @public */
     public initializeForm(): void {
         this.primitiveForm = this.formBuilder.group({
             primitive: [null, [Validators.required]],
-            vnf_member_index: [null, [Validators.required]],
+            member_vnf_index: [null, [Validators.required]],
             vdu_id: [null, [Validators.required]],
             kdu_name: [null, [Validators.required]],
             primitive_params: this.formBuilder.array([this.primitiveParamsBuilder()])
@@ -194,7 +195,7 @@ export class NSPrimitiveComponent implements OnInit {
         this.objectPrimitiveParams = {};
         this.sharedService.cleanForm(this.primitiveForm);
         if (this.primitiveForm.invalid) { return; } // Proceed, onces form is valid
-        this.primitiveForm.value.primitive_params.forEach((params: NSPrimitiveParams) => {
+        this.primitiveForm.value.primitive_params.forEach((params: NSPrimitiveParams): void => {
             if (params.primitive_params_name !== null && params.primitive_params_value !== '') {
                 this.objectPrimitiveParams[params.primitive_params_name] = params.primitive_params_value;
             }
@@ -206,17 +207,17 @@ export class NSPrimitiveComponent implements OnInit {
         };
         if (this.primitiveType === 'VNF_Primitive') {
             // tslint:disable-next-line: no-string-literal
-            primitiveParamsPayLoads['vnf_member_index'] = this.primitiveForm.value.vnf_member_index;
+            primitiveParamsPayLoads['member_vnf_index'] = this.primitiveForm.value.member_vnf_index;
         }
         if (this.primitiveType === 'VDU_Primitive') {
             // tslint:disable-next-line: no-string-literal
-            primitiveParamsPayLoads['vnf_member_index'] = this.primitiveForm.value.vnf_member_index;
+            primitiveParamsPayLoads['member_vnf_index'] = this.primitiveForm.value.member_vnf_index;
             // tslint:disable-next-line: no-string-literal
             primitiveParamsPayLoads['vdu_id'] = this.primitiveForm.value.vdu_id;
         }
         if (this.primitiveType === 'KDU_Primitive') {
             // tslint:disable-next-line: no-string-literal
-            primitiveParamsPayLoads['vnf_member_index'] = this.primitiveForm.value.vnf_member_index;
+            primitiveParamsPayLoads['member_vnf_index'] = this.primitiveForm.value.member_vnf_index;
             // tslint:disable-next-line: no-string-literal
             primitiveParamsPayLoads['kdu_name'] = this.primitiveForm.value.kdu_name;
         }
@@ -224,23 +225,23 @@ export class NSPrimitiveComponent implements OnInit {
             url: environment.NSDINSTANCES_URL + '/' + this.nsdId + '/action'
         };
         this.isLoadingResults = true;
-        this.restService.postResource(apiURLHeader, primitiveParamsPayLoads).subscribe((result: {}) => {
+        this.restService.postResource(apiURLHeader, primitiveParamsPayLoads).subscribe((result: {}): void => {
             this.activeModal.dismiss();
             this.notifierService.notify('success', this.translateService.instant('PAGE.NSPRIMITIVE.EXECUTEDSUCCESSFULLY'));
             this.isLoadingResults = false;
-        }, (error: ERRORDATA) => {
+        }, (error: ERRORDATA): void => {
             this.isLoadingResults = false;
             this.restService.handleError(error, 'post');
         });
     }
     /** Primitive type change event @public */
-    public primitiveTypeChange(data: { value: string }): void {
+    public primitiveTypeChange(data: PRIMITIVETYPES): void {
         this.primitiveList = [];
         this.primitiveParameter = [];
         this.initializeForm();
         if (data.value === 'NS_Primitive') {
             this.getNSInfo(this.params.name);
-            this.setUpdateValueandValidation('vnf_member_index');
+            this.setUpdateValueandValidation('member_vnf_index');
         }
         if (data.value === 'VNF_Primitive' || data.value === 'KDU_Primitive' || data.value === 'NS_Primitive') {
             this.setUpdateValueandValidation('vdu_id');
@@ -250,11 +251,11 @@ export class NSPrimitiveComponent implements OnInit {
         }
     }
     /** Member index change event */
-    public indexChange(data: {}, getType?: string): void {
+    public indexChange(data: VNFPROFILE, getType?: string): void {
         this.getFormControl('vdu_id').setValue(null);
         this.getFormControl('kdu_name').setValue(null);
-        if (data) {
-            this.getVnfdInfo(data['vnfd-id-ref'], getType);
+        if (data['vnfd-id'] !== null) {
+            this.getVnfdInfo(data['vnfd-id'], getType);
         } else {
             this.primitiveList = [];
             this.getFormControl('primitive').setValue(null);
@@ -266,7 +267,7 @@ export class NSPrimitiveComponent implements OnInit {
         this.primitiveList = data[selectedType + '-configuration']['config-primitive'];
     }
     /** Primivtive change event */
-    public primitiveChange(data: { parameter: {}[] }): void {
+    public primitiveChange(data: PRIMITIVEDATA): void {
         this.primitiveParameter = [];
         const formArr: FormArray = this.getFormControl('primitive_params') as FormArray;
         formArr.controls = [];
@@ -276,11 +277,13 @@ export class NSPrimitiveComponent implements OnInit {
         }
     }
     /** Generate vdu section @public */
-    public generateVDUData(vduData: VDUPRIMITIVELEVEL): VDUPRIMITIVELEVEL {
+    public generateVDUData(vduData: VDUPROFILE, vduConfig: VDUCONFIG[]): VDUPROFILE {
+        const getVDUConfig: VDUCONFIG = vduConfig.filter((itemData: VDUCONFIG): boolean =>
+            itemData.id === vduData['vdu-configuration-id'])[0];
         return {
             id: vduData.id,
-            name: vduData.name,
-            'vdu-configuration': vduData['vdu-configuration']
+            name: vduData.id,
+            'vdu-configuration': getVDUConfig
         };
     }
     /** Generate kdu section @public */
@@ -297,13 +300,13 @@ export class NSPrimitiveComponent implements OnInit {
         this.getFormControl(formName).updateValueAndValidity();
     }
     /** Update primitive value based on parameter */
-    private updatePrimitive(primitive: { parameter: {}[] }): void {
+    private updatePrimitive(primitive: PRIMITIVEDATA): void {
         if (primitive.parameter) {
             this.primitiveParameter = primitive.parameter;
         } else {
             this.primitiveParameter = [];
             const formArr: AbstractControl[] = this.getControls();
-            formArr.forEach((formGp: FormGroup) => {
+            formArr.forEach((formGp: FormGroup): void => {
                 formGp.controls.primitive_params_name.setValidators([]);
                 formGp.controls.primitive_params_name.updateValueAndValidity();
                 formGp.controls.primitive_params_value.setValidators([]);
@@ -316,24 +319,33 @@ export class NSPrimitiveComponent implements OnInit {
         this.primitiveList = [];
         this.primitiveParameter = [];
         this.getFormControl('primitive').setValue(null);
-        const apiUrl: string = environment.VNFPACKAGES_URL + '?short-name=' + vnfdRef;
+        const apiUrl: string = environment.VNFPACKAGES_URL + '?product-name=' + vnfdRef;
         this.isLoadingResults = true;
         this.restService.getResource(apiUrl)
-            .subscribe((vnfdInfo: {}) => {
-                if (vnfdInfo[0]['vnf-configuration'] !== undefined && vnfdInfo[0]['vnf-configuration']) {
+            .subscribe((vnfdInfo: VNFD[]): void => {
+                const vnfInstances: VNFD = vnfdInfo[0];
+                if (!isNullOrUndefined(vnfInstances.df) && !isNullOrUndefined(vnfInstances['vnf-configuration'])) {
                     this.getFormControl('vdu_id').setValidators([]);
                     this.getFormControl('kdu_name').setValidators([]);
-                    this.primitiveList = vnfdInfo[0]['vnf-configuration']['config-primitive'];
+                    vnfInstances.df.forEach((df: DF): void => {
+                        if (df['vnf-configuration-id'] !== undefined) {
+                            const vnfprimitiveList: VNFCONFIG = vnfInstances['vnf-configuration']
+                                .filter((itemData: VNFCONFIG): boolean => itemData.id === df['vnf-configuration-id'])[0];
+                            this.primitiveList = vnfprimitiveList['config-primitive'];
+                        }
+                    });
                 }
                 if (getType === 'VDU_Primitive') {
                     this.kduList = [];
                     this.vduList = [];
                     this.primitiveList = [];
-                    if (!isNullOrUndefined(vnfdInfo[0].vdu)) {
-                        vnfdInfo[0].vdu.forEach((vduData: VDUPRIMITIVELEVEL) => {
-                            if (vduData['vdu-configuration']) {
-                                const vduDataObj: VDUPRIMITIVELEVEL = this.generateVDUData(vduData);
-                                this.vduList.push(vduDataObj);
+                    if (!isNullOrUndefined(vnfInstances.df) && !isNullOrUndefined(vnfInstances['vdu-configuration'])) {
+                        vnfInstances.df.forEach((df: DF): void => {
+                            if (df['vdu-profile'] !== undefined) {
+                                df['vdu-profile'].forEach((element: VDUPROFILE): void => {
+                                    const vduDataObj: VDUPROFILE = this.generateVDUData(element, vnfInstances['vdu-configuration']);
+                                    this.vduList.push(vduDataObj);
+                                });
                             }
                         });
                     }
@@ -342,8 +354,8 @@ export class NSPrimitiveComponent implements OnInit {
                     this.kduList = [];
                     this.vduList = [];
                     this.primitiveList = [];
-                    if (!isNullOrUndefined(vnfdInfo[0].kdu)) {
-                        vnfdInfo[0].kdu.forEach((kduData: KDUPRIMITIVELEVEL) => {
+                    if (!isNullOrUndefined(vnfInstances.kdu)) {
+                        vnfInstances.kdu.forEach((kduData: KDUPRIMITIVELEVEL): void => {
                             if (kduData['kdu-configuration']) {
                                 const kduDataObj: KDUPRIMITIVELEVEL = this.generateKDUData(kduData);
                                 this.kduList.push(kduDataObj);
@@ -352,7 +364,7 @@ export class NSPrimitiveComponent implements OnInit {
                     }
                 }
                 this.isLoadingResults = false;
-            }, (error: ERRORDATA) => {
+            }, (error: ERRORDATA): void => {
                 this.isLoadingResults = false;
                 this.restService.handleError(error, 'get');
             });
@@ -362,10 +374,10 @@ export class NSPrimitiveComponent implements OnInit {
         this.primitiveList = [];
         this.primitiveParameter = [];
         this.getFormControl('primitive').setValue(null);
-        const apiUrl: string = environment.NSDESCRIPTORS_URL + '?short-name=' + nsdRef;
+        const apiUrl: string = environment.NSDESCRIPTORS_URL + '?name=' + nsdRef;
         this.isLoadingResults = true;
         this.restService.getResource(apiUrl)
-            .subscribe((nsdInfo: {}) => {
+            .subscribe((nsdInfo: {}): void => {
                 if (!isNullOrUndefined(nsdInfo[0]['ns-configuration'])) {
                     this.primitiveList = !isNullOrUndefined(nsdInfo[0]['ns-configuration']['config-primitive']) ?
                         nsdInfo[0]['ns-configuration']['config-primitive'] : [];
@@ -373,7 +385,7 @@ export class NSPrimitiveComponent implements OnInit {
                     this.primitiveList = [];
                 }
                 this.isLoadingResults = false;
-            }, (error: ERRORDATA) => {
+            }, (error: ERRORDATA): void => {
                 this.isLoadingResults = false;
                 this.restService.handleError(error, 'get');
             });

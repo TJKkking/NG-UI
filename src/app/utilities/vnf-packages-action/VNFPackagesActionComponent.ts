@@ -108,7 +108,7 @@ export class VNFPackagesActionComponent {
       'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0'
     });
     this.vnfID = this.value.identifier;
-    this.vnfName = this.value.shortName;
+    this.vnfName = this.value.productName;
   }
 
   /** Delete VNF packages @public */

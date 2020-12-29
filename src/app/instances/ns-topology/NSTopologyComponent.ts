@@ -27,7 +27,7 @@ import { ERRORDATA } from 'CommonModel';
 import * as d3 from 'd3';
 import { environment } from 'environment';
 import * as HttpStatus from 'http-status-codes';
-import { VNFDCONNECTIONPOINTREF } from 'NSDModel';
+import { CCI, DF, VLC, VNFPROFILE } from 'NSDModel';
 import { COMPOSERNODES, CONNECTIONPOINT, NSD, NSDVLD, NSINFO, NSInstanceDetails, NSINSTANCENODES, VLINFO, VNFRINFO } from 'NSInstanceModel';
 import { GRAPHDETAILS, Tick, TickPath } from 'NSTopologyModel';
 import { RestService } from 'src/services/RestService';
@@ -159,7 +159,7 @@ export class NSTopologyComponent {
       this.force.stop();
     }
     this.forceSimulationActive = alreadyFixedIsActive;
-    this.nodes.forEach((d: COMPOSERNODES) => {
+    this.nodes.forEach((d: COMPOSERNODES): void => {
       d.fx = (alreadyFixedIsActive) ? null : d.x;
       d.fy = (alreadyFixedIsActive) ? null : d.y;
     });
@@ -211,49 +211,48 @@ export class NSTopologyComponent {
   }
   /** Prepare all the information for node creation @private */
   private generateData(): void {
-    this.restService.getResource(environment.NSINSTANCESCONTENT_URL + '/' + this.nsIdentifier).subscribe((nsData: NSInstanceDetails) => {
-      this.nsData = nsData;
-      this.nsInfo = {
-        nsInstanceID: nsData._id,
-        nsName: nsData.name,
-        nsOperationalStatus: nsData['operational-status'],
-        nsConfigStatus: nsData['config-status'],
-        nsDetailedStatus: nsData['detailed-status'],
-        nsResourceOrchestrator: nsData['resource-orchestrator']
-      };
-      if (this.nsData['constituent-vnfr-ref'] !== undefined) {
-        this.generateVNFRCPNodes();
-      }
-      if (this.nsData.vld !== undefined) {
-        this.generateVLDNetworkNodes();
-      }
-      setTimeout(() => {
-        this.pushAllNodes();
-        this.generateVNFDCP();
-        this.generateVLDCP();
+    this.restService.getResource(environment.NSINSTANCESCONTENT_URL + '/' + this.nsIdentifier)
+      .subscribe((nsData: NSInstanceDetails): void => {
+        this.nsData = nsData;
+        this.nsInfo = {
+          nsInstanceID: nsData._id,
+          nsName: nsData.name,
+          nsOperationalStatus: nsData['operational-status'],
+          nsConfigStatus: nsData['config-status'],
+          nsDetailedStatus: nsData['detailed-status'],
+          nsResourceOrchestrator: nsData['resource-orchestrator']
+        };
+        if (this.nsData['constituent-vnfr-ref'] !== undefined) {
+          this.generateVNFRCPNodes();
+        }
+        if (this.nsData.vld !== undefined) {
+          this.generateVLDNetworkNodes();
+        }
+        setTimeout((): void => {
+          this.pushAllNodes();
+          this.generateVNFDCP();
+          this.generateVLDCP();
+          this.isLoadingResults = false;
+          this.createNode(this.nodes, this.links);
+        }, this.TIMEOUT);
+      }, (error: ERRORDATA): void => {
         this.isLoadingResults = false;
-        this.createNode(this.nodes, this.links);
-      }, this.TIMEOUT);
-    }, (error: ERRORDATA) => {
-      this.isLoadingResults = false;
-      if (error.error.status === HttpStatus.NOT_FOUND || error.error.status === HttpStatus.UNAUTHORIZED) {
-        this.router.navigateByUrl('404', { skipLocationChange: true }).catch();
-      } else {
-        this.restService.handleError(error, 'get');
-      }
-    });
+        if (error.error.status === HttpStatus.NOT_FOUND || error.error.status === HttpStatus.UNAUTHORIZED) {
+          this.router.navigateByUrl('404', { skipLocationChange: true }).catch();
+        } else {
+          this.restService.handleError(error, 'get');
+        }
+      });
   }
-
   /** Fetching all the VNFR Information @private */
   private generateVNFRCPNodes(): void {
-    this.nsData['constituent-vnfr-ref'].forEach((vnfdrID: string) => {
-      this.restService.getResource(environment.VNFINSTANCES_URL + '/' + vnfdrID).subscribe((vndfrDetail: NSD) => {
+    this.nsData['constituent-vnfr-ref'].forEach((vnfdrID: string): void => {
+      this.restService.getResource(environment.VNFINSTANCES_URL + '/' + vnfdrID).subscribe((vndfrDetail: NSD): void => {
         this.nodes.push({
           id: vndfrDetail['vnfd-ref'] + ':' + vndfrDetail['member-vnf-index-ref'],
           nodeTypeRef: 'vnfd',
           cp: vndfrDetail['connection-point'],
           vdur: vndfrDetail.vdur,
-          vld: vndfrDetail.vld,
           nsID: vndfrDetail['nsr-id-ref'],
           vnfdID: vndfrDetail['vnfd-id'],
           vimID: vndfrDetail['vim-account-id'],
@@ -264,7 +263,7 @@ export class NSTopologyComponent {
           selectorId: 'nsInst-' + vndfrDetail.id
         });
         // Fetching all the connection point of VNF & Interface
-        vndfrDetail['connection-point'].forEach((cp: CONNECTIONPOINT) => {
+        vndfrDetail['connection-point'].forEach((cp: CONNECTIONPOINT): void => {
           this.nodes.push({
             id: cp.name + ':' + vndfrDetail['member-vnf-index-ref'],
             vndfCPRef: vndfrDetail['vnfd-ref'] + ':' + vndfrDetail['member-vnf-index-ref'],
@@ -272,32 +271,29 @@ export class NSTopologyComponent {
             name: cp.name
           });
         });
-      }, (error: ERRORDATA) => {
+      }, (error: ERRORDATA): void => {
         this.restService.handleError(error, 'get');
       });
     });
   }
-
   /** Fetching all the VLD/Network Information @private */
   private generateVLDNetworkNodes(): void {
     this.nsdData = this.nsData.nsd;
-    this.nsdData.vld.forEach((ref: NSDVLD) => {
+    this.nsdData['virtual-link-desc'].forEach((ref: NSDVLD): void => {
       this.nodes.push({
         id: ref.id,
         nodeTypeRef: 'vld',
-        name: ref.name,
+        name: ref.id,
         type: ref.type,
-        vnfdCP: ref['vnfd-connection-point-ref'],
+        vnfdCP: this.nsdData.df,
         vimNetworkName: ref['vim-network-name'],
-        shortName: ref['short-name'],
         selectorId: 'nsInst-' + ref.id
       });
     });
   }
-
   /** Pushing connection points of path/links nodes @private */
   private pushAllNodes(): void {
-    this.nodes.forEach((nodeList: NSINSTANCENODES) => {
+    this.nodes.forEach((nodeList: NSINSTANCENODES): void => {
       if (nodeList.nodeTypeRef === 'vnfd') {
         this.vnfdNodes.push(nodeList);
       } else if (nodeList.nodeTypeRef === 'vld') {
@@ -307,13 +303,12 @@ export class NSTopologyComponent {
       }
     });
   }
-
   /** Get CP position based on vndf @private */
   private generateVNFDCP(): void {
-    this.vnfdNodes.forEach((list: NSINSTANCENODES) => {
-      const vndfPos: number = this.nodes.map((e: NSINSTANCENODES) => { return e.id; }).indexOf(list.id);
+    this.vnfdNodes.forEach((list: NSINSTANCENODES): void => {
+      const vndfPos: number = this.nodes.map((e: NSINSTANCENODES): string => { return e.id; }).indexOf(list.id);
       this.cpCount = 0;
-      this.nodes.forEach((res: NSINSTANCENODES) => {
+      this.nodes.forEach((res: NSINSTANCENODES): void => {
         if (res.nodeTypeRef === 'cp' && res.vndfCPRef === list.id) {
           this.links.push({ source: this.nodes[vndfPos], target: this.nodes[this.cpCount] });
         }
@@ -321,44 +316,49 @@ export class NSTopologyComponent {
       });
     });
   }
-
   /** Get CP position based on vld @private */
   private generateVLDCP(): void {
     let vldPos: number = 0;
-    this.vldNodes.forEach((list: NSINSTANCENODES) => {
+    this.vldNodes.forEach((list: NSINSTANCENODES): void => {
       if (!isNullOrUndefined(list.vnfdCP)) {
-        list.vnfdCP.forEach((cpRef: VNFDCONNECTIONPOINTREF) => {
-          this.cpCount = 0;
-          this.nodes.forEach((res: NSINSTANCENODES) => {
-            if (res.nodeTypeRef === 'cp' && res.id === cpRef['vnfd-connection-point-ref'] + ':' + cpRef['member-vnf-index-ref']) {
-              this.links.push({ source: this.nodes[vldPos], target: this.nodes[this.cpCount] });
-            }
-            this.cpCount++;
+        list.vnfdCP.forEach((cpRef: DF): void => {
+          cpRef['vnf-profile'].forEach((vnfProfile: VNFPROFILE): void => {
+            vnfProfile['virtual-link-connectivity'].forEach((resultVLC: VLC, index: number): void => {
+              resultVLC['constituent-cpd-id'].forEach((resultCCI: CCI): void => {
+                this.cpCount = 0;
+                this.nodes.forEach((res: NSINSTANCENODES): void => {
+                  if (res.nodeTypeRef === 'cp' &&
+                    res.id === resultCCI['constituent-cpd-id'] + ':' + resultCCI['constituent-base-element-id']) {
+                    this.links.push({ source: this.nodes[vldPos], target: this.nodes[this.cpCount] });
+                  }
+                  this.cpCount++;
+                });
+              });
+            });
           });
         });
         vldPos++;
       }
     });
   }
-
   /** Node is created and render at D3 region @private */
   private createNode(nodes: NSINSTANCENODES[], links: {}[]): void {
     const graphContainerAttr: GRAPHDETAILS = this.getGraphContainerAttr();
     d3.selectAll('svg#graphContainer > *').remove();
-    d3.select(window).on('keydown', () => { this.keyDown(); });
-    d3.select(window).on('keyup', () => { this.keyUp(); });
+    d3.select(window).on('keydown', (): void => { this.keyDown(); });
+    d3.select(window).on('keyup', (): void => { this.keyUp(); });
     this.svg = d3.select('#graphContainer')
       .attr('oncontextmenu', 'return false;')
       .attr('width', graphContainerAttr.width)
       .attr('height', graphContainerAttr.height);
     this.force = d3.forceSimulation()
       .force('charge', d3.forceManyBody().strength(graphContainerAttr.strength))
-      .force('link', d3.forceLink().id((d: TickPath) => d.id).distance(graphContainerAttr.distance))
+      .force('link', d3.forceLink().id((d: TickPath): string => d.id).distance(graphContainerAttr.distance))
       .force('center', d3.forceCenter(graphContainerAttr.width / graphContainerAttr.forcex,
         graphContainerAttr.height / graphContainerAttr.forcey))
       .force('x', d3.forceX(graphContainerAttr.width / graphContainerAttr.forcex))
       .force('y', d3.forceY(graphContainerAttr.height / graphContainerAttr.forcey))
-      .on('tick', () => { this.tick(); });
+      .on('tick', (): void => { this.tick(); });
     // handles to link and node element groups
     this.path = this.svg.append('svg:g').selectAll('path');
     this.network = this.svg.append('svg:g').selectAll('network');
@@ -366,12 +366,11 @@ export class NSTopologyComponent {
     this.circle = this.svg.append('svg:g').selectAll('circle');
     this.restart(nodes, links);
   }
-
   /** Update force layout (called automatically each iteration) @private */
   private tick(): void {
     const graphContainerAttr: GRAPHDETAILS = this.getGraphContainerAttr();
     // draw directed edges with proper padding from node centers
-    this.path.attr('class', 'link').attr('d', (d: Tick) => {
+    this.path.attr('class', 'link').attr('d', (d: Tick): string => {
       const deltaX: number = d.target.x - d.source.x;
       const deltaY: number = d.target.y - d.source.y;
       const dist: number = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
@@ -385,29 +384,27 @@ export class NSTopologyComponent {
       const targetY: number = d.target.y - (targetPadding * normY);
       return `M${sourceX},${sourceY}L${targetX},${targetY}`;
     });
-    this.network.attr('transform', (t: TickPath) => `translate(${t.x},${t.y})`);
-    this.square.attr('transform', (t: TickPath) => `translate(${t.x},${t.y})`);
-    this.circle.attr('transform', (t: TickPath) => `translate(${t.x},${t.y})`);
+    this.network.attr('transform', (t: TickPath): string => `translate(${t.x},${t.y})`);
+    this.square.attr('transform', (t: TickPath): string => `translate(${t.x},${t.y})`);
+    this.circle.attr('transform', (t: TickPath): string => `translate(${t.x},${t.y})`);
   }
-
   /** Update graph (called when needed) @private */
   private restart(nodes: NSINSTANCENODES[], links: {}[]): void {
     const graphContainerAttr: GRAPHDETAILS = this.getGraphContainerAttr();
     this.path = this.path.data(links);
     const vnfdNodes: {}[] = []; const vldNodes: {}[] = []; const cpNodes: {}[] = []; // NB: Nodes are known by id, not by index!
-    nodes.forEach((nodeList: NSINSTANCENODES) => {
+    nodes.forEach((nodeList: NSINSTANCENODES): void => {
       if (nodeList.nodeTypeRef === 'vnfd') { vnfdNodes.push(nodeList); }
       else if (nodeList.nodeTypeRef === 'vld') { vldNodes.push(nodeList); }
       else if (nodeList.nodeTypeRef === 'cp') { cpNodes.push(nodeList); }
     });
-    this.square = this.square.data(vnfdNodes, (d: { id: number }) => d.id);
-    this.network = this.network.data(vldNodes, (d: { id: number }) => d.id);
-    this.circle = this.circle.data(cpNodes, (d: { id: number }) => d.id);
+    this.square = this.square.data(vnfdNodes, (d: COMPOSERNODES): string => d.id);
+    this.network = this.network.data(vldNodes, (d: COMPOSERNODES): string => d.id);
+    this.circle = this.circle.data(cpNodes, (d: COMPOSERNODES): string => d.id);
     this.resetAndCreateNodes();
     this.force.nodes(nodes).force('link').links(links); //Set the graph in motion
     this.force.alphaTarget(graphContainerAttr.alphaTarget).restart();
   }
-
   /** Rest and create nodes @private */
   private resetAndCreateNodes(): void {
     this.path.exit().remove();
@@ -424,7 +421,6 @@ export class NSTopologyComponent {
     this.path = gPath.merge(this.path);
     this.circle = this.gCircle.merge(this.circle);
   }
-
   /** Events handles when Shift Click to perform create cp @private */
   // tslint:disable-next-line: no-any
   private singleClick(nodeSelected: any, d: COMPOSERNODES): void {
@@ -470,16 +466,16 @@ export class NSTopologyComponent {
       .style('opacity', 1)
       .attr('x', graphContainerAttr.imageX)
       .attr('y', graphContainerAttr.imageY)
-      .attr('id', (d: COMPOSERNODES) => { return d.selectorId; })
+      .call(this.onDragDrop())
+      .attr('id', (d: COMPOSERNODES): string => { return d.selectorId; })
       .attr('class', 'node').attr('width', graphContainerAttr.nodeWidth).attr('height', graphContainerAttr.nodeHeight)
       .attr('xlink:href', 'assets/images/VNFD.svg')
-      .on('click', (d: COMPOSERNODES) => { this.singleClick(this.gSquare, d); this.onNodeClickToggleSidebar(); });
+      .on('click', (d: COMPOSERNODES): void => { this.singleClick(this.gSquare, d); this.onNodeClickToggleSidebar(); });
     this.gSquare.append('svg:text')
       .attr('class', 'node_text')
       .attr('y', graphContainerAttr.textY)
-      .text((d: COMPOSERNODES) => d.id);
+      .text((d: COMPOSERNODES): string => d.id);
   }
-
   /** Settings all the network attributes of nodes @private */
   private getgNetwork(): void {
     const graphContainerAttr: GRAPHDETAILS = this.getGraphContainerAttr();
@@ -489,16 +485,16 @@ export class NSTopologyComponent {
       .style('opacity', 1)
       .attr('x', graphContainerAttr.imageX)
       .attr('y', graphContainerAttr.imageY)
-      .attr('id', (d: COMPOSERNODES) => { return d.selectorId; })
+      .call(this.onDragDrop())
+      .attr('id', (d: COMPOSERNODES): string => { return d.selectorId; })
       .attr('class', 'node').attr('width', graphContainerAttr.nodeWidth).attr('height', graphContainerAttr.nodeHeight)
       .attr('xlink:href', 'assets/images/VL.svg')
-      .on('click', (d: COMPOSERNODES) => { this.singleClick(this.gNetwork, d); this.onNodeClickToggleSidebar(); });
+      .on('click', (d: COMPOSERNODES): void => { this.singleClick(this.gNetwork, d); this.onNodeClickToggleSidebar(); });
     this.gNetwork.append('svg:text')
       .attr('class', 'node_text')
       .attr('y', graphContainerAttr.textY)
-      .text((d: COMPOSERNODES) => d.name);
+      .text((d: COMPOSERNODES): string => d.name);
   }
-
   /** Settings all the connection point attributes of nodes @private */
   private getgCircle(): void {
     const graphContainerAttr: GRAPHDETAILS = this.getGraphContainerAttr();
@@ -508,14 +504,22 @@ export class NSTopologyComponent {
       .style('opacity', 1)
       .attr('x', graphContainerAttr.imageX)
       .attr('y', graphContainerAttr.imageY)
+      .call(this.onDragDrop())
       .attr('class', 'node').attr('width', graphContainerAttr.nodeWidth).attr('height', graphContainerAttr.nodeHeight)
       .attr('xlink:href', 'assets/images/CP.svg');
     this.gCircle.append('svg:text')
       .attr('class', 'node_text')
       .attr('y', graphContainerAttr.textY)
-      .text((d: COMPOSERNODES) => d.name);
+      .text((d: COMPOSERNODES): string => d.name);
   }
-
+  /** drag event @private */
+  // tslint:disable-next-line: no-any
+  private onDragDrop(): any {
+    return d3.drag().filter(this.dragFilter)
+      .on('start', this.dragstarted)
+      .on('drag', this.dragged)
+      .on('end', this.dragended);
+  }
   /** Key press event @private */
   private keyDown(): void {
     const graphContainerAttr: GRAPHDETAILS = this.getGraphContainerAttr();
@@ -544,6 +548,10 @@ export class NSTopologyComponent {
       this.gCircle.on('.drag', null);
       this.svg.classed('ctrl', false);
     }
+  }
+  /** Events handles when to drag using filter for the keys @private */
+  private dragFilter(): boolean {
+    return d3.event.ctrlKey && !d3.event.button;
   }
   /** Events handles when dragstarted @private */
   private dragstarted(d: COMPOSERNODES): void {

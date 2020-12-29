@@ -26,9 +26,10 @@ import { NotifierService } from 'angular-notifier';
 import { APIURLHEADER, ERRORDATA, GETAPIURLHEADER, MODALCLOSERESPONSEDATA, URLPARAMS } from 'CommonModel';
 import { environment } from 'environment';
 import * as jsyaml from 'js-yaml';
-import { NSDDetails } from 'NSDModel';
+import { NSDATACREATION, NSDDetails } from 'NSDModel';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
+import { VNFDATA } from 'VNFDModel';
 
 /**
  * Creating component
@@ -99,9 +100,9 @@ export class ClonePackageComponent implements OnInit {
       apiUrl = environment.VNFPACKAGES_URL + '/' + this.params.id + '/vnfd';
     this.isLoadingResults = true;
     this.restService.getResource(apiUrl, httpOptions)
-      .subscribe((nsData: NSDDetails[]) => {
+      .subscribe((nsData: NSDDetails[]): void => {
         this.modifyContent(nsData);
-      }, (error: ERRORDATA) => {
+      }, (error: ERRORDATA): void => {
         this.isLoadingResults = false;
         error.error = typeof error.error === 'string' ? jsyaml.load(error.error) : error.error;
         this.restService.handleError(error, 'get');
@@ -125,30 +126,28 @@ export class ClonePackageComponent implements OnInit {
    * Get and modify package information based on type
    */
   private modifyContent(packageInfo: NSDDetails[]): void {
-    const packageContent: string = jsyaml.load(packageInfo.toString());
     if (this.params.page === 'nsd') {
-      this.packageName = 'clone_' + packageContent['nsd:nsd-catalog'].nsd[0].name;
+      const nsPackageContent: NSDATACREATION = jsyaml.load(packageInfo.toString());
+      this.packageName = 'clone_' + nsPackageContent.nsd.nsd[0].name;
       this.endPoint = environment.NSDESCRIPTORSCONTENT_URL;
-      packageContent['nsd:nsd-catalog'].nsd.forEach((nsd: NSDDetails) => {
+      nsPackageContent.nsd.nsd.forEach((nsd: NSDDetails): void => {
         nsd.id = 'clone_' + nsd.id;
         nsd.name = 'clone_' + nsd.name;
-        nsd['short-name'] = 'clone_' + nsd['short-name'];
       });
+      this.clonePackage(nsPackageContent);
     } else {
-      this.packageName = 'clone_' + packageContent['vnfd:vnfd-catalog'].vnfd[0].name;
+      const vnfPackageContent: VNFDATA = jsyaml.load(packageInfo.toString());
+      this.packageName = 'clone_' + vnfPackageContent.vnfd['product-name'];
       this.endPoint = environment.VNFPACKAGESCONTENT_URL;
-      packageContent['vnfd:vnfd-catalog'].vnfd.forEach((vnfd: NSDDetails) => {
-        vnfd.id = 'clone_' + vnfd.id;
-        vnfd.name = 'clone_' + vnfd.name;
-        vnfd['short-name'] = 'clone_' + vnfd['short-name'];
-      });
+      vnfPackageContent.vnfd.id = 'clone_' + vnfPackageContent.vnfd.id;
+      vnfPackageContent.vnfd['product-name'] = 'clone_' + vnfPackageContent.vnfd['product-name'];
+      this.clonePackage(vnfPackageContent);
     }
-    this.clonePackage(packageContent);
   }
   /**
    * Create clone package and upload as TAR.GZ file
    */
-  private clonePackage(packageContent: string): void {
+  private clonePackage(packageContent: NSDATACREATION | VNFDATA): void {
     const descriptorInfo: string = jsyaml.dump(packageContent);
     const apiHeader: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/gzip',
@@ -164,11 +163,12 @@ export class ClonePackageComponent implements OnInit {
           url: this.endPoint,
           httpOptions: { headers: apiHeader }
         };
-        this.restService.postResource(apiURLHeader, content).subscribe((result: { id: string }) => {
+        // tslint:disable-next-line: completed-docs
+        this.restService.postResource(apiURLHeader, content).subscribe((result: { id: string }): void => {
           this.activeModal.close(modalData);
           this.isLoadingResults = false;
           this.notifierService.notify('success', this.translateService.instant('CLONESUCCESSFULLY'));
-        }, (error: ERRORDATA) => {
+        }, (error: ERRORDATA): void => {
           this.isLoadingResults = false;
           this.restService.handleError(error, 'post');
         });

@@ -141,7 +141,7 @@ export class VNFInstancesComponent implements OnInit {
         this.isLoadingResults = true;
         this.restService.getResource(environment.VNFINSTANCES_URL).subscribe((vnfInstancesData: VNFInstanceDetails[]) => {
             this.vnfInstanceData = [];
-            vnfInstancesData.forEach((vnfInstanceData: VNFInstanceDetails) => {
+            vnfInstancesData.forEach((vnfInstanceData: VNFInstanceDetails): void => {
                 const vnfDataObj: {} =
                 {
                     VNFD: vnfInstanceData['vnfd-ref'],

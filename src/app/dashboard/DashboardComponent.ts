@@ -34,7 +34,6 @@ import { SDNControllerModel } from 'SDNControllerModel';
 import { SharedService } from 'SharedService';
 import { ProjectRoleMappings, UserDetail } from 'UserModel';
 import { VimAccountDetails } from 'VimAccountModel';
-import { VNFDDetails } from 'VNFDModel';
 import { VNFInstanceDetails } from 'VNFInstanceModel';
 
 /**
@@ -189,13 +188,13 @@ export class DashboardComponent implements OnInit {
 
     /** Get all the projects @public */
     public getUserAccessedProjects(): void {
-        this.projectService.getUserProjects().subscribe((projects: UserDetail) => {
+        this.projectService.getUserProjects().subscribe((projects: UserDetail): void => {
             const projectList: {}[] = projects.project_role_mappings;
             this.projectList = projectList.filter(
-                (thing: ProjectRoleMappings, i: number, arr: []) => arr
-                    .findIndex((t: ProjectRoleMappings) => t.project_name === thing.project_name) === i
+                (thing: ProjectRoleMappings, i: number, arr: []): boolean => arr
+                    .findIndex((t: ProjectRoleMappings): boolean => t.project_name === thing.project_name) === i
             );
-        }, (error: Error) => {
+        }, (error: Error): void => {
             // TODO: Handle failure
         });
     }
@@ -203,14 +202,14 @@ export class DashboardComponent implements OnInit {
     /** Fetching all the Project in dashboard @public */
     public getAllProjects(): void {
         this.isProjectsLoadingResults = true;
-        this.restService.getResource(environment.PROJECTS_URL).subscribe((projectsData: ProjectDetails[]) => {
+        this.restService.getResource(environment.PROJECTS_URL).subscribe((projectsData: ProjectDetails[]): void => {
             this.allProjectList = [];
-            projectsData.forEach((projectData: ProjectDetails) => {
+            projectsData.forEach((projectData: ProjectDetails): void => {
                 const projectDataObj: ProjectData = this.generateProjectData(projectData);
                 this.allProjectList.push(projectDataObj);
             });
             this.isProjectsLoadingResults = false;
-        }, (error: ERRORDATA) => {
+        }, (error: ERRORDATA): void => {
             this.restService.handleError(error, 'get');
             this.isProjectsLoadingResults = false;
         });
@@ -230,9 +229,9 @@ export class DashboardComponent implements OnInit {
     /** Function to check admin privilege @public */
     public checkAdminPrivilege(): void {
         if (!this.isAdmin) {
-            this.projectService.getCurrentProjectDetails().subscribe((projectDetails: {}) => {
+            this.projectService.getCurrentProjectDetails().subscribe((projectDetails: {}): void => {
                 this.currentProjectDetails = projectDetails;
-            }, (error: Error) => {
+            }, (error: Error): void => {
                 // TODO: Handle failure
             });
         }
@@ -241,9 +240,9 @@ export class DashboardComponent implements OnInit {
     /** Get VNFD Package details @public */
     public getVnfdPackageCount(): void {
         this.vnfdPackageCountSub = this.restService.getResource(environment.VNFPACKAGESCONTENT_URL)
-            .subscribe((vnfdPackageData: VNFDDetails[]) => {
+            .subscribe((vnfdPackageData: []): void => {
                 this.vnfdPackageCount = vnfdPackageData.length;
-            }, (error: ERRORDATA) => {
+            }, (error: ERRORDATA): void => {
                 this.restService.handleError(error, 'get');
             });
     }
@@ -251,9 +250,9 @@ export class DashboardComponent implements OnInit {
     /** Get NSD Package details @public */
     public getNsdPackageCount(): void {
         this.nsdPackageCountSub = this.restService.getResource(environment.NSDESCRIPTORSCONTENT_URL)
-            .subscribe((nsdPackageData: NSDDetails[]) => {
+            .subscribe((nsdPackageData: NSDDetails[]): void => {
                 this.nsdPackageCount = nsdPackageData.length;
-            }, (error: ERRORDATA) => {
+            }, (error: ERRORDATA): void => {
                 this.restService.handleError(error, 'get');
             });
     }
@@ -262,12 +261,12 @@ export class DashboardComponent implements OnInit {
     public getNsInstanceCount(): void {
         this.isCanvasLoadingResults = true;
         this.nsInstanceCountSub = this.restService.getResource(environment.NSDINSTANCES_URL)
-            .subscribe((nsInstancesData: NSInstanceDetails[]) => {
+            .subscribe((nsInstancesData: NSInstanceDetails[]): void => {
                 this.nsInstancesDataArr = nsInstancesData;
                 this.nsInstanceCount = nsInstancesData.length;
                 this.nsInstanceChart();
                 this.isCanvasLoadingResults = false;
-            }, (error: ERRORDATA) => {
+            }, (error: ERRORDATA): void => {
                 this.restService.handleError(error, 'get');
                 this.isCanvasLoadingResults = false;
             });
@@ -275,7 +274,7 @@ export class DashboardComponent implements OnInit {
 
     /** Get NS Instance chart details @public */
     public nsInstanceChart(): void {
-        this.nsInstancesDataArr.forEach((nsdInstanceData: NSDDetails) => {
+        this.nsInstancesDataArr.forEach((nsdInstanceData: NSDDetails): void => {
             const operationalStatus: string = nsdInstanceData['operational-status'];
             const configStatus: string = nsdInstanceData['config-status'];
             if (operationalStatus === 'failed' || configStatus === 'failed') {
@@ -288,7 +287,7 @@ export class DashboardComponent implements OnInit {
         });
         const now: Date = new Date();
         const currentTime: number = Number((now.getTime().toString().slice(0, this.sliceLimit)));
-        this.createdTimes.forEach((createdTime: string) => {
+        this.createdTimes.forEach((createdTime: string): void => {
             this.noOfHours.push((Math.round((currentTime - Number(createdTime)) / this.hourConverter)));
         });
         this.drawNsChart();
@@ -342,9 +341,9 @@ export class DashboardComponent implements OnInit {
     /** Get VNFD instance details @public */
     public getVnfInstanceCount(): void {
         this.vnfInstanceCountSub = this.restService.getResource(environment.NSDINSTANCES_URL)
-            .subscribe((vnfInstanceData: VNFInstanceDetails[]) => {
+            .subscribe((vnfInstanceData: VNFInstanceDetails[]): void => {
                 this.vnfInstanceCount = vnfInstanceData.length;
-            }, (error: ERRORDATA) => {
+            }, (error: ERRORDATA): void => {
                 this.restService.handleError(error, 'get');
             });
     }
@@ -352,9 +351,9 @@ export class DashboardComponent implements OnInit {
     /** Get VIM account details @public */
     public getVimAccountCount(): void {
         this.vimAccountCountSub = this.restService.getResource(environment.VIMACCOUNTS_URL)
-            .subscribe((vimAccountData: VimAccountDetails[]) => {
+            .subscribe((vimAccountData: VimAccountDetails[]): void => {
                 this.vimAccountCount = vimAccountData.length;
-            }, (error: ERRORDATA) => {
+            }, (error: ERRORDATA): void => {
                 this.restService.handleError(error, 'get');
             });
     }
@@ -362,9 +361,9 @@ export class DashboardComponent implements OnInit {
     /** Get SDN Controller Count  @public */
     public getSDNControllerCount(): void {
         this.sdnControllerCountSub = this.restService.getResource(environment.SDNCONTROLLER_URL)
-            .subscribe((sdnControllerData: SDNControllerModel[]) => {
+            .subscribe((sdnControllerData: SDNControllerModel[]): void => {
                 this.sdnControllerCount = sdnControllerData.length;
-            }, (error: ERRORDATA) => {
+            }, (error: ERRORDATA): void => {
                 this.restService.handleError(error, 'get');
             });
     }

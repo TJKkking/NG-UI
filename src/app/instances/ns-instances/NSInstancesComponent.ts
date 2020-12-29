@@ -124,7 +124,7 @@ export class NSInstancesComponent implements OnInit {
         this.generateTableColumn();
         this.generateTableSettings();
         this.generateData();
-        this.generateDataSub = this.sharedService.dataEvent.subscribe(() => { this.generateData(); });
+        this.generateDataSub = this.sharedService.dataEvent.subscribe((): void => { this.generateData(); });
     }
 
     /** Generate smart table row title and filters @public  */
@@ -219,9 +219,9 @@ export class NSInstancesComponent implements OnInit {
     /** generateData initiate the ns-instance list @public */
     public generateData(): void {
         this.isLoadingResults = true;
-        this.restService.getResource(environment.NSDINSTANCES_URL).subscribe((nsdInstancesData: NSInstanceDetails[]) => {
+        this.restService.getResource(environment.NSDINSTANCES_URL).subscribe((nsdInstancesData: NSInstanceDetails[]): void => {
             this.nsInstanceData = [];
-            nsdInstancesData.forEach((nsdInstanceData: NSInstanceDetails) => {
+            nsdInstancesData.forEach((nsdInstanceData: NSInstanceDetails): void => {
                 const nsDataObj: NSDInstanceData = {
                     name: nsdInstanceData.name,
                     identifier: nsdInstanceData.id,
@@ -229,7 +229,7 @@ export class NSInstancesComponent implements OnInit {
                     OperationalStatus: nsdInstanceData['operational-status'],
                     ConfigStatus: nsdInstanceData['config-status'],
                     DetailedStatus: nsdInstanceData['detailed-status'],
-                    memberIndex: nsdInstanceData.nsd['constituent-vnfd'],
+                    memberIndex: nsdInstanceData.nsd.df,
                     nsConfig: nsdInstanceData.nsd['ns-configuration']
                 };
                 this.nsInstanceData.push(nsDataObj);
@@ -239,10 +239,10 @@ export class NSInstancesComponent implements OnInit {
             } else {
                 this.checkDataClass = 'dataTables_empty';
             }
-            this.dataSource.load(this.nsInstanceData).then((data: {}) => {
+            this.dataSource.load(this.nsInstanceData).then((data: {}): void => {
                 this.isLoadingResults = false;
             }).catch();
-        }, (error: ERRORDATA) => {
+        }, (error: ERRORDATA): void => {
             this.restService.handleError(error, 'get');
             this.isLoadingResults = false;
         });
@@ -262,7 +262,7 @@ export class NSInstancesComponent implements OnInit {
     /** Instantiate NS using modalservice @public */
     public instantiateNS(): void {
         const modalRef: NgbModalRef = this.modalService.open(InstantiateNsComponent, { backdrop: 'static' });
-        modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
+        modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
             if (result) {
                 this.generateData();
             }

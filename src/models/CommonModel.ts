@@ -20,6 +20,7 @@ import { HttpHeaders } from '@angular/common/http';
 /**
  * @file  Model for Commonly used information.
  */
+// tslint:disable: completed-docs
 /**
  * handle count @enum
  */
@@ -112,12 +113,12 @@ export interface URLPARAMS {
 export interface DELETEPARAMS {
     identifier: string;
     name?: string;
-    shortName: string;
     projectName?: string;
     userName?: string;
     username?: string;
     page?: string;
     id?: string;
+    productName?: string;
 }
 
 /** Interface for the Delete Details */
@@ -220,6 +221,15 @@ export const OSMREPO_TYPES: TYPESECTION[] = [
 export interface TYPESECTION {
     value: string;
     title: string;
+}
+/** Interface for PRIMITIVETYPES */
+export interface PRIMITIVETYPES {
+    title: string;
+    value: string;
+}
+/** Interface for the PRIMITIVEDATA */
+export interface PRIMITIVEDATA {
+    parameter: {}[];
 }
 /** Interface for VIM type Openstack's Config */
 export const TYPEOPENSTACK: {} = {
