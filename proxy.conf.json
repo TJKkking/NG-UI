@@ -3,5 +3,10 @@
         "target": "https://nbi:9999",
         "secure": false,
         "logLevel": "info"
+    },
+    "/api/*": {
+        "target": "https://photon.komoot.de",
+        "secure": false,
+        "logLevel": "info"
     }
 }

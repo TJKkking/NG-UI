@@ -53,8 +53,7 @@ export const environment = {
     packageSize: 50,
     paginationNumber: 10, //Possible values are 10, 25, 50, 100
     packageVersion: version,
-    // tslint:disable-next-line: no-http-string
-    MAPLATLONGAPI_URL: 'http://photon.komoot.de/api/?q={value}&limit=5',
+    MAPLATLONGAPI_URL: 'api/?q={value}&limit=5',
     GENERATETOKEN_URL: OSM_ADMIN_ENDPOINT + 'tokens',
     PROJECTS_URL: OSM_ADMIN_ENDPOINT + 'projects',
     USERS_URL: OSM_ADMIN_ENDPOINT + 'users',
