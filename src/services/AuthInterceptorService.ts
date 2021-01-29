@@ -93,8 +93,12 @@ export class AuthInterceptorService implements HttpInterceptor {
             });
         } else {
             this.clonedReq = req.clone({
-                setHeaders: { Authorization: 'Bearer ' + idToken, 'Content-Type': 'charset=UTF-8',
-                'Cache-Control': 'no-cache', Pragma: 'no-cache' }
+                setHeaders: {
+                    Authorization: 'Bearer ' + idToken,
+                    'Content-Type': 'charset=UTF-8',
+                    'Cache-Control': 'no-cache',
+                    Pragma: 'no-cache'
+                }
             });
         }
     }
@@ -119,7 +123,7 @@ export class AuthInterceptorService implements HttpInterceptor {
 
     /** Method to handle  401, 403 & 502 error */
     private handleError(err: HttpErrorResponse): void {
-        if (err.error.detail !== 'Access denied: lack of permissions.') {
+        if (err.error.detail !== 'Access denied: lack of permissions.' && err.error.detail !== 'You cannot remove system_admin role from admin user') {
             this.notifierService.hideAll();
             this.authService.logoutResponse();
             if (this.authService.handle401) {

@@ -247,7 +247,7 @@ export const MENU_ITEMS: MENUITEMS[] = [
         liClass: 'round-edge-bottom-3',
         anchorTagClass: 'link round-edge-bottom-3 individual',
         clickFunction: 'nosubmenu',
-        routerLink: '/roles',
+        routerLink: '/roles/details',
         routerLinkActive: ['parentactive'],
         routerLinkActiveOptions: true,
         icon: 'fas fa-user-tag',

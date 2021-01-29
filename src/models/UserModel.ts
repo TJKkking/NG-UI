@@ -42,6 +42,7 @@ export interface UserDetail {
 /** Interface for user role mappings */
 export interface UserRoleMap {
     project_role_mappings?: ProjectRoleMappings[];
+    remove_project_role_mappings?: ProjectRoleMappings[];
 }
 
 /** Interface for Admin */

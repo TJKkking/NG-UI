@@ -29,7 +29,9 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
                     <i class="fas fa-plus-circle"></i> {{'PAGE.USERS.ADDMAPPINGS' | translate}}</button>
             </div>
         </div>
-        <label class="col-sm-12 col-form-label mandatory-label" [ngClass]="{'text-danger': projectRoleForm.invalid === true && submitted === true}">{{'MANDATORYCHECK' | translate}}</label>
+        <label class="col-sm-12 col-form-label mandatory-label"
+            [ngClass]="{'text-danger': projectRoleForm.invalid === true && submitted === true}">{{'MANDATORYCHECK' |
+            translate}}</label>
         <div *ngFor="let params of getControls(); let i = index;" [formGroupName]="i">
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label" for="project_{{i}}">{{'PROJECT' | translate}}*</label>
@@ -44,9 +46,19 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
                         formControlName="role_name" id="roles_{{i}}"
                         [ngClass]="{ 'is-invalid': submitted && params.controls.role_name.errors }"></ng-select>
                 </div>
-                <div class="col-sm-1">
-                    <button type="button" class="btn btn-sm btn-danger remove-mapping" (click)="removeMapping(i)">
-                        <i class="fas fa-times-circle"></i>
+                <div class="col-sm-1"
+                    *ngIf="userDetails.project_role_mappings[i] ? userDetails.project_role_mappings[i].project_name === '' : true">
+                    <button class="button-xs" type="button" class="close mt-2" (click)="removeMapping(i)"
+                        placement="right" ngbTooltip="{{ 'CANCEL' | translate }}">
+                        <i class="fas fa-minus-circle text-danger"></i>
+                    </button>
+                </div>
+                <div class="col-sm-1"
+                    *ngIf="userDetails.project_role_mappings[i] ? userDetails.project_role_mappings[i].project_name !== '' : false">
+                    <button class="button-xs" type="button" class="close mt-2"
+                        (click)="deleteProjectAndRoleMapping(userDetails.project_role_mappings[i])" placement="right"
+                        ngbTooltip="{{ 'DELETE' | translate }}">
+                        <i class="fas fa-trash-alt text-danger"></i>
                     </button>
                 </div>
             </div>
