@@ -23,12 +23,25 @@ import { EventEmitter, Injectable, Output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { CONSTANTNUMBER, ERRORDATA, FILESETTINGS, GETAPIURLHEADER, PACKAGEINFO, PAGERSMARTTABLE, SMARTTABLECLASS, TARSETTINGS } from 'CommonModel';
+import {
+    CONSTANTNUMBER,
+    DOMAINS,
+    ERRORDATA,
+    FILESETTINGS,
+    GETAPIURLHEADER,
+    PACKAGEINFO,
+    PAGERSMARTTABLE,
+    SMARTTABLECLASS,
+    TARSETTINGS,
+    TYPESECTION
+} from 'CommonModel';
 import { environment } from 'environment';
 import * as HttpStatus from 'http-status-codes';
 import * as untar from 'js-untar';
 import * as pako from 'pako';
 import { RestService } from 'RestService';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
 
 /** This is added globally by the tar.js library */
@@ -158,6 +171,7 @@ export class SharedService {
         }
         return result;
     }
+
     /** Function to read uploaded file String @public */
     public async getFileString(files: FileList, fileType: string): Promise<string | ArrayBuffer> {
         const reader: FileReader = new FileReader();
@@ -178,6 +192,7 @@ export class SharedService {
             };
         });
     }
+
     /** Method to handle tar and tar.gz file for shared YAML file content @public */
     public async targzFile(packageInfo: PACKAGEINFO): Promise<string | ArrayBuffer> {
         return new Promise<string | ArrayBuffer>((resolve: Function, reject: Function): void => {
@@ -185,15 +200,15 @@ export class SharedService {
             let apiUrl: string = '';
             apiUrl = packageInfo.packageType === 'nsd' ? environment.NSDESCRIPTORS_URL + '/' + packageInfo.id + '/nsd_content' :
                 environment.VNFPACKAGES_URL + '/' + packageInfo.id + '/package_content';
-            this.restService.getResource(apiUrl, httpOptions).subscribe((response: ArrayBuffer) => {
+            this.restService.getResource(apiUrl, httpOptions).subscribe((response: ArrayBuffer): void => {
                 try {
                     // tslint:disable-next-line: no-any
                     const tar: any = new Tar();
                     const originalInput: Uint8Array = pako.inflate(response, { to: 'Uint8Array' });
-                    untar(originalInput.buffer).then((extractedFiles: TARSETTINGS[]) => {
+                    untar(originalInput.buffer).then((extractedFiles: TARSETTINGS[]): void => {
                         const getFoldersFiles: {}[] = extractedFiles;
                         const folderNameStr: string = extractedFiles[0].name;
-                        getFoldersFiles.forEach((value: TARSETTINGS) => {
+                        getFoldersFiles.forEach((value: TARSETTINGS): void => {
                             const fileValueObj: FILESETTINGS = this.createFileValueObject(value);
                             const getRootFolder: string[] = value.name.split('/');
                             if (value.name.startsWith(folderNameStr) &&
@@ -209,13 +224,13 @@ export class SharedService {
                         const out: Uint8Array = tar.out;
                         const originalOutput: Uint8Array = pako.gzip(out);
                         resolve(originalOutput.buffer);
-                    }, (err: string) => {
+                    }, (err: string): void => {
                         reject('');
                     });
                 } catch (e) {
                     reject('');
                 }
-            }, (error: HttpErrorResponse) => {
+            }, (error: HttpErrorResponse): void => {
                 if (error.status === HttpStatus.NOT_FOUND || error.status === HttpStatus.UNAUTHORIZED) {
                     this.router.navigateByUrl('404', { skipLocationChange: true }).catch();
                 } else {
@@ -225,6 +240,7 @@ export class SharedService {
             });
         });
     }
+
     /** Method to return the file information @public */
     public createFileValueObject(value: TARSETTINGS): FILESETTINGS {
         return {
@@ -234,6 +250,7 @@ export class SharedService {
             group: value.gname
         };
     }
+
     /** Method to check given string is JSON or not @public */
     public checkJson(jsonString: string): boolean {
         jsonString = jsonString.replace(/'/g, '"');
@@ -244,6 +261,7 @@ export class SharedService {
         }
         return true;
     }
+
     /** Clean the form before submit @public */
     public cleanForm(formGroup: FormGroup, formName?: String): void {
         Object.keys(formGroup.controls).forEach((key: string) => {
@@ -265,6 +283,7 @@ export class SharedService {
             }
         });
     }
+
     /** Method to return the config of pager value for ngSmarttable @public */
     public paginationPagerConfig(): PAGERSMARTTABLE {
         return {
@@ -272,12 +291,14 @@ export class SharedService {
             perPage: environment.paginationNumber
         };
     }
+
     /** Method to return the class for the table for ngSmarttable @public */
     public tableClassConfig(): SMARTTABLECLASS {
         return {
             class: 'table list-data'
         };
     }
+
     /** Method to return all languages name and its code @public */
     public languageCodeList(): {}[] {
         return [
@@ -287,20 +308,22 @@ export class SharedService {
             { code: 'de', language: 'German' }
         ];
     }
+
     /** Fetch OSM Version @public */
     public fetchOSMVersion(): void {
-        this.restService.getResource(environment.OSM_VERSION_URL).subscribe((res: { version: string }) => {
+        this.restService.getResource(environment.OSM_VERSION_URL).subscribe((res: { version: string }): void => {
             const version: string[] = res.version.split('+');
             if (!isNullOrUndefined(version[0])) {
                 this.osmVersion = version[0];
             } else {
                 this.osmVersion = null;
             }
-        }, (error: ERRORDATA) => {
+        }, (error: ERRORDATA): void => {
             this.osmVersion = null;
             this.restService.handleError(error, 'get');
         });
     }
+
     /** Random RGB color code generator @public */
     public generateColor(): string {
         const x: number = Math.floor(Math.random() * this.colorStringLength);
@@ -319,6 +342,33 @@ export class SharedService {
         return fileInfo[0].name.substring(fileInfo[0].name.lastIndexOf('.') + 1);
     }
 
+    /** Get domain name @private */
+    public getDomainName(): Observable<TYPESECTION[]> {
+        return this.restService.getResource(environment.DOMAIN_URL).pipe(map((domains: DOMAINS): TYPESECTION[] => {
+            const domainList: TYPESECTION[] = [];
+            try {
+                let domainNames: string[] = [];
+                if (!isNullOrUndefined(domains.project_domain_name)) {
+                    domainNames = domainNames.concat(domains.project_domain_name.split(','));
+                }
+                if (!isNullOrUndefined(domains.user_domain_name)) {
+                    domainNames = domainNames.concat(domains.user_domain_name.split(','));
+                }
+                domainNames = Array.from(new Set(domainNames));
+                if (domainNames.length > 0) {
+                    domainNames.forEach((domainName: string): void => {
+                        if (!domainName.endsWith(':ro')) {
+                            domainList.push({ title: domainName, value: domainName });
+                        }
+                    });
+                }
+                return domainList;
+            } catch (e) {
+                return domainList;
+            }
+        }));
+    }
+
     /** Method to validate file extension and size @private */
     private vaildataFileInfo(fileInfo: File, fileType: string): boolean {
         const extension: string = fileInfo.name.substring(fileInfo.name.lastIndexOf('.') + 1);
@@ -331,6 +381,7 @@ export class SharedService {
         }
         return false;
     }
+
     /** Method to read file content based on type @private */
     private readFileContent(reader: FileReader, fileInfo: File, fileType: string): void {
         if (fileType === 'gz') {
@@ -339,6 +390,7 @@ export class SharedService {
             reader.readAsText(fileInfo);
         }
     }
+
     /** Method to handle http options @public */
     private getHttpOptions(): GETAPIURLHEADER {
         return {

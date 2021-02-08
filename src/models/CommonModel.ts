@@ -231,7 +231,7 @@ export interface PRIMITIVETYPES {
 export interface PRIMITIVEDATA {
     parameter: {}[];
 }
-/** Interface for VIM type Openstack's Config */
+/** Constant for VIM type Openstack's Config */
 export const TYPEOPENSTACK: {} = {
     sdn_controller: '',
     APIversion: '',
@@ -254,7 +254,7 @@ export const TYPEOPENSTACK: {} = {
     additional_conf: '',
     use_existing_flavors: ''
 };
-/** Interface for VIM type AWS's Config */
+/** Constant for VIM type AWS's Config */
 export const TYPEAWS: {} = {
     sdn_controller: '',
     vpc_cidr_block: '',
@@ -266,7 +266,7 @@ export const TYPEAWS: {} = {
     flavor_info: '',
     additional_conf: ''
 };
-/** Interface for VIM type VMWARE's Config */
+/** Constant for VIM type VMWARE's Config */
 export const TYPEVMWARE: {} = {
     sdn_controller: '',
     orgname: '',
@@ -286,14 +286,14 @@ export const TYPEVMWARE: {} = {
     vrops_password: '',
     additional_conf: ''
 };
-/** Interface for VIM type OPENVIMNEBULA's Config */
+/** Constant for VIM type OPENVIMNEBULA's Config */
 export const TYPEOPENVIMNEBULA: {} = {
     sdn_controller: '',
     sdn_port_mapping: '',
     vim_network_name: '',
     additional_conf: ''
 };
-/** Interface for VIM type AZURE's Config */
+/** Constant for VIM type AZURE's Config */
 export const TYPEAZURE: {} = {
     subscription_id: '',
     region_name: '',
@@ -301,7 +301,7 @@ export const TYPEAZURE: {} = {
     vnet_name: '',
     flavors_pattern: ''
 };
-/** Interface for VIM other type Config */
+/** Constant for VIM other type Config */
 export const TYPEOTERS: {} = {
     sdn_controller: '',
     sdn_port_mapping: '',
@@ -311,3 +311,13 @@ export const TYPEOTERS: {} = {
     additional_conf: '',
     use_existing_flavors: ''
 };
+/** Interface for Domains */
+export interface DOMAINS {
+    project_domain_name: string;
+    user_domain_name: string;
+}
+/** Interface for Login */
+export interface LOGINPARAMS {
+    username?: string;
+    password?: string;
+}

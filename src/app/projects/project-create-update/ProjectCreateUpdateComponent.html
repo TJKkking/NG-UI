@@ -42,8 +42,8 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
     <div class="form-group row" *ngIf="getProjectType === 'Add'">
       <label class="col-sm-4 col-form-label">{{'DOMAIN' | translate}} {{'NAME' | translate}}</label>
       <div class="col-sm-8">
-        <ng-select [clearable]="false" placeholder="{{'SELECT' | translate}}" [items]="domains" bindLabel="text"
-          bindValue="id" formControlName="domain_name" id="domain_name"
+        <ng-select [clearable]="false" placeholder="{{'SELECT' | translate}}" [items]="domains" bindLabel="title"
+          bindValue="value" formControlName="domain_name" id="domain_name"
           [ngClass]="{ 'is-invalid': submitted && f.domain_name.errors }"></ng-select>
       </div>
     </div>
