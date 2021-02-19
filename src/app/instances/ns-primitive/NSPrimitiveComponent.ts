@@ -319,7 +319,7 @@ export class NSPrimitiveComponent implements OnInit {
         this.primitiveList = [];
         this.primitiveParameter = [];
         this.getFormControl('primitive').setValue(null);
-        const apiUrl: string = environment.VNFPACKAGES_URL + '?product-name=' + vnfdRef;
+        const apiUrl: string = environment.VNFPACKAGES_URL + '?id=' + vnfdRef;
         this.isLoadingResults = true;
         this.restService.getResource(apiUrl)
             .subscribe((vnfdInfo: VNFD[]): void => {
@@ -374,7 +374,7 @@ export class NSPrimitiveComponent implements OnInit {
         this.primitiveList = [];
         this.primitiveParameter = [];
         this.getFormControl('primitive').setValue(null);
-        const apiUrl: string = environment.NSDESCRIPTORS_URL + '?name=' + nsdRef;
+        const apiUrl: string = environment.NSDESCRIPTORS_URL + '?id=' + nsdRef;
         this.isLoadingResults = true;
         this.restService.getResource(apiUrl)
             .subscribe((nsdInfo: {}): void => {
