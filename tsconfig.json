@@ -142,7 +142,12 @@
             "OsmRepositoriesAction" : ["src/app/utilities/osm-repositories-action/OsmRepositoriesActionComponent"],
             "OsmRepoModel": ["src/models/OsmRepoModel"],
             "OsmRepoCreateUpdate": ["src/app/osm-repositories/osm-repo-create-update/OsmRepoCreateUpdateComponent"],
-            "ScalingComponent": ["src/app/utilities/scaling/ScalingComponent"]
+            "ScalingComponent": ["src/app/utilities/scaling/ScalingComponent"],
+            "OperationalViewComponent": ["src/app/operational-view/OperationalViewComponent"],
+            "OperationalModel": ["src/models/OperationalModel"],
+            "OperationalAppConfigsComponent": ["src/app/operational-view/operational-view-app-configs/OperationalViewAppConfigsComponent"],
+            "OperationalAppActionsComponent": ["src/app/operational-view/operational-view-app-actions/OperationalViewAppActionsComponent"],
+            "OperationalAppExecutedActionsComponent" : ["src/app/operational-view/operational-view-app-executed-actions/OperationalViewAppExecutedActionsComponent"]
         }
     }
 }

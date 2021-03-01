@@ -48,6 +48,7 @@ export interface NSInstanceDetails {
     instantiate_params: InstantiateParam;
     additionalParamsForNs: AdditionalParamForN;
     _id?: string;
+    vcaStatus?: object;
 }
 
 /** Interface for Admin */
@@ -179,6 +180,7 @@ export interface NSDInstanceData {
     state?: string;
     memberIndex?: DF[];
     nsConfig?: object;
+    vcaStatus?: object;
     adminDetails?: object;
     vnfID?: string[];
     nsd?: NSD;

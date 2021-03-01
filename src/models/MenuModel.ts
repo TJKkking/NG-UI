@@ -134,6 +134,16 @@ export const MENU_ITEMS: MENUITEMS[] = [
                 icon: 'fas fa-layer-group',
                 menuName: 'PAGE.DASHBOARD.NETSLICEINSTANCE',
                 isChildExists: false
+            },
+            {
+                liClass: '',
+                anchorTagClass: 'link',
+                routerLink: '/instances/operational-view',
+                routerLinkActive: childActiveClass,
+                routerLinkActiveOptions: false,
+                icon: 'fas fa-tachometer-alt',
+                menuName: 'PAGE.OPERATIONALDASHBOARD.TITLE',
+                isChildExists: false
             }
         ]
     },

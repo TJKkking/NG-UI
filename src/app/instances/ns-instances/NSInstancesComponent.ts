@@ -242,7 +242,8 @@ export class NSInstancesComponent implements OnInit {
                     adminDetails: nsdInstanceData._admin,
                     vnfID: nsdInstanceData['vnfd-id'],
                     nsd: nsdInstanceData.nsd,
-                    'nsd-id': nsdInstanceData['nsd-id']
+                    'nsd-id': nsdInstanceData['nsd-id'],
+                    vcaStatus: nsdInstanceData.vcaStatus
                 };
                 this.nsInstanceData.push(nsDataObj);
             });

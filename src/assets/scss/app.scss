@@ -128,9 +128,6 @@ body {
       color: $gray-400;
     }
   }
-  .modal-dialog {
-    max-width: 600px;
-  }
   .header-style {
     @include font(null, 1.2rem, 700);
     color: $primary;
@@ -179,6 +176,37 @@ body {
     .card {
       .bg-secondary {
         @include background(null, $gray-400 !important, null, null, null);
+      }
+    }
+  }
+  .juju-section {
+    .card {
+      @include roundedCorners(4);
+      margin-bottom: 0.25rem;
+      box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      .bg-secondary {
+        @include background(null, $primary !important, null, null, null);
+        b,
+        span {
+          color: $white;
+        }
+      }
+      .card-body {
+        .seconds-btn-group .active {
+          color: $white;
+          @include background(null, $primary !important, null, null, null);
+        }
+        @include border(all, 2, dashed, $primary);
+        @include padding-value(5, 5, 5, 5);
+        border-top: 0;
+        table {
+          thead th {
+            font-size: 12px;
+          }
+          tbody th i.active-icon {
+            font-size: 10px;
+          }
+        }
       }
     }
   }
@@ -694,6 +722,93 @@ body {
       }
     }
   }
+  /** Switch Design **/
+  .switch {
+    @include position_value(relative, null, null, null, null);
+    @include flexbox(inline-block, null, null, null, null, null);
+    @include wh-value(50px, 15px);
+    @include margin-value(0, 0, 0, 0);
+    input {
+      opacity: 0;
+      @include wh-value(0px, 0px);
+      &:checked + .slider {
+        @include background(null, $gray-400, null, null, null);
+        &:before {
+          @include background(null, $pure-red, null, null, null);
+          left: 5px;
+          animation: pulse 2s infinite;
+          -webkit-transform: translateX(26px);
+          -ms-transform: translateX(26px);
+          transform: translateX(26px);
+        }
+        .on {
+          @include flexbox(block, null, null, null, null, null);
+        }
+        .off {
+          @include flexbox(none, null, null, null, null, null);
+        }
+      }
+    }
+    .slider {
+      @include position_value(absolute, 0, 0, 0, 0);
+      cursor: pointer;
+      @include background(null, $gray-400, null, null, null);
+      -webkit-transition: 0.4s;
+      transition: 0.4s;
+      box-shadow: 0 0 1px $gray-400;
+      &.round {
+        @include roundedCorners(30);
+        &:before {
+          @include roundedCornersPercentage(50%);
+        }
+      }
+      &:before {
+        @include position_value(absolute, null, null, -2px, 0px);
+        @include wh-value(20px, 20px);
+        @include background(null, $white, null, null, null);
+        content: "";
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+      }
+      .on {
+        @include flexbox(none, null, null, null, null, null);
+        @include position_value(absolute, 50%, null, null, 35% !important);
+      }
+      .on,
+      .off {
+        @include position_value(absolute, 50%, null, null, 65%);
+        color: $primary;
+        transform: translate(-50%, -50%);
+        @include font(null, 11px, bold);
+      }
+    }
+    @-webkit-keyframes pulse {
+      0% {
+        -webkit-box-shadow: 0 0 0 0 rgba(204, 89, 44, 0.4);
+      }
+      70% {
+        -webkit-box-shadow: 0 0 0 10px rgba(204, 89, 44, 0);
+      }
+      100% {
+        -webkit-box-shadow: 0 0 0 0 rgba(204, 89, 44, 0);
+      }
+    }
+    @keyframes pulse {
+      0% {
+        -moz-box-shadow: 0 0 0 0 rgba(204, 89, 44, 0.4);
+        box-shadow: 0 0 0 0 rgba(204, 89, 44, 0.4);
+      }
+      70% {
+        -moz-box-shadow: 0 0 0 10px rgba(204, 89, 44, 0);
+        box-shadow: 0 0 0 10px rgba(204, 89, 44, 0);
+      }
+      100% {
+        -moz-box-shadow: 0 0 0 0 rgba(204, 89, 44, 0);
+        box-shadow: 0 0 0 0 rgba(204, 89, 44, 0);
+      }
+    }
+  }
 }
 /****************************************************************************/
 /************************** MEDIA QUERIES ***********************************/
@@ -709,6 +824,25 @@ body {
 .text-captilize {
   text-transform: capitalize;
 }
-.text-info{
+.text-info {
   color: $secondary !important;
+}
+.hide {
+  @include flexbox(none, null, null, null, null, null);
+}
+.title-bar {
+  .name-width {
+    @include wh-value(20%, null);
+  }
+  .id-width {
+    @include wh-value(25%, null);
+  }
+}
+.filter-actions {
+  button {
+    @include roundedCorners(10);
+    @include padding-percentage-value(0.2rem, 1rem, 0.2rem, 1rem);
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border: none;
+  }
 }

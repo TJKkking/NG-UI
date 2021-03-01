@@ -77,14 +77,17 @@ export class NSInstancesActionComponent {
   /** Assign the VNF Details @public */
   public vnfDetails: VNFD[] = [];
 
+  /** Contains instance ID @public */
+  public instanceID: string;
+
+  /** Contains operational dashboard view @public */
+  public isShowOperationalDashboard: boolean = false;
+
   /** Instance of the modal service @private */
   private modalService: NgbModal;
 
   /** Holds teh instance of AuthService class of type AuthService @private */
   private router: Router;
-
-  /** Contains instance ID @private */
-  private instanceID: string;
 
   /** Contains all methods related to shared @private */
   private sharedService: SharedService;
@@ -120,6 +123,8 @@ export class NSInstancesActionComponent {
     this.operationalStatus = this.value.OperationalStatus;
     this.instanceID = this.value.identifier;
     this.getAdminDetails = this.value.adminDetails;
+    this.isShowOperationalDashboard = !isNullOrUndefined(this.value.vcaStatus) ?
+      Object.keys(this.value.vcaStatus).length === 0 && typeof this.value.vcaStatus === 'object' : true;
   }
 
   /** Shows information using modalservice @public */

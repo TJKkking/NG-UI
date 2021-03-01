@@ -17,6 +17,7 @@
  */
 import { HttpHeaders } from '@angular/common/http';
 import { NSD } from 'NSInstanceModel';
+import { EXECUTEDACTIONS } from 'OperationalModel';
 import { VNFD } from 'VNFDModel';
 
 /**
@@ -41,7 +42,8 @@ export enum CONSTANTNUMBER {
     oneMB = 1048576,
     paginationDefaultValue = 10,
     splitLongitude = 1,
-    splitLatitude = 2
+    splitLatitude = 2,
+    timeOutDefaultSeconds = 5
 }
 /**
  * handle count @enum
@@ -115,6 +117,9 @@ export interface URLPARAMS {
     nsID?: string;
     nsd?: NSD;
     data?: VNFD[];
+    configs?: object;
+    actions?: object;
+    executedActions?: EXECUTEDACTIONS[];
 }
 /** Handle the Delete params */
 export interface DELETEPARAMS {

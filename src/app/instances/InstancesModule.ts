@@ -39,6 +39,10 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NSInstancesComponent } from 'NSInstancesComponent';
 import { NSPrimitiveComponent } from 'NSPrimitiveComponent';
 import { NSTopologyComponent } from 'NSTopologyComponent';
+import { OperationalViewAppActionsComponent } from 'OperationalAppActionsComponent';
+import { OperationalViewAppConfigsComponent } from 'OperationalAppConfigsComponent';
+import { OperationalViewAppExecutedActionsComponent } from 'OperationalAppExecutedActionsComponent';
+import { OperationalViewComponent } from 'OperationalViewComponent';
 import { PagePerRowModule } from 'PagePerRowModule';
 import { PageReloadModule } from 'PageReloadModule';
 import { PDUInstancesComponent } from 'PDUInstancesComponent';
@@ -100,6 +104,23 @@ const routes: Routes = [
                         projectInfo, { title: 'NSINSTANCES', url: '/instances/ns' }, { title: '{id}', url: null }]
                 },
                 component: NSTopologyComponent
+            },
+            {
+                path: 'operational-view',
+                data: {
+                    breadcrumb: [{ title: 'PAGE.DASHBOARD.DASHBOARD', url: '/' }, { title: 'PAGE.DASHBOARD.PROJECTS', url: '/projects' },
+                        projectInfo, { title: 'PAGE.OPERATIONALDASHBOARD.TITLE', url: null }]
+                },
+                component: OperationalViewComponent
+            },
+            {
+                path: 'operational-view/:id',
+                data: {
+                    breadcrumb: [{ title: 'PAGE.DASHBOARD.DASHBOARD', url: '/' }, { title: 'PAGE.DASHBOARD.PROJECTS', url: '/projects' },
+                        projectInfo, { title: 'PAGE.OPERATIONALDASHBOARD.TITLE', url: '/instances/operational-view' },
+                    { title: '{id}', url: null }]
+                },
+                component: OperationalViewComponent
             }
         ]
     }
@@ -114,10 +135,17 @@ const routes: Routes = [
         CodemirrorModule, CommonModule, Ng2SmartTableModule, FlexLayoutModule, RouterModule.forChild(routes), NgbModule,
         NgSelectModule, PagePerRowModule, LoaderModule, SidebarModule.forRoot(), PageReloadModule],
     declarations: [InstancesComponent, NSInstancesComponent, VNFInstancesComponent, PDUInstancesComponent, AddPDUInstancesComponent,
-        NetsliceInstancesComponent, HistoryOperationsComponent, NSTopologyComponent, NSPrimitiveComponent],
+        NetsliceInstancesComponent, HistoryOperationsComponent, NSTopologyComponent, NSPrimitiveComponent, OperationalViewComponent,
+        OperationalViewAppConfigsComponent, OperationalViewAppActionsComponent, OperationalViewAppExecutedActionsComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [DataService],
-    entryComponents: [NSPrimitiveComponent, AddPDUInstancesComponent]
+    entryComponents: [
+        NSPrimitiveComponent,
+        AddPDUInstancesComponent,
+        OperationalViewAppConfigsComponent,
+        OperationalViewAppActionsComponent,
+        OperationalViewAppExecutedActionsComponent
+    ]
 })
 /** Exporting a class @exports InstancesModule */
 export class InstancesModule {

@@ -1,0 +1,276 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: BARATH KUMAR R (barath.r@tataelxsi.co.in)
+-->
+<div class="row d-flex flex-row justify-content-between">
+    <div class="d-flex align-items-center header-style">{{ 'PAGE.OPERATIONALDASHBOARD.TITLE' | translate }}
+        ({{ 'PAGE.OPERATIONALDASHBOARD.MODELSUMMARY' | translate }})</div>
+    <page-reload></page-reload>
+</div>
+<div class="container-fluid p-0 m-0 mt-2">
+    <ng-container *ngIf="vcaDetails.length > 0 else noData">
+        <ngb-accordion #acc="ngbAccordion" class="juju-section" [closeOthers]="true" type="secondary"
+            activeIds="{{activeID}}">
+            <ngb-panel id="{{vcaDetail.ns_id}}" *ngFor="let vcaDetail of vcaDetails; let i = index;">
+                <ng-template ngbPanelHeader let-opened="opened">
+                    <div class="d-flex align-items-center justify-content-between cursor-pointer title-bar"
+                        (click)="acc.toggle(vcaDetail.ns_id);">
+                        <span class="name-width">{{vcaDetail.vca_name}}</span>
+                        <span class="id-width">{{vcaDetail.ns_id}}</span>
+                        <button class="btn btn-sm btn-primary border-radius-default" placement="top" container="body"
+                            ngbTooltip="{{ (opened ? 'CLOSE' : 'OPEN') | translate }}">
+                            <i [ngClass]="{ 'fas': true, 'fa-angle-down': opened, 'fa-angle-right': !opened }"></i>
+                        </button>
+                    </div>
+                </ng-template>
+                <ng-template ngbPanelContent>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 p-1">
+                            <div class="row my-2 justify-content-end align-items-center setting-section">
+                                <div class="form-group row align-items-center mb-0">
+                                    <label class="col-form-label font-weight-bold text-primary">
+                                        {{ 'PAGE.OPERATIONALDASHBOARD.LIVELOAD' | translate}}
+                                    </label>
+                                    <!-- Live button switch -->
+                                    <label class="switch ml-1">
+                                        <input id="liveData{{i}}" type="checkbox" [checked]="vcaDetail.isLiveloading"
+                                            (change)="callLiveData($event.target.checked, vcaDetail.ns_id, i)">
+                                        <div class="slider round">
+                                            <span class="on">{{ 'ON' | translate }}</span>
+                                            <span class="off">{{ 'OFF' | translate }}</span>
+                                        </div>
+                                    </label>
+                                    <!-- Seconds button group -->
+                                    <div class="btn-group list action ml-2 seconds-btn-group" role="group"
+                                        *ngIf="vcaDetail.isLiveloading">
+                                        <button [disabled]="!vcaDetail.isLiveloading" type="button"
+                                            class="btn btn-primary"
+                                            [ngClass]="{'active': seconds.value === vcaDetail.timeOutSeconds}"
+                                            (click)="onSetTimerSelector(seconds.value, vcaDetail.ns_id, i)"
+                                            *ngFor="let seconds of setSeconds;">{{seconds.label}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container *ngFor="let modelVCAStatus of vcaDetail.vcaStatusModels; let i = index;">
+                        <h5 class="font-weight-bold text-primary">
+                            {{ 'PAGE.OPERATIONALDASHBOARD.MODEL' | translate }} {{i+1}} (Cloud/Region):
+                            {{modelVCAStatus.model ? modelVCAStatus.model.cloud_tag : '-'}}/
+                            {{modelVCAStatus.model ? modelVCAStatus.model.region : '-' }}
+                        </h5>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 p-1">
+                                <div class="row my-2 justify-content-between align-items-center filter-actions">
+                                    <div class="form-group row align-items-center mb-0">
+                                        <button class="btn btn-sm btn-outline-primary mx-1 filter{{i}} all{{i}} active"
+                                            type="button" (click)="showHideTables($event.target, 'all', i)">
+                                            {{ 'ALL' | translate }}
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary mx-1 filter{{i}} app{{i}}"
+                                            type="button" (click)="showHideTables($event.target, 'app', i)"
+                                            *ngIf="modelVCAStatus.applications.length > 0">
+                                            {{ 'PAGE.OPERATIONALDASHBOARD.APPLICATIONTITLE' | translate }} -
+                                            {{modelVCAStatus.applications.length > 0 ?
+                                            modelVCAStatus.applications.length : 0}}
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary mx-1 filter{{i}} unit{{i}}"
+                                            type="button" (click)="showHideTables($event.target, 'unit', i)"
+                                            *ngIf="modelVCAStatus.units.length > 0">
+                                            {{ 'PAGE.OPERATIONALDASHBOARD.UNITSTITLE' | translate }} -
+                                            {{modelVCAStatus.units.length > 0 ? modelVCAStatus.units.length : 0}}
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary mx-1 filter{{i}} machine{{i}}"
+                                            type="button" (click)="showHideTables($event.target, 'machine', i)"
+                                            *ngIf="modelVCAStatus.machines.length > 0">
+                                            {{ 'PAGE.OPERATIONALDASHBOARD.MACHINETITLE' | translate }} -
+                                            {{modelVCAStatus.machines.length > 0 ? modelVCAStatus.machines.length : 0}}
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary mx-1 filter{{i}} relation{{i}}"
+                                            type="button" (click)="showHideTables($event.target, 'relation', i)"
+                                            *ngIf="modelVCAStatus.relations.length > 0">
+                                            {{ 'PAGE.OPERATIONALDASHBOARD.RELATIONS' | translate }} -
+                                            {{modelVCAStatus.relations.length > 0 ? modelVCAStatus.relations.length :
+                                            0}}
+                                        </button>
+                                    </div>
+                                    <div class="form-group row align-items-center mb-0"
+                                        *ngIf="modelVCAStatus.executedActions !== undefined && modelVCAStatus.executedActions.length > 0">
+                                        <label class="col-form-label font-weight-bold text-primary">
+                                            {{ 'EXECUTEDACTIONS' | translate }}
+                                        </label>
+                                        <button type="button"
+                                            class="btn btn-sm btn-primary border border-radius-default ml-1"
+                                            (click)="showExecutedActionsList(modelVCAStatus.executedActions);">
+                                            <i class="fas fa-directions"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Apps section -->
+                                <table class="table table-sm filterTable{{i}} app{{i}}" id="app{{i}}"
+                                    *ngIf="modelVCAStatus.applications.length > 0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">{{ 'PAGE.OPERATIONALDASHBOARD.APPLICATION' | translate }}
+                                            </th>
+                                            <th scope="col">{{ 'STATUS' | translate }}</th>
+                                            <th scope="col">{{ 'SCALE' | translate }}</th>
+                                            <th scope="col">{{ 'PAGE.OPERATIONALDASHBOARD.CHARM' | translate }}</th>
+                                            <th scope="col">{{ 'PAGE.OPERATIONALDASHBOARD.STORE' | translate }}</th>
+                                            <th scope="col">{{ 'ACTIONS' | translate }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let application of modelVCAStatus.applications">
+                                            <th scope="row">
+                                                <i class="active-icon fa-circle"
+                                                    [ngClass]="application.status ? application.status === 'active' ?  'fas text-success': application.status === 'waiting' ? 'fas text-warning' : application.status === 'blocked' ? 'fas text-danger' : 'far': ''">
+                                                </i>
+                                                {{application.app_id ? application.app_id : '-' }}
+                                            </th>
+                                            <td>{{application.status ? application.status : '-' }}</td>
+                                            <td>{{application.scale ? application.scale : 0 }}</td>
+                                            <td>{{application.charm ? application.charm : '-' }}</td>
+                                            <td>{{application.store ? application.store : '-' }}</td>
+                                            <td>
+                                                <div class="btn-group list action" role="group">
+                                                    <button type="button" class="btn btn-primary"
+                                                        (click)="showConfigList(application.configs);" placement="top"
+                                                        container="body" ngbTooltip="{{ 'CONFIG' | translate }}"
+                                                        [disabled]="application.configs === null">
+                                                        <i class="fas fa-cogs"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary"
+                                                        (click)="showActionsList(application.actions);" placement="top"
+                                                        container="body" ngbTooltip="{{ 'ACTIONS' | translate }}"
+                                                        [disabled]="application.actions === null">
+                                                        <i class="fas fa-receipt"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center" *ngIf="modelVCAStatus.applications.length === 0">
+                                            <td colspan="7">{{ 'PAGE.OPERATIONALDASHBOARD.NOAPPLICATION' | translate }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- Units section -->
+                                <table class="table table-sm filterTable{{i}} unit{{i}}" id="unit{{i}}"
+                                    *ngIf="modelVCAStatus.units.length > 0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">{{ 'PAGE.OPERATIONALDASHBOARD.UNITS' | translate }}</th>
+                                            <th scope="col">{{ 'PAGE.OPERATIONALDASHBOARD.WORKLOAD' | translate }}</th>
+                                            <th scope="col">{{ 'PAGE.OPERATIONALDASHBOARD.AGENT' | translate }}</th>
+                                            <th scope="col">{{ 'PAGE.OPERATIONALDASHBOARD.MACHINE' | translate }}</th>
+                                            <th scope="col">
+                                                {{ 'PUBLICADDRESS' | translate }} /
+                                                {{ 'PAGE.OPERATIONALDASHBOARD.ADDRESS' | translate }}
+                                            </th>
+                                            <th scope="col">{{ 'PAGE.OPERATIONALDASHBOARD.MESSAGE' | translate }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let unit of modelVCAStatus.units">
+                                            <th scope="row">
+                                                <i class="active-icon fa-circle"
+                                                    [ngClass]="unit.workload_status ? unit.workload_status.status === 'active' ?  'fas text-success': unit.workload_status.status === 'waiting' ? 'fas text-warning' : unit.workload_status.status === 'blocked' ? 'fas text-danger' : 'far': ''">
+                                                </i>
+                                                {{unit.unit_id ? unit.unit_id : '-'}} {{unit.leader !== null ? '(' +
+                                                ('PAGE.OPERATIONALDASHBOARD.LEADER' | translate) + ')' : '' }}
+                                            </th>
+                                            <td>{{unit.workload_status ? unit.workload_status.status : '-'}}</td>
+                                            <td>{{unit.agent_status ? unit.agent_status.status : '-'}}</td>
+                                            <td>{{unit.machine ? unit.machine : '-'}}</td>
+                                            <td>
+                                                {{unit.public_address ? unit.public_address : unit.address ?
+                                                unit.address : '-'}}
+                                            </td>
+                                            <td>{{unit.workload_status ? unit.workload_status.info : '-'}}</td>
+                                        </tr>
+                                        <tr class="text-center" *ngIf="modelVCAStatus.units.length === 0">
+                                            <td colspan="7">{{ 'PAGE.OPERATIONALDASHBOARD.NOUNITS' | translate }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- Machines section -->
+                                <table class="table table-sm filterTable{{i}} machine{{i}}" id="machine{{i}}"
+                                    *ngIf="modelVCAStatus.machines.length > 0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">{{ 'PAGE.OPERATIONALDASHBOARD.MACHINE' | translate }}</th>
+                                            <th scope="col">State</th>
+                                            <th scope="col">DNS</th>
+                                            <th scope="col">Instance ID</th>
+                                            <th scope="col">{{ 'PAGE.OPERATIONALDASHBOARD.SERIES' | translate }}</th>
+                                            <th scope="col">{{ 'PAGE.OPERATIONALDASHBOARD.MESSAGE' | translate }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let machines of modelVCAStatus.machines">
+                                            <th scope="row">{{machines.id_ ? machines.id_ : '-'}}</th>
+                                            <td>{{machines.agent_status ? machines.agent_status.status : '-'}}</td>
+                                            <td>{{machines.dns_name !== null ? machines.dns_name : '-'}}</td>
+                                            <td>{{machines.instance_id ? machines.instance_id : '-'}}</td>
+                                            <td>{{machines.series ? machines.series : '-'}}</td>
+                                            <td>{{machines.instance_status ? machines.instance_status.info : '-'}}</td>
+                                        </tr>
+                                        <tr class="text-center" *ngIf="modelVCAStatus.machines.length === 0">
+                                            <td colspan="6">
+                                                {{ 'PAGE.OPERATIONALDASHBOARD.NOMACHINES' | translate }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- Relations section -->
+                                <table class="table table-sm filterTable{{i}} relation{{i}}" id="relation{{i}}"
+                                    *ngIf="modelVCAStatus.relations.length > 0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">
+                                                {{ 'PAGE.OPERATIONALDASHBOARD.RELATIONPROVIDER' | translate }}
+                                            </th>
+                                            <th scope="col">{{ 'PAGE.OPERATIONALDASHBOARD.REQUIRER' | translate }}</th>
+                                            <th scope="col">{{ 'PAGE.OPERATIONALDASHBOARD.INTERFACE' | translate }}</th>
+                                            <th scope="col">{{ 'TYPE' | translate }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let relation of modelVCAStatus.relations">
+                                            <th scope="row">{{relation.key ? relation.key : '-'}}</th>
+                                            <td>{{relation.key ? relation.key : '-'}}</td>
+                                            <td>{{relation.interface ? relation.interface : '-'}}</td>
+                                            <td>{{relation.endpoints[0].role ? relation.endpoints[0].role : '-'}}</td>
+                                        </tr>
+                                        <tr class="text-center" *ngIf="modelVCAStatus.relations.length === 0">
+                                            <td colspan="4">{{ 'PAGE.OPERATIONALDASHBOARD.NORELATIONS' | translate }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-template>
+            </ngb-panel>
+        </ngb-accordion>
+    </ng-container>
+    <ng-template #noData>
+        <h5 class="text-center">{{ 'NODATA' | translate }}</h5>
+    </ng-template>
+</div>
+<app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>
