@@ -277,21 +277,19 @@ export class NSPrimitiveComponent implements OnInit {
         }
     }
     /** Generate vdu section @public */
-    public generateVDUData(vduData: VDUPROFILE, vduConfig: VDUCONFIG[]): VDUPROFILE {
-        const getVDUConfig: VDUCONFIG = vduConfig.filter((itemData: VDUCONFIG): boolean =>
-            itemData.id === vduData['vdu-configuration-id'])[0];
+    public generateVDUData(vduConfig: VDUCONFIG): VDUPROFILE {
         return {
-            id: vduData.id,
-            name: vduData.id,
-            'vdu-configuration': getVDUConfig
+            id: vduConfig.id,
+            name: vduConfig.id,
+            'vdu-configuration': vduConfig
         };
     }
     /** Generate kdu section @public */
-    public generateKDUData(kduData: KDUPRIMITIVELEVEL): KDUPRIMITIVELEVEL {
+    public generateKDUData(kduData: KDUPRIMITIVELEVEL, kduConfig: VDUCONFIG): KDUPRIMITIVELEVEL {
         return {
             name: kduData.name,
             'juju-bundle': kduData['juju-bundle'],
-            'kdu-configuration': kduData['kdu-configuration']
+            'kdu-configuration': kduConfig
         };
     }
     /** Used to set the validation and value and update the validation and value @public */
@@ -321,47 +319,55 @@ export class NSPrimitiveComponent implements OnInit {
         this.getFormControl('primitive').setValue(null);
         const apiUrl: string = environment.VNFPACKAGES_URL + '?id=' + vnfdRef;
         this.isLoadingResults = true;
-        this.restService.getResource(apiUrl)
-            .subscribe((vnfdInfo: VNFD[]): void => {
+        this.restService.getResource(apiUrl).subscribe((vnfdInfo: VNFD[]): void => {
                 const vnfInstances: VNFD = vnfdInfo[0];
-                if (!isNullOrUndefined(vnfInstances.df) && !isNullOrUndefined(vnfInstances['vnf-configuration'])) {
+                if (!isNullOrUndefined(vnfInstances.df)) {
                     this.getFormControl('vdu_id').setValidators([]);
                     this.getFormControl('kdu_name').setValidators([]);
                     vnfInstances.df.forEach((df: DF): void => {
-                        if (df['vnf-configuration-id'] !== undefined) {
-                            const vnfprimitiveList: VNFCONFIG = vnfInstances['vnf-configuration']
-                                .filter((itemData: VNFCONFIG): boolean => itemData.id === df['vnf-configuration-id'])[0];
-                            this.primitiveList = vnfprimitiveList['config-primitive'];
+                        if (df['lcm-operations-configuration'] !== undefined) {
+                            if (df['lcm-operations-configuration']['operate-vnf-op-config'] !== undefined) {
+                                const day12Operation: VDUCONFIG[] = df['lcm-operations-configuration']['operate-vnf-op-config']['day1-2'];
+                                if (day12Operation !== undefined) {
+                                    const vnfprimitiveList: VNFCONFIG = day12Operation
+                                        .filter((itemData: VNFCONFIG): boolean => itemData.id === vnfInstances.id)[0];
+                                    if (vnfprimitiveList !== undefined) {
+                                        this.primitiveList = vnfprimitiveList['config-primitive'];
+                                    }
+                                    /** VDU Primitive */
+                                    if (getType === 'VDU_Primitive') {
+                                        this.kduList = [];
+                                        this.vduList = [];
+                                        this.primitiveList = [];
+                                        df['vdu-profile'].forEach((vduProfile: VDUPROFILE): void => {
+                                            day12Operation.forEach((element: VDUCONFIG): void => {
+                                                if (element.id === vduProfile.id){
+                                                    const vduDataObj: VDUPROFILE = this.generateVDUData(element);
+                                                    this.vduList.push(vduDataObj);
+                                                }
+                                            });
+                                        });
+                                    }
+                                    /** KDU Primitive */
+                                    if (getType === 'KDU_Primitive') {
+                                        this.kduList = [];
+                                        this.vduList = [];
+                                        this.primitiveList = [];
+                                        if (!isNullOrUndefined(vnfInstances.kdu)) {
+                                            vnfInstances.kdu.forEach((kduData: KDUPRIMITIVELEVEL): void => {
+                                                day12Operation.forEach((element: VDUCONFIG): void => {
+                                                    if (element.id === kduData.name){
+                                                        const kduDataObj: KDUPRIMITIVELEVEL = this.generateKDUData(kduData, element);
+                                                        this.kduList.push(kduDataObj);
+                                                    }
+                                                });
+                                            });
+                                        }
+                                    }
+                                }
+                            }
                         }
                     });
-                }
-                if (getType === 'VDU_Primitive') {
-                    this.kduList = [];
-                    this.vduList = [];
-                    this.primitiveList = [];
-                    if (!isNullOrUndefined(vnfInstances.df) && !isNullOrUndefined(vnfInstances['vdu-configuration'])) {
-                        vnfInstances.df.forEach((df: DF): void => {
-                            if (df['vdu-profile'] !== undefined) {
-                                df['vdu-profile'].forEach((element: VDUPROFILE): void => {
-                                    const vduDataObj: VDUPROFILE = this.generateVDUData(element, vnfInstances['vdu-configuration']);
-                                    this.vduList.push(vduDataObj);
-                                });
-                            }
-                        });
-                    }
-                }
-                if (getType === 'KDU_Primitive') {
-                    this.kduList = [];
-                    this.vduList = [];
-                    this.primitiveList = [];
-                    if (!isNullOrUndefined(vnfInstances.kdu)) {
-                        vnfInstances.kdu.forEach((kduData: KDUPRIMITIVELEVEL): void => {
-                            if (kduData['kdu-configuration']) {
-                                const kduDataObj: KDUPRIMITIVELEVEL = this.generateKDUData(kduData);
-                                this.kduList.push(kduDataObj);
-                            }
-                        });
-                    }
                 }
                 this.isLoadingResults = false;
             }, (error: ERRORDATA): void => {

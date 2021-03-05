@@ -32,6 +32,7 @@ import { NSPrimitiveComponent } from 'NSPrimitiveComponent';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
 import { ShowInfoComponent } from 'ShowInfoComponent';
+import { VDU, VNFD } from 'VNFDModel';
 /**
  * Creating component
  * @Component takes NSInstancesActionComponent.html as template url
@@ -121,7 +122,7 @@ export class NSInstancesActionComponent {
   public deleteNSInstance(forceAction: boolean): void {
     const modalRef: NgbModalRef = this.modalService.open(DeleteComponent, { backdrop: 'static' });
     modalRef.componentInstance.params = { forceDeleteType: forceAction };
-    modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
+    modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
       if (result) {
         this.sharedService.callData();
       }
@@ -130,14 +131,14 @@ export class NSInstancesActionComponent {
 
   /** History of operations for an Instanace @public */
   public historyOfOperations(): void {
-    this.router.navigate(['/instances/ns/history-operations/', this.instanceID]).catch(() => {
+    this.router.navigate(['/instances/ns/history-operations/', this.instanceID]).catch((): void => {
       // Catch Navigation Error
     });
   }
 
   /** NS Topology */
   public nsTopology(): void {
-    this.router.navigate(['/instances/ns/', this.instanceID]).catch(() => {
+    this.router.navigate(['/instances/ns/', this.instanceID]).catch((): void => {
       // Catch Navigation Error
     });
   }
@@ -154,27 +155,29 @@ export class NSInstancesActionComponent {
   /** Redirect to Grafana Metrics @public */
   public metrics(): void {
     this.isLoadingMetricsResult = true;
-    this.restService.getResource(environment.NSDINSTANCES_URL + '/' + this.instanceID).subscribe((nsData: NSDDetails[]) => {
-      nsData['vnfd-id'].forEach((vnfdID: string[]) => {
+    this.restService.getResource(environment.NSDINSTANCES_URL + '/' + this.instanceID).subscribe((nsData: NSDDetails[]): void => {
+      nsData['vnfd-id'].forEach((vnfdID: string[]): void => {
         this.restService.getResource(environment.VNFPACKAGES_URL + '/' + vnfdID)
-          .subscribe((vnfd: {}[]) => {
-            if (vnfd['monitoring-param'] !== undefined && vnfd['monitoring-param'].length > 0) {
-              this.isLoadingMetricsResult = false;
-              const location: string = environment.GRAFANA_URL + '/' + this.instanceID + '/osm-ns-metrics-metrics';
-              window.open(location);
-            } else {
-              this.isLoadingMetricsResult = false;
-              this.notifierService.notify('error', this.translateService.instant('GRAFANA.METRICSERROR'));
-            }
-            setTimeout(() => {
+          .subscribe((vnfd: VNFD): void => {
+            vnfd.vdu.forEach((vduData: VDU): void => {
+              if (vduData['monitoring-parameter'] !== undefined && vduData['monitoring-parameter'].length > 0) {
+                this.isLoadingMetricsResult = false;
+                const location: string = environment.GRAFANA_URL + '/' + this.instanceID + '/osm-ns-metrics-metrics';
+                window.open(location);
+              } else {
+                this.isLoadingMetricsResult = false;
+                this.notifierService.notify('error', this.translateService.instant('GRAFANA.METRICSERROR'));
+              }
+            });
+            setTimeout((): void => {
               this.cd.detectChanges();
             }, this.timeOut);
-          }, (error: ERRORDATA) => {
+          }, (error: ERRORDATA): void => {
             this.restService.handleError(error, 'get');
             this.isLoadingMetricsResult = false;
           });
       });
-    }, (error: ERRORDATA) => {
+    }, (error: ERRORDATA): void => {
       this.restService.handleError(error, 'get');
       this.isLoadingMetricsResult = false;
     });
