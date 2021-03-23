@@ -10,16 +10,21 @@
 # implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# This Dockerfile is intented for devops and deb package generation
+########################################################################################
+# This Dockerfile is intented for devops testing and deb package generation
 #
-# Use Dockerfile.local for running osm/NBI in a docker container from source
-# Use Dockerfile.fromdeb for running osm/NBI in a docker container from last stable package
-
+# To run stage 2 locally:
+#
+#   docker build -t stage2 .
+#   docker run -ti -v `pwd`:/work -w /work --entrypoint /bin/bash stage2
+#   devops-stages/stage-test.sh
+#   devops-stages/stage-build.sh
+#
 
 FROM ubuntu:18.04
 
-RUN apt-get update && apt-get -y install git make libcurl4-gnutls-dev \
-    libgnutls28-dev debhelper apt-utils dh-make
-	
-	
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y install \
+        debhelper \
+        dh-make \
+        git
