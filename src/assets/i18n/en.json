@@ -150,6 +150,10 @@
     "TYPEINFO": "To add a new TYPE, Please enter input above",
     "UPLOADCONFIGLABEL": "Please upload file with .yaml or .yml format",
     "NEWVERSIONTAG": "Here is the new version {{appVersion}} of OSM!",
+    "SCALEOUT": "Scale Out",
+    "SCALEIN": "Scale In",
+    "SCALING": "Manual Scaling",
+    "SCALINGNOTFOUND": "scaling-aspect not found in vnfd",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Dashboard",

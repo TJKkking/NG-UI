@@ -83,6 +83,7 @@ export interface DF {
     'instantiation-level'?: INSTANTIATIONLEVEL[];
     'vdu-profile'?: VDUPROFILE[];
     'vnf-configuration-id'?: string;
+    'scaling-aspect'?: SCALING[];
 }
 /** Interface for INSTANTIATIONLEVEL */
 export interface INSTANTIATIONLEVEL {
@@ -102,6 +103,31 @@ export interface VDUPROFILE {
     'max-number-of-instances'?: number;
     'vdu-configuration-id'?: string;
     'vdu-configuration'?: VDUCONFIG;
+}
+/** Interface for SCALING */
+export interface SCALING {
+    'aspect-delta-details'?: object;
+    id: string;
+    name?: string;
+    'max-scale-level'?: number;
+    'scaling-policy'?: SCALINGPOLICY[];
+}
+/** Interface for SCALINGPOLICY */
+export interface SCALINGPOLICY {
+    'cooldown-time': number;
+    name?: string;
+    'scaling-criteria': SCALINGCRITERIA[];
+    'scaling-type'?: string;
+    'threshold-time'?: number;
+}
+/** Interface for SCALINGCRITERIA */
+export interface SCALINGCRITERIA {
+    name?: string;
+    'scale-in-relational-operation': string;
+    'scale-in-threshold'?: string;
+    'scale-out-relational-operation'?: string;
+    'scale-out-threshold'?: string;
+    'vnf-monitoring-param-ref'?: string;
 }
 /** Interface for VDUCONFIG */
 export interface VDUCONFIG {

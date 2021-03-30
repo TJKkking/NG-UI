@@ -138,7 +138,8 @@
             "OsmRepositoriesDetails":["src/app/osm-repositories/osm-repositories-details/OsmRepositoriesDetailsComponent"],
             "OsmRepositoriesAction" : ["src/app/utilities/osm-repositories-action/OsmRepositoriesActionComponent"],
             "OsmRepoModel": ["src/models/OsmRepoModel"],
-            "OsmRepoCreateUpdate": ["src/app/osm-repositories/osm-repo-create-update/OsmRepoCreateUpdateComponent"]
+            "OsmRepoCreateUpdate": ["src/app/osm-repositories/osm-repo-create-update/OsmRepoCreateUpdateComponent"],
+            "ScalingComponent": ["src/app/utilities/scaling/ScalingComponent"]
         }
     }
 }

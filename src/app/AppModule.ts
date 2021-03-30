@@ -67,6 +67,7 @@ import { PageNotFoundComponent } from 'PageNotFound';
 import { PDUInstancesActionComponent } from 'PDUInstancesActionComponent';
 import { ProjectLinkComponent } from 'ProjectLinkComponent';
 import { ProjectsActionComponent } from 'ProjectsAction';
+import { ScalingComponent } from 'ScalingComponent';
 import { SDNControllerActionComponent } from 'SDNControllerActionComponent';
 import { ShowInfoComponent } from 'ShowInfoComponent';
 import { SwitchProjectComponent } from 'SwitchProjectComponent';
@@ -121,7 +122,8 @@ const customNotifierOptions: NotifierOptions = {
         PDUInstancesActionComponent,
         SDNControllerActionComponent,
         SwitchProjectComponent,
-        GoToTopDirective
+        GoToTopDirective,
+        ScalingComponent
     ],
     imports: [
         NotifierModule.withConfig(customNotifierOptions),
@@ -191,7 +193,8 @@ const customNotifierOptions: NotifierOptions = {
         WIMAccountsActionComponent,
         PDUInstancesActionComponent,
         SDNControllerActionComponent,
-        SwitchProjectComponent
+        SwitchProjectComponent,
+        ScalingComponent
     ]
 })
 

@@ -150,6 +150,10 @@
     "TYPEINFO": "Um einen neuen TYPW hinzuzufügen, geben Sie oben die Eingabe ein",
     "UPLOADCONFIGLABEL": "Bitte laden Sie eine Datei im .yaml- oder .yml-Format hoch",
     "NEWVERSIONTAG": "Hier ist die neue Version {{appVersion}} von OSM!",
+    "SCALEOUT": "Scale Out",
+    "SCALEIN": "Scale In",
+    "SCALING": "Manuelle Skalierung",
+    "SCALINGNOTFOUND": "scaling-aspect nicht in vnfd gefunden",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Instrumententafel",

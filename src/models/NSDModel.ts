@@ -34,7 +34,6 @@ export interface NSData {
 /** Interface for the nscompose descriptors content */
 export interface NSDDetails {
     'connection-point': CONNECTIONPOINT[];
-    'constituent-vnfd': CONSTITUENTVNFD[];
     description: string;
     id: string;
     logo: string;
@@ -55,12 +54,6 @@ export interface NSDDetails {
 export interface CONNECTIONPOINT {
     name: string;
     'vld-id-ref': string;
-}
-
-/** Interface for the constituent-vnfd */
-export interface CONSTITUENTVNFD {
-    'member-vnf-index': number;
-    'vnfd-id-ref': string;
 }
 
 /** Interface for the vld */

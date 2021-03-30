@@ -150,6 +150,10 @@
     "TYPEINFO": "Para agregar un nuevo TIPO, ingrese la entrada de arriba",
     "UPLOADCONFIGLABEL": "Cargue el archivo con formato .yaml o .yml",
     "NEWVERSIONTAG": "¡Aquí está la nueva versión {{appVersion}} de OSM!",
+    "SCALEOUT": "Desescalar",
+    "SCALEIN": "Escalar",
+    "SCALING": "Escalado manual",
+    "SCALINGNOTFOUND": "scaling-aspect no encontrado en vnfd",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Tablero",

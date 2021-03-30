@@ -30,9 +30,12 @@ import { NSDDetails } from 'NSDModel';
 import { NSDInstanceData } from 'NSInstanceModel';
 import { NSPrimitiveComponent } from 'NSPrimitiveComponent';
 import { RestService } from 'RestService';
+import { forkJoin, Observable } from 'rxjs';
+import { ScalingComponent } from 'ScalingComponent';
 import { SharedService } from 'SharedService';
 import { ShowInfoComponent } from 'ShowInfoComponent';
-import { VDU, VNFD } from 'VNFDModel';
+import { isNullOrUndefined } from 'util';
+import { DF, VDU, VNFD } from 'VNFDModel';
 /**
  * Creating component
  * @Component takes NSInstancesActionComponent.html as template url
@@ -59,11 +62,20 @@ export class NSInstancesActionComponent {
   /** Operational Status Check @public */
   public operationalStatus: string;
 
+  /** get Admin Details @public */
+  public getAdminDetails: {};
+
+  /** Scaling is accepted @public */
+  public isScalingPresent: boolean = false;
+
   /** Check the loading results for loader status @public */
-  public isLoadingMetricsResult: boolean = false;
+  public isLoadingNSInstanceAction: boolean = false;
 
   /** Give the message for the loading @public */
   public message: string = 'PLEASEWAIT';
+
+  /** Assign the VNF Details @public */
+  public vnfDetails: VNFD[] = [];
 
   /** Instance of the modal service @private */
   private modalService: NgbModal;
@@ -87,7 +99,7 @@ export class NSInstancesActionComponent {
   private cd: ChangeDetectorRef;
 
   /** Set timeout @private */
-  private timeOut: number = 1000;
+  private timeOut: number = 100;
 
   constructor(injector: Injector) {
     this.injector = injector;
@@ -107,6 +119,7 @@ export class NSInstancesActionComponent {
     this.configStatus = this.value.ConfigStatus;
     this.operationalStatus = this.value.OperationalStatus;
     this.instanceID = this.value.identifier;
+    this.getAdminDetails = this.value.adminDetails;
   }
 
   /** Shows information using modalservice @public */
@@ -154,32 +167,96 @@ export class NSInstancesActionComponent {
 
   /** Redirect to Grafana Metrics @public */
   public metrics(): void {
-    this.isLoadingMetricsResult = true;
+    this.isLoadingNSInstanceAction = true;
     this.restService.getResource(environment.NSDINSTANCES_URL + '/' + this.instanceID).subscribe((nsData: NSDDetails[]): void => {
       nsData['vnfd-id'].forEach((vnfdID: string[]): void => {
         this.restService.getResource(environment.VNFPACKAGES_URL + '/' + vnfdID)
           .subscribe((vnfd: VNFD): void => {
             vnfd.vdu.forEach((vduData: VDU): void => {
               if (vduData['monitoring-parameter'] !== undefined && vduData['monitoring-parameter'].length > 0) {
-                this.isLoadingMetricsResult = false;
+                this.isLoadingNSInstanceAction = false;
                 const location: string = environment.GRAFANA_URL + '/' + this.instanceID + '/osm-ns-metrics-metrics';
                 window.open(location);
               } else {
-                this.isLoadingMetricsResult = false;
+                this.isLoadingNSInstanceAction = false;
                 this.notifierService.notify('error', this.translateService.instant('GRAFANA.METRICSERROR'));
               }
             });
-            setTimeout((): void => {
-              this.cd.detectChanges();
-            }, this.timeOut);
+            this.doChanges();
           }, (error: ERRORDATA): void => {
             this.restService.handleError(error, 'get');
-            this.isLoadingMetricsResult = false;
+            this.isLoadingNSInstanceAction = false;
           });
       });
     }, (error: ERRORDATA): void => {
       this.restService.handleError(error, 'get');
-      this.isLoadingMetricsResult = false;
+      this.isLoadingNSInstanceAction = false;
     });
+  }
+
+  /**
+   * Do the manual scaling
+   * Here we are going to get a list of VNFD ID used in the instances
+   * and have this in array with URL created then pass to checkscaling method for forkjoin to get the data @public
+   */
+  public manualScaling(): void {
+    this.isLoadingNSInstanceAction = true;
+    const tempURL: Observable<{}>[] = [];
+    this.value.vnfID.forEach((id: string): void => {
+      const apiUrl: string = environment.VNFPACKAGESCONTENT_URL + '/' + id;
+      tempURL.push(this.restService.getResource(apiUrl));
+    });
+    this.checkScaling(tempURL);
+  }
+
+  /**
+   * Used to forkjoin to all the request to send parallely, get the data and check 'scaling-aspect' key is present @public
+   */
+  public checkScaling(URLS: Observable<{}>[]): void {
+    forkJoin(URLS).subscribe((data: VNFD[]): void => {
+      this.vnfDetails = data;
+      if (this.vnfDetails.length > 0) {
+        this.vnfDetails.forEach((vnfdData: VNFD): void => {
+          vnfdData.df.forEach((dfData: DF): void => {
+            if (!isNullOrUndefined(dfData['scaling-aspect']) && dfData['scaling-aspect'].length > 0) {
+              this.isScalingPresent = true;
+            }
+          });
+        });
+      }
+      this.isLoadingNSInstanceAction = false;
+      if (this.isScalingPresent) {
+        this.openScaling();
+      } else {
+        this.notifierService.notify('error', this.translateService.instant('SCALINGNOTFOUND'));
+      }
+      this.doChanges();
+    });
+  }
+
+  /** Open the scaling pop-up @public */
+  public openScaling(): void {
+    const modalRef: NgbModalRef = this.modalService.open(ScalingComponent, { backdrop: 'static' });
+    modalRef.componentInstance.params = {
+      id: this.instanceID,
+      vnfID: this.value.vnfID,
+      nsID: this.value['nsd-id'],
+      nsd: this.value.nsd,
+      data: this.vnfDetails
+    };
+    modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
+      if (result) {
+        this.sharedService.callData();
+      }
+    }).catch();
+  }
+
+  /**
+   * Check any changes in the child component @public
+   */
+  public doChanges(): void {
+    setTimeout((): void => {
+      this.cd.detectChanges();
+    }, this.timeOut);
   }
 }

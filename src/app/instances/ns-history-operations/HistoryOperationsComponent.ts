@@ -33,6 +33,7 @@ import { RestService } from 'RestService';
 import { Subscription } from 'rxjs';
 import { SharedService } from 'SharedService';
 import { ShowInfoComponent } from 'ShowInfoComponent';
+import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component
@@ -231,12 +232,16 @@ export class HistoryOperationsComponent implements OnInit {
   /** generateData initiate the ns-instance list @private */
   private generateData(): void {
     this.isLoadingResults = true;
-    this.restService.getResource(this.historyURL).subscribe((nsdInstancesData: {}[]) => {
+    this.restService.getResource(this.historyURL).subscribe((nsdInstancesData: {}[]): void => {
       this.nsAndnstInstanceData = [];
-      nsdInstancesData.forEach((nsdAndnstInstanceData: NSDInstanceData) => {
+      nsdInstancesData.forEach((nsdAndnstInstanceData: NSDInstanceData): void => {
+        let scaleType: string = '';
+        if (!isNullOrUndefined(nsdAndnstInstanceData.operationParams.scaleVnfData)) {
+          scaleType = ' (' + nsdAndnstInstanceData.operationParams.scaleVnfData.scaleVnfType + ')';
+        }
         const nsAndnstDataObj: {} = {
           id: nsdAndnstInstanceData.id,
-          type: nsdAndnstInstanceData.lcmOperationType,
+          type: nsdAndnstInstanceData.lcmOperationType + scaleType,
           state: nsdAndnstInstanceData.operationState,
           startTime: this.sharedService.convertEpochTime(nsdAndnstInstanceData.startTime),
           statusEnteredTime: this.sharedService.convertEpochTime(nsdAndnstInstanceData.statusEnteredTime)
@@ -249,11 +254,11 @@ export class HistoryOperationsComponent implements OnInit {
       } else {
         this.checkDataClass = 'dataTables_empty';
       }
-      this.dataSource.load(this.nsAndnstInstanceData).then((data: {}) => {
+      this.dataSource.load(this.nsAndnstInstanceData).then((data: {}): void => {
         //empty block
       }).catch();
       this.isLoadingResults = false;
-    }, (error: ERRORDATA) => {
+    }, (error: ERRORDATA): void => {
       this.isLoadingResults = false;
       if (error.error.status === HttpStatus.NOT_FOUND || error.error.status === HttpStatus.UNAUTHORIZED) {
         this.router.navigateByUrl('404', { skipLocationChange: true }).catch();

@@ -16,6 +16,8 @@
  Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
  */
 import { HttpHeaders } from '@angular/common/http';
+import { NSD } from 'NSInstanceModel';
+import { VNFD } from 'VNFDModel';
 
 /**
  * @file  Model for Commonly used information.
@@ -48,6 +50,7 @@ export enum CONFIGCONSTANT {
     operationalStateFirstStep = 'init',
     operationalStateSecondStep = 'running',
     operationalStateThirdStep = 'failed',
+    operationalStateFourthStep = 'scaling',
     configStateFirstStep = 'init',
     configStateSecondStep = 'configured',
     configStateThirdStep = 'failed',
@@ -108,6 +111,10 @@ export interface URLPARAMS {
     nsConfig?: object;
     projectID?: string;
     username?: string;
+    vnfID?: [];
+    nsID?: string;
+    nsd?: NSD;
+    data?: VNFD[];
 }
 /** Handle the Delete params */
 export interface DELETEPARAMS {

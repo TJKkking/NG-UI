@@ -81,6 +81,9 @@ export class NSInstancesComponent implements OnInit {
     /** operational State failed data @public */
     public operationalStateThirdStep: string = CONFIGCONSTANT.operationalStateThirdStep;
 
+    /** operational State scaling data @public */
+    public operationalStateFourthStep: string = CONFIGCONSTANT.operationalStateFourthStep;
+
     /** Config State init data @public */
     public configStateFirstStep: string = CONFIGCONSTANT.configStateFirstStep;
 
@@ -153,7 +156,8 @@ export class NSInstancesComponent implements OnInit {
                         list: [
                             { value: this.operationalStateFirstStep, title: this.operationalStateFirstStep },
                             { value: this.operationalStateSecondStep, title: this.operationalStateSecondStep },
-                            { value: this.operationalStateThirdStep, title: this.operationalStateThirdStep }
+                            { value: this.operationalStateThirdStep, title: this.operationalStateThirdStep },
+                            { value: this.operationalStateFourthStep, title: this.operationalStateFourthStep }
                         ]
                     }
                 },
@@ -169,6 +173,10 @@ export class NSInstancesComponent implements OnInit {
                     } else if (row.OperationalStatus === this.operationalStateThirdStep) {
                         return `<span class="icon-label" title="${row.OperationalStatus}">
                         <i class="fas fa-times-circle text-danger"></i>
+                        </span>`;
+                    } else if (row.OperationalStatus === this.operationalStateFourthStep) {
+                        return `<span class="icon-label" title="${row.OperationalStatus}">
+                        <i class="fas fa-compress-alt text-success"></i>
                         </span>`;
                     } else {
                         return `<span>${row.OperationalStatus}</span>`;
@@ -230,7 +238,11 @@ export class NSInstancesComponent implements OnInit {
                     ConfigStatus: nsdInstanceData['config-status'],
                     DetailedStatus: nsdInstanceData['detailed-status'],
                     memberIndex: nsdInstanceData.nsd.df,
-                    nsConfig: nsdInstanceData.nsd['ns-configuration']
+                    nsConfig: nsdInstanceData.nsd['ns-configuration'],
+                    adminDetails: nsdInstanceData._admin,
+                    vnfID: nsdInstanceData['vnfd-id'],
+                    nsd: nsdInstanceData.nsd,
+                    'nsd-id': nsdInstanceData['nsd-id']
                 };
                 this.nsInstanceData.push(nsDataObj);
             });

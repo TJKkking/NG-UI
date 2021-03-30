@@ -19,7 +19,7 @@
  * @file  Model for NS Instance related information.
  */
 // tslint:disable: completed-docs
-import { CONSTITUENTVNFD, DF, VLD } from 'NSDModel';
+import { DF, VLD } from 'NSDModel';
 import { VNFDAdminDetails } from 'VNFDModel';
 
 /** Interface for NSInstanceDetails */
@@ -34,6 +34,7 @@ export interface NSInstanceDetails {
     'operational-status': string;
     'datacenter': string;
     nsd: NSD;
+    'nsd-id': string;
     name: string;
     'name-ref': string;
     id: string;
@@ -104,7 +105,6 @@ export interface NSD {
     version: string;
     _id: string;
     id: string;
-    'constituent-vnfd': CONSTITUENTVNFD[];
     vendor: string;
     vdur: string[];
     'connection-point': CONNECTIONPOINT[];
@@ -179,6 +179,29 @@ export interface NSDInstanceData {
     state?: string;
     memberIndex?: DF[];
     nsConfig?: object;
+    adminDetails?: object;
+    vnfID?: string[];
+    nsd?: NSD;
+    operationParams?: OPERATIONPARAMS;
+    'nsd-id': string;
+}
+
+/** Interface for the operationparams */
+export interface OPERATIONPARAMS{
+    scaleType?: string;
+    scaleVnfData?: SCALEVNFDATA;
+}
+
+/** Interface for the scaleVnfData */
+export interface SCALEVNFDATA{
+    scaleVnfType?: string;
+    scaleByStepData?: SCALEBYSTEPDATA;
+}
+
+/** Interface for the scaleByStepData */
+export interface SCALEBYSTEPDATA{
+    'scaling-group-descriptor'?: string;
+    'member-vnf-index'?: string;
 }
 
 /** Interface for the nsInfo */
