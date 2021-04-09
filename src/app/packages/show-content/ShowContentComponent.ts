@@ -18,10 +18,12 @@
 /**
  * @file Show content modal
  */
+import { HttpHeaders } from '@angular/common/http';
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ERRORDATA, URLPARAMS } from 'CommonModel';
+import { ERRORDATA, GETAPIURLHEADER, URLPARAMS } from 'CommonModel';
 import { environment } from 'environment';
+import * as jsyaml from 'js-yaml';
 import { RestService } from 'RestService';
 
 /** Shows json data in the information modal */
@@ -41,6 +43,9 @@ export class ShowContentComponent implements OnInit {
   /** To inject services @public */
   public injector: Injector;
 
+  /** Check the loading results @public */
+  public isLoadingResults: boolean = false;
+
   /** Instance for active modal service @public */
   public activeModal: NgbActiveModal;
 
@@ -53,6 +58,9 @@ export class ShowContentComponent implements OnInit {
   /** Instance of the rest service @private */
   private restService: RestService;
 
+  /** Controls the header form @private */
+  private headers: HttpHeaders;
+
   constructor(injector: Injector) {
     this.injector = injector;
     this.restService = this.injector.get(RestService);
@@ -63,20 +71,31 @@ export class ShowContentComponent implements OnInit {
    * Lifecyle Hooks the trigger before component is instantiate @public
    */
   public ngOnInit(): void {
+    this.headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'text/plain',
+      'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0'
+    });
     if (this.params.page === 'nsd') {
-      this.restService.getResource(environment.NSDESCRIPTORS_URL + '/' + this.params.id + '/artifacts/artifactPath')
-        .subscribe((nsd: {}[]) => {
-          this.contents = nsd;
-        }, (error: ERRORDATA) => {
-          this.restService.handleError(error, 'get');
-        });
+      this.getContent(environment.NSDESCRIPTORS_URL + '/' + this.params.id + '/artifacts');
     } else if (this.params.page === 'vnfd') {
-      this.restService.getResource(environment.VNFPACKAGES_URL + '/' + this.params.id + '/artifacts/artifactPath')
-        .subscribe((vnfd: {}[]) => {
-          this.contents = vnfd;
-        }, (error: ERRORDATA) => {
-          this.restService.handleError(error, 'get');
-        });
+      this.getContent(environment.VNFPACKAGES_URL + '/' + this.params.id + '/artifacts');
     }
+  }
+  /** Get the NSD Content List @public */
+  public getContent(URL: string): void {
+    this.isLoadingResults = true;
+    const httpOptions: GETAPIURLHEADER = {
+      headers: this.headers,
+      responseType: 'text'
+    };
+    this.restService.getResource(URL, httpOptions).subscribe((content: {}[]): void => {
+      const getJson: string[] = jsyaml.load(content.toString(), { json: true });
+      this.contents = getJson;
+      this.isLoadingResults = false;
+    }, (error: ERRORDATA): void => {
+      this.restService.handleError(error, 'get');
+      this.isLoadingResults = false;
+    });
   }
 }

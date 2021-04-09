@@ -23,18 +23,12 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
   </button>
 </div>
 <div class="modal-body">
-  <table class="table table-bored show-content" *ngIf="contents else noData">
+  <table class="table table-sm table-hover table-layout-fixed mb-0" *ngIf="contents else noData">
     <tr>
-      <th># {{'FILES' | translate}} {{'NAME' | translate}}</th>
-      <th>{{'ACTIONS' | translate }}</th>
+      <th>{{'NAME' | translate}}</th>
     </tr>
     <tr *ngFor="let data of contents">
-      <td>- {{(data)?data:'-'}}</td>
-      <td>
-        <button class="btn btn-xs">
-          <i class="far fa-folder-open icons"></i>
-        </button>
-      </td>
+      <td>{{(data)?data:'-'}}</td>
     </tr>
   </table>
   <ng-template #noData>{{'NODATAERROR' | translate}}</ng-template>
@@ -42,3 +36,4 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
 <div class="modal-footer">
   <button type="button" class="btn btn-danger" (click)="activeModal.close()">{{'CANCEL' | translate}}</button>
 </div>
+<app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>
