@@ -62,7 +62,7 @@ export interface CONFIG {
     sdn_port_mapping?: string;
     vim_network_name?: string;
     security_groups?: string;
-    availabilityZone?: string;
+    availability_zone?: string;
     region_name?: string;
     insecure?: string;
     use_existing_flavors?: string;

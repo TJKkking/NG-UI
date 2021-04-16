@@ -449,11 +449,11 @@ export class VimAccountDetailsComponent implements OnInit {
     // tslint:disable-next-line: no-any
     private setCoordinates(feature: any, overlay: Overlay): void {
         this.popupData = '';
-        this.popupData += '<h3 class="popover-header">' + feature.values_.vimName + '</h3>';
+        this.popupData += '<h3 class="popover-header">' + feature.values_.vimName + '- (' + feature.values_.location + ')</h3>';
         this.popupData += '<ul class="list-unstyled m-2">';
         const instnaceData: NSInstanceDetails[] = this.nsData.filter((item: NSInstanceDetails) => {
             if (item.datacenter === feature.values_.Id) {
-                this.popupData += '<li class="m-2"><a class="d-block text-truncate" target="_parent" href="instances/ns/' + item._id + '">'
+                this.popupData += '<li class="m-2"><a class="d-block text-truncate" target="_parent" href="instances/ns/' + item._id + '"><i class="fa-sitemap fas icons mr-1"></i>'
                     + item.name + '</a></li>';
                 return item;
             }

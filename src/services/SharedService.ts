@@ -78,6 +78,13 @@ export class SharedService {
     // tslint:disable-next-line: max-line-length
     public REGX_PASSWORD_PATTERN: RegExp = new RegExp(/^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/);
 
+    /** Variables to hold regexp pattern for Latitude */
+    public REGX_LAT_PATTERN: RegExp = new RegExp(/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,15})?))$/);
+
+    /** Variables to hold regexp pattern for Longitude */
+    // tslint:disable-next-line: max-line-length
+    public REGX_LONG_PATTERN: RegExp = new RegExp(/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,15})?))$/);
+
     /** Variables to hold maxlength for the description @public */
     public MAX_LENGTH_DESCRIPTION: number = 500;
 

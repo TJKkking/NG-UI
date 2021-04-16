@@ -25,8 +25,9 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
     <ng-template #popContent>
         <ul class="list-group">
             <li class="list-group-item text-left p-1 border-0" *ngFor="let instanceDetails of showInstanceDetails">
-                <a class="d-block text-truncate" target="_parent"
-                    routerLink="/instances/ns/{{instanceDetails._id}}"><i class="fa-sitemap fas icons"></i> {{instanceDetails.name}}</a>
+                <a class="d-block text-truncate" target="_parent" routerLink="/instances/ns/{{instanceDetails._id}}">
+                    <i class="fa-sitemap fas icons"></i> {{instanceDetails.name}}
+                </a>
             </li>
         </ul>
     </ng-template>

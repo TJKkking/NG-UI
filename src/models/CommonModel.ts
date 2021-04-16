@@ -250,7 +250,7 @@ export const TYPEOPENSTACK: {} = {
     user_domain_id: '',
     security_groups: '',
     user_domain_name: '',
-    availabilityZone: '',
+    availability_zone: '',
     keypair: '',
     region_name: '',
     dataplane_physical_net: '',

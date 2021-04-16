@@ -22,7 +22,9 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
     <div class="context-style bg-white p-3">
         <div class="row form-group content-style">
             <label class="col-sm-12 col-form-label mandatory-label"
-                [ngClass]="{'text-danger': vimNewAccountForm.invalid === true && submitted === true}">{{'MANDATORYCHECK' | translate}}</label>
+                [ngClass]="{'text-danger': vimNewAccountForm.invalid === true && submitted === true}">
+                {{'MANDATORYCHECK' | translate}}
+            </label>
             <div class="col-sm-3">
                 <label for="name">{{'PAGE.VIMDETAILS.NAME' | translate}}*</label>
             </div>
@@ -47,8 +49,9 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
             </div>
             <div class="col-sm-3">
                 <ng-select bindLabel="title" bindValue="value" [items]="vimType" placeholder="{{'SELECT' | translate}}"
-                    formControlName="vim_type" id="vim_type" [(ngModel)]="selectedVimType" [addTag]="sharedService.addCustomTag"
-                    [ngClass]="{ 'is-invalid': submitted && f.vim_type.errors }" (change)="clearConfig()">
+                    formControlName="vim_type" id="vim_type" [(ngModel)]="selectedVimType"
+                    [addTag]="sharedService.addCustomTag" [ngClass]="{ 'is-invalid': submitted && f.vim_type.errors }"
+                    (change)="clearConfig()">
                 </ng-select>
                 <small class="text-info">{{'TYPEINFO' | translate}}</small>
             </div>
@@ -103,13 +106,20 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
             <div class="col-sm-3">
                 <label for="location">{{'PAGE.VIMDETAILS.VIMLOCATION' | translate}}</label>
             </div>
-            <div class="col-sm-3" formGroupName="config">
-                <ng-select [items]="getVIMLocation" bindLabel="label" bindValue="value"
-                    placeholder="{{'PAGE.VIMDETAILS.VIMLOCATION' | translate}}" formControlName="location" id="location"
-                    (keydown.enter)="fetchLocationLatLong($event.target.value)" (change)="locationChange($event)">
-                </ng-select>
-                <small class="text-info">{{'PAGE.VIM.LOCATIONINFO' | translate}}</small>
+            <div class="col-sm-9 form-inline">
+                <div class="input-group">
+                    <input autocomplete="off" formControlName="locationName" type="text" class="form-control"
+                        placeholder="{{'PAGE.VIMDETAILS.NAME' | translate}}"
+                        [ngClass]="{ 'is-invalid': submitted && f.locationName.errors }">
+                    <input autocomplete="off" formControlName="latitude" type="text" class="form-control"
+                        placeholder="Latitude" [ngClass]="{ 'is-invalid': submitted && f.latitude.errors }">
+                    <input autocomplete="off" formControlName="longitude" type="text" class="form-control"
+                        placeholder="Longitude" [ngClass]="{ 'is-invalid': submitted && f.longitude.errors }">
+                </div>
+                <small class="text-info mt-1 ml-1">{{'PAGE.VIM.LOCATIONINFO' | translate}}</small>
             </div>
+        </div>
+        <div class="row form-group content-style">
             <div class="col-sm-3">
                 <label>{{'UPLOADCONFIG' | translate}}</label>
             </div>
@@ -117,8 +127,9 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
                 <div class="custom-file">
                     <input [disabled]="!selectedVimType" type="file" #fileInput class="custom-file-input"
                         (change)="filesDropped($event.target.files)" id="customFile">
-                    <label class="custom-file-label" #fileInputLabel
-                        for="customFile">{{'CHOOSEFILE' | translate}}</label>
+                    <label class="custom-file-label" #fileInputLabel for="customFile">
+                        {{'CHOOSEFILE' | translate}}
+                    </label>
                 </div>
                 <small class="text-info">{{'UPLOADCONFIGLABEL' | translate}}</small>
             </div>

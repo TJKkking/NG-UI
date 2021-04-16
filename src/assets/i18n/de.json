@@ -200,7 +200,7 @@
         },
         "VIM": {
             "CREATEDSUCCESSFULLY": "VIM erfolgreich erstellt",
-            "LOCATIONINFO": "Geben Sie den Standortnamen ein und klicken Sie auf die Eingabetaste"
+            "LOCATIONINFO": "Geben Sie den Namen des Datenorts, den Breiten- und Längengrad ein, der in der Kartenansicht angezeigt werden soll"
         },
         "VIMDETAILS": {
             "NEWVIM": "Nieuwe VIM",

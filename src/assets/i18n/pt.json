@@ -200,7 +200,7 @@
         },
         "VIM": {
             "CREATEDSUCCESSFULLY": "VIM criado com sucesso",
-            "LOCATIONINFO": "Digite o nome do local e clique em Enter"
+            "LOCATIONINFO": "Digite o nome do local de dados, latitude e longitude para mostrar na visualização do mapa"
         },
         "VIMDETAILS": {
             "NEWVIM": "Novo VIM",

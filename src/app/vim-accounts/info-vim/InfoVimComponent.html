@@ -16,7 +16,18 @@ limitations under the License.
 Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
 -->
 <div class="row d-flex flex-row justify-content-between">
-  <div class="d-flex align-items-center header-style">{{'PAGE.VIMDETAILS.VIMACCOUNTDETAILS' | translate}}</div>
+  <div class="col-sm-4">
+      <div class="d-flex align-items-center header-style">{{'PAGE.VIMDETAILS.VIMACCOUNTDETAILS' | translate}}</div>
+  </div>
+  <div class="col-sm-8 text-right">
+      <span class="button">
+          <button class="btn btn-primary" type="button" placement="top" container="body"
+              ngbTooltip="{{'PAGE.VIMDETAILS.NEWVIM' | translate}}" routerLink="/vim/new">
+              <i class="fas fa-plus-circle" aria-hidden="true"></i>&nbsp;
+              {{'PAGE.VIMDETAILS.NEWVIM' | translate}}
+          </button>
+      </span>
+  </div>
 </div>
 <div class="context-style bg-white mt-2 vim-details">
   <div class="row">
