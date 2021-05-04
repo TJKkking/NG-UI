@@ -307,7 +307,8 @@
             "VDU": "VDU",
             "INTVL": "IntVL",
             "INTCP": "IntCP",
-            "DATAEMPTY": "Bitte ändere etwas"
+            "DATAEMPTY": "Bitte ändere etwas",
+            "ADDCPBEFOREVDU": "Fügen Sie CP hinzu, bevor Sie VDU hinzufügen"
         },
         "PROJECT": {
             "NEWPROJECT": "Nieuw project",

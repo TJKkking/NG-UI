@@ -239,6 +239,6 @@ export class ComposePackages implements OnInit {
         }
       };
     }
-    return jsyaml.dump(packageYaml);
+    return jsyaml.dump(packageYaml, { sortKeys: true });
   }
 }

@@ -307,7 +307,8 @@
             "VDU": "VDU",
             "INTVL": "IntVL",
             "INTCP": "IntCP",
-            "DATAEMPTY": "Please change something"
+            "DATAEMPTY": "Please change something",
+            "ADDCPBEFOREVDU": "Add CP before adding VDU"
         },
         "PROJECT": {
             "NEWPROJECT": "New Project",

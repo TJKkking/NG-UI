@@ -266,7 +266,7 @@ export class VNFComposerComponent {
     if (vnfdPackageDetails['ext-cpd'] !== undefined) {
       vnfdPackageDetails['ext-cpd'].forEach((cp: EXTCPD): void => {
         this.nodes.push({
-          id: cp['int-cpd'] !== undefined ? cp['int-cpd'].cpd : cp.id,
+          id: cp['int-cpd'].cpd !== undefined ? cp['int-cpd'].cpd : cp.id,
           name: cp.id,
           reflexive: false,
           type: 'cp'
@@ -643,32 +643,38 @@ export class VNFComposerComponent {
   /** Drop VDU Composer Data @private */
   private vduDropCompose(): void {
     const randomID: string = this.sharedService.randomString();
-    if (this.vnfdPackageDetails.vdu === undefined) {
-      this.vnfdPackageDetails.vdu = [];
+    if (this.vnfdPackageDetails['mgmt-cp'] === undefined) {
+      this.notifierService.notify('error', this.translateService.instant('PAGE.TOPOLOGY.ADDCPBEFOREVDU'));
+    } else {
+      if (this.vnfdPackageDetails.vdu === undefined) {
+        this.vnfdPackageDetails.vdu = [];
+      }
+      this.vnfdPackageDetails.vdu.push({
+        id: 'vdu_' + randomID,
+        name: 'vdu_' + randomID,
+        description: '',
+        'sw-image-desc': 'ubuntu',
+        'int-cpd': [],
+        'monitoring-parameter': [],
+        'virtual-compute-desc': '',
+        'virtual-storage-desc': []
+      });
+      this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
     }
-    this.vnfdPackageDetails.vdu.push({
-      id: 'vdu_' + randomID,
-      name: 'vdu_' + randomID,
-      description: '',
-      'sw-image-desc': 'ubuntu',
-      'int-cpd': [],
-      'monitoring-parameter': [],
-      'virtual-compute-desc': '',
-      'virtual-storage-desc': []
-    });
-    this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
   }
   /** Drop CP Composer Data @private */
   private cpDropCompose(): void {
     const randomID: string = this.sharedService.randomString();
     if (this.vnfdPackageDetails['ext-cpd'] === undefined) {
       this.vnfdPackageDetails['ext-cpd'] = [];
-      this.vnfdPackageDetails['mgmt-cp'] = 'cp_' + randomID;
     }
     this.vnfdPackageDetails['ext-cpd'].push({
       id: 'cp_' + randomID,
       'int-cpd': {}
     });
+    if (this.vnfdPackageDetails['mgmt-cp'] === undefined) {
+      this.vnfdPackageDetails['mgmt-cp'] = 'cp_' + randomID;
+    }
     this.addNodes(environment.VNFPACKAGES_URL, this.identifier, this.vnfdPackageDetails);
   }
   /** Drop IntVL Composer Data @private */
@@ -812,25 +818,23 @@ export class VNFComposerComponent {
                 if (vdu['int-cpd'] === undefined) {
                   vdu['int-cpd'] = [];
                 }
-                if (extcpd['int-cpd'] === undefined) {
-                  vdu['int-cpd'].push({
-                    id: vduExternalID,
-                    'virtual-network-interface-requirement': [
-                      {
-                        name: vduExternalID,
-                        position: 1,
-                        'virtual-interface': { type: 'PARAVIRT' }
-                      }
-                    ]
-                  });
-                  this.vnfdPackageDetails['ext-cpd'][index] = {
-                    id: extcpd.id,
-                    'int-cpd': {
-                      cpd: vduExternalID,
-                      'vdu-id': vduID
+                vdu['int-cpd'].push({
+                  id: vduExternalID,
+                  'virtual-network-interface-requirement': [
+                    {
+                      name: vduExternalID,
+                      position: 1,
+                      'virtual-interface': { type: 'PARAVIRT' }
                     }
-                  };
-                }
+                  ]
+                });
+                this.vnfdPackageDetails['ext-cpd'][index] = {
+                  id: extcpd.id,
+                  'int-cpd': {
+                    cpd: vduExternalID,
+                    'vdu-id': vduID
+                  }
+                };
               }
             });
           }
@@ -1018,7 +1022,7 @@ export class VNFComposerComponent {
             this.vnfdPackageDetails['ext-cpd'].forEach((extCPD: EXTCPD): void => {
               if (extCPD['int-cpd'] !== undefined) {
                 if (extCPD['int-cpd'].cpd === CPDID) {
-                  delete extCPD['int-cpd'];
+                  extCPD['int-cpd'] = {};
                 }
               }
             });
