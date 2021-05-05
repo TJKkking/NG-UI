@@ -21,7 +21,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from 'AuthenticationService';
-import { Chart } from 'chart.js';
+import { ActiveElement, Chart, ChartEvent } from 'chart.js';
 import { ERRORDATA } from 'CommonModel';
 import { environment } from 'environment';
 import { NSDDetails } from 'NSDModel';
@@ -303,36 +303,29 @@ export class DashboardComponent implements OnInit {
                     data: this.noOfHours,
                     label: this.translateService.instant('NOOFHOURS'),
                     borderColor: this.backgroundColor,
-                    fill: false,
                     backgroundColor: this.backgroundColor
                 }]
             },
             options: {
-                hover: {
-                    onHover(evt: Event, item: {}): void {
-                        const el: HTMLElement = document.getElementById('canvas');
-                        el.style.cursor = item[0] ? 'pointer' : 'default';
-                    }
+                onHover: (evt: ChartEvent, elements):void => {
+                    const el: HTMLElement = document.getElementById('canvas');
+                    el.style.cursor = elements[0] ? 'pointer' : 'default';
                 },
-                legend: { display: false },
+                plugins: {
+                    legend: { display: false },
+                },
                 scales: {
-                    xAxes: [{
+                    x: {
                         display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: this.translateService.instant('INSTANCES')
-                        }
-                    }],
-                    yAxes: [{
+                        labels: [this.translateService.instant('INSTANCES')],
+                    },
+                    y: {
                         ticks: {
-                            beginAtZero: true
+                            labelOffset: 0,
                         },
                         display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: this.translateService.instant('NOOFHOURS')
-                        }
-                    }]
+                        labels: [this.translateService.instant('NOOFHOURS')]
+                    },
                 }
             }
         });

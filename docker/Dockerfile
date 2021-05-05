@@ -25,19 +25,21 @@ RUN apt-get update && apt-get install -y curl xz-utils gnupg2 \
     && apt-get update && apt-get install -y nodejs \
     && apt-get install -y nginx
 
+RUN npm install -g yarn
+
 # Preparing working environment.
 RUN mkdir -p /usr/src/osm-angularapp
 WORKDIR /usr/src/osm-angularapp
 
 # Installing dependencies.
 COPY ./package.json /usr/src/osm-angularapp/
-RUN npm install
+RUN yarn install
 
 # Copy osm-angularapp source into image.
 COPY ./ /usr/src/osm-angularapp
 
 # Building app.
-RUN npm run build
+RUN yarn build
 
 # Removing nginx default page.
 RUN rm -rf /usr/share/nginx/html/*
