@@ -48,8 +48,7 @@ import * as jsyaml from 'js-yaml';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
 import { isNullOrUndefined } from 'util';
-import { FEATURES, VIMLOCATION, VIMLOCATIONDATA } from 'VimAccountModel';
-import { VimAccountDetails, VIMData } from 'VimAccountModel';
+import { VimAccountDetails } from 'VimAccountModel';
 
 /**
  * Creating component
@@ -79,9 +78,6 @@ export class NewVimaccountComponent implements OnInit {
 
   /** Showing more details of collapase */
   public isCollapsed: boolean = false;
-
-  /** Vim location values @public */
-  public getVIMLocation: VIMLOCATIONDATA[] = [];
 
   /** Check the Projects loading results @public */
   public isLocationLoadingResults: boolean = false;

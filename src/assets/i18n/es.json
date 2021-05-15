@@ -40,7 +40,7 @@
     "PACKAGES": "Paquetes",
     "MODIFIED": "Modificado",
     "NODATAMSG": "No hay datos disponibles en la tabla",
-    "PRODUCTNAME":"Nombre del producto",
+    "PRODUCTNAME": "Nombre del producto",
     "IDENTIFIER": "Identificador",
     "DESCRIPTION": "Descripción",
     "DESIGNER": "Diseñador",
@@ -165,6 +165,7 @@
     "SCALE": "Escala",
     "DEFAULT": "por defecto",
     "SOURCE": "Fuente",
+    "RESOURCESNOTFOUND": "Recursos no encontrados",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Tablero",
@@ -231,7 +232,13 @@
             "BACKTOVIMACCOUNTS": "Volver a cuentas VIM",
             "LOCATIONERROR": "El centro de datos ya está disponible en la ubicación seleccionada",
             "LOADSAMPLECONFIG": "Cargar configuración de muestra",
-            "CLEARCONFIG": "Borrar configuración"
+            "CLEARCONFIG": "Borrar configuración",
+            "USED": "Usado",
+            "ALLOCATED": "Asignado",
+            "FREE": "Libre",
+            "VIMRESOURCES": "Descripción general de los recursos de VIM",
+            "DOUGHNUT": "Rosquilla",
+            "PIE": "Pastel"
         },
         "WIMACCOUNTS": {
             "CREATEDSUCCESSFULLY": "WIM Creado correctamente",
@@ -469,7 +476,8 @@
             "LEADER": "Líder",
             "LIVELOAD": "Cargando en vivo",
             "SETSECONDS": "Configurar temporizador",
-            "SERIES": "serie"
+            "SERIES": "serie",
+            "UPDATEDSUCCESSFULLY": "Repositorio OSM actualizado correctamente"
         }
     },
     "HTTPERROR": {

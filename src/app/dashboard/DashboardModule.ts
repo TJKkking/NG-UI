@@ -26,10 +26,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { TranslateModule } from '@ngx-translate/core';
 import { DashboardComponent } from 'DashboardComponent';
 import { LoaderModule } from 'LoaderModule';
 import { ChartsModule } from 'ng2-charts';
+import { SharedModule } from 'SharedModule';
 
 /** To halndle project information */
 const projectInfo: {} = { title: '{project}', url: '/' };
@@ -50,8 +52,8 @@ const routes: Routes = [
  * @NgModule takes a metadata object that tells Angular how to compile and run module code.
  */
 @NgModule({
-    imports: [FormsModule, CommonModule, HttpClientModule, FlexLayoutModule, TranslateModule,
-        ChartsModule, RouterModule.forChild(routes), NgbModule, LoaderModule],
+    imports: [FormsModule, CommonModule, HttpClientModule, FlexLayoutModule, TranslateModule, NgSelectModule,
+        ChartsModule, RouterModule.forChild(routes), NgbModule, LoaderModule, SharedModule],
     declarations: [DashboardComponent]
 })
 /** Exporting a class @exports DashboardModule */

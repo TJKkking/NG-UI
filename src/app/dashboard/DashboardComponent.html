@@ -133,6 +133,33 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
                 </div>
             </div>
         </div>
+        <div class="row mb-2">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="custom-card card mt-2 text-primary">
+                    <div class="text-center header-style pt-2">{{'PAGE.VIMDETAILS.VIMRESOURCES' | translate}}</div>
+                    <div class="row p-2">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="vimType">{{'PAGE.VIMDETAILS.VIMTYPE' | translate}}</label>
+                                    <ng-select (change)="getSelectedVimTypeList($event.value)" [clearable]="false"
+                                        placeholder="{{'SELECT' | translate}}" [items]="vimTypes" bindLabel="title"
+                                        bindValue="value" id="vimType"></ng-select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="vimList">{{'PAGE.VIMDETAILS.NAME' | translate}}</label>
+                                    <ng-select (change)="getSelectedVIMDetails($event)" [clearable]="false"
+                                        placeholder="{{'SELECT' | translate}}" [items]="vimList" bindLabel="name"
+                                        bindValue="name" id="vimList"></ng-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <app-resources-overview *ngIf="selectedVIMDetails !== null && selectedVIMDetails !== undefined"
+                        [resourcesData]="selectedVIMDetails"></app-resources-overview>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="col-xs-3 col-sm-12 col-md-12 col-lg-3 col-xl-3 p-0">
         <div class="custom-card">

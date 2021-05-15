@@ -31,6 +31,21 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
             </li>
         </ul>
     </ng-template>
+    <ng-template #graphTitle>
+        <span class="text-primary"><strong>{{'PAGE.VIMDETAILS.VIMRESOURCES' | translate}}</strong></span>
+        <button class="button-xs close" type="button" (click)="chart.close()">
+            <i class="fas fa-times-circle text-danger"></i>
+        </button>
+    </ng-template>
+    <ng-template #graphContent>
+        <app-resources-overview [resourcesData]="value"></app-resources-overview>
+    </ng-template>
+    <button type="button" class="btn btn-primary" placement="left" container="body"
+        [ngbPopover]="graphContent" triggers="manual" #chart="ngbPopover"
+        (click)="chart.open()" [autoClose]="'outside'" [popoverTitle]="graphTitle" popoverClass="resources-chart-popover"
+        [disabled]="value.resources === null">
+        <i class="fas fa-chart-pie"></i>
+    </button>
     <button type="button" class="btn btn-primary" (click)="vimInfo()" placement="top" container="body"
         ngbTooltip="{{'INFO' | translate}}">
         <i class="fas fa-info icons"></i>

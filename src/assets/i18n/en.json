@@ -165,6 +165,7 @@
     "SCALE": "Scale",
     "DEFAULT": "Default",
     "SOURCE": "Source",
+    "RESOURCESNOTFOUND": "Resources not found",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Dashboard",
@@ -231,7 +232,13 @@
             "BACKTOVIMACCOUNTS": "Back to VimAccounts",
             "LOCATIONERROR": "The Datacenter is already available in the selected location",
             "LOADSAMPLECONFIG": "Load Sample Config",
-            "CLEARCONFIG": "Clear Config"
+            "CLEARCONFIG": "Clear Config",
+            "USED": "Used",
+            "ALLOCATED": "Allocated",
+            "FREE": "Free",
+            "VIMRESOURCES": "VIM Resources Overview",
+            "DOUGHNUT": "Doughnut",
+            "PIE": "Pie"
         },
         "WIMACCOUNTS": {
             "CREATEDSUCCESSFULLY": "WIM Created Successfully",

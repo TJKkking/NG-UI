@@ -37,7 +37,8 @@ body,
 .layout-wrapper,
 .CodeMirror-vscrollbar,
 .ng-sidebar,
-.runninginstances .popover-body {
+.runninginstances .popover-body,
+.resources-chart-popover .popover-body {
   &::-webkit-scrollbar {
     @include wh-value(10px, null);
   }
@@ -260,6 +261,14 @@ body {
     width: 200px;
     .popover-body {
       max-height: 200px;
+      overflow-y: scroll;
+    }
+  }
+  .resources-chart-popover{
+    max-width: 60% !important;
+    @include font-family("Roboto");
+    .popover-body{
+      max-height: 60vh;
       overflow-y: scroll;
     }
   }

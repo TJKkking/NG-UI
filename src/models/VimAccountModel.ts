@@ -18,9 +18,8 @@
 /**
  * @file  Model for VimAccount Details related information.
  */
-
+// tslint:disable: completed-docs
 import { NSInstanceDetails } from 'NSInstanceModel';
-
 /** Interface for VimAccountDetails */
 export interface VimAccountDetails {
     description: string;
@@ -35,12 +34,13 @@ export interface VimAccountDetails {
     vim_user: string;
     vim_type: string;
     name: string;
+    resources?: RESOURCES;
 }
 
 /** Interface for _ADMIN */
 interface ADMIN {
     projects_write: string[];
-    deployed: Deployed;
+    deployed?: Deployed;
     operationalState: string;
     modified: string;
     projects_read: string[];
@@ -106,6 +106,7 @@ export interface VIMData {
     description: string;
     page?: string;
     instancesData?: NSInstanceDetails[];
+    resources?: RESOURCES;
 }
 /** Interface for VIMLOCATION */
 export interface VIMLOCATION {
@@ -129,8 +130,61 @@ interface PROPERTIES {
     name: string;
     state: string;
 }
-/** Interface for the VIMLOCATIONDATA */
-export interface VIMLOCATIONDATA {
-    label: string;
-    value: string;
+/** Interface for the RESOURCES */
+export interface RESOURCES {
+    compute: object;
+    storage: object;
+    network: object;
+}
+/** Interface for the RESOURCESDATA */
+export interface RESOURCESDATA {
+    heading: string;
+    length: number;
+    data: RESOURCESCHARTDATA[];
+}
+/** Interface for the RESOURCESCHARTDATA */
+export interface RESOURCESCHARTDATA {
+    title: string;
+    values: CHARTVALUES;
+    data: number[];
+    colorValues: Color[];
+}
+/** Interface common use for the Chart */
+export interface CHARTVALUES {
+    total: number;
+    used?: number;
+    remaining?: number;
+}
+/** Interface for the CHARTRANGE */
+export interface CHARTRANGE {
+    percentage: number;
+    nearlyFull: number;
+    full: number;
+}
+/** Interface for the COLOR */
+export interface Color {
+    backgroundColor?: string[] | string;
+    borderColor?: string[] | string;
+}
+/** Constant Values for the resources titles */
+export enum CONFIGRESOURCESTITLE {
+    ram = 'RAM',
+    instances = 'Instances',
+    vcpus = 'VCPUs',
+    snapshots = 'Volume Snapshots',
+    storage = 'Volume Storage',
+    volumes = 'Volumes',
+    floating_ips = 'Floating IPs',
+    security_group = 'Security Group',
+    subnets = 'Subnets',
+    networks = 'Networks',
+    ports = 'Ports',
+    routers = 'Routers'
+}
+
+/** constant values for color */
+export enum RANGECOLOR {
+    used = '#29c3be',
+    nearlyfull = '#f0ad4e',
+    full = '#d9534f'
 }

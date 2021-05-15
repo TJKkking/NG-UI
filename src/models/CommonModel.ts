@@ -43,7 +43,8 @@ export enum CONSTANTNUMBER {
     paginationDefaultValue = 10,
     splitLongitude = 1,
     splitLatitude = 2,
-    timeOutDefaultSeconds = 5
+    timeOutDefaultSeconds = 5,
+    oneGB = 1024
 }
 /**
  * handle count @enum
@@ -332,4 +333,9 @@ export interface DOMAINS {
 export interface LOGINPARAMS {
     username?: string;
     password?: string;
+}
+/** Interface for the LABELVALUE */
+export interface LABELVALUE {
+    label: string;
+    value: string;
 }

@@ -75,6 +75,9 @@ export class InstantiateNsComponent implements OnInit {
   /** Give the message for the loading @public */
   public message: string = 'PLEASEWAIT';
 
+  /** Contains Selected VIM Details @public */
+  public selectedVIMDetails: VimAccountDetails = null;
+
   /** Element ref for fileInputConfig @public */
   @ViewChild('fileInputConfig', { static: true }) public fileInputConfig: ElementRef;
 
@@ -283,5 +286,12 @@ export class InstantiateNsComponent implements OnInit {
     }
     this.fileInputConfigLabel.nativeElement.innerText = files[0].name;
     this.fileInputConfig.nativeElement.value = null;
+  }
+
+  /** Get Selected VIM details @public */
+  public getSelectedVIMDetails(vimDetails: VimAccountDetails): void {
+    if (!isNullOrUndefined(vimDetails.resources)) {
+      this.selectedVIMDetails = vimDetails;
+    }
   }
 }

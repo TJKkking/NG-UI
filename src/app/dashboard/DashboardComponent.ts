@@ -20,9 +20,11 @@
  */
 import { Component, Injector, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { NotifierService } from 'angular-notifier';
 import { AuthenticationService } from 'AuthenticationService';
 import { Chart } from 'chart.js';
-import { ERRORDATA } from 'CommonModel';
+import 'chartjs-plugin-labels';
+import { ERRORDATA, TYPESECTION, VIM_TYPES } from 'CommonModel';
 import { environment } from 'environment';
 import { NSDDetails } from 'NSDModel';
 import { NSInstanceDetails } from 'NSInstanceModel';
@@ -33,6 +35,7 @@ import { Observable, Subscription } from 'rxjs';
 import { SDNControllerModel } from 'SDNControllerModel';
 import { SharedService } from 'SharedService';
 import { ProjectRoleMappings, UserDetail } from 'UserModel';
+import { isNullOrUndefined } from 'util';
 import { VimAccountDetails } from 'VimAccountModel';
 import { VNFInstanceDetails } from 'VNFInstanceModel';
 
@@ -108,6 +111,18 @@ export class DashboardComponent implements OnInit {
     /** List of NS Success Instances @public */
     public nsRunningInstance: string[] = [];
 
+    /** Contains VIM Account details @public */
+    public vimData: VimAccountDetails[] = [];
+
+    /** Contains Selected VIM Details @public */
+    public selectedVIMDetails: VimAccountDetails = null;
+
+    /** List of VIM_TYPES @public */
+    public vimTypes: TYPESECTION[] = VIM_TYPES;
+
+    /** Array holds Vim data filtered with selected vimtype  */
+    public vimList: VimAccountDetails[] = [];
+
     /** List of color for Instances @private */
     private backgroundColor: string[] = [];
 
@@ -159,6 +174,9 @@ export class DashboardComponent implements OnInit {
     /** Contians hour converter @private */
     private hourConverter: number = 3600;
 
+    /** Notifier service to popup notification @private */
+    private notifierService: NotifierService;
+
     constructor(injector: Injector) {
         this.injector = injector;
         this.restService = this.injector.get(RestService);
@@ -166,6 +184,7 @@ export class DashboardComponent implements OnInit {
         this.projectService = this.injector.get(ProjectService);
         this.sharedService = this.injector.get(SharedService);
         this.translateService = this.injector.get(TranslateService);
+        this.notifierService = this.injector.get(NotifierService);
     }
 
     /**
@@ -314,6 +333,12 @@ export class DashboardComponent implements OnInit {
                         el.style.cursor = item[0] ? 'pointer' : 'default';
                     }
                 },
+                plugins: {
+                    labels: {
+                        // render 'label', 'value', 'percentage', 'image' or custom function, default is 'percentage'
+                        render: 'value'
+                    }
+                },
                 legend: { display: false },
                 scales: {
                     xAxes: [{
@@ -353,6 +378,7 @@ export class DashboardComponent implements OnInit {
         this.vimAccountCountSub = this.restService.getResource(environment.VIMACCOUNTS_URL)
             .subscribe((vimAccountData: VimAccountDetails[]): void => {
                 this.vimAccountCount = vimAccountData.length;
+                this.vimData = vimAccountData;
             }, (error: ERRORDATA): void => {
                 this.restService.handleError(error, 'get');
             });
@@ -366,6 +392,22 @@ export class DashboardComponent implements OnInit {
             }, (error: ERRORDATA): void => {
                 this.restService.handleError(error, 'get');
             });
+    }
+
+    /** Get Vim data filtered by the selected Vim Type @public */
+    public getSelectedVimTypeList(selectedVIMType: string): void {
+        this.vimList = this.vimData.filter((vimData: VimAccountDetails): boolean =>
+            vimData.vim_type === selectedVIMType);
+
+    }
+
+    /** Get Selected VIM details @public */
+    public getSelectedVIMDetails(vimDetails: VimAccountDetails): void {
+        if (!isNullOrUndefined(vimDetails.resources)) {
+            this.selectedVIMDetails = vimDetails;
+        } else {
+            this.notifierService.notify('error', this.translateService.instant('RESOURCESNOTFOUND'));
+        }
     }
 
     /**

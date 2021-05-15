@@ -267,7 +267,8 @@ export class VimAccountDetailsComponent implements OnInit {
             type: vimAccountData.vim_type,
             operationalState: vimAccountData._admin.operationalState,
             description: vimAccountData.description,
-            instancesData: this.nsData
+            instancesData: this.nsData,
+            resources: vimAccountData.resources !== undefined ? vimAccountData.resources : null
         };
     }
 

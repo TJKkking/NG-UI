@@ -57,12 +57,29 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
         <div class="form-group row">
             <label class="col-sm-4 col-form-label"
                 for="vimAccountId">{{'PAGE.INSTANCEINSTANTIATE.VIMACCOUNT' | translate}}*</label>
-            <div class="col-sm-8">
-                <ng-select [items]="vimAccountSelect" bindLabel="name" bindValue="_id"
+            <div class="col-sm-6">
+                <ng-select  (change)="getSelectedVIMDetails($event)" [items]="vimAccountSelect" bindLabel="name" bindValue="_id"
                     placeholder="{{'SELECT' | translate}} {{'PAGE.INSTANCEINSTANTIATE.VIMACCOUNT' | translate}}"
                     formControlName="vimAccountId" [(ngModel)]="vimAccountId" id="vimAccountId"
                     [ngClass]="{ 'is-invalid': submitted && f.vimAccountId.errors }" required>
                 </ng-select>
+            </div>
+            <div class="col-sm-2" *ngIf="selectedVIMDetails !== null && selectedVIMDetails !== undefined" >
+                <ng-template #graphTitle>
+                    <span class="text-primary"><strong>{{'PAGE.VIMDETAILS.VIMRESOURCES' | translate}}</strong></span>
+                    <button class="button-xs close" type="button" (click)="chart.close()">
+                        <i class="fas fa-times-circle text-danger"></i>
+                    </button>
+                </ng-template>
+                <ng-template #graphContent>
+                    <app-resources-overview *ngIf="selectedVIMDetails !== null && selectedVIMDetails !== undefined"
+                    [resourcesData]="selectedVIMDetails"></app-resources-overview>
+                </ng-template>
+                <button type="button" class="btn btn-primary" placement="left" container="body"
+                    [ngbPopover]="graphContent" triggers="manual" #chart="ngbPopover"
+                    (click)="chart.open()" [autoClose]="'outside'" [popoverTitle]="graphTitle" popoverClass="resources-chart-popover">
+                    <i class="fas fa-chart-pie"></i>
+                </button>
             </div>
         </div>
         <div class="form-group row">

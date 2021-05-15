@@ -69,6 +69,7 @@ import { ProjectLinkComponent } from 'ProjectLinkComponent';
 import { ProjectsActionComponent } from 'ProjectsAction';
 import { ScalingComponent } from 'ScalingComponent';
 import { SDNControllerActionComponent } from 'SDNControllerActionComponent';
+import { SharedModule } from 'SharedModule';
 import { ShowInfoComponent } from 'ShowInfoComponent';
 import { SwitchProjectComponent } from 'SwitchProjectComponent';
 import { UsersActionComponent } from 'UsersActionComponent';
@@ -147,7 +148,8 @@ const customNotifierOptions: NotifierOptions = {
         NgSelectModule,
         RouterModule.forRoot(appRoutes, { useHash: false, relativeLinkResolution: 'legacy' }),
         NgIdleKeepaliveModule.forRoot(),
-        LoaderModule
+        LoaderModule,
+        SharedModule
     ],
     providers: [
         {

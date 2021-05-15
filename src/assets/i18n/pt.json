@@ -40,7 +40,7 @@
     "MODIFIED": "Modificada",
     "PACKAGES": "Pacotes",
     "NODATAMSG": "Sem dados disponíveis na tabela",
-    "PRODUCTNAME":"Nome do Produto",
+    "PRODUCTNAME": "Nome do Produto",
     "IDENTIFIER": "Identificador",
     "DESCRIPTION": "Descrição",
     "DESIGNER": "Designer",
@@ -165,6 +165,7 @@
     "SCALE": "Escala",
     "DEFAULT": "Padrão",
     "SOURCE": "Fonte",
+    "RESOURCESNOTFOUND": "Recursos não encontrados",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "painel de controle",
@@ -231,7 +232,13 @@
             "BACKTOVIMACCOUNTS": "Voltar para VimAccounts",
             "LOCATIONERROR": "O Datacenter já está disponível no local selecionado",
             "LOADSAMPLECONFIG": "Carregar configuração de amostra",
-            "CLEARCONFIG": "Limpar configuração"
+            "CLEARCONFIG": "Limpar configuração",
+            "USED": "Usava",
+            "ALLOCATED": "Alocada",
+            "FREE": "Livre",
+            "VIMRESOURCES": "Visão geral dos recursos do VIM",
+            "DOUGHNUT": "rosquinha",
+            "PIE": "torta"
         },
         "WIMACCOUNTS": {
             "CREATEDSUCCESSFULLY": "WIM criado com sucesso",

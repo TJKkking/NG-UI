@@ -24,8 +24,9 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MODALCLOSERESPONSEDATA } from 'CommonModel';
 import { DeleteComponent } from 'DeleteComponent';
 import { NSInstanceDetails } from 'NSInstanceModel';
+import { ResourcesOverviewComponent } from 'ResourcesOverviewComponent';
 import { SharedService } from 'SharedService';
-import { VIMData } from 'VimAccountModel';
+import { VimAccountDetails, VIMData } from 'VimAccountModel';
 
 /**
  * Creating component
@@ -100,5 +101,11 @@ export class VimAccountsActionComponent implements OnInit {
                 this.showInstanceDetails.push(item);
             }
         });
+    }
+
+    /** Show VIM Resources Data @public */
+    public showVIMResources(vimDetails: VimAccountDetails): void {
+        const modalRef: NgbModalRef = this.modalService.open(ResourcesOverviewComponent, {backdrop: 'static'});
+        modalRef.componentInstance.resourcesData = vimDetails;
     }
 }
