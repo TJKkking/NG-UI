@@ -19,6 +19,7 @@
  * @file Bread Crumb component.
  */
 import { Component, Injector, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router, RouterEvent, UrlSegment } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { BREADCRUMBITEM } from 'CommonModel';
@@ -58,11 +59,15 @@ export class BreadcrumbComponent implements OnInit {
   /** handle translate service @private */
   private translateService: TranslateService;
 
+  /** Title Service in create ticket page */
+  private titleService: Title;
+
   constructor(injector: Injector) {
     this.injector = injector;
     this.router = this.injector.get(Router);
     this.activatedRoute = this.injector.get(ActivatedRoute);
     this.translateService = this.injector.get(TranslateService);
+    this.titleService = this.injector.get(Title);
   }
   /** Lifecyle Hooks the trigger before component is instantiate @public */
   public ngOnInit(): void {
@@ -70,7 +75,10 @@ export class BreadcrumbComponent implements OnInit {
       .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd), startWith(undefined))
       .subscribe(() => this.menuItems = this.createBreadcrumbs(this.activatedRoute.root));
   }
-
+  /** To set the title if the page @private */
+  public setTitle(newTitle: string): void {
+      this.titleService.setTitle(newTitle);
+  }
   /** Generate breadcrumbs from data given the module routes @private */
   private createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: BREADCRUMBITEM[] = []):
     BREADCRUMBITEM[] {
@@ -99,8 +107,17 @@ export class BreadcrumbComponent implements OnInit {
           breadcrumbs.push(item);
         });
       }
+      this.setTitleforApplication(breadcrumbs);
       return this.createBreadcrumbs(child, url, breadcrumbs);
     }
+  }
+  /** Generate title from data given the module routes @private */
+  private setTitleforApplication(breadcrumbs: BREADCRUMBITEM[]): void {
+      let addTitle: string = 'Open Source MANO';
+      breadcrumbs.forEach((data: BREADCRUMBITEM): void => {
+        addTitle += ' | ' + this.translateService.instant(data.title);
+      });
+      this.setTitle(addTitle);
   }
   /** Check and update title based on type of operations @private */
   private checkTitle(breadcrumbItem: BREADCRUMBITEM, opertionType: string): string {
