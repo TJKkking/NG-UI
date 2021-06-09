@@ -67,7 +67,7 @@ export class ProjectsActionComponent {
 
     /** Edit project @public */
     public projectEdit(): void {
-        const modalRef: NgbModalRef = this.modalService.open(ProjectCreateUpdateComponent, { backdrop: 'static' });
+        const modalRef: NgbModalRef = this.modalService.open(ProjectCreateUpdateComponent, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.projectType = 'Edit';
         modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
             if (result) {

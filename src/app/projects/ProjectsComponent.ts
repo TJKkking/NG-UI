@@ -146,7 +146,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
     /** Modal service to initiate the project add @private */
     public projectAdd(): void {
-        const modalRef: NgbModalRef = this.modalService.open(ProjectCreateUpdateComponent, { backdrop: 'static' });
+        const modalRef: NgbModalRef = this.modalService.open(ProjectCreateUpdateComponent, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.projectType = 'Add';
         modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
             if (result) {
@@ -175,7 +175,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
             creationDate: this.sharedService.convertEpochTime(!isNullOrUndefined(projectData._admin) ? projectData._admin.created : null),
             id: projectData._id,
             project: projectData._id,
-            quotas: !isNullOrUndefined(projectData.quotas) ? projectData.quotas : null
+            quotas: !isNullOrUndefined(projectData.quotas) && Object.keys(projectData.quotas).length !== 0 ? projectData.quotas : null
         };
     }
 

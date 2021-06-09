@@ -197,11 +197,11 @@ export class ProjectCreateUpdateComponent implements OnInit {
     public checkQuota(): void {
         if (this.getFormControl('enable_quota').value) {
             this.quotaItems.forEach((quotaItem: QUOTAITEM): void => {
-                this.projectForm.addControl(quotaItem.value, new FormControl(quotaItem.minValue, Validators.required));
+                this.projectForm.addControl(quotaItem.value, new FormControl(''));
             });
         } else {
             this.quotaItems.forEach((quotaItem: QUOTAITEM): void => {
-                this.getFormControl(quotaItem.value).setValue(quotaItem.minValue);
+                this.getFormControl(quotaItem.value).setValue('');
             });
         }
     }
@@ -247,8 +247,13 @@ export class ProjectCreateUpdateComponent implements OnInit {
         if (this.getFormControl('enable_quota').value) {
             payload.quotas = {};
             this.quotaItems.forEach((quotaItem: QUOTAITEM): void => {
-                payload.quotas[quotaItem.value] = this.getFormControl(quotaItem.value).value;
+                if (this.getFormControl(quotaItem.value).value !== '') {
+                    payload.quotas[quotaItem.value] = this.getFormControl(quotaItem.value).value;
+                }
             });
+            if (Object.keys(payload.quotas).length === 0) {
+                delete payload.quotas;
+            }
         }
     }
 
@@ -259,16 +264,15 @@ export class ProjectCreateUpdateComponent implements OnInit {
             this.quotaItems.forEach((quotaItem: QUOTAITEM): void => {
                 if (!isNullOrUndefined(quotaRef[quotaItem.value])) {
                     this.projectForm.addControl(quotaItem.value, new FormControl(quotaRef[quotaItem.value],
-                        [Validators.required, Validators.min(quotaItem.minValue), Validators.max(quotaItem.maxValue)]));
+                        [Validators.max(quotaItem.maxValue)]));
                 } else {
-                    this.projectForm.addControl(quotaItem.value, new FormControl(quotaItem.minValue, [Validators.required,
-                    Validators.min(quotaItem.minValue), Validators.max(quotaItem.maxValue)]));
+                    this.projectForm.addControl(quotaItem.value, new FormControl('', [Validators.max(quotaItem.maxValue)]));
                 }
             });
         } else {
             this.quotaItems.forEach((quotaItem: QUOTAITEM): void => {
-                this.projectForm.addControl(quotaItem.value, new FormControl(quotaItem.minValue, [Validators.required,
-                Validators.min(quotaItem.minValue), Validators.max(quotaItem.maxValue)]));
+                this.projectForm.addControl(quotaItem.value, new FormControl('', [Validators.min(quotaItem.minValue),
+                Validators.max(quotaItem.maxValue)]));
             });
         }
     }

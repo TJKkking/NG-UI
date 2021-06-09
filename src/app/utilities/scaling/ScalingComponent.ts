@@ -140,7 +140,6 @@ export class ScalingComponent implements OnInit {
         this.getFormControl('scalingname').setValue(null);
         const scalingGroupDescriptorName: SCALING[] = [];
         if (!isNullOrUndefined(this.params.data)) {
-            console.log(this.params.data);
             const vnfdPackageDetails: VNFD = this.params.data.filter((vnfdData: VNFD): boolean => vnfdData.id === vnfID)[0];
             if (vnfdPackageDetails.df.length > 0) {
                 vnfdPackageDetails.df.forEach((df: DF): void => {

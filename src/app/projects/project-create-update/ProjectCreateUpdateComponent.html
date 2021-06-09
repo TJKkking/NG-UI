@@ -34,14 +34,14 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
       <label class="col-sm-12 col-form-label mandatory-label"
         [ngClass]="{'text-danger': projectForm.invalid === true && submitted === true}">{{'MANDATORYCHECK' | translate}}</label>
       <label class="col-sm-4 col-form-label">{{'PROJECT' | translate}} {{'NAME' | translate}}*</label>
-      <div class="col-sm-8">
+      <div class="col-sm-4">
         <input placeholder="{{'PROJECT' | translate}} {{'NAME' | translate}}" type="text" class="form-control"
           formControlName="project_name" [ngClass]="{ 'is-invalid': submitted && f.project_name.errors }" required>
       </div>
     </div>
     <div class="form-group row" *ngIf="getProjectType === 'Add'">
       <label class="col-sm-4 col-form-label">{{'DOMAIN' | translate}} {{'NAME' | translate}}</label>
-      <div class="col-sm-8">
+      <div class="col-sm-4">
         <ng-select [clearable]="false" placeholder="{{'SELECT' | translate}}" [items]="domains" bindLabel="title"
           bindValue="value" formControlName="domain_name" id="domain_name"
           [ngClass]="{ 'is-invalid': submitted && f.domain_name.errors }"></ng-select>
@@ -50,15 +50,15 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
     <div class="form-check form-check-inline ml-2">
       <input class="form-check-input" type="checkbox" formControlName="enable_quota" (change)="checkQuota()"
         id="quotaCheck" *ngIf="getProjectType === 'Add' || quotaRefs === null">
-      <label class="form-check-label" for="quotaCheck">{{'PAGE.PROJECT.QUOTA' | translate}}</label>
+      <label class="form-check-label" for="quotaCheck"><b>{{'PAGE.PROJECT.QUOTA' | translate}}</b></label>
     </div>
     <div class="row mt-1" [ngbCollapse]="!f.enable_quota.value">
       <div class="form-group col-sm-6" *ngFor="let quota of quotaItems;">
         <div class="row">
           <label class="col-sm-7 col-form-label">{{quota.title | translate}}*</label>
           <div class="col-sm-5">
-            <input placeholder="{{'COUNT' | translate}}" type="number" min="{{quota.minValue}}"
-              class="form-control" [formControlName]="quota.value" [ngClass]="{ 'is-invalid': submitted && f[quota.value].errors }" required>
+            <input placeholder="{{'COUNT' | translate}}" type="number"
+              class="form-control" [formControlName]="quota.value" [ngClass]="{ 'is-invalid': submitted && f[quota.value].errors }">
           </div>
         </div>
       </div>
