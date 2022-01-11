@@ -187,7 +187,7 @@ export class EditPackagesComponent implements OnInit {
       this.updateFileContentType = 'package_content';
       this.navigatePath = 'vnf';
       this.fileTypes = [{ value: 'text/x-yaml', viewValue: 'yaml' }, { value: 'text/json', viewValue: 'json' }];
-      this.httpOptions = this.getHeadersWithContentAccept('application/zip', 'application/json');
+      this.httpOptions = this.getHeadersWithContentAccept('application/gzip', 'application/json');
       this.getEditFileData();
     } else if (this.pacakgeType === 'netslice') {
       this.getUpdateURL = environment.NETWORKSLICETEMPLATE_URL;
@@ -204,7 +204,7 @@ export class EditPackagesComponent implements OnInit {
       this.pacakgeType = 'nsd';
       this.navigatePath = 'ns';
       this.fileTypes = [{ value: 'text/x-yaml', viewValue: 'yaml' }, { value: 'text/json', viewValue: 'json' }];
-      this.httpOptions = this.getHeadersWithContentAccept('application/zip', 'application/json');
+      this.httpOptions = this.getHeadersWithContentAccept('application/gzip', 'application/json');
       this.getEditFileData();
     }
   }
