@@ -21,7 +21,13 @@
 #   devops-stages/stage-build.sh
 #
 
-FROM ubuntu:18.04
+FROM ubuntu:20.04
+
+ARG APT_PROXY
+RUN if [ ! -z $APT_PROXY ] ; then \
+    echo "Acquire::http::Proxy \"$APT_PROXY\";" > /etc/apt/apt.conf.d/proxy.conf ;\
+    echo "Acquire::https::Proxy \"$APT_PROXY\";" >> /etc/apt/apt.conf.d/proxy.conf ;\
+    fi
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install \
