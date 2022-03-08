@@ -227,11 +227,11 @@ export class OperationalViewComponent implements OnInit {
     public vcaDetailsData(list: VCASTATUS, liveData: boolean, timeOutSeconds: number): VCADETAILS {
         const assignVCADetails: VCADETAILS[] = [];
         const setModels: SETMODELS[] = [];
-        const assignNSInstancesID: string = list.id;
         Object.keys(list.vcaStatus).forEach((key: string): void => {
             const vcaApplication: VCAAPPLICATIONS[] = this.appData(list.vcaStatus[key].applications);
             const vcaUnits: VCAUNITS[] = this.unitsData(vcaApplication);
             const vcaMachines: MACHINES[] = this.machinesData(list.vcaStatus[key].machines);
+            const assignNSInstancesID: string = key;
             list.vcaStatus[key].units = vcaUnits;
             list.vcaStatus[key].applications = vcaApplication;
             list.vcaStatus[key].machines = vcaMachines;
