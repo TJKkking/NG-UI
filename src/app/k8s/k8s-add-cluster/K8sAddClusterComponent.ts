@@ -24,7 +24,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { NotifierService } from 'angular-notifier';
-import { APIURLHEADER, ERRORDATA, MODALCLOSERESPONSEDATA } from 'CommonModel';
+import { APIURLHEADER, ERRORDATA, MODALCLOSERESPONSEDATA, TYPESECTION } from 'CommonModel';
 import { environment } from 'environment';
 import * as jsyaml from 'js-yaml';
 import { RestService } from 'RestService';
@@ -50,6 +50,15 @@ export class K8sAddClusterComponent implements OnInit {
 
   /** Contains all vim account collections */
   public vimAccountSelect: VimAccountDetails;
+
+  /** Contains all deployment methods */
+  public deploymentMethodsSelect: TYPESECTION[] = [];
+
+  /** Submited deployments methods format */
+  public deploymentMethodsSubmit: Map<string, boolean>;
+
+  /** Contains all deployment methods selected */
+  public selectedDeploymentMethods: string[] = ['helm-chart-v2', 'helm-chart-v3', 'juju-bundle'];
 
   /** Instance for active modal service @public */
   public activeModal: NgbActiveModal;
@@ -104,6 +113,20 @@ export class K8sAddClusterComponent implements OnInit {
     this.notifierService = this.injector.get(NotifierService);
     this.translateService = this.injector.get(TranslateService);
     this.sharedService = this.injector.get(SharedService);
+    this.deploymentMethodsSelect = [
+      {
+        title: 'Helm v2',
+        value: 'helm-chart-v2'
+      },
+      {
+        title: 'Helm v3',
+        value: 'helm-chart-v3'
+      },
+      {
+        title: 'Juju bundle',
+        value: 'juju-bundle'
+      }
+    ];
   }
 
   public ngOnInit(): void {
@@ -125,6 +148,7 @@ export class K8sAddClusterComponent implements OnInit {
       vim_account: [null, [Validators.required]],
       description: ['', [Validators.required]],
       nets: ['', [Validators.required]],
+      deployment_methods: ['', [Validators.required]],
       credentials: ['', [Validators.required]]
     });
   }
@@ -172,6 +196,25 @@ export class K8sAddClusterComponent implements OnInit {
       this.notifierService.notify('error', this.translateService.instant('INVALIDCONFIG'));
       return;
     }
+
+    this.deploymentMethodsSubmit = new Map<string, boolean>();
+    /// Set deployment method Map
+    for (const methods of this.deploymentMethodsSelect) {
+      this.deploymentMethodsSubmit.set(methods.value, false);
+    }
+
+    this.k8sclusterForm.value.deployment_methods.forEach((dm: string): void => {
+      this.deploymentMethodsSubmit.set(dm, true);
+    });
+    // Transform Map to json object
+    const jsonDMObject: {} = {};
+    this.deploymentMethodsSubmit.forEach((value: boolean, key: string): void => {
+      jsonDMObject[key] = value;
+    });
+
+    // Transform values to json
+    this.k8sclusterForm.value.deployment_methods = jsonDMObject;
+
     this.isLoadingResults = true;
     this.restService.postResource(apiURLHeader, this.k8sclusterForm.value).subscribe((result: {}) => {
       this.activeModal.close(modalData);

@@ -453,6 +453,7 @@
             "K8SVERSION": "K8s-versie",
             "VIMACCOUNT": "Vim-account",
             "DESCRIPTION": "Beschrijving",
+            "DEPLOYMENTMETHODS": "Bereitstellungsmethoden",
             "NETS": "Nets",
             "NETSPLACEHOLDER": "example: {'net1': 'osm-ext'}",
             "CREDENTIALS": "Inloggegevens",
