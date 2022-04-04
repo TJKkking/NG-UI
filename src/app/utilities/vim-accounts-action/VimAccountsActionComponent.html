@@ -44,7 +44,7 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
         [ngbPopover]="graphContent" triggers="manual" #chart="ngbPopover"
         (click)="chart.open()" [autoClose]="'outside'" [popoverTitle]="graphTitle" popoverClass="resources-chart-popover"
         [disabled]="value.resources === null">
-        <i class="fas fa-chart-pie"></i>
+        <i ngbTooltip="{{'PAGE.VIMDETAILS.VIMRESOURCES' | translate}}" class="fas fa-chart-pie"></i>
     </button>
     <button type="button" class="btn btn-primary" (click)="vimInfo()" placement="top" container="body"
         ngbTooltip="{{'INFO' | translate}}">
@@ -57,6 +57,6 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
     <button type="button" placement="left" container="body" [ngbPopover]="popContent" triggers="manual" #p="ngbPopover"
         (click)="p.open()" [autoClose]="'outside'" [popoverTitle]="popTitle" class="btn btn-primary"
         popoverClass="runninginstances" [disabled]="!showMapIcon">
-        <i class="fas fa-layer-group"></i>
+        <i ngbTooltip="{{'PAGE.DASHBOARD.RUNNINGINSTANCES' | translate}}" class="fas fa-layer-group"></i>
     </button>
 </div>

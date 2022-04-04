@@ -238,7 +238,8 @@
             "FREE": "Livre",
             "VIMRESOURCES": "Visão geral dos recursos do VIM",
             "DOUGHNUT": "rosquinha",
-            "PIE": "torta"
+            "PIE": "torta",
+            "NODATA": "Sem dados"
         },
         "WIMACCOUNTS": {
             "CREATEDSUCCESSFULLY": "WIM criado com sucesso",

@@ -27,6 +27,10 @@
     .card-body {
         @include padding-value(5, 5, 5, 10);
     }
+    .no-data {
+        margin-bottom: 2.5rem;
+        margin-top: -1.5rem;
+    }
 }
 .switch {
     @include position_value(relative, null, null, null, null);

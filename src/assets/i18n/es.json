@@ -238,7 +238,8 @@
             "FREE": "Libre",
             "VIMRESOURCES": "Descripción general de los recursos de VIM",
             "DOUGHNUT": "Rosquilla",
-            "PIE": "Pastel"
+            "PIE": "Pastel",
+            "NODATA": "Sin datos"
         },
         "WIMACCOUNTS": {
             "CREATEDSUCCESSFULLY": "WIM Creado correctamente",
@@ -446,7 +447,7 @@
             "EDITOSMREPO": "Editar repositorios de OSM",
             "OSMREPOTITLE": "Repositorio OSM registrado",
             "CREATEDSUCCESSFULLY": "Repositorio OSM agregado correctamente",
-            "UPDATEDSUCCESSFULLY" : "Repositorio OSM actualizado correctamente"
+            "UPDATEDSUCCESSFULLY": "Repositorio OSM actualizado correctamente"
         },
         "OPERATIONALDASHBOARD": {
             "TITLE": "Tablero operativo",

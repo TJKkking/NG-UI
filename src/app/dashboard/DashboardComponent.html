@@ -150,12 +150,12 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
                                     <label for="vimList">{{'PAGE.VIMDETAILS.NAME' | translate}}</label>
                                     <ng-select (change)="getSelectedVIMDetails($event)" [clearable]="false"
                                         placeholder="{{'SELECT' | translate}}" [items]="vimList" bindLabel="name"
-                                        bindValue="name" id="vimList"></ng-select>
+                                        bindValue="name" id="vimList" [(ngModel)]="vimListData"></ng-select>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <app-resources-overview *ngIf="selectedVIMDetails !== null && selectedVIMDetails !== undefined"
+                    <app-resources-overview *ngIf="selectedVIMDetails !== null && selectedVIMDetails !== undefined && vimListData !== null"
                         [resourcesData]="selectedVIMDetails"></app-resources-overview>
                 </div>
             </div>

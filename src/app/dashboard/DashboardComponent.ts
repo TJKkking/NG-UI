@@ -123,6 +123,9 @@ export class DashboardComponent implements OnInit {
     /** Array holds Vim data filtered with selected vimtype  */
     public vimList: VimAccountDetails[] = [];
 
+    /** Model value used to hold selected vimtype Data @public */
+    public vimListData: string;
+
     /** List of color for Instances @private */
     private backgroundColor: string[] = [];
 
@@ -398,6 +401,9 @@ export class DashboardComponent implements OnInit {
     public getSelectedVimTypeList(selectedVIMType: string): void {
         this.vimList = this.vimData.filter((vimData: VimAccountDetails): boolean =>
             vimData.vim_type === selectedVIMType);
+        if (this.vimList.length === 0) {
+            this.vimListData = null;
+        }
 
     }
 

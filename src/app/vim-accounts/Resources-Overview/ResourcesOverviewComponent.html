@@ -44,6 +44,9 @@ Author: SANDHYA JS (sandhya.j@tataelxsi.co.in)
                             [legend]="chartLegend"
                             [colors]="list.colorValues">
                         </canvas>
+                         <div class="no-data" *ngIf="list.values.total === 0 || list.values.total === null">
+                            <h4><strong>{{'PAGE.VIMDETAILS.NODATA' | translate}}</strong></h4>
+                        </div>
                         <div class="card-body">
                             <h5 class="card-title"><strong>{{list.title}}</strong></h5>
                             <p class="card-text">

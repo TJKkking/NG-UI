@@ -40,7 +40,7 @@
     "PACKAGES": "Packages",
     "MODIFIED": "Modified",
     "NODATAMSG": "No data available in table",
-    "PRODUCTNAME":"Product Name",
+    "PRODUCTNAME": "Product Name",
     "IDENTIFIER": "Identifier",
     "DESCRIPTION": "Description",
     "DESIGNER": "Designer",
@@ -238,7 +238,8 @@
             "FREE": "Free",
             "VIMRESOURCES": "VIM Resources Overview",
             "DOUGHNUT": "Doughnut",
-            "PIE": "Pie"
+            "PIE": "Pie",
+            "NODATA": "No Data"
         },
         "WIMACCOUNTS": {
             "CREATEDSUCCESSFULLY": "WIM Created Successfully",

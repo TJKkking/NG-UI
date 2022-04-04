@@ -238,7 +238,8 @@
             "FREE": "Kostenlos",
             "VIMRESOURCES": "Übersicht über die VIM-Ressourcen",
             "DOUGHNUT": "Krapfen",
-            "PIE": "Kuchen"
+            "PIE": "Kuchen",
+            "NODATA": "Keine Daten"
         },
         "WIMACCOUNTS": {
             "CREATEDSUCCESSFULLY": "WIM erfolgreich erstellt",
