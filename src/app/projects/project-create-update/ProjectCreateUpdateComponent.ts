@@ -164,6 +164,12 @@ export class ProjectCreateUpdateComponent implements OnInit {
             message: 'Done'
         };
         this.sharedService.cleanForm(this.projectForm);
+        for (const data of this.quotaItems) {
+            if (this.getFormControl(data.value).value > data.maxValue) {
+                this.notifierService.notify('error', this.translateService.instant('PAGE.PROJECT.QUOTALIMIT'));
+                break;
+            }
+        }
         if (!this.projectForm.invalid) {
             if (userType === 'Add') {
                 this.createProject();

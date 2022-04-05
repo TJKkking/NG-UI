@@ -333,7 +333,8 @@
             "NEWPROJECT": "New Project",
             "CREATEDSUCCESSFULLY": "Project Created Successfully",
             "UPDATEDSUCCESSFULLY": "Project Updated Successfully",
-            "QUOTA": "Quota Limit"
+            "QUOTA": "Quota Limit",
+            "QUOTALIMIT": "Quota Limit exceeded"
         },
         "NSPACKAGE": {
             "ADDNSPACKAGE": "Compose a new NS",

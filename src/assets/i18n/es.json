@@ -333,7 +333,8 @@
             "NEWPROJECT": "Nuevo proyecto",
             "CREATEDSUCCESSFULLY": "Proyecto creado correctamente",
             "UPDATEDSUCCESSFULLY": "Proyecto actualizado correctamente",
-            "QUOTA": "Límite de cuota"
+            "QUOTA": "Límite de cuota",
+            "QUOTALIMIT": "Límite de cuota excedido"
         },
         "NSPACKAGE": {
             "ADDNSPACKAGE": "Componer un nuevo NS",

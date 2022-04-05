@@ -361,10 +361,12 @@ export class VimAccountDetailsComponent implements OnInit {
         if (this.getLocation !== []) {
             this.getLocation.filter((loc: GetLocation) => {
                 if (loc.location !== '') {
-                    const getLatLong: string[] = loc.location.split(',');
-                    this.lng = +getLatLong[CONSTANTNUMBER.splitLongitude];
-                    this.lat = +getLatLong[CONSTANTNUMBER.splitLatitude];
-                    this.addMarker(getLatLong[0], loc.id, loc.name);
+                    if (loc.location !== ',,') {
+                        const getLatLong: string[] = loc.location.split(',');
+                        this.lng = +getLatLong[CONSTANTNUMBER.splitLongitude];
+                        this.lat = +getLatLong[CONSTANTNUMBER.splitLatitude];
+                        this.addMarker(getLatLong[0], loc.id, loc.name);
+                    }
                 }
             });
         }

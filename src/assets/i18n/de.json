@@ -333,7 +333,8 @@
             "NEWPROJECT": "Nieuw project",
             "CREATEDSUCCESSFULLY": "Projekt erfolgreich erstellt",
             "UPDATEDSUCCESSFULLY": "Projekt erfolgreich aktualisiert",
-            "QUOTA": "Kontingentlimit"
+            "QUOTA": "Kontingentlimit",
+            "QUOTALIMIT": "Kontingentlimit überschritten"
         },
         "NSPACKAGE": {
             "ADDNSPACKAGE": "Verfassen Sie eine neue NS",
