@@ -207,13 +207,13 @@ export class NSComposerComponent {
     this.modalService = this.injector.get(NgbModal);
     this.sharedService = this.injector.get(SharedService);
   }
-  /** Lifecyle Hooks the trigger before component is instantiate @public */
+  /** Lifecyle Hooks the trigger before component is instantiated @public */
   public ngOnInit(): void {
     // tslint:disable-next-line:no-backbone-get-set-outside-model
     this.identifier = this.activatedRoute.snapshot.paramMap.get('id');
     this.generateData();
     this.headers = new HttpHeaders({
-      'Content-Type': 'application/zip',
+      'Content-Type': 'application/gzip',
       Accept: 'application/json',
       'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0'
     });

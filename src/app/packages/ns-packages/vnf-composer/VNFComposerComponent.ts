@@ -176,7 +176,7 @@ export class VNFComposerComponent {
     this.identifier = this.activatedRoute.snapshot.paramMap.get('id');
     this.generateData();
     this.headers = new HttpHeaders({
-      'Content-Type': 'application/zip',
+      'Content-Type': 'application/gzip',
       Accept: 'application/json',
       'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0'
     });
