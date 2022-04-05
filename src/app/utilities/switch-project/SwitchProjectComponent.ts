@@ -21,6 +21,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { APIURLHEADER, ERRORDATA, LOCALSTORAGE, URLPARAMS } from 'CommonModel';
 import { DataService } from 'DataService';
@@ -73,12 +74,16 @@ export class SwitchProjectComponent implements OnInit {
   /** FormBuilder instance added to the formBuilder @private */
   private formBuilder: FormBuilder;
 
+  /** Service holds the router information @private */
+  private router: Router;
+
   constructor(injector: Injector) {
     this.injector = injector;
     this.dataService = this.injector.get(DataService);
     this.restService = this.injector.get(RestService);
     this.activeModal = this.injector.get(NgbActiveModal);
     this.formBuilder = this.injector.get(FormBuilder);
+    this.router = this.injector.get(Router);
   }
 
   /** convenience getter for easy access to form fields */
@@ -126,10 +131,16 @@ export class SwitchProjectComponent implements OnInit {
           localStorage.setItem('project', data.project_name);
           localStorage.setItem('token_state', data.id);
           this.activeModal.close();
-          location.reload();
+          if (this.router.url.includes('history-operations')) {
+            this.router.navigate(['/instances/ns']).then((): void => {
+              location.reload();
+            }).catch();
+          } else {
+            location.reload();
+          }
           this.isLoadingResults = false;
         }
-      }, (error: ERRORDATA) => {
+      }, (error: ERRORDATA): void => {
         this.isLoadingResults = false;
         this.restService.handleError(error, 'post');
         this.activeModal.close();
