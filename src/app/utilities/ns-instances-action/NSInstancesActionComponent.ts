@@ -184,7 +184,7 @@ export class NSInstancesActionComponent {
                 window.open(location);
               } else {
                 this.isLoadingNSInstanceAction = false;
-                this.notifierService.notify('error', this.translateService.instant('GRAFANA.METRICSERROR'));
+                this.notifierService.notify('error', this.translateService.instant('PAGE.NSMETRIC.METRICERROR'));
               }
             });
             this.doChanges();

@@ -330,6 +330,11 @@ export class DashboardComponent implements OnInit {
                 }]
             },
             options: {
+                layout: {
+                    padding: {
+                        top: 20
+                    }
+                },
                 hover: {
                     onHover(evt: Event, item: {}): void {
                         const el: HTMLElement = document.getElementById('canvas');
