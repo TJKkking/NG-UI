@@ -333,6 +333,7 @@ export interface DOMAINS {
 export interface LOGINPARAMS {
     username?: string;
     password?: string;
+    old_password?: string;
 }
 /** Interface for the LABELVALUE */
 export interface LABELVALUE {

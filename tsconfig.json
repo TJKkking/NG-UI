@@ -149,7 +149,9 @@
             "OperationalAppActionsComponent": ["src/app/operational-view/operational-view-app-actions/OperationalViewAppActionsComponent"],
             "OperationalAppExecutedActionsComponent" : ["src/app/operational-view/operational-view-app-executed-actions/OperationalViewAppExecutedActionsComponent"],
             "ResourcesOverviewComponent": ["src/app/vim-accounts/Resources-Overview/ResourcesOverviewComponent"],
-            "SharedModule": ["src/app/vim-accounts/Resources-Overview/SharedModule"]
+            "SharedModule": ["src/app/vim-accounts/Resources-Overview/SharedModule"],
+            "ChangePasswordComponent": ["src/app/utilities/change-password/ChangePasswordComponent"],
+            "ChangePasswordModule": ["src/app/utilities/change-password/ChangePasswordModule"]
         }
     }
 }

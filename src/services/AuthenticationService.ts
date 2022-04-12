@@ -37,24 +37,6 @@ import { RestService } from './RestService';
  */
 @Injectable()
 export class AuthenticationService {
-    /**
-     * Get method for  Observable loggedIn
-     */
-    get isLoggedIn(): Observable<boolean> {
-        return this.loggedIn.asObservable();
-    }
-
-    /**
-     * Get method for Observable Username
-     */
-    get username(): Observable<string> {
-        return this.userName.asObservable();
-    }
-
-    /** Get method for project name */
-    get ProjectName(): Observable<string> {
-        return this.projectName$.asObservable();
-    }
     /** To inject services @public */
     public injector: Injector;
 
@@ -79,6 +61,9 @@ export class AuthenticationService {
     /** Holds the logged in condition of type BehaviorSubject<boolean> @private */
     private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
+    /** Holds the change password in condition of type BehaviorSubject<boolean> @private */
+    private changePassword: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
     /** Hold Rest Service Objects */
     private restService: RestService;
 
@@ -98,12 +83,43 @@ export class AuthenticationService {
         this.restService = this.injector.get(RestService);
         this.modalService = this.injector.get(NgbModal);
         this.idle = this.injector.get(Idle);
-        if (localStorage.getItem('id_token') !== null) {
+        if (localStorage.getItem('username') !== null) {
             this.loggedIn.next(true);
+            this.changePassword.next(false);
+        } else if (localStorage.getItem('firstLogin') !== null) {
+            this.changePassword.next(true);
+            this.loggedIn.next(false);
         } else {
             this.loggedIn.next(false);
         }
         this.userName.next(localStorage.getItem('username'));
+        this.redirectToPage();
+    }
+
+    /**
+     * Get method for  Observable loggedIn
+     */
+    get isLoggedIn(): Observable<boolean> {
+        return this.loggedIn.asObservable();
+    }
+
+    /**
+     * Get method for  Observable changepassword
+     */
+    get isChangePassword(): Observable<boolean> {
+        return this.changePassword.asObservable();
+    }
+
+    /**
+     * Get method for Observable Username
+     */
+    get username(): Observable<string> {
+        return this.userName.asObservable();
+    }
+
+    /** Get method for project name */
+    get ProjectName(): Observable<string> {
+        return this.projectName$.asObservable();
     }
 
     /**
@@ -118,8 +134,16 @@ export class AuthenticationService {
             httpOptions: { headers: this.httpOptions }
         };
         return this.restService.postResource(apiURLHeader, this.payLoad)
-            .pipe(map((data: ProjectModel) => {
-                if (data) {
+            .pipe(map((data: ProjectModel): BehaviorSubject<boolean> => {
+                if (data.message === 'change_password') {
+                    localStorage.setItem('firstLogin', 'true');
+                    localStorage.setItem('id_token', data.id);
+                    localStorage.setItem('user_id', data.user_id);
+                    this.idle.watch(true);
+                    this.changePassword.next(true);
+                    this.loggedIn.next(false);
+                    return this.changePassword;
+                } else {
                     this.setLocalStorage(data);
                     this.idle.watch(true);
                     this.loggedIn.next(true);
@@ -127,7 +151,7 @@ export class AuthenticationService {
                     this.userName.next(data.username);
                     return this.loggedIn;
                 }
-            }, (error: ERRORDATA) => { this.restService.handleError(error, 'post'); }
+            }, (error: ERRORDATA): void => { this.restService.handleError(error, 'post'); }
             ));
     }
 
@@ -162,6 +186,7 @@ export class AuthenticationService {
     /** Destory tokens API response handling @public */
     public logoutResponse(): void {
         this.loggedIn.next(false);
+        this.changePassword.next(false);
         const langCode: string = localStorage.getItem('languageCode');
         const redirecturl: string = isNullOrUndefined(localStorage.getItem('returnUrl')) ? '/' : localStorage.getItem('returnUrl');
         const osmVersion: string = isNullOrUndefined(localStorage.getItem('osmVersion')) ? '' : localStorage.getItem('osmVersion');
@@ -182,16 +207,25 @@ export class AuthenticationService {
         this.modalService.dismissAll();
         this.destoryToken();
     }
-    /** Destory tokens on logout @private */
-    private destoryToken(): void {
+    /** Destory tokens on logout @public */
+    public destoryToken(): void {
         const tokenID: string = localStorage.getItem('id_token');
         if (tokenID !== null) {
             const deletingURl: string = environment.GENERATETOKEN_URL + '/' + tokenID;
-            this.restService.deleteResource(deletingURl).subscribe((res: {}) => {
+            this.restService.deleteResource(deletingURl).subscribe((res: {}): void => {
                 this.logoutResponse();
-            }, (error: ERRORDATA) => {
+            }, (error: ERRORDATA): void => {
                 this.restService.handleError(error, 'delete');
             });
+        }
+    }
+
+    /** Return to previous page deny access to changepassword */
+    public redirectToPage(): void {
+        if (window.location.pathname === '/changepassword' && localStorage.getItem('username') !== null) {
+            window.history.back();
+        } else if (window.location.pathname === '/' && localStorage.getItem('firstLogin') === 'true') {
+            this.router.navigate(['/login']).catch();
         }
     }
 }

@@ -282,6 +282,7 @@
             "NEWUSER": "Neuer Benutzer",
             "USERNAME": "Nutzername",
             "PASSWORD": "Passwort",
+            "OLDPASSWORD": "Jetziges Passwort",
             "CONFPASSWORD": "Passwort bestätigen",
             "EDITUSER": "Benutzer bearbeiten",
             "NEWPASSWORD": "Neues Kennwort",
@@ -295,7 +296,8 @@
             "PROJECTSROLES": "Projekte Rollen",
             "EDITPROJECTROLEMAPPING": "Projektrollenzuordnung bearbeiten",
             "ADDMAPPINGS": "Mappings hinzufügen",
-            "EDITPROJECTROLEERROR": "Bitte geben Sie mindestens eine Projektrollenzuordnung an, um fortzufahren"
+            "EDITPROJECTROLEERROR": "Bitte geben Sie mindestens eine Projektrollenzuordnung an, um fortzufahren",
+            "CHANGEPASSWORD": "Passwort wurde geändert. Melden Sie sich an, um Ihre Sitzung zu starten"
         },
         "TOPOLOGY": {
             "SELECTELEMENT": "Element auswählen",

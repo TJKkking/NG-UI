@@ -50,6 +50,8 @@ import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { AuthenticationService } from 'AuthenticationService';
 import { AuthGuardService } from 'AuthGuardService';
 import { BreadcrumbComponent } from 'BreadCrumb';
+import { ChangePasswordComponent } from 'ChangePasswordComponent';
+import { ChangePasswordModule } from 'ChangePasswordModule';
 import { ComposePackages } from 'ComposePackages';
 import { ConfirmationTopologyComponent } from 'ConfirmationTopology';
 import { DeleteComponent } from 'DeleteComponent';
@@ -124,7 +126,8 @@ const customNotifierOptions: NotifierOptions = {
         SDNControllerActionComponent,
         SwitchProjectComponent,
         GoToTopDirective,
-        ScalingComponent
+        ScalingComponent,
+        ChangePasswordComponent
     ],
     imports: [
         NotifierModule.withConfig(customNotifierOptions),
@@ -149,7 +152,8 @@ const customNotifierOptions: NotifierOptions = {
         RouterModule.forRoot(appRoutes, { useHash: false, relativeLinkResolution: 'legacy' }),
         NgIdleKeepaliveModule.forRoot(),
         LoaderModule,
-        SharedModule
+        SharedModule,
+        ChangePasswordModule
     ],
     providers: [
         {
@@ -196,7 +200,8 @@ const customNotifierOptions: NotifierOptions = {
         PDUInstancesActionComponent,
         SDNControllerActionComponent,
         SwitchProjectComponent,
-        ScalingComponent
+        ScalingComponent,
+        ChangePasswordComponent
     ]
 })
 
@@ -225,7 +230,7 @@ export function appInitializerFactory(translate: TranslateService, injector: Inj
         translate.setDefaultLang('en');
         const languageCode: string = localStorage.getItem('languageCode');
         if (languageCode !== null && languageCode !== undefined && languageCode !== '') {
-            await translate.use(languageCode).toPromise().catch(() => {
+            await translate.use(languageCode).toPromise().catch((): void => {
                 translate.setDefaultLang('en');
             });
         } else {

@@ -22,8 +22,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthenticationService } from 'AuthenticationService';
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 /**
  * An Injectable is a class adorned with the @Injectable decorator function.
@@ -45,17 +45,19 @@ export class AuthGuardService implements CanActivate {
      * Returns Observable<boolean> if authorized @public
      */
     public canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-        return this.authService.isLoggedIn
-            .pipe(
-                take(1),
-                map((isLoggedIn: boolean) => {
-                    if (!isLoggedIn) {
-                        this.router.navigate(['/login']).catch(() => {
-                            //TODO: Handle error notification
-                        });
-                    }
+        return combineLatest(
+            this.authService.isLoggedIn,
+            this.authService.isChangePassword
+        ).pipe(
+            map(([isLoggedIn, changePassword]: [boolean, boolean]): boolean => {
+                if (changePassword || isLoggedIn) {
                     return true;
-                })
-            );
+                } else {
+                    this.router.navigate(['/login']).catch();
+                    this.authService.destoryToken();
+                    return false;
+                }
+            })
+        );
     }
 }

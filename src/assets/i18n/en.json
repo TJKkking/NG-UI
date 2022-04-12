@@ -282,6 +282,7 @@
             "NEWUSER": "New User",
             "USERNAME": "User Name",
             "PASSWORD": "Password",
+            "OLDPASSWORD": "Current Password",
             "CONFPASSWORD": "Confirm Password",
             "EDITUSER": "Edit User",
             "NEWPASSWORD": "New Password",
@@ -295,7 +296,8 @@
             "PROJECTSROLES": "Projects Roles",
             "EDITPROJECTROLEMAPPING": "Edit Project Role Mapping",
             "ADDMAPPINGS": "Add Mappings",
-            "EDITPROJECTROLEERROR": "Please provide at least one project role mapping to continue"
+            "EDITPROJECTROLEERROR": "Please provide at least one project role mapping to continue",
+            "CHANGEPASSWORD": "Password is changed, Sign in to start your session"
         },
         "TOPOLOGY": {
             "SELECTELEMENT": "Select Element",

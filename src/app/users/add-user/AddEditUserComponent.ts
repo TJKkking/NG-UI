@@ -36,6 +36,7 @@ import { isNullOrUndefined } from 'util';
  * @Component takes AddEditUserComponent.html as template url
  */
 @Component({
+    selector: 'app-add-edit-user',
     templateUrl: './AddEditUserComponent.html',
     styleUrls: ['./AddEditUserComponent.scss']
 })
@@ -73,6 +74,12 @@ export class AddEditUserComponent implements OnInit {
 
     /** Holds list of domains @public */
     public domains: TYPESECTION[] = [];
+
+    /** Variable contains type is changepassword or not @public */
+    public isPassword: boolean;
+
+    /** Variable holds value for first login user @public */
+    public isFirstLogin: boolean = Boolean(localStorage.getItem('firstLogin') === 'true');
 
     /** Instance of the rest service @private */
     private restService: RestService;
@@ -113,6 +120,7 @@ export class AddEditUserComponent implements OnInit {
             userName: ['', Validators.required],
             password: [null, [Validators.required, Validators.pattern(this.sharedService.REGX_PASSWORD_PATTERN)]],
             password2: [null, Validators.required],
+            old_password: [null, Validators.required],
             domain_name: [null]
         });
     }
@@ -131,6 +139,8 @@ export class AddEditUserComponent implements OnInit {
             this.getDomainList();
         } else if (this.userType === 'editUserName') {
             this.userForm.patchValue({ userName: this.userName });
+        } else if (this.isFirstLogin) {
+            this.isPassword = true;
         }
     }
 
@@ -139,11 +149,21 @@ export class AddEditUserComponent implements OnInit {
         if (userType === 'editPassword') {
             this.getFormControl('userName').setValidators([]);
             this.getFormControl('userName').updateValueAndValidity();
+            this.getFormControl('old_password').setValidators([]);
+            this.getFormControl('old_password').updateValueAndValidity();
         } else if (userType === 'editUserName') {
             this.getFormControl('password').setValidators([]);
             this.getFormControl('password').updateValueAndValidity();
             this.getFormControl('password2').setValidators([]);
             this.getFormControl('password2').updateValueAndValidity();
+            this.getFormControl('old_password').setValidators([]);
+            this.getFormControl('old_password').updateValueAndValidity();
+        } else if (userType === 'changePassword') {
+            this.getFormControl('userName').setValidators([]);
+            this.getFormControl('userName').updateValueAndValidity();
+        } else if (userType === 'add') {
+            this.getFormControl('old_password').setValidators([]);
+            this.getFormControl('old_password').updateValueAndValidity();
         }
         this.submitted = true;
         this.modalData = {
@@ -157,7 +177,7 @@ export class AddEditUserComponent implements OnInit {
             }
             if (userType === 'add') {
                 this.addUser();
-            } else if (userType === 'editUserName' || userType === 'editPassword') {
+            } else {
                 this.editUser();
             }
         }
@@ -191,6 +211,9 @@ export class AddEditUserComponent implements OnInit {
         const payLoad: LOGINPARAMS = {};
         if (this.userType === 'editPassword') {
             payLoad.password = (this.userForm.value.password);
+        } else if (this.userType === 'changePassword') {
+            payLoad.password = (this.userForm.value.password);
+            payLoad.old_password = (this.userForm.value.old_password);
         } else {
             payLoad.username = this.userForm.value.userName.toLowerCase();
         }
@@ -201,12 +224,32 @@ export class AddEditUserComponent implements OnInit {
         this.restService.patchResource(apiURLHeader, payLoad).subscribe((result: {}): void => {
             this.checkUsername(payLoad);
             this.activeModal.close(this.modalData);
+            if (this.isFirstLogin) {
+                this.notifierService.notify('success', this.translateService.instant('PAGE.USERS.CHANGEPASSWORD'));
+                this.authService.destoryToken();
+            } else {
+                this.notifierService.notify('success', this.translateService.instant('PAGE.USERS.EDITEDSUCCESSFULLY'));
+            }
             this.isLoadingResults = false;
-            this.notifierService.notify('success', this.translateService.instant('PAGE.USERS.EDITEDSUCCESSFULLY'));
         }, (error: ERRORDATA): void => {
-            this.restService.handleError(error, 'put');
+            if (this.isFirstLogin) {
+                this.notifierService.notify('error', error.error.detail);
+                this.activeModal.close(this.modalData);
+                this.authService.destoryToken();
+            } else {
+                this.restService.handleError(error, 'put');
+            }
             this.isLoadingResults = false;
         });
+    }
+    /** Close the modal and destroy subscribe @public */
+    public close(): void {
+        if (this.isFirstLogin) {
+            this.activeModal.close(this.modalData);
+            this.authService.destoryToken();
+        } else {
+            this.activeModal.close(this.modalData);
+        }
     }
     /** Get domain name list @private */
     private getDomainList(): void {

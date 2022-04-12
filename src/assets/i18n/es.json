@@ -282,6 +282,7 @@
             "NEWUSER": "Nuevo usuario",
             "USERNAME": "Nombre de usuario",
             "PASSWORD": "Contraseña",
+            "OLDPASSWORD": "Contraseña actual",
             "CONFPASSWORD": "Confirmar contraseña",
             "EDITUSER": "Editar usuario",
             "NEWPASSWORD": "Nueva contraseña",
@@ -295,7 +296,8 @@
             "PROJECTSROLES": "Roles de proyectos",
             "EDITPROJECTROLEMAPPING": "Editar asignación de roles de proyecto",
             "ADDMAPPINGS": "Agregar asignaciones",
-            "EDITPROJECTROLEERROR": "Proporcione al menos un mapeo de roles del proyecto para continuar"
+            "EDITPROJECTROLEERROR": "Proporcione al menos un mapeo de roles del proyecto para continuar",
+            "CHANGEPASSWORD": "Se cambió la contraseña, inicie sesión para iniciar su sesión"
         },
         "TOPOLOGY": {
             "SELECTELEMENT": "Seleccionar elemento",

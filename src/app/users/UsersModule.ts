@@ -28,7 +28,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TranslateModule } from '@ngx-translate/core';
-import { AddEditUserComponent } from 'AddEditUserComponent';
+import { ChangePasswordModule } from 'ChangePasswordModule';
 import { DataService } from 'DataService';
 import { LoaderModule } from 'LoaderModule';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -60,10 +60,11 @@ const routes: Routes = [
  */
 @NgModule({
     imports: [ReactiveFormsModule, FormsModule, CommonModule, HttpClientModule, Ng2SmartTableModule, TranslateModule,
-        FlexLayoutModule, NgSelectModule, NgbModule, RouterModule.forChild(routes), PagePerRowModule, LoaderModule, PageReloadModule],
-    declarations: [UsersComponent, UserDetailsComponent, AddEditUserComponent, ProjectRoleComponent],
+        FlexLayoutModule, NgSelectModule, NgbModule, RouterModule.forChild(routes), PagePerRowModule, LoaderModule,
+        PageReloadModule, ChangePasswordModule],
+    declarations: [UsersComponent, UserDetailsComponent, ProjectRoleComponent],
     providers: [DataService],
-    entryComponents: [AddEditUserComponent, ProjectRoleComponent]
+    entryComponents: [ProjectRoleComponent]
 })
 /** Exporting a class @exports UsersModule */
 export class UsersModule {

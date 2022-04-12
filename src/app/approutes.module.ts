@@ -20,6 +20,7 @@
  */
 import { Routes } from '@angular/router';
 import { AuthGuardService } from 'AuthGuardService';
+import { ChangePasswordComponent } from 'ChangePasswordComponent';
 import { LayoutComponent } from 'LayoutComponent';
 import { LoginComponent } from 'LoginComponent';
 import { PageNotFoundComponent } from 'PageNotFound';
@@ -113,6 +114,11 @@ export const appRoutes: Routes = [
                 canActivate: [AuthGuardService]
             }
         ]
+    },
+    {
+        path: 'changepassword',
+        component: ChangePasswordComponent,
+        canActivate: [AuthGuardService]
     },
     {
         path: '**',

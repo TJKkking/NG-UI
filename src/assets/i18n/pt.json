@@ -282,6 +282,7 @@
             "NEWUSER": "Novo usuário",
             "USERNAME": "Nome de Usuário",
             "PASSWORD": "Senha",
+            "OLDPASSWORD": "Senha atual",
             "CONFPASSWORD": "Confirme a Senha",
             "EDITUSER": "Editar usuário",
             "NEWPASSWORD": "Nova senha",
@@ -295,7 +296,8 @@
             "PROJECTSROLES": "Funções dos Projetos",
             "EDITPROJECTROLEMAPPING": "Editar mapeamento de função do projeto",
             "ADDMAPPINGS": "Adicionar mapeamentos",
-            "EDITPROJECTROLEERROR": "Forneça pelo menos um mapeamento de função do projeto para continuar"
+            "EDITPROJECTROLEERROR": "Forneça pelo menos um mapeamento de função do projeto para continuar",
+            "CHANGEPASSWORD": "A senha foi alterada, faça login para iniciar sua sessão"
         },
         "TOPOLOGY": {
             "SELECTELEMENT": "Selecionar elemento",

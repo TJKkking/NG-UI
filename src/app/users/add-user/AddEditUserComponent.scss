@@ -15,11 +15,46 @@
 
  Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
 */
-@import '../../../assets/scss/mixins/mixin';
-@import '../../../assets/scss/variable';
-.input-validation-msg{
-    color:$red;
-    text-align:left;
+@import "../../../assets/scss/mixins/mixin";
+@import "../../../assets/scss/variable";
+.input-validation-msg {
+    color: $red;
+    text-align: left;
     @include padding-value(0, 0, 0, 10);
+    @include font(null, 11px, null);
+}
+.change-password {
+    @include background(
+        linear-gradient(
+            to left bottom,
+            #00c0ef,
+            #00b3f9,
+            #3ea3fd,
+            #7190f8,
+            #9c78e8,
+            #a86cdd,
+            #b25fd1,
+            #bb51c3,
+            #b151c4,
+            #a652c6,
+            #9b53c6,
+            #9053c7
+        ),
+        null,
+        null,
+        null,
+        null
+    );
+    color: $white;
+    overflow: visible;
+    @include box-shadow(0px, 3px, 10px, 0px, rgba($black, 0.5));
+}
+.message {
+    @include roundedCorners(25);
+    @include background(null, $cerise-pink, null, null, null);
+    color: $white !important;
+    text-align: left;
+    @include padding-value(0, 0, 0, 10);
+    @include margin-value(0, 0, 10, 0);
     @include font(null, 11px, null);
 }

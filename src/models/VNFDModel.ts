@@ -32,6 +32,8 @@ export interface ProjectModel {
     username: string;
     remote_host: string;
     admin: boolean;
+    message?: string;
+    user_id?: string;
 }
 
 /** Interface for ProjectDetails */

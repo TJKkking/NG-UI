@@ -15,75 +15,105 @@ limitations under the License.
 
 Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
 -->
-<form [formGroup]="userForm" (ngSubmit)="userAction(userType)" autocomplete="off">
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{userTitle}}</h4>
-    <button class="button-xs" type="button" class="close" aria-label="Close" (click)="activeModal.close()">
-      <i class="fas fa-times-circle text-danger"></i>
-    </button>
-  </div>
-  <div class="modal-body">
-    <label class="col-sm-12 col-form-label mandatory-label"
-      [ngClass]="{'text-danger': userForm.invalid === true && submitted === true}">{{'MANDATORYCHECK' | translate}}</label>
-    <div class="row form-group" *ngIf="userType === 'add' || userType === 'editUserName'">
-      <div class="col-sm-4">
-        <label for="userName">{{'PAGE.USERS.USERNAME' | translate}} *</label>
-      </div>
-      <div class="col-sm-8">
-        <input class="form-control" placeholder="{{'PAGE.USERS.USERNAME' | translate}}" type="text"
-          formControlName="userName" id="userName" [ngClass]="{ 'is-invalid': submitted && f.userName.errors }"
-          required>
-      </div>
-      <div *ngIf="submitted && f.userName.errors" class="input-validation-msg">
-        <div *ngIf="f.userName.errors.minlength">
-          {{'PAGE.LOGIN.USERNAMEMINLENGTHVALIDMESSAGE' | translate}} </div>
-      </div>
+<div class="wrap-user" [ngClass]="{'change-password': isPassword}">
+  <form [formGroup]="userForm" (ngSubmit)="userAction(userType)" autocomplete="off">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{userTitle}}</h4>
+      <button *ngIf="!isFirstLogin" class="button-xs" type="button" class="close" aria-label="Close"
+        (click)="activeModal.close()">
+        <i class="fas fa-times-circle text-danger"></i>
+      </button>
     </div>
-    <ng-container *ngIf="userType === 'add' || userType === 'editPassword'">
-      <div class="row form-group">
+    <div class="modal-body">
+      <label class="col-sm-12 col-form-label mandatory-label"
+        [ngClass]="{'text-danger': userForm.invalid === true && submitted === true,'message': isPassword && userForm.invalid === true && submitted  }">{{'MANDATORYCHECK'|
+        translate}}</label>
+      <div class="row form-group" *ngIf="userType === 'add' || userType === 'editUserName'">
         <div class="col-sm-4">
-          <label for="password">{{'PAGE.USERS.PASSWORD' | translate}} *</label>
+          <label for="userName">{{'PAGE.USERS.USERNAME' | translate}} *</label>
         </div>
         <div class="col-sm-8">
-          <input class="form-control" placeholder="{{'PAGE.USERS.PASSWORD' | translate}}" minlength="8" maxlength="50"
-            type="password" formControlName="password" id="password" autocomplete="new-password"
-            [ngClass]="{ 'is-invalid': submitted && f.password.errors }" required>
+          <input class="form-control" placeholder="{{'PAGE.USERS.USERNAME' | translate}}" type="text"
+            formControlName="userName" id="userName" [ngClass]="{ 'is-invalid': submitted && f.userName.errors }"
+            required>
         </div>
-        <div class="input-validation-msg">
-          <div *ngIf="userForm?.controls.password.hasError('minlength') || userForm?.controls.password.errors?.pattern">
-            {{'PAGE.LOGIN.PASSWORDMINLENGTHVALIDMESSAGE' | translate}} </div>
+        <div *ngIf="submitted && f.userName.errors" class="input-validation-msg">
+          <div *ngIf="f.userName.errors.minlength">
+            {{'PAGE.LOGIN.USERNAMEMINLENGTHVALIDMESSAGE' | translate}} </div>
         </div>
       </div>
-      <div class="row form-group">
-        <div class="col-sm-4">
-          <label for="password2">{{'PAGE.USERS.CONFPASSWORD' | translate}} *</label>
-        </div>
-        <div class="col-sm-8">
-          <input class="form-control" placeholder="{{'PAGE.USERS.CONFPASSWORD' | translate}}" type="password"
-            formControlName="password2" id="password2" autocomplete="new-password"
-            [ngClass]="{ 'is-invalid': submitted && f.password2.errors }" required>
-          <div class="mr-top-5" *ngIf="userForm?.controls.password.value && userForm?.controls.password2.value">
-            <i class="far"
-              [ngClass]="{'fa-times-circle text-danger':userForm?.controls.password.value !== userForm?.controls.password2.value,
-            'fa-check-circle text-success':userForm?.controls.password.value === userForm?.controls.password2.value}"></i>
-            {{'PAGE.USERS.PASSWORDMATCH' | translate}}
+      <ng-container *ngIf="userType === 'add' || userType === 'editPassword' || userType === 'changePassword'">
+        <div class="row form-group" *ngIf=" userType === 'changePassword'">
+          <div class="col-sm-4">
+            <label for="oldpassword">{{'PAGE.USERS.OLDPASSWORD' | translate}} *</label>
+          </div>
+          <div class="col-sm-8">
+            <input class="form-control" placeholder="{{'PAGE.USERS.OLDPASSWORD' | translate}}" type="password"
+              formControlName="old_password" id="old_password" autocomplete="old-password"
+              [ngClass]="{ 'is-invalid': submitted && f.old_password.errors }" required>
           </div>
         </div>
-      </div>
-    </ng-container>
-    <div class="form-group row" *ngIf="userType === 'add'">
-      <label class="col-sm-4 col-form-label">{{'DOMAIN' | translate}} {{'NAME' | translate}}</label>
-      <div class="col-sm-8">
-        <ng-select [clearable]="false" placeholder="{{'SELECT' | translate}}" [items]="domains" bindLabel="title"
-          bindValue="value" formControlName="domain_name" id="domain_name"
-          [ngClass]="{ 'is-invalid': submitted && f.domain_name.errors }"></ng-select>
+        <div class="row form-group" *ngIf="userType === 'add' || userType === 'editPassword'">
+          <div class="col-sm-4">
+            <label for="password">{{'PAGE.USERS.PASSWORD' | translate}} *</label>
+          </div>
+          <div class="col-sm-8">
+            <input class="form-control" placeholder="{{'PAGE.USERS.PASSWORD' | translate}}" minlength="8" maxlength="50"
+              type="password" formControlName="password" id="password" autocomplete="new-password"
+              [ngClass]="{ 'is-invalid': submitted && f.password.errors }" required>
+          </div>
+          <div class="input-validation-msg" [ngClass]="{'message': isPassword}">
+            <div
+              *ngIf="userForm?.controls.password.hasError('minlength') || userForm?.controls.password.errors?.pattern">
+              {{'PAGE.LOGIN.PASSWORDMINLENGTHVALIDMESSAGE' | translate}} </div>
+          </div>
+        </div>
+        <div class="row form-group" *ngIf="userType === 'changePassword'">
+          <div class="col-sm-4">
+            <label for="password">{{'PAGE.USERS.NEWPASSWORD' | translate}} *</label>
+          </div>
+          <div class="col-sm-8">
+            <input class="form-control" placeholder="{{'PAGE.USERS.NEWPASSWORD' | translate}}" minlength="8"
+              maxlength="50" type="password" formControlName="password" id="password" autocomplete="new-password"
+              [ngClass]="{ 'is-invalid': submitted && f.password.errors }" required>
+          </div>
+          <div class="input-validation-msg" [ngClass]="{'message': isPassword}">
+            <div
+              *ngIf="userForm?.controls.password.hasError('minlength') || userForm?.controls.password.errors?.pattern">
+              {{'PAGE.LOGIN.PASSWORDMINLENGTHVALIDMESSAGE' | translate}} </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-sm-4">
+            <label for="password2">{{'PAGE.USERS.CONFPASSWORD' | translate}} *</label>
+          </div>
+          <div class="col-sm-8">
+            <input class="form-control" placeholder="{{'PAGE.USERS.CONFPASSWORD' | translate}}" type="password"
+              formControlName="password2" id="password2" autocomplete="new-password"
+              [ngClass]="{ 'is-invalid': submitted && f.password2.errors }" required>
+            <div class="mr-top-5" *ngIf="userForm?.controls.password.value && userForm?.controls.password2.value">
+              <i class="far"
+                [ngClass]="{'fa-times-circle text-danger':userForm?.controls.password.value !== userForm?.controls.password2.value,
+            'fa-check-circle text-success':userForm?.controls.password.value === userForm?.controls.password2.value}"></i>
+              {{'PAGE.USERS.PASSWORDMATCH' | translate}}
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <div class="form-group row" *ngIf="userType === 'add'">
+        <label class="col-sm-4 col-form-label">{{'DOMAIN' | translate}} {{'NAME' | translate}}</label>
+        <div class="col-sm-8">
+          <ng-select [clearable]="false" placeholder="{{'SELECT' | translate}}" [items]="domains" bindLabel="title"
+            bindValue="value" formControlName="domain_name" id="domain_name"
+            [ngClass]="{ 'is-invalid': submitted && f.domain_name.errors }"></ng-select>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="activeModal.close()">{{'CANCEL' | translate}}</button>
-    <button *ngIf="userType==='add'" type="submit" class="btn btn-primary">{{'CREATE' | translate}}</button>
-    <button *ngIf="userType!=='add'" type="submit" class="btn btn-primary">{{'APPLY' | translate}}</button>
-  </div>
-</form>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="close()">{{'CANCEL' | translate}}</button>
+      <button *ngIf="userType==='add'" type="submit" class="btn btn-primary">{{'CREATE' | translate}}</button>
+      <button *ngIf="userType!=='add'" type="submit" class="btn btn-primary">{{'APPLY' | translate}}</button>
+    </div>
+  </form>
+</div>
 <app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>

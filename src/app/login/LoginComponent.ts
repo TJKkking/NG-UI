@@ -55,6 +55,9 @@ export class LoginComponent implements OnInit {
     /** Observable Hold the value of subscription  @public */
     public isLoggedIn$: Observable<boolean>;
 
+    /** Observable Hold the value of subscription  @public */
+    public isChangePassword$: Observable<boolean>;
+
     /** contains access token information @public */
     public accessToken: string;
 
@@ -69,6 +72,12 @@ export class LoginComponent implements OnInit {
 
     /** Contains all methods related to shared @public */
     public sharedService: SharedService;
+
+    /** contains the loggedIn observable value @public */
+    public loggedIn: boolean;
+
+    /** contains the passwordIn observable value @public */
+    public changePassword: boolean;
 
     /** Utilizes auth service for any auth operations @private */
     private authService: AuthenticationService;
@@ -94,11 +103,24 @@ export class LoginComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.isLoggedIn$ = this.authService.isLoggedIn;
-        if (this.isLoggedIn$) {
-            this.router.navigate(['/']).catch(() => {
+        this.isLoggedIn$.subscribe((res: boolean): void => {
+            this.loggedIn = res;
+        });
+        if (this.loggedIn === true) {
+            this.router.navigate(['/']).catch((): void => {
                 // Catch Navigation Error
             });
         }
+        this.isChangePassword$ = this.authService.isChangePassword;
+        this.isChangePassword$.subscribe((res: boolean): void => {
+            this.changePassword = res;
+        });
+        if (this.changePassword === true) {
+            this.router.navigate(['changepassword']).catch((): void => {
+                // Catch Navigation Error
+            });
+        }
+
         this.loginForm = this.formBuilder.group({
             userName: ['', [Validators.required]],
             password: ['', [Validators.required]]
@@ -117,13 +139,19 @@ export class LoginComponent implements OnInit {
         this.isLoadingResults = true;
         this.sharedService.cleanForm(this.loginForm);
         this.authService.login(this.loginForm.value.userName, this.loginForm.value.password).subscribe(
-            (data: {}) => {
+            (data: {}): void => {
                 this.isLoadingResults = false;
-                this.router.navigate([this.returnUrl]).catch(() => {
-                    // Catch Navigation Error
-                });
+                if (this.changePassword === true && this.loggedIn === false) {
+                    this.router.navigate(['/changepassword']).catch((): void => {
+                        // Catch Navigation Error
+                    });
+                } else {
+                    this.router.navigate([this.returnUrl]).catch((): void => {
+                        // Catch Navigation Error
+                    });
+                }
                 localStorage.removeItem('returnUrl');
-            }, (err: HttpErrorResponse) => {
+            }, (err: HttpErrorResponse): void => {
                 this.isLoadingResults = false;
                 this.restService.handleError(err, 'post');
             });
