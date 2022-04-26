@@ -206,7 +206,8 @@ export const VIM_TYPES: TYPESECTION[] = [
     { value: 'vmware', title: 'VMware vCD' },
     { value: 'openvim', title: 'OpenVIM' },
     { value: 'opennebula', title: 'OpenNebula' },
-    { value: 'azure', title: 'Azure' }
+    { value: 'azure', title: 'Azure' },
+    { value: 'dummy', title: 'Dummy' }
 ];
 /** Constants of the SDN Types */
 export const SDN_TYPES: TYPESECTION[] = [
