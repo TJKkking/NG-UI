@@ -70,7 +70,7 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
                         <div class="row mr-top-5">
                             <label class="col-sm-2 col-form-label" for="mgmt{{i}}">{{'MGMT' | translate}}*</label>
                             <div class="col-sm-4">
-                                <ng-select placeholder="{{'SELECT' | translate}} {{'MGMT' | translate}}" [items]="mgmtState" bindLabel="name" bindValue="value" formControlName="mgmt" id="mgmt{{i}}" [(ngModel)]="selectedMgmt" [ngClass]="{ 'is-invalid': submitted && params.controls.mgmt.errors }"></ng-select>
+                                <ng-select placeholder="{{'SELECT' | translate}} {{'MGMT' | translate}}" [items]="mgmtState" bindLabel="name" bindValue="value" formControlName="mgmt" id="mgmt{{i}}" [ngClass]="{ 'is-invalid': submitted && params.controls.mgmt.errors }"></ng-select>
                             </div>
                             <label class="col-sm-2 col-form-label padLeft0 padRight0" for="vimNetName{{i}}">{{'NETNAME' | translate}}*</label>
                             <div class="col-sm-4">

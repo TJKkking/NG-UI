@@ -59,9 +59,6 @@ export class AddPDUInstancesComponent implements OnInit {
     /** Variable set for twoway binding @public */
     public pduInstanceId: string;
 
-    /** Set mgmt field to empty on load @public */
-    public selectedMgmt: string;
-
     /** Set vim field to empty on load @public */
     public selectedVIM: string;
 
@@ -141,7 +138,7 @@ export class AddPDUInstancesComponent implements OnInit {
         return this.formBuilder.group({
             name: ['', [Validators.required]],
             'ip-address': ['', [Validators.required, Validators.pattern(this.sharedService.REGX_IP_PATTERN)]],
-            mgmt: ['', [Validators.required]],
+            mgmt: [null, [Validators.required]],
             'vim-network-name': ['', [Validators.required]]
         });
     }
