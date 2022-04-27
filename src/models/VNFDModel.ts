@@ -65,6 +65,7 @@ export interface VNFD {
     usageState?: string;
     vdu?: VDU[];
     version?: string;
+    'software-version'?: string;
     'virtual-compute-desc'?: string;
     'virtual-storage-desc'?: string[];
     _admin?: VNFDAdminDetails;

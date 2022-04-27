@@ -29,6 +29,7 @@ import { environment } from 'environment';
 import { NSDDetails } from 'NSDModel';
 import { NSDInstanceData } from 'NSInstanceModel';
 import { NSPrimitiveComponent } from 'NSPrimitiveComponent';
+import { NsUpdateComponent } from 'NsUpdateComponent';
 import { RestService } from 'RestService';
 import { forkJoin, Observable } from 'rxjs';
 import { ScalingComponent } from 'ScalingComponent';
@@ -260,6 +261,19 @@ export class NSInstancesActionComponent {
   /** To open VM Migration in NS Instances */
   public openVmMigration(): void {
     const modalRef: NgbModalRef = this.modalService.open(VmMigrationComponent, { backdrop: 'static' });
+    modalRef.componentInstance.params = {
+      id: this.instanceID
+    };
+    modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
+      if (result) {
+        this.sharedService.callData();
+      }
+    }).catch();
+  }
+
+  /** To open the Ns Update pop-up */
+  public openNsUpdate(): void {
+    const modalRef: NgbModalRef = this.modalService.open(NsUpdateComponent, { backdrop: 'static' });
     modalRef.componentInstance.params = {
       id: this.instanceID
     };

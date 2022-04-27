@@ -47,6 +47,10 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
                 [disabled]="operationalStatus === 'failed' || configStatus === 'failed'" ngbTooltip="{{'VMMIGRATION' | translate}}">
                 <i class="fas fa-angle-double-left"></i> {{'VMMIGRATION' | translate}}
             </button>
+            <button type="button" class="btn btn-primary dropdown-item" (click)="openNsUpdate()" placement="left" data-container="body"
+                [disabled]="operationalStatus === 'failed' || configStatus === 'failed'" ngbTooltip="{{'NSUPDATE' | translate}}">
+                <i class="fas fa-arrow-alt-circle-up"></i> {{'NSUPDATE' | translate}}
+            </button>
             <button type="button" class="btn btn-primary dropdown-item" (click)="historyOfOperations()" placement="left" container="body" ngbTooltip="{{'HISTORYOFOPERATIONS' | translate}}">
                 <i class="fas fa-history"></i> {{'HISTORYOFOPERATIONS' | translate}}
             </button>

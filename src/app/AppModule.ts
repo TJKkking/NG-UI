@@ -65,6 +65,7 @@ import { NetsliceInstancesActionComponent } from 'NetsliceInstancesActionCompone
 import { NetslicePackagesActionComponent } from 'NetslicePackagesAction';
 import { NSInstancesActionComponent } from 'NSInstancesActionComponent';
 import { NsPackagesActionComponent } from 'NsPackagesAction';
+import { NsUpdateComponent } from 'NsUpdateComponent';
 import { PageNotFoundComponent } from 'PageNotFound';
 import { PDUInstancesActionComponent } from 'PDUInstancesActionComponent';
 import { ProjectLinkComponent } from 'ProjectLinkComponent';
@@ -81,6 +82,7 @@ import { VmMigrationComponent } from 'VmMigrationComponent';
 import { VNFInstancesActionComponent } from 'VNFInstancesActionComponent';
 import { VNFLinkComponent } from 'VNFLinkComponent';
 import { VNFPackagesActionComponent } from 'VNFPackagesAction';
+import { WarningComponent } from 'WarningComponent';
 import { WIMAccountsActionComponent } from 'WIMAccountsAction';
 
 /**
@@ -129,7 +131,9 @@ const customNotifierOptions: NotifierOptions = {
         GoToTopDirective,
         ScalingComponent,
         ChangePasswordComponent,
-        VmMigrationComponent
+        VmMigrationComponent,
+        NsUpdateComponent,
+        WarningComponent
     ],
     imports: [
         NotifierModule.withConfig(customNotifierOptions),
@@ -204,7 +208,9 @@ const customNotifierOptions: NotifierOptions = {
         SwitchProjectComponent,
         ScalingComponent,
         ChangePasswordComponent,
-        VmMigrationComponent
+        VmMigrationComponent,
+        NsUpdateComponent,
+        WarningComponent
     ]
 })
 

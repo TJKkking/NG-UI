@@ -152,7 +152,9 @@
             "SharedModule": ["src/app/vim-accounts/Resources-Overview/SharedModule"],
             "ChangePasswordComponent": ["src/app/utilities/change-password/ChangePasswordComponent"],
             "ChangePasswordModule": ["src/app/utilities/change-password/ChangePasswordModule"],
-            "VmMigrationComponent":  ["src/app/utilities/vm-migration/VmMigrationComponent"]
+            "VmMigrationComponent":  ["src/app/utilities/vm-migration/VmMigrationComponent"],
+            "NsUpdateComponent":  ["src/app/utilities/ns-update/NsUpdateComponent"],
+            "WarningComponent":  ["src/app/utilities/warning/WarningComponent"],
         }
     }
 }

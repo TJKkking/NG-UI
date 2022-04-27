@@ -163,6 +163,28 @@ export interface VDUPARAM {
     vduCountIndex?: string;
 }
 
+/** Interface for Ns Update */
+export interface NSUPDATE {
+    lcmOperationType: string;
+    updateType: string;
+    nsInstanceId: string;
+    changeVnfPackageData: CHANGEVNFDATA;
+}
+
+/** Interface for changeVnfPackageData in Ns Update */
+export interface CHANGEVNFDATA {
+    vnfdId: string;
+    vnfInstanceId: string;
+}
+
+/** Interface for terminate vnf in Ns Update */
+export interface TERMINATEVNF {
+    lcmOperationType: string;
+    updateType: string;
+    nsInstanceId: string;
+    removeVnfInstanceId: string;
+}
+
 /** Interface for InstantiateParam */
 interface InstantiateParam {
     nsdId: string;

@@ -71,7 +71,9 @@ export enum CONFIGCONSTANT {
     sdnOperationalStateThirdStep = 'ERROR',
     k8OperationalStateFirstStep = 'PROCESSING',
     k8OperationalStateStateSecondStep = 'ENABLED',
-    k8OperationalStateThirdStep = 'ERROR'
+    k8OperationalStateThirdStep = 'ERROR',
+    done = 'done',
+    close = 'close'
 }
 /** Interface for Post options */
 export interface POSTAPIRESOURCE {
