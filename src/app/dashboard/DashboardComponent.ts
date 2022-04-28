@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
     /** Invoke service injectors @public */
     public injector: Injector;
 
-    /** handle translate @public */
+    /** Handle translate @public */
     public translateService: TranslateService;
 
     /** Observable holds logined value  @public */
@@ -176,6 +176,9 @@ export class DashboardComponent implements OnInit {
 
     /** Contians hour converter @private */
     private hourConverter: number = 3600;
+
+    /** Converter used to round off time to one decimal point @private */
+    private converter: number = 10;
 
     /** Notifier service to popup notification @private */
     private notifierService: NotifierService;
@@ -310,7 +313,7 @@ export class DashboardComponent implements OnInit {
         const now: Date = new Date();
         const currentTime: number = Number((now.getTime().toString().slice(0, this.sliceLimit)));
         this.createdTimes.forEach((createdTime: string): void => {
-            this.noOfHours.push((Math.round((currentTime - Number(createdTime)) / this.hourConverter)));
+            this.noOfHours.push(Math.floor(((currentTime - Number(createdTime)) / this.hourConverter) * (this.converter)) / this.converter);
         });
         this.drawNsChart();
     }
@@ -353,7 +356,7 @@ export class DashboardComponent implements OnInit {
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: this.translateService.instant('INSTANCES')
+                            labelString: this.translateService.instant('NSINSTANCES')
                         }
                     }],
                     yAxes: [{
@@ -373,7 +376,7 @@ export class DashboardComponent implements OnInit {
 
     /** Get VNFD instance details @public */
     public getVnfInstanceCount(): void {
-        this.vnfInstanceCountSub = this.restService.getResource(environment.NSDINSTANCES_URL)
+        this.vnfInstanceCountSub = this.restService.getResource(environment.VNFINSTANCES_URL)
             .subscribe((vnfInstanceData: VNFInstanceDetails[]): void => {
                 this.vnfInstanceCount = vnfInstanceData.length;
             }, (error: ERRORDATA): void => {
