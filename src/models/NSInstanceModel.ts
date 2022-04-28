@@ -149,6 +149,20 @@ export interface NSDVLD {
     df: DF[];
 }
 
+/** Interface for Vm Migration */
+export interface VMMIGRATION {
+    lcmOperationType: string;
+    vnfInstanceId: string;
+    migrateToHost?: string;
+    vdu?: VDUPARAM;
+}
+
+/** Interface for vdu for Vm Migration */
+export interface VDUPARAM {
+    vduId?: string;
+    vduCountIndex?: string;
+}
+
 /** Interface for InstantiateParam */
 interface InstantiateParam {
     nsdId: string;
@@ -189,19 +203,19 @@ export interface NSDInstanceData {
 }
 
 /** Interface for the operationparams */
-export interface OPERATIONPARAMS{
+export interface OPERATIONPARAMS {
     scaleType?: string;
     scaleVnfData?: SCALEVNFDATA;
 }
 
 /** Interface for the scaleVnfData */
-export interface SCALEVNFDATA{
+export interface SCALEVNFDATA {
     scaleVnfType?: string;
     scaleByStepData?: SCALEBYSTEPDATA;
 }
 
 /** Interface for the scaleByStepData */
-export interface SCALEBYSTEPDATA{
+export interface SCALEBYSTEPDATA {
     'scaling-group-descriptor'?: string;
     'member-vnf-index'?: string;
 }
@@ -295,7 +309,7 @@ export interface VLINFO {
 }
 
 /** Interface for the VNFR Info */
-export interface VNFRINFO{
+export interface VNFRINFO {
     vimID: string;
     _id: string;
     ip: string;

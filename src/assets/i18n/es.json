@@ -166,6 +166,12 @@
     "DEFAULT": "por defecto",
     "SOURCE": "Fuente",
     "RESOURCESNOTFOUND": "Recursos no encontrados",
+    "SELECTMEMBERVNFINDEX": "Seleccione el índice VNF de miembros",
+    "MEMBERVNFINDEX": "Índice VNF de miembros",
+    "VDUID": "Identificación de VDU",
+    "COUNTINDEX": "Índice de conteo",
+    "MIGRATETOHOST": "Migrar a host",
+    "VMMIGRATION": "Migración de máquina virtual",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Tablero",

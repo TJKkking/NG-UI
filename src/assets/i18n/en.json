@@ -166,6 +166,12 @@
     "DEFAULT": "Default",
     "SOURCE": "Source",
     "RESOURCESNOTFOUND": "Resources not found",
+    "SELECTMEMBERVNFINDEX": "Select Member VNF Index",
+    "MEMBERVNFINDEX": "Member VNF Index",
+    "VDUID": "VDU Id",
+    "COUNTINDEX": "Count Index",
+    "MIGRATETOHOST": "Migrate To Host",
+    "VMMIGRATION": "Vm Migration",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Dashboard",

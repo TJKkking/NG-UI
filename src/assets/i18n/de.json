@@ -166,6 +166,14 @@
     "DEFAULT": "Standard",
     "SOURCE": "Quelle",
     "RESOURCESNOTFOUND": "Ressourcen nicht gefunden",
+    "VNFPKGCHANGE": "CHANGE_VNFPKG",
+    "REMOVEVNF": "REMOVE_VNF",
+    "SELECTMEMBERVNFINDEX": "Wählen Sie Mitglieds-VNF-Index",
+    "MEMBERVNFINDEX": "Mitglieds-VNF-Index",
+    "VDUID": "Vdu-ID",
+    "COUNTINDEX": "Index zählen",
+    "MIGRATETOHOST": "Zum Host migrieren",
+    "VMMIGRATION": "VM-Migration",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Instrumententafel",

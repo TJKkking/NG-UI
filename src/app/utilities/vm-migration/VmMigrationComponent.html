@@ -1,0 +1,81 @@
+<!--
+Copyright 2020 TATA ELXSI
+
+Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Author: SANDHYA JS (sandhya.j@tataelxsi.co.in)
+-->
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">  {{'VMMIGRATION' | translate}} </h4>
+    <button class="button-xs" type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+        <i class="fas fa-times-circle text-danger"></i>
+    </button>
+</div>
+<form [formGroup]="migrationForm" (ngSubmit)="triggerMigration()" autocomplete="off">
+    <div class="modal-body">
+        <div class="form-group row">
+            <label class="col-sm-12 col-form-label mandatory-label"
+                [ngClass]="{'text-danger': migrationForm.invalid === true && submitted === true}">
+                {{'MANDATORYCHECK' | translate}}
+            </label>
+            <div class="col-sm-6">
+                <label for="memberVnfIndex"> {{'MEMBERVNFINDEX' | translate}} *</label>
+            </div>
+            <div class="col-sm-6">
+                <ng-select (change)="getVdu($event.vnfinstanceId)" formControlName="memberVnfIndex" [clearable]="false"
+                    placeholder="{{'SELECTMEMBERVNFINDEX' | translate}}" [items]="memberTypes" bindLabel="id"
+                    bindValue="id" [ngClass]="{ 'is-invalid': submitted && f.memberVnfIndex.errors }">
+                </ng-select>
+                <small class="form-text text-muted" *ngIf="selectedvnfId !== ''">vnfd-id : {{ selectedvnfId }}</small>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-6">
+                <label for="vduid"> {{'VDUID' | translate}}</label>
+            </div>
+            <div class="col-sm-6">
+                <ng-select formControlName="vduId" [clearable]="false"
+                    placeholder="{{'SELECT' | translate}} {{'VDUID' | translate}}" [items]="vdu" bindLabel="VDU"
+                    bindValue="VDU" [ngClass]="{ 'is-invalid': submitted && f.vduId.errors }">
+                </ng-select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-6">
+                <label for="countIndex"> {{'COUNTINDEX' | translate}}</label>
+            </div>
+            <div class="col-sm-6">
+                <ng-select formControlName="countIndex" [clearable]="false"
+                    placeholder="{{'SELECT' | translate}} {{'COUNTINDEX' | translate}}" [items]="vdu"
+                    bindLabel="count-index" bindValue="count-index"
+                    [ngClass]="{ 'is-invalid': submitted && f.countIndex.errors }">
+                </ng-select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-6">
+                <label for="migrateToHost"> {{'MIGRATETOHOST' | translate}}</label>
+            </div>
+            <div class="col-sm-6">
+                <input autocomplete="off" class="form-control" placeholder="{{'MIGRATETOHOST' | translate}}" type="text"
+                    formControlName="migrateToHost" id="migrateToHost"
+                    [ngClass]="{ 'is-invalid': submitted && f.migrateToHost.errors }">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" (click)="activeModal.close()" class="btn btn-danger">{{'CANCEL' | translate}}</button>
+        <button type="submit" class="btn btn-primary">{{'APPLY' | translate }}</button>
+    </div>
+</form>
+<app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>

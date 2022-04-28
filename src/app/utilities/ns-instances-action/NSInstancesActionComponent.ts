@@ -35,6 +35,7 @@ import { ScalingComponent } from 'ScalingComponent';
 import { SharedService } from 'SharedService';
 import { ShowInfoComponent } from 'ShowInfoComponent';
 import { isNullOrUndefined } from 'util';
+import { VmMigrationComponent } from 'VmMigrationComponent';
 import { DF, VDU, VNFD } from 'VNFDModel';
 /**
  * Creating component
@@ -248,6 +249,19 @@ export class NSInstancesActionComponent {
       nsID: this.value['nsd-id'],
       nsd: this.value.nsd,
       data: this.vnfDetails
+    };
+    modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
+      if (result) {
+        this.sharedService.callData();
+      }
+    }).catch();
+  }
+
+  /** To open VM Migration in NS Instances */
+  public openVmMigration(): void {
+    const modalRef: NgbModalRef = this.modalService.open(VmMigrationComponent, { backdrop: 'static' });
+    modalRef.componentInstance.params = {
+      id: this.instanceID
     };
     modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
       if (result) {

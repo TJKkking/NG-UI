@@ -37,7 +37,7 @@ export interface VNFInstanceDetails {
 }
 
 /** Interface for VDUR */
-interface VDUR {
+export interface VDUR {
     'ip-address': string;
     'vim-id': string;
     'internal-connection-point': string[];

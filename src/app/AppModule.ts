@@ -77,6 +77,7 @@ import { SwitchProjectComponent } from 'SwitchProjectComponent';
 import { UsersActionComponent } from 'UsersActionComponent';
 import { UserSettingsComponent } from 'UserSettingsComponent';
 import { VimAccountsActionComponent } from 'VimAccountsAction';
+import { VmMigrationComponent } from 'VmMigrationComponent';
 import { VNFInstancesActionComponent } from 'VNFInstancesActionComponent';
 import { VNFLinkComponent } from 'VNFLinkComponent';
 import { VNFPackagesActionComponent } from 'VNFPackagesAction';
@@ -127,7 +128,8 @@ const customNotifierOptions: NotifierOptions = {
         SwitchProjectComponent,
         GoToTopDirective,
         ScalingComponent,
-        ChangePasswordComponent
+        ChangePasswordComponent,
+        VmMigrationComponent
     ],
     imports: [
         NotifierModule.withConfig(customNotifierOptions),
@@ -201,7 +203,8 @@ const customNotifierOptions: NotifierOptions = {
         SDNControllerActionComponent,
         SwitchProjectComponent,
         ScalingComponent,
-        ChangePasswordComponent
+        ChangePasswordComponent,
+        VmMigrationComponent
     ]
 })
 

@@ -151,7 +151,8 @@
             "ResourcesOverviewComponent": ["src/app/vim-accounts/Resources-Overview/ResourcesOverviewComponent"],
             "SharedModule": ["src/app/vim-accounts/Resources-Overview/SharedModule"],
             "ChangePasswordComponent": ["src/app/utilities/change-password/ChangePasswordComponent"],
-            "ChangePasswordModule": ["src/app/utilities/change-password/ChangePasswordModule"]
+            "ChangePasswordModule": ["src/app/utilities/change-password/ChangePasswordModule"],
+            "VmMigrationComponent":  ["src/app/utilities/vm-migration/VmMigrationComponent"]
         }
     }
 }

@@ -43,6 +43,10 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
                 placement="left" data-container="body" ngbTooltip="{{'SCALING' | translate}}">
                 <i class="fas fa-cubes"></i> {{'SCALING' | translate}}
             </button>
+            <button type="button" class="btn btn-primary dropdown-item" (click)="openVmMigration()" placement="left" data-container="body"
+                [disabled]="operationalStatus === 'failed' || configStatus === 'failed'" ngbTooltip="{{'VMMIGRATION' | translate}}">
+                <i class="fas fa-angle-double-left"></i> {{'VMMIGRATION' | translate}}
+            </button>
             <button type="button" class="btn btn-primary dropdown-item" (click)="historyOfOperations()" placement="left" container="body" ngbTooltip="{{'HISTORYOFOPERATIONS' | translate}}">
                 <i class="fas fa-history"></i> {{'HISTORYOFOPERATIONS' | translate}}
             </button>
