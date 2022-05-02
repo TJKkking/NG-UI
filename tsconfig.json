@@ -155,7 +155,8 @@
             "VmMigrationComponent":  ["src/app/utilities/vm-migration/VmMigrationComponent"],
             "NsUpdateComponent":  ["src/app/utilities/ns-update/NsUpdateComponent"],
             "WarningComponent":  ["src/app/utilities/warning/WarningComponent"],
-            "StartStopRebuildComponent":  ["src/app/utilities/start-stop-rebuild/StartStopRebuildComponent"]
+            "StartStopRebuildComponent":  ["src/app/utilities/start-stop-rebuild/StartStopRebuildComponent"],
+            "VerticalScalingComponent":  ["src/app/utilities/vertical-scaling/VerticalScalingComponent"]
         }
     }
 }

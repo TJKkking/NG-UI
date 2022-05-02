@@ -187,6 +187,10 @@
     "START": "Começar",
     "STOP": "Pare",
     "VIMACTION": "Ação VIM",
+    "VERTICALSCALING": "Escala vertical",
+    "MEMORYMB": "MB de memória",
+    "STORAGEGB": "GB de armazenamento",
+    "VCPUCOUNT": "Contagem de VCPU",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "painel de controle",

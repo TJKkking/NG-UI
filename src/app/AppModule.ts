@@ -78,6 +78,7 @@ import { StartStopRebuildComponent } from 'StartStopRebuildComponent';
 import { SwitchProjectComponent } from 'SwitchProjectComponent';
 import { UsersActionComponent } from 'UsersActionComponent';
 import { UserSettingsComponent } from 'UserSettingsComponent';
+import { VerticalScalingComponent } from 'VerticalScalingComponent';
 import { VimAccountsActionComponent } from 'VimAccountsAction';
 import { VmMigrationComponent } from 'VmMigrationComponent';
 import { VNFInstancesActionComponent } from 'VNFInstancesActionComponent';
@@ -135,7 +136,8 @@ const customNotifierOptions: NotifierOptions = {
         VmMigrationComponent,
         NsUpdateComponent,
         WarningComponent,
-        StartStopRebuildComponent
+        StartStopRebuildComponent,
+        VerticalScalingComponent
     ],
     imports: [
         NotifierModule.withConfig(customNotifierOptions),
@@ -213,7 +215,8 @@ const customNotifierOptions: NotifierOptions = {
         VmMigrationComponent,
         NsUpdateComponent,
         WarningComponent,
-        StartStopRebuildComponent
+        StartStopRebuildComponent,
+        VerticalScalingComponent
     ]
 })
 

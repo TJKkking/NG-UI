@@ -37,6 +37,7 @@ import { SharedService } from 'SharedService';
 import { ShowInfoComponent } from 'ShowInfoComponent';
 import { StartStopRebuildComponent } from 'StartStopRebuildComponent';
 import { isNullOrUndefined } from 'util';
+import { VerticalScalingComponent } from 'VerticalScalingComponent';
 import { VmMigrationComponent } from 'VmMigrationComponent';
 import { DF, VDU, VNFD } from 'VNFDModel';
 /**
@@ -299,6 +300,19 @@ export class NSInstancesActionComponent {
       modalRef.componentInstance.instanceTitle = this.translateService.instant('REBUILD');
     }
     modalRef.componentInstance.instanceType = actionType;
+    modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
+      if (result) {
+        this.sharedService.callData();
+      }
+    }).catch();
+  }
+
+  /** To open the vertical Scaling pop-up */
+  public openVerticalScaling(): void {
+    const modalRef: NgbModalRef = this.modalService.open(VerticalScalingComponent, { backdrop: 'static' });
+    modalRef.componentInstance.params = {
+      id: this.instanceID
+    };
     modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
       if (result) {
         this.sharedService.callData();

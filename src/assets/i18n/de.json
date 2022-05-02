@@ -187,6 +187,10 @@
     "START": "Start",
     "STOP": "Halt",
     "VIMACTION": "VIM-Aktion",
+    "VERTICALSCALING": "Vertikale Skalierung",
+    "MEMORYMB": "Arbeitsspeicher MB",
+    "STORAGEGB": "Speicher GB",
+    "VCPUCOUNT": "VCPU-Anzahl",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Instrumententafel",

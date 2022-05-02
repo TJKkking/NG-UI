@@ -205,6 +205,31 @@ export interface ADDITIONALPARAMS {
     'count-index': string;
 }
 
+/** Interface for VerticalScaling */
+export interface VerticalScaling {
+    lcmOperationType: string;
+    verticalScale: string;
+    nsInstanceId: string;
+    changeVnfFlavorData: CHANGEVNFFLAVORDATAPARAM;
+}
+
+/** Interface for changeVnfFlavorData in Vertical Scaling */
+export interface CHANGEVNFFLAVORDATAPARAM {
+    vnfInstanceId: string;
+    additionalParams: ADDITIONALPARAM;
+
+}
+
+/** Interface for additionalParam in Vertical Scaling */
+export interface ADDITIONALPARAM {
+    vduid: string;
+    vduCountIndex: string;
+    virtualMemory: number;
+    sizeOfStorage: number;
+    numVirtualCpu: number;
+
+}
+
 /** Interface for InstantiateParam */
 interface InstantiateParam {
     nsdId: string;
