@@ -74,6 +74,7 @@ import { ScalingComponent } from 'ScalingComponent';
 import { SDNControllerActionComponent } from 'SDNControllerActionComponent';
 import { SharedModule } from 'SharedModule';
 import { ShowInfoComponent } from 'ShowInfoComponent';
+import { StartStopRebuildComponent } from 'StartStopRebuildComponent';
 import { SwitchProjectComponent } from 'SwitchProjectComponent';
 import { UsersActionComponent } from 'UsersActionComponent';
 import { UserSettingsComponent } from 'UserSettingsComponent';
@@ -133,7 +134,8 @@ const customNotifierOptions: NotifierOptions = {
         ChangePasswordComponent,
         VmMigrationComponent,
         NsUpdateComponent,
-        WarningComponent
+        WarningComponent,
+        StartStopRebuildComponent
     ],
     imports: [
         NotifierModule.withConfig(customNotifierOptions),
@@ -210,7 +212,8 @@ const customNotifierOptions: NotifierOptions = {
         ChangePasswordComponent,
         VmMigrationComponent,
         NsUpdateComponent,
-        WarningComponent
+        WarningComponent,
+        StartStopRebuildComponent
     ]
 })
 

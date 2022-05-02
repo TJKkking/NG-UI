@@ -28,7 +28,26 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
     <button type="button" class="btn btn-primary" (click)="deleteNSInstance(false)" placement="top" container="body" ngbTooltip="{{'DELETE' | translate}}">
         <i class="far fa-trash-alt icons"></i>
     </button>
-    <div class="btn-group" ngbDropdown display="dynamic" container="body">
+    <div class="btn-group" placement="bottom-right" ngbDropdown display="dynamic" container="body">
+        <button type="button" class="btn btn-primary" ngbDropdownToggle placement="top" container="body" [disabled]="operationalStatus === 'failed' || configStatus === 'failed'" ngbTooltip="{{'VIMACTION' | translate}}">
+            <i class="fas fa-desktop"></i>
+        </button>
+        <div class="dropdown-menu list-action-dropdown" ngbDropdownMenu>
+            <button type="button" class="btn btn-primary dropdown-item" (click)="openStart('start')" placement="left"
+                data-container="body" ngbTooltip="{{'START' | translate}}">
+                <i class="fas fa-toggle-on"></i> {{'START' | translate}}
+            </button>
+            <button type="button" class="btn btn-primary dropdown-item" (click)="openStart('stop')" placement="left"
+                data-container="body" ngbTooltip="{{'STOP' | translate}}">
+                <i class="fas fa-toggle-off"></i> {{'STOP' | translate}}
+            </button>
+            <button type="button" class="btn btn-primary dropdown-item" (click)="openStart('rebuild')" placement="left"
+                data-container="body" ngbTooltip="{{'REBUILD' | translate}}">
+                <i class="fas fa-arrows-alt"></i> {{'REBUILD' | translate}}
+            </button>
+        </div>
+    </div>
+    <div class="btn-group" placement="bottom-right" ngbDropdown display="dynamic" container="body">
         <button type="button" class="btn btn-primary dropdown-toggle action-button" ngbDropdownToggle>
             {{'ACTION' | translate}}
         </button>

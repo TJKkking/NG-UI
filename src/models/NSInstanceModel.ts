@@ -185,6 +185,26 @@ export interface TERMINATEVNF {
     removeVnfInstanceId: string;
 }
 
+/** Interface for Start, Stop & Rebuild */
+export interface StartStopRebuild {
+    updateType: string;
+    operateVnfData: OPERATEVNFDATA;
+}
+
+/** Interface for operateVnfData  in Start, Stop and Rebuild */
+export interface OPERATEVNFDATA {
+    additionalParam: ADDITIONALPARAMS;
+    vnfInstanceId: string;
+    changeStateTo: string;
+}
+
+/** Interface for additionalParam in Start, Stop and Rebuild */
+export interface ADDITIONALPARAMS {
+    'run-day1': boolean;
+    'vdu_id': string;
+    'count-index': string;
+}
+
 /** Interface for InstantiateParam */
 interface InstantiateParam {
     nsdId: string;

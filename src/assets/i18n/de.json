@@ -183,6 +183,10 @@
     "UPDATEPOLICIESCONTENT": "Diese Aktion umfasst die Neuerstellung der Richtlinien dieser VNF. Sind Sie sicher, dass Sie fortfahren möchten",
     "REDEPLOYCONTENT": "Diese Aktion umfasst die erneute Bereitstellung aller Ressourcen dieser VNF. Sind Sie sicher, dass Sie fortfahren möchten",
     "TERMINATEVNFCONTENT": "Diese Aktion beinhaltet das Beenden dieser VNF. Sind Sie sicher, dass Sie fortfahren möchten",
+    "REBUILD": "Wiederaufbau",
+    "START": "Start",
+    "STOP": "Halt",
+    "VIMACTION": "VIM-Aktion",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Instrumententafel",

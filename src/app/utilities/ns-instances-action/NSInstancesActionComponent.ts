@@ -35,6 +35,7 @@ import { forkJoin, Observable } from 'rxjs';
 import { ScalingComponent } from 'ScalingComponent';
 import { SharedService } from 'SharedService';
 import { ShowInfoComponent } from 'ShowInfoComponent';
+import { StartStopRebuildComponent } from 'StartStopRebuildComponent';
 import { isNullOrUndefined } from 'util';
 import { VmMigrationComponent } from 'VmMigrationComponent';
 import { DF, VDU, VNFD } from 'VNFDModel';
@@ -277,6 +278,27 @@ export class NSInstancesActionComponent {
     modalRef.componentInstance.params = {
       id: this.instanceID
     };
+    modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
+      if (result) {
+        this.sharedService.callData();
+      }
+    }).catch();
+  }
+
+  /** To open the Start, Stop & Rebuild pop-up */
+  public openStart(actionType: string): void {
+    const modalRef: NgbModalRef = this.modalService.open(StartStopRebuildComponent, { backdrop: 'static' });
+    modalRef.componentInstance.params = {
+      id: this.instanceID
+    };
+    if (actionType === 'start') {
+      modalRef.componentInstance.instanceTitle = this.translateService.instant('START');
+    } else if (actionType === 'stop') {
+      modalRef.componentInstance.instanceTitle = this.translateService.instant('STOP');
+    } else {
+      modalRef.componentInstance.instanceTitle = this.translateService.instant('REBUILD');
+    }
+    modalRef.componentInstance.instanceType = actionType;
     modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
       if (result) {
         this.sharedService.callData();

@@ -183,6 +183,10 @@
     "UPDATEPOLICIESCONTENT": "This action involves recreating the policies of this VNF. Are you sure you want to proceed",
     "REDEPLOYCONTENT": "This action involves redeploying all resources of this VNF. Are you sure you want to proceed",
     "TERMINATEVNFCONTENT": "This action involves terminating this VNF. Are you sure you want to proceed",
+    "REBUILD": "Rebuild",
+    "START": "Start",
+    "STOP": "Stop",
+    "VIMACTION": "VIM Action",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Dashboard",

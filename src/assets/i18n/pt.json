@@ -183,6 +183,10 @@
     "UPDATEPOLICIESCONTENT": "Esta ação envolve a recriação das políticas desta VNF. Tem certeza de que deseja continuar",
     "REDEPLOYCONTENT": "Esta ação envolve a redistribuição de todos os recursos desta VNF. Tem certeza de que deseja continuar",
     "TERMINATEVNFCONTENT": "Esta ação envolve encerrar este VNF. Tem certeza de que deseja continuar",
+    "REBUILD": "Reconstruir",
+    "START": "Começar",
+    "STOP": "Pare",
+    "VIMACTION": "Ação VIM",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "painel de controle",
