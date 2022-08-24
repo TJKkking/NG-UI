@@ -45,9 +45,13 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
                 data-container="body" ngbTooltip="{{'REBUILD' | translate}}">
                 <i class="fas fa-arrows-alt"></i> {{'REBUILD' | translate}}
             </button>
-            <button type="button" class="btn btn-primary dropdown-item" (click)="openVerticalScaling()" placement="left" 
+            <button type="button" class="btn btn-primary dropdown-item" (click)="openVerticalScaling()" placement="left"
                 data-container="body" ngbTooltip="{{'VERTICALSCALING' | translate}}">
                 <i class="fas fa-grip-vertical"></i> {{'VERTICALSCALING' | translate}}
+            </button>
+            <button type="button" class="btn btn-primary dropdown-item" (click)="openVmMigration()" placement="left" data-container="body"
+                [disabled]="operationalStatus === 'failed' || configStatus === 'failed'" ngbTooltip="{{'VMMIGRATION' | translate}}">
+                <i class="fas fa-angle-double-left"></i> {{'VMMIGRATION' | translate}}
             </button>
         </div>
     </div>
@@ -62,13 +66,9 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
             <button type="button" class="btn btn-primary dropdown-item" (click)="execNSPrimitiveModal()" placement="left" container="body" ngbTooltip="{{'EXECPRIMITIVE' | translate}}" [disabled]="operationalStatus == 'failed' || configStatus == 'failed'">
                 <i class="fas fa-magic"></i> {{'EXECPRIMITIVE' | translate}}
             </button>
-            <button type="button" class="btn btn-primary dropdown-item" [disabled]="operationalStatus === 'scaling'" (click)="manualScaling()"
+            <button type="button" class="btn btn-primary dropdown-item" [disabled]="operationalStatus === 'scaling' || operationalStatus === 'failed' || configStatus === 'failed'" (click)="manualScaling()"
                 placement="left" data-container="body" ngbTooltip="{{'SCALING' | translate}}">
                 <i class="fas fa-cubes"></i> {{'SCALING' | translate}}
-            </button>
-            <button type="button" class="btn btn-primary dropdown-item" (click)="openVmMigration()" placement="left" data-container="body"
-                [disabled]="operationalStatus === 'failed' || configStatus === 'failed'" ngbTooltip="{{'VMMIGRATION' | translate}}">
-                <i class="fas fa-angle-double-left"></i> {{'VMMIGRATION' | translate}}
             </button>
             <button type="button" class="btn btn-primary dropdown-item" (click)="openNsUpdate()" placement="left" data-container="body"
                 [disabled]="operationalStatus === 'failed' || configStatus === 'failed'" ngbTooltip="{{'NSUPDATE' | translate}}">

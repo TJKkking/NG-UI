@@ -191,6 +191,9 @@
     "MEMORYMB": "Arbeitsspeicher MB",
     "STORAGEGB": "Speicher GB",
     "VCPUCOUNT": "VCPU-Anzahl",
+    "UPDATENS": "NS aktualisieren",
+    "GENERICCONTENT": "Diese Aktion umfasst die Neuerstellung der Ressourcen dieser VNF. Sind Sie sicher, dass Sie fortfahren möchten",
+    "VNFDNAME": "Vnfd-Name",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Instrumententafel",

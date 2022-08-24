@@ -32,7 +32,7 @@ Author: SANDHYA JS (sandhya.j@tataelxsi.co.in)
                 <label for="updateType"> {{'UPDATETYPE' | translate}} *</label>
             </div>
             <div class="col-sm-6">
-                <ng-select formControlName="updateType" [clearable]="false" placeholder="{{'SELECT' | translate}}"
+                <ng-select formControlName="updateType" [clearable]="false" placeholder="{{'SELECT' | translate}} {{'UPDATETYPE' | translate}}"
                     [items]="updateTypeList" bindLabel="title" bindValue="value" (change)="terminateVNF($event.value)"
                     [ngClass]="{ 'is-invalid': submitted && f.updateType.errors }"></ng-select>
             </div>
@@ -51,12 +51,12 @@ Author: SANDHYA JS (sandhya.j@tataelxsi.co.in)
         </div>
         <div class="form-group row" *ngIf="!vnfdIdShow">
             <div class="col-sm-6">
-                <label for="vnfdId"> {{'VNFDID' | translate}} *</label>
+                <label for="vnfdId"> {{'VNFDNAME' | translate}} *</label>
             </div>
             <div class="col-sm-6">
-                <input autocomplete="off" class="form-control" placeholder="{{'VNFDID' | translate}}" type="text"
-                    formControlName="vnfdId" id="computeHost"
-                    [ngClass]="{ 'is-invalid': submitted && f.vnfdId.errors }">
+                <ng-select formControlName="vnfdId" [clearable]="false" placeholder="{{'SELECT' | translate}} {{'VNFDNAME' | translate}}"
+                    [items]="selectedVnf" bindLabel="VNFD" bindValue="VNFID"
+                    [ngClass]="{ 'is-invalid': submitted && f.vnfdId.errors }"></ng-select>
             </div>
         </div>
     </div>

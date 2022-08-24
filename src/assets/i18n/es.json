@@ -191,6 +191,9 @@
     "MEMORYMB": "MB de memoria",
     "STORAGEGB": "GB de almacenamiento",
     "VCPUCOUNT": "Recuento de VCPU",
+    "UPDATENS": "Actualizar NS",
+    "GENERICCONTENT": "Esta acción implica recrear los recursos de este VNF. Estas seguro que deseas continuar",
+    "VNFDNAME": "Nombre Vnfd",
     "PAGE": {
         "DASHBOARD": {
             "DASHBOARD": "Tablero",

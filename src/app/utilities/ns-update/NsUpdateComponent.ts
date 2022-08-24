@@ -68,6 +68,8 @@ export class NsUpdateComponent implements OnInit {
     public vnfdIdShow: boolean = false;
     /** Contains MemberVNFIndex values @public */
     public memberVnfIndex: {}[] = [];
+    /** Contains MemberVNFIndex content @public */
+    public selectedVnf: {}[];
     /** Array holds VNFR Data filtered with nsr ID @public */
     public nsIdFilteredData: {}[] = [];
     /** Contains vnfdId value @public */
@@ -188,6 +190,7 @@ export class NsUpdateComponent implements OnInit {
             vnfdData[memberIndex] === this.memberIndexValue);
         const vnfId: string = 'VNFID';
         const selectedvnfId: string = 'VNFD';
+        this.selectedVnf = memberIndexFilteredData;
         for (const data of memberIndexFilteredData) {
             this.vnfID = data[vnfId];
             this.selectedvnfId = data[selectedvnfId];
@@ -243,7 +246,8 @@ export class NsUpdateComponent implements OnInit {
                 if (result.message === CONFIGCONSTANT.done) {
                     this.onSubmit();
                 }
-            }).catch();
+            }).catch((): void => { //empty
+             });
         }
         this.isLoadingResults = false;
     }
@@ -274,14 +278,16 @@ export class NsUpdateComponent implements OnInit {
                 }
                 if (this.version === this.vnfversion) {
                     const modalRef: NgbModalRef = this.modalService.open(WarningComponent, { backdrop: 'static' });
-                    modalRef.componentInstance.heading = this.translateService.instant('UPDATEPOLICIES');
-                    modalRef.componentInstance.confirmationMessage = this.translateService.instant('UPDATEPOLICIESCONTENT');
-                    modalRef.componentInstance.submitMessage = this.translateService.instant('UPDATEPOLICIES');
+                    modalRef.componentInstance.heading = this.translateService.instant('UPDATENS');
+                    modalRef.componentInstance.confirmationMessage = this.translateService.instant('GENERICCONTENT');
+                    modalRef.componentInstance.submitMessage = this.translateService.instant('UPDATENS');
                     modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
                         if (result.message === CONFIGCONSTANT.done) {
                             this.onSubmit();
                         }
-                    }).catch();
+                    }).catch((): void => { //empty
+                     }
+                    );
                 } else {
                     const modalRef: NgbModalRef = this.modalService.open(WarningComponent, { backdrop: 'static' });
                     modalRef.componentInstance.heading = this.translateService.instant('REDEPLOY');
@@ -291,7 +297,8 @@ export class NsUpdateComponent implements OnInit {
                         if (result.message === CONFIGCONSTANT.done) {
                             this.onSubmit();
                         }
-                    }).catch();
+                    }).catch((): void => { //empty
+                     });
                 }
             }, (error: ERRORDATA): void => {
                 this.restService.handleError(error, 'get');
