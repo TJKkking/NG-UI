@@ -67,6 +67,10 @@ export class VerticalScalingComponent implements OnInit {
     public nsIdFilteredData: {}[] = [];
     /** Form valid on submit trigger @public */
     public submitted: boolean = false;
+     /** Contains vduId @public */
+    public vduId: {};
+    /** Items for countIndex @public */
+    public countIndex: {}[];
     /** Input contains component objects @private */
     @Input() private params: URLPARAMS;
     /** FormBuilder instance added to the formBuilder @private */
@@ -175,12 +179,24 @@ export class VerticalScalingComponent implements OnInit {
                             vnfInstanceData.push(vnfInstanceDataObj);
                         });
                         this.vdu = vnfInstanceData;
+                        const vduName: string = 'VDU';
+                        this.vduId = this.vdu.filter((vdu: {}, index: number, self: {}[]): {} =>
+                            index === self.findIndex((t: {}): {} => (
+                                t[vduName] === vdu[vduName]
+                            ))
+                        );
                     }
                 }, (error: ERRORDATA): void => {
                     this.restService.handleError(error, 'get');
                     this.isLoadingResults = false;
                 });
         }
+    }
+
+    /** Getting count-index by filtering id  */
+    public getCountIndex(id: string): void {
+        const VDU: string = 'VDU';
+        this.countIndex = this.vdu.filter((vnfdData: {}[]): boolean => vnfdData[VDU] === id);
     }
 
     /** Vertical Scaling on submit */

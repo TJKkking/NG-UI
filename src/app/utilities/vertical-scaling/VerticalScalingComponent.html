@@ -44,8 +44,8 @@ Author: SANDHYA JS (sandhya.j@tataelxsi.co.in)
                 <label for="vdu-id"> {{'VDUID' | translate}} *</label>
             </div>
             <div class="col-sm-6">
-                <ng-select formControlName="vduId" [clearable]="false"
-                    placeholder="{{'SELECT' | translate}} {{'VDUID' | translate}}" [items]="vdu" bindLabel="VDU"
+                <ng-select formControlName="vduId" [clearable]="false" (change)="getCountIndex($event.VDU)"
+                    placeholder="{{'SELECT' | translate}} {{'VDUID' | translate}}" [items]="vduId" bindLabel="VDU"
                     bindValue="VDU" [ngClass]="{ 'is-invalid': submitted && f.vduId.errors }">
                 </ng-select>
             </div>
@@ -56,7 +56,7 @@ Author: SANDHYA JS (sandhya.j@tataelxsi.co.in)
             </div>
             <div class="col-sm-6">
                 <ng-select formControlName="countIndex" [clearable]="false"
-                    placeholder="{{'SELECT' | translate}} {{'COUNTINDEX' | translate}}" [items]="vdu"
+                    placeholder="{{'SELECT' | translate}} {{'COUNTINDEX' | translate}}" [items]="countIndex"
                     bindLabel="count-index" bindValue="count-index"
                     [ngClass]="{ 'is-invalid': submitted && f.countIndex.errors }">
                 </ng-select>

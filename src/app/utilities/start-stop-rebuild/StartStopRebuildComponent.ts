@@ -68,6 +68,10 @@ export class StartStopRebuildComponent implements OnInit {
     public nsIdFilteredData: {}[] = [];
     /** Form valid on submit trigger @public */
     public submitted: boolean = false;
+    /** Contains vduId @public */
+    public vduId: {};
+    /** Items for countIndex @public */
+    public countIndex: {}[];
     /** Input contains Modal dialog component Instance @public */
     @Input() public instanceType: string;
     /** Input contains Modal dialog component Instance @public */
@@ -152,7 +156,6 @@ export class StartStopRebuildComponent implements OnInit {
     /** Getting vdu-id & count-index from VNFInstance API */
     public getVdu(id: string): void {
         const vnfInstanceData: {}[] = [];
-        const vnfrDetails: {}[] = [];
         this.getFormControl('vduId').setValue(null);
         this.getFormControl('countIndex').setValue(null);
         if (!isNullOrUndefined(id)) {
@@ -172,6 +175,12 @@ export class StartStopRebuildComponent implements OnInit {
                             vnfInstanceData.push(vnfInstanceDataObj);
                         });
                         this.vdu = vnfInstanceData;
+                        const vduName: string = 'VDU';
+                        this.vduId = this.vdu.filter((vdu: {}, index: number, self: {}[]): {} =>
+                            index === self.findIndex((t: {}): {} => (
+                                t[vduName] === vdu[vduName]
+                            ))
+                        );
                     }
                     this.checkDay12Operation(this.selectedvnfId);
                 }, (error: ERRORDATA): void => {
@@ -179,6 +188,12 @@ export class StartStopRebuildComponent implements OnInit {
                     this.isLoadingResults = false;
                 });
         }
+    }
+
+    /** Getting count-index by filtering id */
+    public getCountIndex(id: string): void {
+        const VDU: string = 'VDU';
+        this.countIndex = this.vdu.filter((vnfdData: {}[]): boolean => vnfdData[VDU] === id);
     }
 
     /** To check primitve actions from VNFR  */
