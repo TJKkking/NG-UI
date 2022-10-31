@@ -32,6 +32,7 @@ import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
 import { isNullOrUndefined } from 'util';
 import { CONFIGPRIMITIVE, DF, VDUCONFIG, VDUPROFILE, VNFCONFIG, VNFD } from 'VNFDModel';
+import { VNFInstanceDetails } from 'VNFInstanceModel';
 
 /**
  * Creating component
@@ -87,6 +88,15 @@ export class NSPrimitiveComponent implements OnInit {
 
     /** Contains list of KDU primitive lists @public */
     public kduList: {}[];
+
+    /** Array holds MemberVNFIndex values @public */
+    public memberVnfIndex: {}[] = [];
+
+    /** Array holds VNFR Data filtered with nsr ID @public */
+    public nsIdFilteredData: {}[] = [];
+
+    /** Items for the memberVNFIndex data @public */
+    public memberTypes: {}[];
 
     /** FormBuilder instance added to the formBuilder @private */
     private formBuilder: FormBuilder;
@@ -151,6 +161,7 @@ export class NSPrimitiveComponent implements OnInit {
                 this.nsdId = event.identifier;
             }
         });
+        this.getMemberVnfIndex();
         this.initializeForm();
     }
 
@@ -234,6 +245,36 @@ export class NSPrimitiveComponent implements OnInit {
             this.restService.handleError(error, 'post');
         });
     }
+    /** Getting MemberVnfIndex using VNFDescriptor API @public */
+    public getMemberVnfIndex(): void {
+        const vnfInstanceData: {}[] = [];
+        this.restService.getResource(environment.VNFINSTANCES_URL).subscribe((vnfInstancesData: VNFInstanceDetails[]): void => {
+            vnfInstancesData.forEach((vnfData: VNFInstanceDetails): void => {
+                const vnfDataObj: {} =
+                {
+                    'vnf-ref': vnfData['vnfd-ref'],
+                    'vnf-id': vnfData._id,
+                    'member-index': vnfData['member-vnf-index-ref']
+                };
+                vnfInstanceData.push(vnfDataObj);
+            });
+            for (const id of this.params.id) {
+                this.nsIdFilteredData = vnfInstanceData.filter((vnfdData: {}[]): boolean => vnfdData['vnf-id'] === id);
+                this.nsIdFilteredData.forEach((resVNF: {}[]): void => {
+                    const assignMemberIndex: {} = {
+                        id: resVNF['member-index'],
+                        'vnf-ref': resVNF['vnf-ref']
+                    };
+                    this.memberVnfIndex.push(assignMemberIndex);
+                });
+            }
+            this.memberTypes = this.memberVnfIndex;
+            this.isLoadingResults = false;
+        }, (error: ERRORDATA): void => {
+            this.restService.handleError(error, 'get');
+            this.isLoadingResults = false;
+        });
+    }
     /** Primitive type change event @public */
     public primitiveTypeChange(data: PRIMITIVETYPES): void {
         this.primitiveList = [];
@@ -254,8 +295,8 @@ export class NSPrimitiveComponent implements OnInit {
     public indexChange(data: VNFPROFILE, getType?: string): void {
         this.getFormControl('vdu_id').setValue(null);
         this.getFormControl('kdu_name').setValue(null);
-        if (data['vnfd-id'] !== null) {
-            this.getVnfdInfo(data['vnfd-id'], getType);
+        if (data['vnf-ref'] !== null) {
+            this.getVnfdInfo(data['vnf-ref'], getType);
         } else {
             this.primitiveList = [];
             this.getFormControl('primitive').setValue(null);
@@ -320,60 +361,60 @@ export class NSPrimitiveComponent implements OnInit {
         const apiUrl: string = environment.VNFPACKAGES_URL + '?id=' + vnfdRef;
         this.isLoadingResults = true;
         this.restService.getResource(apiUrl).subscribe((vnfdInfo: VNFD[]): void => {
-                const vnfInstances: VNFD = vnfdInfo[0];
-                if (!isNullOrUndefined(vnfInstances.df)) {
-                    this.getFormControl('vdu_id').setValidators([]);
-                    this.getFormControl('kdu_name').setValidators([]);
-                    vnfInstances.df.forEach((df: DF): void => {
-                        if (df['lcm-operations-configuration'] !== undefined) {
-                            if (df['lcm-operations-configuration']['operate-vnf-op-config'] !== undefined) {
-                                const day12Operation: VDUCONFIG[] = df['lcm-operations-configuration']['operate-vnf-op-config']['day1-2'];
-                                if (day12Operation !== undefined) {
-                                    const vnfprimitiveList: VNFCONFIG = day12Operation
-                                        .filter((itemData: VNFCONFIG): boolean => itemData.id === vnfInstances.id)[0];
-                                    if (vnfprimitiveList !== undefined) {
-                                        this.primitiveList = vnfprimitiveList['config-primitive'];
-                                    }
-                                    /** VDU Primitive */
-                                    if (getType === 'VDU_Primitive') {
-                                        this.kduList = [];
-                                        this.vduList = [];
-                                        this.primitiveList = [];
-                                        df['vdu-profile'].forEach((vduProfile: VDUPROFILE): void => {
+            const vnfInstances: VNFD = vnfdInfo[0];
+            if (!isNullOrUndefined(vnfInstances.df)) {
+                this.getFormControl('vdu_id').setValidators([]);
+                this.getFormControl('kdu_name').setValidators([]);
+                vnfInstances.df.forEach((df: DF): void => {
+                    if (df['lcm-operations-configuration'] !== undefined) {
+                        if (df['lcm-operations-configuration']['operate-vnf-op-config'] !== undefined) {
+                            const day12Operation: VDUCONFIG[] = df['lcm-operations-configuration']['operate-vnf-op-config']['day1-2'];
+                            if (day12Operation !== undefined) {
+                                const vnfprimitiveList: VNFCONFIG = day12Operation
+                                    .filter((itemData: VNFCONFIG): boolean => itemData.id === vnfInstances.id)[0];
+                                if (vnfprimitiveList !== undefined) {
+                                    this.primitiveList = vnfprimitiveList['config-primitive'];
+                                }
+                                /** VDU Primitive */
+                                if (getType === 'VDU_Primitive') {
+                                    this.kduList = [];
+                                    this.vduList = [];
+                                    this.primitiveList = [];
+                                    df['vdu-profile'].forEach((vduProfile: VDUPROFILE): void => {
+                                        day12Operation.forEach((element: VDUCONFIG): void => {
+                                            if (element.id === vduProfile.id) {
+                                                const vduDataObj: VDUPROFILE = this.generateVDUData(element);
+                                                this.vduList.push(vduDataObj);
+                                            }
+                                        });
+                                    });
+                                }
+                                /** KDU Primitive */
+                                if (getType === 'KDU_Primitive') {
+                                    this.kduList = [];
+                                    this.vduList = [];
+                                    this.primitiveList = [];
+                                    if (!isNullOrUndefined(vnfInstances.kdu)) {
+                                        vnfInstances.kdu.forEach((kduData: KDUPRIMITIVELEVEL): void => {
                                             day12Operation.forEach((element: VDUCONFIG): void => {
-                                                if (element.id === vduProfile.id){
-                                                    const vduDataObj: VDUPROFILE = this.generateVDUData(element);
-                                                    this.vduList.push(vduDataObj);
+                                                if (element.id === kduData.name) {
+                                                    const kduDataObj: KDUPRIMITIVELEVEL = this.generateKDUData(kduData, element);
+                                                    this.kduList.push(kduDataObj);
                                                 }
                                             });
                                         });
                                     }
-                                    /** KDU Primitive */
-                                    if (getType === 'KDU_Primitive') {
-                                        this.kduList = [];
-                                        this.vduList = [];
-                                        this.primitiveList = [];
-                                        if (!isNullOrUndefined(vnfInstances.kdu)) {
-                                            vnfInstances.kdu.forEach((kduData: KDUPRIMITIVELEVEL): void => {
-                                                day12Operation.forEach((element: VDUCONFIG): void => {
-                                                    if (element.id === kduData.name){
-                                                        const kduDataObj: KDUPRIMITIVELEVEL = this.generateKDUData(kduData, element);
-                                                        this.kduList.push(kduDataObj);
-                                                    }
-                                                });
-                                            });
-                                        }
-                                    }
                                 }
                             }
                         }
-                    });
-                }
-                this.isLoadingResults = false;
-            }, (error: ERRORDATA): void => {
-                this.isLoadingResults = false;
-                this.restService.handleError(error, 'get');
-            });
+                    }
+                });
+            }
+            this.isLoadingResults = false;
+        }, (error: ERRORDATA): void => {
+            this.isLoadingResults = false;
+            this.restService.handleError(error, 'get');
+        });
     }
     /** Get primivitive actions from NSD data */
     private getNSInfo(nsdRef: string): void {

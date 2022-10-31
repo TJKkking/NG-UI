@@ -267,6 +267,7 @@ export interface NSDInstanceData {
     nsd?: NSD;
     operationParams?: OPERATIONPARAMS;
     'nsd-id': string;
+    constituent: string[];
 }
 
 /** Interface for the operationparams */

@@ -170,7 +170,8 @@ export class NSInstancesActionComponent {
     this.modalService.open(NSPrimitiveComponent, { backdrop: 'static' }).componentInstance.params = {
       memberIndex: this.value.memberIndex,
       nsConfig: this.value.nsConfig,
-      name: this.value.NsdName
+      name: this.value.NsdName,
+      id: this.value.constituent
     };
   }
 
