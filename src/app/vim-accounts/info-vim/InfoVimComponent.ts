@@ -116,6 +116,7 @@ export class InfoVimComponent implements OnInit {
     this.restService.getResource(environment.VIMACCOUNTS_URL + '/' + this.paramsID)
       .subscribe((vimAccountsData: VimAccountDetails) => {
         this.showDetails(vimAccountsData);
+        if (!isNullOrUndefined(vimAccountsData.config)) {
         if (vimAccountsData.config.location !== undefined) {
           const locationArr: string[] = vimAccountsData.config.location.split(',');
           if (Array.isArray(locationArr)) {
@@ -133,6 +134,7 @@ export class InfoVimComponent implements OnInit {
           }
         });
         this.configParams = vimAccountsData.config;
+      }
         this.isLoadingResults = false;
       }, (error: ERRORDATA) => {
         this.isLoadingResults = false;
