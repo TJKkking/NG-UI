@@ -16,7 +16,7 @@
 
 
 PKG_DIRECTORIES="nginx src"
-PKG_FILES="angular.json .browserslistrc CONTRIBUTING.md package.json proxy.conf.json tsconfig.json tslint.json LICENSE README.md"
+PKG_FILES=".eslintrc.json angular.json .browserslistrc CONTRIBUTING.md package.json proxy.conf.json tsconfig.json LICENSE README.md"
 MDG_NAME=ngui
 DEB_INSTALL=debian/osm-${MDG_NAME}.install
 export DEBEMAIL="gerardo.garciadeblas@telefonica.com"

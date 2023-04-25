@@ -18,6 +18,7 @@
 /**
  * @file Project Add Modal
  */
+import { isNullOrUndefined } from 'util';
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -30,7 +31,6 @@ import { ProjectData, ProjectDetails, QUOTAITEM, QUOTA_ITEMS } from 'ProjectMode
 import { ProjectService } from 'ProjectService';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component
@@ -245,6 +245,7 @@ export class ProjectCreateUpdateComponent implements OnInit {
 
     /** Used to get the AbstractControl of controlName passed @private */
     private getFormControl(controlName: string): AbstractControl {
+        // eslint-disable-next-line security/detect-object-injection
         return this.projectForm.controls[controlName];
     }
 

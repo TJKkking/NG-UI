@@ -19,10 +19,10 @@
 /**
  * @file Page for Operational View App configs Component
  */
+import { isNullOrUndefined } from 'util';
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { URLPARAMS } from 'CommonModel';
-import { isNullOrUndefined } from 'util';
 /**
  * Creating component
  * @Component takes OperationalViewAppConfigsComponent.html as template url
@@ -60,10 +60,15 @@ export class OperationalViewAppConfigsComponent implements OnInit {
       this.configData = Object.keys(this.params.configs).map((key: string): Object => (
         {
           name: key,
+          // eslint-disable-next-line security/detect-object-injection
           default: this.params.configs[key].default,
+          // eslint-disable-next-line security/detect-object-injection
           description: this.params.configs[key].description,
+          // eslint-disable-next-line security/detect-object-injection
           source: this.params.configs[key].source,
+          // eslint-disable-next-line security/detect-object-injection
           type: this.params.configs[key].type,
+          // eslint-disable-next-line security/detect-object-injection
           value: this.params.configs[key].value
         }));
     }

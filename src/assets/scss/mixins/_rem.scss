@@ -20,6 +20,8 @@
  * example: @include rem("font-size", 14);
  */
 
+@use "sass:math";
+
 @mixin rem($property, $values...) {
     $n: length($values);
     $i: 1;
@@ -29,7 +31,7 @@
         $itemVal: (nth($values, $i));
         @if $itemVal !="auto" {
             $pxlist: append($pxlist, $itemVal + px);
-            $remlist: append($remlist, ($itemVal / 16) + rem);
+            $remlist: append($remlist, math.div($itemVal, 16) + rem);
         }
         @else {
             $pxlist: append($pxlist, auto);

@@ -90,6 +90,7 @@ export class EditPackagesComponent implements OnInit {
 
   /** options @public */
   public options: {} = {
+    // eslint-disable-next-line no-invalid-this
     mode: this.modeDefault,
     showCursorWhenSelecting: true,
     autofocus: true,
@@ -172,9 +173,7 @@ export class EditPackagesComponent implements OnInit {
       Accept: 'text/plain',
       'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0'
     });
-    // tslint:disable-next-line: no-backbone-get-set-outside-model
     this.paramsID = this.activatedRoute.snapshot.paramMap.get('id');
-    // tslint:disable-next-line: no-backbone-get-set-outside-model
     this.pacakgeType = this.activatedRoute.snapshot.paramMap.get('type');
     this.generateURLPath();
   }
@@ -254,9 +253,13 @@ export class EditPackagesComponent implements OnInit {
         (packageType !== 'netslice') ? 'PAGE.NSPACKAGE.EDITPACKAGES.UPDATEDSUCCESSFULLY' : 'PAGE.NETSLICE.UPDATEDSUCCESSFULLY'));
       if (showgraph) {
         if (packageType === 'nsd') {
-          this.router.navigate(['/packages/ns/compose/' + this.paramsID]).catch();
+          this.router.navigate(['/packages/ns/compose/' + this.paramsID]).catch((): void => {
+            // Catch Navigation Error
+        });
         } else if (packageType === 'vnf') {
-          this.router.navigate(['/packages/vnf/compose/' + this.paramsID]).catch();
+          this.router.navigate(['/packages/vnf/compose/' + this.paramsID]).catch((): void => {
+            // Catch Navigation Error
+        });
         }
       }
       this.getEditFileData();
@@ -301,14 +304,15 @@ export class EditPackagesComponent implements OnInit {
     this.restService.getResource(this.getUpdateURL + '/' + this.paramsID + '/' + this.getFileContentType, httpOptions)
       .subscribe((nsData: NSDDetails[]) => {
         const getJson: string = jsyaml.load(nsData.toString(), { json: true });
-        //tslint:disable-next-line:no-string-literal
         this.defaults['text/x-yaml'] = nsData.toString();
         this.defaults['text/json'] = JSON.stringify(getJson, null, '\t');
         this.isLoadingResults = false;
       }, (error: ERRORDATA) => {
         error.error = typeof error.error === 'string' ? jsyaml.load(error.error) : error.error;
         if (error.error.status === HttpStatus.NOT_FOUND || error.error.status === HttpStatus.UNAUTHORIZED  ) {
-          this.router.navigateByUrl('404', { skipLocationChange: true }).catch();
+          this.router.navigateByUrl('404', { skipLocationChange: true }).catch((): void => {
+            // Catch Navigation Error
+        });
         } else {
           this.restService.handleError(error, 'get');
         }

@@ -49,7 +49,9 @@ export class SDNControllerComponent {
     /** Return to list NS Package List */
     public redirectToList(getURL: string): void {
         if (getURL === '/sdn') {
-            this.router.navigate(['/sdn/details']).catch();
+            this.router.navigate(['/sdn/details']).catch((): void => {
+                // Catch Navigation Error
+            });
         }
     }
 }

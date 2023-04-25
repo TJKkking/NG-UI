@@ -18,6 +18,7 @@
 /**
  * @file Provider for Shared Service
  */
+import { isNullOrUndefined } from 'util';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
@@ -42,10 +43,9 @@ import * as pako from 'pako';
 import { RestService } from 'RestService';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { isNullOrUndefined } from 'util';
 
 /** This is added globally by the tar.js library */
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const Tar: any;
 
 /**
@@ -61,34 +61,32 @@ export class SharedService {
     @Output() public dataEvent: EventEmitter<{}> = new EventEmitter<{}>();
 
     /** Variables to hold regexp pattern for URL */
-    // tslint:disable-next-line: max-line-length
     public REGX_URL_PATTERN: RegExp = new RegExp(/^(http?|ftp|https):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.[a-zA-Z0-9]{2,15})(:((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4})))*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/);
 
     /** Variables to hold regexp pattern for IP Address */
     public REGX_IP_PATTERN: RegExp = new RegExp(/^(?:(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(\.(?!$)|$)){4}$/);
 
     /** Variables to hold regexp pattern for Port Number */
-    // tslint:disable-next-line: max-line-length
     public REGX_PORT_PATTERN: RegExp = new RegExp(/^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$/);
 
     /** Variables to hold regexp pattern for DPID */
     public REGX_DPID_PATTERN: RegExp = new RegExp(/^[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){7}$/);
 
     /** Variable to hold regexp pattern for password */
-    // tslint:disable-next-line: max-line-length
     public REGX_PASSWORD_PATTERN: RegExp = new RegExp(/^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/);
 
     /** Variables to hold regexp pattern for Latitude */
     public REGX_LAT_PATTERN: RegExp = new RegExp(/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,15})?))$/);
 
     /** Variables to hold regexp pattern for Longitude */
-    // tslint:disable-next-line: max-line-length
     public REGX_LONG_PATTERN: RegExp = new RegExp(/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,15})?))$/);
 
     /** Variables to hold maxlength for the description @public */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     public MAX_LENGTH_DESCRIPTION: number = 500;
 
     /** Variables to hold maxlength for the name @public */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     public MAX_LENGTH_NAME: number = 50;
 
     /** FormGroup instance added to the form @ html @public */
@@ -101,12 +99,15 @@ export class SharedService {
     public osmVersion: string;
 
     /** express number for time manupulation -2 */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     private epochTimeMinus2: number = -2;
 
     /** express number for time manupulation 1000 */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     private epochTime1000: number = 1000;
 
     /** Random string generator length */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     private randomStringLength: number = 4;
 
     /** Instance of the rest service @private */
@@ -116,9 +117,11 @@ export class SharedService {
     private router: Router;
 
     /** Random color string generator length @private */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     private colorStringLength: number = 256;
 
     /** Check for the root directory @private */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     private directoryCount: number = 2;
 
     /** Contains tranlsate instance @private */
@@ -142,7 +145,9 @@ export class SharedService {
             const hours: number = date.getHours();
             const minutes: string = '0' + date.getMinutes();
             const seconds: string = '0' + date.getSeconds();
+            // eslint-disable-next-line deprecation/deprecation
             return month + '-' + day + '-' + year + ' ' + hours + ':' + minutes.substr(this.epochTimeMinus2) + ':'
+                // eslint-disable-next-line deprecation/deprecation
                 + seconds.substr(this.epochTimeMinus2);
         }
         return this.translateService.instant('NODATE');
@@ -153,8 +158,10 @@ export class SharedService {
         const downloadLink: HTMLAnchorElement = document.createElement('a');
         downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: filetype }));
         if (name !== undefined) {
-            if (window.navigator.msSaveOrOpenBlob) {
-                window.navigator.msSaveBlob(new Blob(binaryData, { type: filetype }), 'OSM_Export_' + name + '.tar.gz');
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const newVariable: any = window.navigator;
+            if (newVariable.msSaveOrOpenBlob) {
+                newVariable.msSaveBlob(new Blob(binaryData, { type: filetype }), 'OSM_Export_' + name + '.tar.gz');
             } else {
                 downloadLink.setAttribute('download', 'OSM_Export_' + name + '.tar.gz');
                 document.body.appendChild(downloadLink);
@@ -172,7 +179,6 @@ export class SharedService {
     public randomString(): string {
         const chars: string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         let result: string = '';
-        // tslint:disable-next-line:no-increment-decrement
         for (let randomStringRef: number = this.randomStringLength; randomStringRef > 0; --randomStringRef) {
             result += chars[Math.floor(Math.random() * chars.length)];
         }
@@ -209,7 +215,7 @@ export class SharedService {
                 environment.VNFPACKAGES_URL + '/' + packageInfo.id + '/package_content';
             this.restService.getResource(apiUrl, httpOptions).subscribe((response: ArrayBuffer): void => {
                 try {
-                    // tslint:disable-next-line: no-any
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const tar: any = new Tar();
                     const originalInput: Uint8Array = pako.inflate(response, { to: 'Uint8Array' });
                     untar(originalInput.buffer).then((extractedFiles: TARSETTINGS[]): void => {
@@ -239,7 +245,9 @@ export class SharedService {
                 }
             }, (error: HttpErrorResponse): void => {
                 if (error.status === HttpStatus.NOT_FOUND || error.status === HttpStatus.UNAUTHORIZED) {
-                    this.router.navigateByUrl('404', { skipLocationChange: true }).catch();
+                    this.router.navigateByUrl('404', { skipLocationChange: true }).catch((): void => {
+                        // Catch Navigation Error
+                    });
                 } else {
                     this.restService.handleError(error, 'get');
                     reject('');
@@ -273,8 +281,9 @@ export class SharedService {
     public cleanForm(formGroup: FormGroup, formName?: String): void {
         Object.keys(formGroup.controls).forEach((key: string) => {
             if ((!isNullOrUndefined((formGroup.get(key) as FormArray | FormGroup).controls)) && key !== 'config') {
-                // tslint:disable-next-line: no-shadowed-variable
+                // eslint-disable-next-line @typescript-eslint/no-shadow
                 for (const { item, index } of (formGroup.get(key).value).map((item: {}, index: number) => ({ item, index }))) {
+                    // eslint-disable-next-line security/detect-object-injection
                     const newFormGroup: FormGroup = (formGroup.get(key) as FormArray).controls[index] as FormGroup;
                     this.cleanForm(newFormGroup);
                 }

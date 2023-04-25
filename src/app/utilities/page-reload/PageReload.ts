@@ -26,11 +26,13 @@ import { SharedService } from 'SharedService';
  * @Component takes PageReload.html as template url
  */
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'page-reload',
   templateUrl: './PageReload.html',
   styleUrls: ['./PageReload.scss']
 })
 /** Exporting a class @exports PageReload */
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class PageReload {
   /** To inject services @public */
   public injector: Injector;

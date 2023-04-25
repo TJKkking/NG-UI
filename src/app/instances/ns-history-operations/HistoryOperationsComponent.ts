@@ -18,6 +18,7 @@
 /**
  * @file NS History Of Operations Component
  */
+import { isNullOrUndefined } from 'util';
 import { Component, Injector, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
@@ -33,7 +34,6 @@ import { RestService } from 'RestService';
 import { Subscription } from 'rxjs';
 import { SharedService } from 'SharedService';
 import { ShowInfoComponent } from 'ShowInfoComponent';
-import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component
@@ -130,9 +130,7 @@ export class HistoryOperationsComponent implements OnInit {
 
   /** Lifecyle Hooks the trigger before component is instantiate @public */
   public ngOnInit(): void {
-    // tslint:disable-next-line:no-backbone-get-set-outside-model
     this.paramsID = this.activatedRoute.snapshot.paramMap.get('id');
-    // tslint:disable-next-line:no-backbone-get-set-outside-model
     this.paramsType = this.activatedRoute.snapshot.paramMap.get('type');
     if (this.paramsType === 'ns') {
       this.historyURL = environment.NSHISTORYOPERATIONS_URL + '/?nsInstanceId=' + this.paramsID;
@@ -215,6 +213,7 @@ export class HistoryOperationsComponent implements OnInit {
   }
   /** show information methods modal with ns history info */
   public showInformation(event: MessageEvent): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     this.modalService.open(ShowInfoComponent, { backdrop: 'static' }).componentInstance.params = {
       id: event.data.id,
       page: this.page,
@@ -256,12 +255,16 @@ export class HistoryOperationsComponent implements OnInit {
       }
       this.dataSource.load(this.nsAndnstInstanceData).then((data: {}): void => {
         //empty block
-      }).catch();
+      }).catch((): void => {
+        // Catch Navigation Error
+    });
       this.isLoadingResults = false;
     }, (error: ERRORDATA): void => {
       this.isLoadingResults = false;
       if (error.error.status === HttpStatus.NOT_FOUND || error.error.status === HttpStatus.UNAUTHORIZED) {
-        this.router.navigateByUrl('404', { skipLocationChange: true }).catch();
+        this.router.navigateByUrl('404', { skipLocationChange: true }).catch((): void => {
+          // Catch Navigation Error
+      });
       } else {
         this.restService.handleError(error, 'get');
       }

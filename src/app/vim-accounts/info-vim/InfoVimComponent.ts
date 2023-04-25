@@ -18,6 +18,7 @@
 /**
  * @file Info VIM Page
  */
+import { isNullOrUndefined } from 'util';
 import { Component, Injector, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -26,7 +27,6 @@ import { DataService } from 'DataService';
 import { environment } from 'environment';
 import * as HttpStatus from 'http-status-codes';
 import { RestService } from 'RestService';
-import { isNullOrUndefined } from 'util';
 import { CONFIG, VimAccountDetails, VIMData } from 'VimAccountModel';
 
 /**
@@ -95,7 +95,6 @@ export class InfoVimComponent implements OnInit {
    * Lifecyle Hooks the trigger before component is instantiate
    */
   public ngOnInit(): void {
-    // tslint:disable-next-line:no-backbone-get-set-outside-model
     this.paramsID = this.activatedRoute.snapshot.paramMap.get('id');
     this.dataService.currentMessage.subscribe((data: VIMData) => {
       this.vimId = data.identifier;
@@ -117,29 +116,35 @@ export class InfoVimComponent implements OnInit {
       .subscribe((vimAccountsData: VimAccountDetails) => {
         this.showDetails(vimAccountsData);
         if (!isNullOrUndefined(vimAccountsData.config)) {
-        if (vimAccountsData.config.location !== undefined) {
-          const locationArr: string[] = vimAccountsData.config.location.split(',');
-          if (Array.isArray(locationArr)) {
-            vimAccountsData.config.location = locationArr[0];
+          if (vimAccountsData.config.location !== undefined) {
+            const locationArr: string[] = vimAccountsData.config.location.split(',');
+            if (Array.isArray(locationArr)) {
+              vimAccountsData.config.location = locationArr[0];
+            }
           }
+          Object.keys(vimAccountsData.config).forEach((key: string) => {
+            // eslint-disable-next-line security/detect-object-injection
+            if (Array.isArray(vimAccountsData.config[key]) || typeof vimAccountsData.config[key] === 'object') {
+              // eslint-disable-next-line security/detect-object-injection
+              vimAccountsData.config[key] = JSON.stringify(vimAccountsData.config[key]);
+            }
+            const keyArr: string[] = key.split('_');
+            if (keyArr.length > 1) {
+              // eslint-disable-next-line security/detect-object-injection
+              vimAccountsData.config[key.split('_').join(' ')] = vimAccountsData.config[key];
+              // eslint-disable-next-line @typescript-eslint/no-dynamic-delete, security/detect-object-injection
+              delete vimAccountsData.config[key];
+            }
+          });
+          this.configParams = vimAccountsData.config;
         }
-        Object.keys(vimAccountsData.config).forEach((key: string) => {
-          if (Array.isArray(vimAccountsData.config[key]) || typeof vimAccountsData.config[key] === 'object') {
-            vimAccountsData.config[key] = JSON.stringify(vimAccountsData.config[key]);
-          }
-          const keyArr: string[] = key.split('_');
-          if (keyArr.length > 1 ) {
-            vimAccountsData.config[key.split('_').join(' ')] = vimAccountsData.config[key];
-            delete vimAccountsData.config[key];
-          }
-        });
-        this.configParams = vimAccountsData.config;
-      }
         this.isLoadingResults = false;
       }, (error: ERRORDATA) => {
         this.isLoadingResults = false;
         if (error.error.status === HttpStatus.NOT_FOUND || error.error.status === HttpStatus.UNAUTHORIZED) {
-          this.router.navigateByUrl('404', { skipLocationChange: true }).catch();
+          this.router.navigateByUrl('404', { skipLocationChange: true }).catch((): void => {
+            // Catch Navigation Error
+          });
         } else {
           this.restService.handleError(error, 'get');
         }

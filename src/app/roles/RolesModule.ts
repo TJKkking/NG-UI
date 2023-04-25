@@ -75,8 +75,7 @@ const routes: Routes = [
 @NgModule({
     imports: [FormsModule, ReactiveFormsModule, CommonModule, HttpClientModule, TranslateModule,
         RouterModule.forChild(routes), NgbModule, PagePerRowModule, Ng2SmartTableModule, LoaderModule, PageReloadModule],
-    declarations: [RolesComponent, RolesDetailsComponent, RolesActionComponent, RolesCreateEditComponent],
-    entryComponents: [RolesActionComponent]
+    declarations: [RolesComponent, RolesDetailsComponent, RolesActionComponent, RolesCreateEditComponent]
 })
 /**
  * AppModule is the Root module for application

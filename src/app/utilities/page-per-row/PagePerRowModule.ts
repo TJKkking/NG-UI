@@ -36,7 +36,7 @@ export class PagePerRowModule {
     /**
      * Lifecyle Hooks the trigger before component is instantiate
      */
-    public ngOnInit(): void {
-        // Empty Block
-    }
+     constructor() {
+        //Empty
+      }
 }

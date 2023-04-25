@@ -96,8 +96,7 @@ const routes: Routes = [
     K8sAddRepoComponent
   ],
   providers: [DataService],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents: [K8sActionComponent, K8sAddClusterComponent, K8sAddRepoComponent]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 /** Exporting a class @exports K8sModule */
 export class K8sModule {

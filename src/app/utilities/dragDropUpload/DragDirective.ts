@@ -31,7 +31,6 @@ export interface FileHandle {
  * Creating Directive
  * @Directive for handling the files.
  */
-// tslint:disable-next-line:export-name
 @Directive({
   selector: '[appDrag]'
 })
@@ -77,6 +76,7 @@ export class DragDirective {
     const files: FileHandle[] = [];
     Array.from(evt.dataTransfer.files).forEach((listFiles: File, index: number) => {
       const file: File = listFiles;
+      // eslint-disable-next-line @microsoft/sdl/no-angular-bypass-sanitizer
       const url: SafeUrl = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file));
       files.push({ file, url });
     });

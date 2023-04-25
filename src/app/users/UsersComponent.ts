@@ -49,7 +49,9 @@ export class UsersComponent {
     /** Return to list NS Package List */
     public redirectToList(getURL: string): void {
         if (getURL === '/users') {
-            this.router.navigate(['/users/details']).catch();
+            this.router.navigate(['/users/details']).catch((): void => {
+                // Catch Navigation Error
+            });
         }
     }
 }

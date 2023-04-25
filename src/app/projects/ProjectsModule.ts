@@ -52,7 +52,6 @@ const routes: Routes = [
 /**
  * Creating @NgModule component for Modules
  */
-// tslint:disable-next-line: no-stateless-class
 @NgModule({
     imports: [
         FormsModule,
@@ -75,9 +74,6 @@ const routes: Routes = [
     ],
     providers: [
         DataService
-    ],
-    entryComponents: [
-        ProjectCreateUpdateComponent
     ]
 })
 /** Exporting a class @exports ProjectsModule */

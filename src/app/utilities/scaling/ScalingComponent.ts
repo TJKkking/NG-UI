@@ -18,6 +18,7 @@
 /**
  * @file Scaling Component
  */
+import { isNullOrUndefined } from 'util';
 import { HttpHeaders } from '@angular/common/http';
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -29,7 +30,6 @@ import { environment } from 'environment';
 import { DF as NSDF, VNFPROFILE } from 'NSDModel';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 import { DF, SCALING, VNFD } from 'VNFDModel';
 
 /**
@@ -185,7 +185,9 @@ export class ScalingComponent implements OnInit {
         };
         this.restService.postResource(apiURLHeader, scalingPayload).subscribe((result: {}): void => {
             this.activeModal.close(modalData);
-            this.router.navigate(['/instances/ns/history-operations/' + this.params.id]).catch();
+            this.router.navigate(['/instances/ns/history-operations/' + this.params.id]).catch((): void => {
+                // Catch Navigation Error
+            });
         }, (error: ERRORDATA): void => {
             this.restService.handleError(error, 'post');
             this.isLoadingResults = false;
@@ -194,6 +196,7 @@ export class ScalingComponent implements OnInit {
 
     /** Used to get the AbstractControl of controlName passed @private */
     private getFormControl(controlName: string): AbstractControl {
+        // eslint-disable-next-line security/detect-object-injection
         return this.scalingForm.controls[controlName];
     }
 }

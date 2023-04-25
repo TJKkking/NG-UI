@@ -98,5 +98,4 @@ export class ConfirmationTopologyComponent implements OnInit {
     };
     this.activeModal.close(modalData);
   }
-
 }

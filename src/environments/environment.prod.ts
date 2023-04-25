@@ -22,7 +22,7 @@
  * The list of file replacements can be found in `angular.json`.
  */
 
-import { version } from 'PACKAGEJSON';
+import PACKAGEJSON from 'PACKAGEJSON';
 
 /** OSM_Admin URL @constant */
 const OSM_ADMIN_ENDPOINT: string = 'osm/admin/v1/';
@@ -43,16 +43,15 @@ const ASSETS_PATH: string = 'assets/';
 /** OSM Version @constant */
 const OSM_VERSION: string = 'osm/version';
 /** Grafana End-Point @constant */
-// tslint:disable-next-line: no-http-string
+// eslint-disable-next-line @microsoft/sdl/no-insecure-url
 const GRAFANA_ENDPOINT: string = 'http://' + window.location.hostname + ':3000';
 
 /** Exporting a const @exports environment */
-// tslint:disable-next-line: typedef
 export const environment = {
     production: true,
     packageSize: 50,
     paginationNumber: 10, //Possible values are 10, 25, 50, 100
-    packageVersion: version,
+    packageVersion: PACKAGEJSON.version,
     GENERATETOKEN_URL: OSM_ADMIN_ENDPOINT + 'tokens',
     PROJECTS_URL: OSM_ADMIN_ENDPOINT + 'projects',
     USERS_URL: OSM_ADMIN_ENDPOINT + 'users',

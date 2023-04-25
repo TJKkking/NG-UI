@@ -19,6 +19,7 @@
 /**
  * @file Page for Login component
  */
+import { isNullOrUndefined } from 'util';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -27,7 +28,6 @@ import { AuthenticationService } from 'AuthenticationService';
 import { RestService } from 'RestService';
 import { Observable } from 'rxjs';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component

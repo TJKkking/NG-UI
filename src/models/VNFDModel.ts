@@ -18,7 +18,6 @@
 /**
  * @file  Model for VNFD related information.
  */
-// tslint:disable: completed-docs
 /** Interface for Project */
 export interface ProjectModel {
     project_id: string;

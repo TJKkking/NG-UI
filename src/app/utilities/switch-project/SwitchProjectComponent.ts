@@ -134,7 +134,9 @@ export class SwitchProjectComponent implements OnInit {
           if (this.router.url.includes('history-operations')) {
             this.router.navigate(['/instances/ns']).then((): void => {
               location.reload();
-            }).catch();
+            }).catch((): void => {
+              // Catch Navigation Error
+          });
           } else {
             location.reload();
           }

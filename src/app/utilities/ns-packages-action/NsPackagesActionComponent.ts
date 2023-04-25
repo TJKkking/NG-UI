@@ -89,6 +89,7 @@ export class NsPackagesActionComponent {
   private cd: ChangeDetectorRef;
 
   /** Set timeout @private */
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   private timeOut: number = 1000;
 
   constructor(injector: Injector) {
@@ -114,17 +115,21 @@ export class NsPackagesActionComponent {
 
   /** Instantiate NS using modalservice @public */
   public instantiateNS(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     this.modalService.open(InstantiateNsComponent, { backdrop: 'static' });
   }
 
   /** Delete NS Package @public */
   public deleteNSPackage(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(DeleteComponent, { backdrop: 'static' });
     modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /** Set instance for NSD Edit @public */
@@ -136,6 +141,7 @@ export class NsPackagesActionComponent {
 
   /** list out all the file content of a descriptors @public */
   public showContent(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     this.modalService.open(ShowContentComponent, { backdrop: 'static' }).componentInstance.params = { id: this.nsdID, page: 'nsd' };
   }
 
@@ -182,12 +188,15 @@ export class NsPackagesActionComponent {
 
   /** Clone NS Packages @public */
   public cloneNSPackage(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const cloneModal: NgbModalRef = this.modalService.open(ClonePackageComponent, { backdrop: 'static' });
     cloneModal.componentInstance.params = { id: this.nsdID, page: 'nsd', name: this.nsdName };
     cloneModal.result.then((result: MODALCLOSERESPONSEDATA) => {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 }

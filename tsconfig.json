@@ -2,6 +2,7 @@
     "compileOnSave": false,
     "compilerOptions": {
         "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
         "baseUrl": ".",
         "downlevelIteration": true,
         "outDir": "./dist/out-tsc",
@@ -12,7 +13,7 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "importHelpers": true,
-        "target": "es5",
+        "target": "es2020",
         "types": [
           "node"
         ],

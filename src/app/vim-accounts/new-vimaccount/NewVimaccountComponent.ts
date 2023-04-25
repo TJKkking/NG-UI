@@ -18,6 +18,7 @@
 /**
  * @file Vim Account Component.
  */
+ import { isNullOrUndefined } from 'util';
 import { HttpHeaders } from '@angular/common/http';
 import { Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -47,7 +48,6 @@ import { environment } from 'environment';
 import * as jsyaml from 'js-yaml';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 import { VimAccountDetails } from 'VimAccountModel';
 
 /**
@@ -98,6 +98,7 @@ export class NewVimaccountComponent implements OnInit {
 
   /** options @public */
   public options: {} = {
+    // eslint-disable-next-line no-invalid-this
     mode: this.modeDefault,
     showCursorWhenSelecting: true,
     autofocus: true,
@@ -208,6 +209,7 @@ export class NewVimaccountComponent implements OnInit {
       } else {
         Object.keys(this.vimNewAccountForm.value.config).forEach((res: string): void => {
           if (res !== 'location') {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete, security/detect-object-injection
             delete this.vimNewAccountForm.value.config[res];
           }
         });
@@ -223,7 +225,9 @@ export class NewVimaccountComponent implements OnInit {
       }
 
       Object.keys(this.vimNewAccountForm.value.config).forEach((res: string): void => {
+        // eslint-disable-next-line security/detect-object-injection
         if (isNullOrUndefined(this.vimNewAccountForm.value.config[res]) || this.vimNewAccountForm.value.config[res] === '') {
+          // eslint-disable-next-line @typescript-eslint/no-dynamic-delete, security/detect-object-injection
           delete this.vimNewAccountForm.value.config[res];
         }
       });

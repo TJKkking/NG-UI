@@ -51,8 +51,9 @@ export class RolesComponent {
   /** Return to role datails list */
   public redirectToList(getURL: string): void {
     if (getURL === '/roles') {
-      this.router.navigate(['/roles/details']).catch();
+      this.router.navigate(['/roles/details']).catch((): void => {
+        // Catch Navigation Error
+    });
     }
   }
-
 }

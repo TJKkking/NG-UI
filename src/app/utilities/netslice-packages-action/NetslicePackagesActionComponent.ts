@@ -71,16 +71,20 @@ export class NetslicePackagesActionComponent {
 
     /** Delete NetSliceTemplate packages @public */
     public deleteNetSliceTemplate(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const modalRef: NgbModalRef = this.modalService.open(DeleteComponent, {backdrop: 'static'});
         modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
             if (result) {
                 this.sharedService.callData();
             }
-        }).catch();
+        }).catch((): void => {
+            // Catch Navigation Error
+        });
     }
 
     /** Shows information using modalservice @public */
     public infoNetSlice(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         this.modalService.open(ShowInfoComponent, { backdrop: 'static' }).componentInstance.params = {
             id: this.instanceID,
             page: 'net-slice-package',
@@ -97,6 +101,7 @@ export class NetslicePackagesActionComponent {
 
     /** Instantiate Net Slice using modalservice @public */
     public instantiateNetSlice(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         this.modalService.open(InstantiateNetSliceTemplateComponent, { backdrop: 'static' });
     }
 }

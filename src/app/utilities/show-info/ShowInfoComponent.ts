@@ -81,6 +81,7 @@ export class ShowInfoComponent implements OnInit {
 
   /** variables to hold options of editor @public */
   public options: {} = {
+    // eslint-disable-next-line no-invalid-this
     mode: this.modeDefault,
     showCursorWhenSelecting: true,
     autofocus: true,

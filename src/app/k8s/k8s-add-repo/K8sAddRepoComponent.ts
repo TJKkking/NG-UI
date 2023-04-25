@@ -130,5 +130,4 @@ export class K8sAddRepoComponent implements OnInit {
       this.restService.handleError(error, 'post');
     });
   }
-
 }

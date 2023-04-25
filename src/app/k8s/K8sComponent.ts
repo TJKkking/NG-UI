@@ -49,8 +49,9 @@ export class K8sComponent {
   /** Return to list NS Package List */
   public redirectToList(getURL: string): void {
     if (getURL === '/k8s') {
-      this.router.navigate(['/k8s/cluster']).catch();
+      this.router.navigate(['/k8s/cluster']).catch((): void => {
+        // Catch Navigation Error
+    });
     }
   }
-
 }

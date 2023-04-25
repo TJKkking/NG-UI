@@ -1,0 +1,16 @@
+{
+    "extends": "../.eslintrc.json",
+    "rules": {
+      "no-restricted-syntax": [
+        "error",
+        "ForInStatement"
+      ],
+      "@typescript-eslint/array-type": [
+        "error",
+        {
+          "default": "array"
+        }
+      ]
+    }
+  }
+  

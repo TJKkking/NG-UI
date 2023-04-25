@@ -18,7 +18,7 @@
 /**
  * @file  Model for NS Instance related information.
  */
-// tslint:disable: completed-docs
+/* eslint-disable */
 import { DF, VLD } from 'NSDModel';
 import { VNFDAdminDetails } from 'VNFDModel';
 
@@ -67,7 +67,6 @@ interface ROAdmin {
 }
 
 /** Interface for _Admin */
-// tslint:disable-next-line:class-name
 interface _Admin {
     'projects_write': string[];
     deployed: DeployedAdmin;
@@ -114,7 +113,6 @@ export interface NSD {
 }
 
 /** Interface for _AdminDetails */
-// tslint:disable-next-line:class-name
 export interface _AdminDetails {
     usageState: string;
     projects_write: string[];

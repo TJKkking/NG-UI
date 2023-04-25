@@ -163,7 +163,6 @@ export class ClonePackageComponent implements OnInit {
           url: this.endPoint,
           httpOptions: { headers: apiHeader }
         };
-        // tslint:disable-next-line: completed-docs
         this.restService.postResource(apiURLHeader, content).subscribe((result: { id: string }): void => {
           this.activeModal.close(modalData);
           this.isLoadingResults = false;

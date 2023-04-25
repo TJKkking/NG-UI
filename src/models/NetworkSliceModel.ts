@@ -76,7 +76,6 @@ interface NetsliceVld {
     id: string;
     'nss-connection-point-ref': NssConnectionPointRef[];
     'mgmt-network': boolean;
-    // tslint:disable-next-line:no-reserved-keywords
     type: string;
 }
 

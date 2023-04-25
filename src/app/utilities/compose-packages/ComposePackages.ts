@@ -34,7 +34,7 @@ import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
 
 /** This is added globally by the tar.js library */
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const Tar: any;
 
 /**
@@ -46,6 +46,7 @@ declare const Tar: any;
   styleUrls: ['./ComposePackages.scss']
 })
 /** Exporting a class @exports ComposePackages */
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class ComposePackages implements OnInit {
   /** Invoke service injectors @public */
   public injector: Injector;
@@ -148,7 +149,7 @@ export class ComposePackages implements OnInit {
       }
       const descriptor: string = this.packageYaml(this.params.page);
       try {
-        // tslint:disable-next-line: no-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const tar: any = new Tar();
         const out: Uint8Array = tar.append(this.packagesForm.value.name + '/' + this.packagesForm.value.name + '.yaml',
           descriptor, { type: '0' });
@@ -166,7 +167,6 @@ export class ComposePackages implements OnInit {
       url: this.endPoint,
       httpOptions: { headers: this.headers }
     };
-    // tslint:disable-next-line: completed-docs
     this.restService.postResource(apiURLHeader, packageContent).subscribe((result: { id: string }): void => {
       this.isLoadingResults = false;
       this.activeModal.close();

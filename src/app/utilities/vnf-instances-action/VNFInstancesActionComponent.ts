@@ -58,6 +58,7 @@ export class VNFInstancesActionComponent {
 
     /** Shows information using modalservice @public */
     public infoVNF(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         this.modalService.open(ShowInfoComponent, { backdrop: 'static' }).componentInstance.params = {
             id: this.instanceID,
             page: 'vnf-instance',

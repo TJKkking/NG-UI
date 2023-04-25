@@ -32,6 +32,7 @@ import { SharedService } from 'SharedService';
 /** Exporting a class @exports GoToTopDirective */
 export class GoToTopDirective {
   /** To set scroll top position @private */
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   private topPosToStartShowing: number = 100;
 
   /** Contains all methods related to shared @private */
@@ -44,6 +45,7 @@ export class GoToTopDirective {
    * to listen the scroll event in DOM @public
    */
   @HostListener('window:scroll') public enableGotoTop(): void {
+    // eslint-disable-next-line deprecation/deprecation
     const scrollPosition: number = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
     if (scrollPosition >= this.topPosToStartShowing) {
       this.sharedService.showGotoTop = true;
@@ -51,5 +53,4 @@ export class GoToTopDirective {
       this.sharedService.showGotoTop = false;
     }
   }
-
 }

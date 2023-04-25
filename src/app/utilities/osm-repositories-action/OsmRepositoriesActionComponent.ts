@@ -68,16 +68,20 @@ export class OsmRepositoriesActionComponent implements OnInit {
 
   /** Delete OSM Repository @public */
   public deleteOsmRepository(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(DeleteComponent, { backdrop: 'static' });
     modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /** Edit a osm repo @public */
   public editOsmrepo(id: string): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(OsmRepoCreateUpdateComponent, { backdrop: 'static' });
     modalRef.componentInstance.createupdateType = 'Edit';
     modalRef.componentInstance.osmrepoid = id;
@@ -85,6 +89,8 @@ export class OsmRepositoriesActionComponent implements OnInit {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 }

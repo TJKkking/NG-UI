@@ -18,6 +18,7 @@
 /**
  * @file Auth service
  */
+import { isNullOrUndefined } from 'util';
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
@@ -27,7 +28,6 @@ import { APIURLHEADER, ERRORDATA } from 'CommonModel';
 import { environment } from 'environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { isNullOrUndefined } from 'util';
 import { ProjectModel } from '../models/VNFDModel';
 import { RestService } from './RestService';
 
@@ -196,7 +196,9 @@ export class AuthenticationService {
         localStorage.setItem('token_state', null);
         localStorage.setItem('osmVersion', osmVersion);
         this.idle.stop();
-        this.router.navigate(['login']).catch();
+        this.router.navigate(['login']).catch((): void => {
+            // Catch Navigation Error
+        });
     }
     /**
      * Logout the user & clearing the token.
@@ -225,7 +227,9 @@ export class AuthenticationService {
         if (window.location.pathname === '/changepassword' && localStorage.getItem('username') !== null) {
             window.history.back();
         } else if (window.location.pathname === '/' && localStorage.getItem('firstLogin') === 'true') {
-            this.router.navigate(['/login']).catch();
+            this.router.navigate(['/login']).catch((): void => {
+                // Catch Navigation Error
+            });
         }
     }
 }

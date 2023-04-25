@@ -159,7 +159,9 @@ export class PDUInstancesComponent implements OnInit, OnDestroy {
             }
             this.dataSource.load(this.pduInstanceData).then((data: {}) => {
                 this.isLoadingResults = false;
-            }).catch();
+            }).catch((): void => {
+                // Catch Navigation Error
+            });
         }, (error: ERRORDATA) => {
             this.restService.handleError(error, 'get');
             this.isLoadingResults = false;
@@ -179,13 +181,16 @@ export class PDUInstancesComponent implements OnInit, OnDestroy {
 
     /** Add PDU Instance modal using modalservice @public */
     public addPDUInstanceModal(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const modalRef: NgbModalRef = this.modalService.open(AddPDUInstancesComponent, { backdrop: 'static' });
         modalRef.componentInstance.title = this.translateService.instant('PAGE.PDUINSTANCE.NEWPDUINSTANCE');
         modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
             if (result) {
                 this.generateData();
             }
-        }).catch();
+        }).catch((): void => {
+            // Catch Navigation Error
+        });
     }
 
     /**

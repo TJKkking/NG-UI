@@ -35,14 +35,14 @@ Author: SANDHYA JS (sandhya.j@tataelxsi.co.in)
                 <div class="col-xs-{{12/showData.length}} col-sm-{{12/showData.length}} col-md-{{12/showData.length}} col-lg-{{12/showData.length}} col-xl-{{12/showData.length}}"
                     *ngFor="let list of showData.data;let i = index;">
                     <div class="chartData-card card text-center text-primary">
-                        <canvas class="my-2"
+                        <canvas class="my-2" *ngIf="list.values.total !== 0"
                             baseChart
-                            [data]="list.data"
+                            [datasets]="list.data"
                             [labels]="chartLabels"
-                            [chartType]="chartType"
+                            [type]="chartType"
                             [options]="chartOptions"
                             [legend]="chartLegend"
-                            [colors]="list.colorValues">
+                            [colors]="list.backgroundColor">
                         </canvas>
                          <div class="no-data" *ngIf="list.values.total === 0 || list.values.total === null">
                             <h4><strong>{{'PAGE.VIMDETAILS.NODATA' | translate}}</strong></h4>

@@ -18,7 +18,6 @@
 /**
  * @file  Model for NSD related information.
  */
-// tslint:disable: completed-docs
 import { VNFDAdminDetails } from './VNFDModel';
 
 /** Interface for NSData */

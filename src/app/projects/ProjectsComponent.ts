@@ -18,6 +18,7 @@
 /**
  * @file Project details Component.
  */
+import { isNullOrUndefined } from 'util';
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
@@ -32,7 +33,6 @@ import { ProjectsActionComponent } from 'ProjectsAction';
 import { RestService } from 'RestService';
 import { Subscription } from 'rxjs';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component
@@ -146,13 +146,16 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
     /** Modal service to initiate the project add @private */
     public projectAdd(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const modalRef: NgbModalRef = this.modalService.open(ProjectCreateUpdateComponent, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.projectType = 'Add';
         modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
             if (result) {
                 this.generateData();
             }
-        }).catch();
+        }).catch((): void => {
+            // Catch Navigation Error
+        });
     }
 
     /** smart table listing manipulation @private */
@@ -197,7 +200,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
             });
             this.dataSource.load(this.projectData).then((data: boolean) => {
                 this.isLoadingResults = false;
-            }).catch();
+            }).catch((): void => {
+                // Catch Navigation Error
+            });
         }, (error: ERRORDATA) => {
             this.restService.handleError(error, 'get');
             this.isLoadingResults = false;

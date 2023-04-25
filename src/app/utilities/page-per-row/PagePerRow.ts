@@ -29,11 +29,13 @@ import { SharedService } from 'SharedService';
  * @Component takes PagePerRow.html as template url
  */
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'page-per-row',
   templateUrl: './PagePerRow.html',
   styleUrls: ['./PagePerRow.scss']
 })
 /** Exporting a class @exports PagePerRow */
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class PagePerRow {
   /** To inject services @public */
   public injector: Injector;

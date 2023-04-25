@@ -67,8 +67,7 @@ const routes: Routes = [
         PagePerRowModule, LoaderModule, PageReloadModule],
     declarations: [WIMAccountsComponent, WIMAccountInfoComponent, WIMAccountDetailsComponent, NewWIMAccountComponent],
     providers: [DataService],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    entryComponents: [WIMAccountInfoComponent, NewWIMAccountComponent]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 /** Exporting a class @exports WIMAccountsModule */
 export class WIMAccountsModule {

@@ -18,6 +18,7 @@
 /**
  * @file Roles Deatils component.
  */
+import { isNullOrUndefined } from 'util';
 import { Component, Injector, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -30,7 +31,6 @@ import { RolesActionComponent } from 'RolesAction';
 import { RoleData, RoleDetails } from 'RolesModel';
 import { Subscription } from 'rxjs';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component
@@ -159,7 +159,9 @@ export class RolesDetailsComponent implements OnInit {
       });
       this.dataSource.load(this.roleData).then((data: boolean) => {
         this.isLoadingResults = false;
-      }).catch();
+      }).catch((): void => {
+        // Catch Navigation Error
+    });
     }, (error: ERRORDATA) => {
       this.restService.handleError(error, 'get');
       this.isLoadingResults = false;
@@ -188,5 +190,4 @@ export class RolesDetailsComponent implements OnInit {
   public ngOnDestroy(): void {
     this.generateDataSub.unsubscribe();
   }
-
 }

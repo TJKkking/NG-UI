@@ -18,12 +18,14 @@
 /**
  * @file Dashboard Component
  */
+import { isNullOrUndefined } from 'util';
 import { Component, Injector, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NotifierService } from 'angular-notifier';
 import { AuthenticationService } from 'AuthenticationService';
-import { Chart } from 'chart.js';
-import 'chartjs-plugin-labels';
+import { Chart, ChartType, LineController, LineElement, PointElement, LinearScale, Title, ChartEvent, ActiveElement } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+Chart.register(LineController, LineElement, PointElement, LinearScale, Title, ChartDataLabels);
 import { ERRORDATA, TYPESECTION, VIM_TYPES } from 'CommonModel';
 import { environment } from 'environment';
 import { NSDDetails } from 'NSDModel';
@@ -35,7 +37,6 @@ import { Observable, Subscription } from 'rxjs';
 import { SDNControllerModel } from 'SDNControllerModel';
 import { SharedService } from 'SharedService';
 import { ProjectRoleMappings, UserDetail } from 'UserModel';
-import { isNullOrUndefined } from 'util';
 import { VimAccountDetails } from 'VimAccountModel';
 import { VNFInstanceDetails } from 'VNFInstanceModel';
 
@@ -172,12 +173,15 @@ export class DashboardComponent implements OnInit {
     private createdTimes: string[] = [];
 
     /** Contains slice limit const @private */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     private sliceLimit: number = 10;
 
     /** Contians hour converter @private */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     private hourConverter: number = 3600;
 
     /** Converter used to round off time to one decimal point @private */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     private converter: number = 10;
 
     /** Notifier service to popup notification @private */
@@ -321,7 +325,7 @@ export class DashboardComponent implements OnInit {
     /** Prepare and sketch NS instance chart */
     public drawNsChart(): void {
         this.charts = new Chart('canvas', {
-            type: 'bar',
+            type: 'bar' as ChartType,
             data: {
                 labels: this.nsRunningInstance,
                 datasets: [{
@@ -329,46 +333,48 @@ export class DashboardComponent implements OnInit {
                     label: this.translateService.instant('NOOFHOURS'),
                     borderColor: this.backgroundColor,
                     fill: false,
-                    backgroundColor: this.backgroundColor
+                    backgroundColor: this.backgroundColor,
+                    hoverBackgroundColor: this.backgroundColor
                 }]
             },
             options: {
                 layout: {
                     padding: {
-                        top: 20
+                        top: 25
                     }
                 },
-                hover: {
-                    onHover(evt: Event, item: {}): void {
-                        const el: HTMLElement = document.getElementById('canvas');
-                        el.style.cursor = item[0] ? 'pointer' : 'default';
-                    }
+                animation: false,
+                // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+                onHover(event: ChartEvent, item: ActiveElement[], chart: Chart): void {
+                    const el: HTMLElement = document.getElementById('canvas');
+                    el.style.cursor = item[0] ? 'pointer' : 'default';
                 },
                 plugins: {
-                    labels: {
-                        // render 'label', 'value', 'percentage', 'image' or custom function, default is 'percentage'
-                        render: 'value'
+                    legend: { display: false },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        font: {
+                            weight: 'bold'
+                        }
                     }
                 },
-                legend: { display: false },
                 scales: {
-                    xAxes: [{
+                    x: {
                         display: true,
-                        scaleLabel: {
+                        title: {
                             display: true,
-                            labelString: this.translateService.instant('NSINSTANCES')
+                            text: this.translateService.instant('NSINSTANCES')
                         }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        },
+                    },
+                    y: {
+                        beginAtZero: true,
                         display: true,
-                        scaleLabel: {
+                        title: {
                             display: true,
-                            labelString: this.translateService.instant('NOOFHOURS')
+                            text: this.translateService.instant('NOOFHOURS')
                         }
-                    }]
+                    }
                 }
             }
         });
@@ -412,7 +418,6 @@ export class DashboardComponent implements OnInit {
         if (this.vimList.length === 0) {
             this.vimListData = null;
         }
-
     }
 
     /** Get Selected VIM details @public */

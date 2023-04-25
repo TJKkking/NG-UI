@@ -50,7 +50,9 @@ export class VimAccountsComponent {
     /** Return to list NS Package List */
     public redirectToList(getURL: string): void {
         if (getURL === '/vim') {
-            this.router.navigate(['/vim/details']).catch();
+            this.router.navigate(['/vim/details']).catch((): void => {
+                // Catch Navigation Error
+            });
         }
     }
 }

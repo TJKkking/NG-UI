@@ -255,7 +255,9 @@ export class NSInstancesComponent implements OnInit {
             }
             this.dataSource.load(this.nsInstanceData).then((data: {}): void => {
                 this.isLoadingResults = false;
-            }).catch();
+            }).catch((): void => {
+                // Catch Navigation Error
+            });
         }, (error: ERRORDATA): void => {
             this.restService.handleError(error, 'get');
             this.isLoadingResults = false;
@@ -275,12 +277,15 @@ export class NSInstancesComponent implements OnInit {
 
     /** Instantiate NS using modalservice @public */
     public instantiateNS(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const modalRef: NgbModalRef = this.modalService.open(InstantiateNsComponent, { backdrop: 'static' });
         modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
             if (result) {
                 this.generateData();
             }
-        }).catch();
+        }).catch((): void => {
+            // Catch Navigation Error
+        });
     }
 
     /**

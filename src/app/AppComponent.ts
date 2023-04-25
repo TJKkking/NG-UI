@@ -19,13 +19,13 @@
 /**
  * @file App Components
  */
+import { isNullOrUndefined } from 'util';
 import { Component, HostListener, Injector } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
 import { AuthenticationService } from 'AuthenticationService';
 import { DeviceCheckService } from 'DeviceCheckService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component

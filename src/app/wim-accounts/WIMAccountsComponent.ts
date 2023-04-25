@@ -49,7 +49,9 @@ export class WIMAccountsComponent {
     /** Return to list NS Package List */
     public redirectToList(getURL: string): void {
         if (getURL === '/wim') {
-            this.router.navigate(['/wim/details']).catch();
+            this.router.navigate(['/wim/details']).catch((): void => {
+                // Catch Navigation Error
+            });
         }
     }
 }

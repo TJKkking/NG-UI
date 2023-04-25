@@ -18,7 +18,6 @@
 /**
  * @file  Model for VimAccount Details related information.
  */
-// tslint:disable: completed-docs
 import { NSInstanceDetails } from 'NSInstanceModel';
 /** Interface for VimAccountDetails */
 export interface VimAccountDetails {
@@ -146,8 +145,14 @@ export interface RESOURCESDATA {
 export interface RESOURCESCHARTDATA {
     title: string;
     values: CHARTVALUES;
+    data: CHARTDATA[];
+}
+/** Interface common use for the Chart */
+export interface CHARTDATA {
     data: number[];
-    colorValues: Color[];
+    backgroundColor?: string[] | string;
+    hoverBackgroundColor?: string[] | string;
+    hoverBorderColor?: string[] | string;
 }
 /** Interface common use for the Chart */
 export interface CHARTVALUES {

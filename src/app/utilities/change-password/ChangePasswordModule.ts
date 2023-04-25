@@ -32,8 +32,7 @@ import { LoaderModule } from 'LoaderModule';
 @NgModule({
     imports: [CommonModule, TranslateModule, FormsModule, ReactiveFormsModule, NgSelectModule, LoaderModule],
     declarations: [AddEditUserComponent],
-    exports: [AddEditUserComponent],
-    entryComponents: [AddEditUserComponent]
+    exports: [AddEditUserComponent]
 })
 /** Exporting a class @exports ChangePasswordModule */
 export class ChangePasswordModule {

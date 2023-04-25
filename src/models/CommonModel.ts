@@ -23,7 +23,7 @@ import { VNFD } from 'VNFDModel';
 /**
  * @file  Model for Commonly used information.
  */
-// tslint:disable: completed-docs
+/* eslint-disable */
 /**
  * handle count @enum
  */
@@ -198,7 +198,6 @@ export interface BREADCRUMBITEM {
 }
 /** Interface For the Pagination pager in ng-smarttable */
 export interface SMARTTABLECLASS {
-    // tslint:disable-next-line: no-reserved-keywords
     class: string;
 }
 /** Constants of the VIM Types */

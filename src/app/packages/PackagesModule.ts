@@ -117,8 +117,7 @@ const routes: Routes = [
     declarations: [PackagesComponent, NSPackagesComponent, VNFPackagesComponent, NetsliceTemplateComponent,
         DragDirective, ShowContentComponent, NSComposerComponent, VNFComposerComponent, EditPackagesComponent, ClonePackageComponent],
     providers: [DataService],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    entryComponents: [ShowContentComponent, ClonePackageComponent]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 /** Exporting a class @exports PackagesModule */
 export class PackagesModule {

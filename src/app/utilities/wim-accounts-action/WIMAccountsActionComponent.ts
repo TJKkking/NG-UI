@@ -65,6 +65,7 @@ export class WIMAccountsActionComponent {
 
     /** Show WIM account information @public */
     public showWIMAccountInfo(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         this.modalService.open(WIMAccountInfoComponent, { backdrop: 'static' }).componentInstance.params = {
             id: this.wimID,
             page: 'wim-accounts'
@@ -73,11 +74,14 @@ export class WIMAccountsActionComponent {
 
     /** Delete WIM Account @public */
     public deleteWIMAccount(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const modalRef: NgbModalRef = this.modalService.open(DeleteComponent, { backdrop: 'static' });
         modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
             if (result) {
                 this.sharedService.callData();
             }
-        }).catch();
+        }).catch((): void => {
+            // Catch Navigation Error
+        });
     }
 }

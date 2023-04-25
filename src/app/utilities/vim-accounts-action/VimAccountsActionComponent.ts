@@ -76,12 +76,15 @@ export class VimAccountsActionComponent implements OnInit {
 
     /** Delete VIM Account @public */
     public deleteVIMAccount(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const modalRef: NgbModalRef = this.modalService.open(DeleteComponent, {backdrop: 'static'});
         modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
             if (result) {
                 this.sharedService.callData();
             }
-        }).catch();
+        }).catch((): void => {
+            // Catch Navigation Error
+        });
     }
 
     /** On navigate to Info VimAccount @public */
@@ -105,6 +108,7 @@ export class VimAccountsActionComponent implements OnInit {
 
     /** Show VIM Resources Data @public */
     public showVIMResources(vimDetails: VimAccountDetails): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const modalRef: NgbModalRef = this.modalService.open(ResourcesOverviewComponent, {backdrop: 'static'});
         modalRef.componentInstance.resourcesData = vimDetails;
     }

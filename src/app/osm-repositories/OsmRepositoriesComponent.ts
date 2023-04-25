@@ -49,7 +49,9 @@ export class OsmRepositoriesComponent{
   /** Return to osm Repo Details list */
   public redirectToList(getURL: string): void {
     if (getURL === '/repos') {
-      this.router.navigate(['/repos/details']).catch();
+      this.router.navigate(['/repos/details']).catch((): void => {
+        // Catch Navigation Error
+    });
     }
   }
 }

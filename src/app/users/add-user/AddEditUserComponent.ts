@@ -18,6 +18,7 @@
 /**
  * @file Add Edit Component.
  */
+import { isNullOrUndefined } from 'util';
 import { HttpHeaders } from '@angular/common/http';
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -29,7 +30,6 @@ import { APIURLHEADER, ERRORDATA, LOGINPARAMS, MODALCLOSERESPONSEDATA, TYPESECTI
 import { environment } from 'environment';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component
@@ -265,6 +265,7 @@ export class AddEditUserComponent implements OnInit {
 
     /** Used to get the AbstractControl of controlName passed @private */
     private getFormControl(controlName: string): AbstractControl {
+        // eslint-disable-next-line security/detect-object-injection
         return this.userForm.controls[controlName];
     }
 

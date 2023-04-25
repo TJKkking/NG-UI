@@ -29,7 +29,7 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
         <i class="far fa-trash-alt icons"></i>
     </button>
     <div class="btn-group" placement="bottom-right" ngbDropdown display="dynamic" container="body">
-        <button type="button" class="btn btn-primary" ngbDropdownToggle placement="top" container="body" [disabled]="operationalStatus === 'failed' || configStatus === 'failed'" ngbTooltip="{{'VIMACTION' | translate}}">
+        <button type="button" class="btn btn-primary" ngbDropdownToggle placement="top" container="body" [disabled]="operationalStatus === 'failed' || configStatus === 'failed'|| k8sStatus" ngbTooltip="{{'VIMACTION' | translate}}">
             <i class="fas fa-desktop"></i>
         </button>
         <div class="dropdown-menu list-action-dropdown" ngbDropdownMenu>

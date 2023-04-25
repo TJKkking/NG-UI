@@ -83,8 +83,7 @@ const routes: Routes = [
         HttpClientModule, NgSelectModule, Ng2SmartTableModule, TranslateModule, RouterModule.forChild(routes), NgbModule,
         PagePerRowModule, LoaderModule, PageReloadModule, CodemirrorModule],
     declarations: [VimAccountsComponent, InfoVimComponent, VimAccountDetailsComponent, NewVimaccountComponent],
-    providers: [DataService],
-    entryComponents: [InfoVimComponent]
+    providers: [DataService]
 })
 /** Exporting a class @exports VimAccountsModule */
 export class VimAccountsModule {

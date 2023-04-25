@@ -46,5 +46,4 @@ export class LoaderComponent implements OnInit {
       this.getMessage = '';
     }
   }
-
 }

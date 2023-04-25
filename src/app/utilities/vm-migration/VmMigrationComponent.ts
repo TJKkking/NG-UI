@@ -18,6 +18,7 @@
 /**
  * @file Vm Migration Component
  */
+import { isNullOrUndefined } from 'util';
 import { HttpHeaders } from '@angular/common/http';
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -28,7 +29,6 @@ import { environment } from 'environment';
 import { VMMIGRATION } from 'NSInstanceModel';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 import { VDUR, VNFInstanceDetails } from 'VNFInstanceModel';
 
 /**
@@ -65,7 +65,7 @@ export class VmMigrationComponent implements OnInit {
     public instanceId: string;
     /** Form valid on submit trigger @public */
     public submitted: boolean = false;
-     /** Contains vduId @public */
+    /** Contains vduId @public */
     public vduId: {};
     /** Items for countIndex @public */
     public countIndex: {}[];
@@ -129,12 +129,15 @@ export class VmMigrationComponent implements OnInit {
                 vnfInstanceData.push(vnfDataObj);
             });
             const nsId: string = 'NS';
+            // eslint-disable-next-line security/detect-object-injection
             this.nsIdFilteredData = vnfInstanceData.filter((vnfdData: {}[]): boolean => vnfdData[nsId] === this.params.id);
             this.nsIdFilteredData.forEach((resVNF: {}[]): void => {
                 const memberIndex: string = 'MemberIndex';
                 const vnfinstanceID: string = 'VNFInstanceId';
                 const assignMemberIndex: {} = {
+                    // eslint-disable-next-line security/detect-object-injection
                     id: resVNF[memberIndex],
+                    // eslint-disable-next-line security/detect-object-injection
                     vnfinstanceId: resVNF[vnfinstanceID]
                 };
                 this.memberVnfIndex.push(assignMemberIndex);
@@ -159,7 +162,9 @@ export class VmMigrationComponent implements OnInit {
                 subscribe((vnfInstanceDetail: VNFInstanceDetails[]): void => {
                     this.selectedvnfId = vnfInstanceDetail['vnfd-ref'];
                     const VDU: string = 'vdur';
+                    // eslint-disable-next-line security/detect-object-injection
                     if (vnfInstanceDetail[VDU] !== undefined) {
+                        // eslint-disable-next-line security/detect-object-injection
                         vnfInstanceDetail[VDU].forEach((vdu: VDUR): void => {
                             const vnfInstanceDataObj: {} =
                             {
@@ -173,6 +178,7 @@ export class VmMigrationComponent implements OnInit {
                         const vduName: string = 'VDU';
                         this.vduId = this.vdu.filter((vdu: {}, index: number, self: {}[]): {} =>
                             index === self.findIndex((t: {}): {} => (
+                                // eslint-disable-next-line security/detect-object-injection
                                 t[vduName] === vdu[vduName]
                             ))
                         );
@@ -187,6 +193,7 @@ export class VmMigrationComponent implements OnInit {
     /** Getting count-index by filtering id  */
     public getCountIndex(id: string): void {
         const VDU: string = 'VDU';
+        // eslint-disable-next-line security/detect-object-injection
         this.countIndex = this.vdu.filter((vnfdData: {}[]): boolean => vnfdData[VDU] === id);
     }
 
@@ -217,7 +224,6 @@ export class VmMigrationComponent implements OnInit {
             };
         }
         this.migrationInitialization(migrationPayload);
-
     }
 
     /** Initialize the Vm Migration operation @public */
@@ -232,7 +238,9 @@ export class VmMigrationComponent implements OnInit {
         };
         this.restService.postResource(apiURLHeader, migrationPayload).subscribe((result: {}): void => {
             this.activeModal.close(modalData);
-            this.router.navigate(['/instances/ns/history-operations/' + this.params.id]).catch();
+            this.router.navigate(['/instances/ns/history-operations/' + this.params.id]).catch((): void => {
+                // Catch Navigation Error
+            });
         }, (error: ERRORDATA): void => {
             this.restService.handleError(error, 'post');
             this.isLoadingResults = false;
@@ -241,6 +249,7 @@ export class VmMigrationComponent implements OnInit {
 
     /** Used to get the AbstractControl of controlName passed @private */
     private getFormControl(controlName: string): AbstractControl {
+        // eslint-disable-next-line security/detect-object-injection
         return this.migrationForm.controls[controlName];
     }
 }

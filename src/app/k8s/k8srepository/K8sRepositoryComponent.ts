@@ -141,12 +141,15 @@ export class K8sRepositoryComponent implements OnInit, OnDestroy {
 
   /** Compose new K8s Repo Accounts @public */
   public addK8sRepo(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(K8sAddRepoComponent, { backdrop: 'static' });
     modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /**
@@ -157,7 +160,6 @@ export class K8sRepositoryComponent implements OnInit, OnDestroy {
   }
 
   /** Generate nsData object from loop and return for the datasource @public */
-  // tslint:disable-next-line: typedef
   public generateK8sRepoData(k8sRepodata: K8SREPODATA): K8SREPODATADISPLAY {
     return {
       name: k8sRepodata.name,
@@ -194,5 +196,4 @@ export class K8sRepositoryComponent implements OnInit, OnDestroy {
       this.isLoadingResults = false;
     });
   }
-
 }

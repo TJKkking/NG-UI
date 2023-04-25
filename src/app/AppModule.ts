@@ -25,44 +25,34 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
-import { AuthInterceptorService } from 'AuthInterceptorService';
-import { HeaderComponent } from 'HeaderComponent';
-import { LayoutComponent } from 'LayoutComponent';
-import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { RestService } from 'RestService';
-import { SidebarComponent } from 'SidebarComponent';
-import { AppComponent } from './AppComponent';
-
-import { appRoutes } from './approutes.module';
-
-import { DataService } from 'DataService';
-import { ProjectService } from 'ProjectService';
-import { SharedService } from 'SharedService';
-
-import { CodemirrorModule } from '@ctrl/ngx-codemirror';
-import { NgSelectModule } from '@ng-select/ng-select';
-
-import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { AuthenticationService } from 'AuthenticationService';
 import { AuthGuardService } from 'AuthGuardService';
+import { AuthInterceptorService } from 'AuthInterceptorService';
 import { BreadcrumbComponent } from 'BreadCrumb';
 import { ChangePasswordComponent } from 'ChangePasswordComponent';
 import { ChangePasswordModule } from 'ChangePasswordModule';
 import { ComposePackages } from 'ComposePackages';
 import { ConfirmationTopologyComponent } from 'ConfirmationTopology';
+import { DataService } from 'DataService';
 import { DeleteComponent } from 'DeleteComponent';
 import { DeviceCheckService } from 'DeviceCheckService';
 import { GoToTopDirective } from 'GoToTopDirective';
+import { HeaderComponent } from 'HeaderComponent';
 import { InstantiateNetSliceTemplateComponent } from 'InstantiateNetSliceTemplate';
 import { InstantiateNsComponent } from 'InstantiateNs';
+import { LayoutComponent } from 'LayoutComponent';
 import { LoaderModule } from 'LoaderModule';
 import { LoginComponent } from 'LoginComponent';
 import { NetsliceInstancesActionComponent } from 'NetsliceInstancesActionComponent';
 import { NetslicePackagesActionComponent } from 'NetslicePackagesAction';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NSInstancesActionComponent } from 'NSInstancesActionComponent';
 import { NsPackagesActionComponent } from 'NsPackagesAction';
 import { NsUpdateComponent } from 'NsUpdateComponent';
@@ -70,10 +60,14 @@ import { PageNotFoundComponent } from 'PageNotFound';
 import { PDUInstancesActionComponent } from 'PDUInstancesActionComponent';
 import { ProjectLinkComponent } from 'ProjectLinkComponent';
 import { ProjectsActionComponent } from 'ProjectsAction';
+import { ProjectService } from 'ProjectService';
+import { RestService } from 'RestService';
 import { ScalingComponent } from 'ScalingComponent';
 import { SDNControllerActionComponent } from 'SDNControllerActionComponent';
 import { SharedModule } from 'SharedModule';
+import { SharedService } from 'SharedService';
 import { ShowInfoComponent } from 'ShowInfoComponent';
+import { SidebarComponent } from 'SidebarComponent';
 import { StartStopRebuildComponent } from 'StartStopRebuildComponent';
 import { SwitchProjectComponent } from 'SwitchProjectComponent';
 import { UsersActionComponent } from 'UsersActionComponent';
@@ -86,6 +80,8 @@ import { VNFLinkComponent } from 'VNFLinkComponent';
 import { VNFPackagesActionComponent } from 'VNFPackagesAction';
 import { WarningComponent } from 'WarningComponent';
 import { WIMAccountsActionComponent } from 'WIMAccountsAction';
+import { AppComponent } from './AppComponent';
+import { appRoutes } from './approutes.module';
 
 /**
  * Custom angular notifier options
@@ -185,39 +181,7 @@ const customNotifierOptions: NotifierOptions = {
         SharedService,
         DeviceCheckService
     ],
-    bootstrap: [AppComponent],
-    entryComponents: [
-        VNFPackagesActionComponent,
-        NsPackagesActionComponent,
-        NSInstancesActionComponent,
-        VNFInstancesActionComponent,
-        VNFLinkComponent,
-        NetsliceInstancesActionComponent,
-        BreadcrumbComponent,
-        DeleteComponent,
-        NetslicePackagesActionComponent,
-        UsersActionComponent,
-        VimAccountsActionComponent,
-        ProjectsActionComponent,
-        ProjectLinkComponent,
-        UserSettingsComponent,
-        ShowInfoComponent,
-        InstantiateNetSliceTemplateComponent,
-        InstantiateNsComponent,
-        ConfirmationTopologyComponent,
-        ComposePackages,
-        WIMAccountsActionComponent,
-        PDUInstancesActionComponent,
-        SDNControllerActionComponent,
-        SwitchProjectComponent,
-        ScalingComponent,
-        ChangePasswordComponent,
-        VmMigrationComponent,
-        NsUpdateComponent,
-        WarningComponent,
-        StartStopRebuildComponent,
-        VerticalScalingComponent
-    ]
+    bootstrap: [AppComponent]
 })
 
 /** Exporting a class @exports AppModule */
@@ -229,7 +193,7 @@ export class AppModule {
 /**
  * HttpLoaderFactory is for translate service of the application.
  */
-// tslint:disable:function-name
+/* eslint-disable  */
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     const now: number = new Date().getTime();
     return new TranslateHttpLoader(http, './assets/i18n/', '.json?locale=' + now);
@@ -237,9 +201,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 /**
  * HttpLoaderFactory is for translate service of the application.
  */
-// tslint:disable:function-name
 export function appInitializerFactory(translate: TranslateService, injector: Injector): Object {
-    // tslint:disable-next-line: no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return async (): Promise<any> => {
         await injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
         translate.setDefaultLang('en');

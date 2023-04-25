@@ -19,10 +19,10 @@
 /**
  * @file Sidebar Component
  */
+import { isNullOrUndefined } from 'util';
 import { Component, Injector, OnInit } from '@angular/core';
 import { DeviceCheckService } from 'DeviceCheckService';
 import { MENU_ITEMS, MENUITEMS } from 'src/models/MenuModel';
-import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component
@@ -133,6 +133,7 @@ export class SidebarComponent implements OnInit {
     }
     /** Hide / Show Menus based on the clicking in the menus @public */
     public checkAndCloseSideBar(childExists: boolean): void {
+        // eslint-disable-next-line deprecation/deprecation
         event.stopPropagation();
         if (this.isMobile$ && !childExists) {
             this.sideBarOpenClose();

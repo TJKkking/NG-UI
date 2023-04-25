@@ -32,6 +32,7 @@ export class DataService {
     public messageSource: BehaviorSubject<{}> = new BehaviorSubject<{}>({});
 
     /** current message @public */
+    // eslint-disable-next-line no-invalid-this
     public currentMessage:  Observable<{}> = this.messageSource.asObservable();
     /** change message function @public */
     public changeMessage(message: {}): void {

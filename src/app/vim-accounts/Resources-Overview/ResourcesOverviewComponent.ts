@@ -20,13 +20,13 @@
  */
 import { Component, Injector, Input, OnChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { ChartOptions, ChartType } from 'chart.js';
-import 'chartjs-plugin-labels';
+import { ChartOptions, ChartType, Chart } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+Chart.register(ChartDataLabels);
 import { CONSTANTNUMBER } from 'CommonModel';
 import {
     CHARTRANGE,
     CHARTVALUES,
-    Color,
     CONFIGRESOURCESTITLE,
     RANGECOLOR,
     RESOURCESCHARTDATA,
@@ -50,13 +50,7 @@ export class ResourcesOverviewComponent implements OnChanges {
     public translateService: TranslateService;
     /** Chart Options @public */
     public chartOptions: ChartOptions = {
-        responsive: true,
-        plugins: {
-            labels: {
-                // render 'label', 'value', 'percentage', 'image' or custom function, default is 'percentage'
-                render: 'value'
-            }
-        }
+        responsive: true
     };
     /** Chart Lables @public */
     public chartLabels: String[] = [];
@@ -119,6 +113,7 @@ export class ResourcesOverviewComponent implements OnChanges {
         const range: CHARTRANGE = { percentage: 100, nearlyFull: 75, full: 100 };
         getCompute.forEach((key: string): void => {
             let usedColor: string = RANGECOLOR.used;
+            // eslint-disable-next-line security/detect-object-injection
             const getValuesUsedFree: number[] = Object.values(compute[key]);
             const total: number = key === keyValidate ? getValuesUsedFree[0] / CONSTANTNUMBER.oneGB : getValuesUsedFree[0];
             const used: number = key === keyValidate ? getValuesUsedFree[1] / CONSTANTNUMBER.oneGB : getValuesUsedFree[1];
@@ -130,7 +125,7 @@ export class ResourcesOverviewComponent implements OnChanges {
             if (usedPercentage === range.full) {
                 usedColor = RANGECOLOR.full;
             }
-            getData.push(this.generateChartData(key, { total, used, remaining }, [{ backgroundColor: [usedColor, '#b9bcc3'] }]));
+            getData.push(this.generateChartData(key, { total, used, remaining }, [usedColor, '#b9bcc3'] ));
         });
         return getData;
     }
@@ -140,12 +135,13 @@ export class ResourcesOverviewComponent implements OnChanges {
      * @param setValues CHARTVALUES
      * @returns RESOURCESCHARTDATA
      */
-    public generateChartData(setTitle: string, setValues: CHARTVALUES, setColor: Color[]): RESOURCESCHARTDATA {
+    public generateChartData(setTitle: string, setValues: CHARTVALUES, setColor: string[]): RESOURCESCHARTDATA {
         return {
+            // eslint-disable-next-line security/detect-object-injection
             title: CONFIGRESOURCESTITLE[setTitle],
             values: this.generateChartDataValues(setValues.total, setValues.used, setValues.remaining),
-            data: [setValues.used, setValues.remaining],
-            colorValues: setColor
+            data: [{data: [setValues.used, setValues.remaining], backgroundColor: setColor,
+                 hoverBackgroundColor: setColor, hoverBorderColor: setColor}]
         };
     }
     /**

@@ -21,16 +21,15 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { ChartsModule } from 'ng2-charts';
+import { NgChartsModule } from 'ng2-charts';
 import { ResourcesOverviewComponent } from 'ResourcesOverviewComponent';
 /**
  * Creating @NgModule component for Modules
  */
 @NgModule({
-    imports: [CommonModule, TranslateModule, ChartsModule],
+    imports: [CommonModule, TranslateModule, NgChartsModule],
     declarations: [ResourcesOverviewComponent],
-    exports: [ResourcesOverviewComponent],
-    entryComponents: [ResourcesOverviewComponent]
+    exports: [ResourcesOverviewComponent]
 })
 /** Exporting a class @exports SharedModule */
 export class SharedModule {

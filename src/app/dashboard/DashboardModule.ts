@@ -30,7 +30,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { TranslateModule } from '@ngx-translate/core';
 import { DashboardComponent } from 'DashboardComponent';
 import { LoaderModule } from 'LoaderModule';
-import { ChartsModule } from 'ng2-charts';
+import { NgChartsModule } from 'ng2-charts';
 import { SharedModule } from 'SharedModule';
 
 /** To halndle project information */
@@ -53,7 +53,7 @@ const routes: Routes = [
  */
 @NgModule({
     imports: [FormsModule, CommonModule, HttpClientModule, FlexLayoutModule, TranslateModule, NgSelectModule,
-        ChartsModule, RouterModule.forChild(routes), NgbModule, LoaderModule, SharedModule],
+        NgChartsModule, RouterModule.forChild(routes), NgbModule, LoaderModule, SharedModule],
     declarations: [DashboardComponent]
 })
 /** Exporting a class @exports DashboardModule */

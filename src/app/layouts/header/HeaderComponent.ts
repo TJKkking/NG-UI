@@ -120,6 +120,7 @@ export class HeaderComponent implements OnInit {
 
     /** Implementation of model for UserSettings options.@public */
     public userSettings(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         this.modalService.open(UserSettingsComponent, { backdrop: 'static' });
     }
 }

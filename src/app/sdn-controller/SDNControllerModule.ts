@@ -68,7 +68,6 @@ const routes: Routes = [
         PagePerRowModule, LoaderModule, PageReloadModule],
     declarations: [SDNControllerComponent, SDNControllerDetailsComponent, SDNControllerInfoComponent, NewSDNControllerComponent],
     providers: [DataService],
-    entryComponents: [SDNControllerInfoComponent, NewSDNControllerComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 /** Exporting a class @exports SDNControllerModule */
@@ -76,7 +75,7 @@ export class SDNControllerModule {
     /**
      * Lifecyle Hooks the trigger before component is instantiate
      */
-    public ngOnInit(): void {
-        //Empty Class
-    }
+     constructor() {
+        //Empty
+      }
 }

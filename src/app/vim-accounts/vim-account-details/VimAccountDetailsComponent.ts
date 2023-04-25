@@ -352,7 +352,9 @@ export class VimAccountDetailsComponent implements OnInit {
     private arrayOfLocation(): void {
         this.getLocation = [];
         this.locationData.filter((item: VimAccountDetails) => {
+            // eslint-disable-next-line no-prototype-builtins
             if (item.hasOwnProperty('config')) {
+                // eslint-disable-next-line no-prototype-builtins
                 if (item.config.hasOwnProperty('location')) {
                     this.getLocation.push({ name: item.name, location: item.config.location, id: item._id });
                 }
@@ -429,12 +431,10 @@ export class VimAccountDetailsComponent implements OnInit {
     }
     /** Add a click handler to the map to render the popup. @private */
     private markerClickEvent(closer: HTMLElement, overlay: Overlay): void {
-        // tslint:disable-next-line: no-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.map.on('singleclick', (evt: any) => {
             const feature: Feature = this.map.forEachFeatureAtPixel(evt.pixel,
-                (f: Feature) => {
-                    return f;
-                });
+                (f: Feature) => f);
             if (feature) {
                 this.setCoordinates(feature, overlay);
             } else {
@@ -449,7 +449,7 @@ export class VimAccountDetailsComponent implements OnInit {
         };
     }
     /** Set the coordinates point if the feature is available @private */
-    // tslint:disable-next-line: no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private setCoordinates(feature: any, overlay: Overlay): void {
         this.popupData = '';
         this.popupData += '<h3 class="popover-header">' + feature.values_.vimName + '- (' + feature.values_.location + ')</h3>';

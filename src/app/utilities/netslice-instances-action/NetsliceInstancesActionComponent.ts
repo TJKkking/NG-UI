@@ -69,6 +69,7 @@ export class NetsliceInstancesActionComponent {
 
     /** Shows information using modalservice @public */
     public infoNetSliceInstance(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         this.modalService.open(ShowInfoComponent, { backdrop: 'static' }).componentInstance.params = {
             id: this.instanceID,
             page: 'net-slice-instance',
@@ -78,13 +79,16 @@ export class NetsliceInstancesActionComponent {
 
     /** Delete NetSlice Instance packages @public */
     public deleteNetSliceInstance(forceAction: boolean): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const modalRef: NgbModalRef = this.modalService.open(DeleteComponent, { backdrop: 'static' });
         modalRef.componentInstance.params = {forceDeleteType: forceAction};
         modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
             if (result) {
                 this.sharedService.callData();
             }
-        }).catch();
+        }).catch((): void => {
+            // Catch Navigation Error
+        });
     }
     /** History of operations for an Instanace @public */
     public historyOfOperations(): void {

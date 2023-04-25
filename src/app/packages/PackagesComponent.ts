@@ -49,7 +49,9 @@ export class PackagesComponent{
     /** Return to list NS Package List */
     public redirectToList(getURL: string): void {
         if (getURL === '/packages') {
-            this.router.navigate(['/packages/ns']).catch();
+            this.router.navigate(['/packages/ns']).catch((): void => {
+                // Catch Navigation Error
+            });
         }
     }
 }

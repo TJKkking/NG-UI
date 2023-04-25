@@ -18,6 +18,7 @@
 /**
  * @file NS Compose Component
  */
+import { isNullOrUndefined } from 'util';
 import { HttpHeaders } from '@angular/common/http';
 import { Component, ElementRef, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -43,7 +44,6 @@ import {
 } from 'NSDModel';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 import { VNFD, VNFData } from 'VNFDModel';
 
 /**
@@ -124,31 +124,31 @@ export class NSComposerComponent {
   /** Contains sidebar open status @public */
   public sideBarOpened: boolean = false;
   /** Contains SVG attributes @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private svg: any;
   /** Contains the Drag line */
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private dragLine: any;
   /** Contains VL node @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private vlNode: any;
   /** Contains VNFD node @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private vnfdnode: any;
   /** Contains CP node @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private cpnode: any;
   /** Rendered nodes represent VL @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private gvlNode: any;
   /** Rendered nodes represent VL @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private gvnfdNode: any;
   /** Rendered nodes represent VL @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private gcpNode: any;
   /** Contains forced node animations @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private force: any;
   /** Contains all the selected node @private */
   private selectedNode: COMPOSERNODES[] = [];
@@ -161,7 +161,7 @@ export class NSComposerComponent {
   /** Contains the VNFD copy @private */
   private vnfdCopy: string;
   /** Contains path information of the node */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private path: any;
   /** Contains the node information @private */
   private nodes: COMPOSERNODES[] = [];
@@ -209,7 +209,6 @@ export class NSComposerComponent {
   }
   /** Lifecyle Hooks the trigger before component is instantiated @public */
   public ngOnInit(): void {
-    // tslint:disable-next-line:no-backbone-get-set-outside-model
     this.identifier = this.activatedRoute.snapshot.paramMap.get('id');
     this.generateData();
     this.headers = new HttpHeaders({
@@ -219,7 +218,7 @@ export class NSComposerComponent {
     });
   }
   /** Events handles at drag on D3 region @public */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   public drag(ev: any): void {
     if (ev.target.id === 'vl') {
       ev.dataTransfer.setData('text', ev.target.id);
@@ -385,6 +384,7 @@ export class NSComposerComponent {
   }
   /** Show Info @public */
   public showInfo(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(ConfirmationTopologyComponent, { backdrop: 'static' });
     modalRef.componentInstance.topologyType = 'Info';
     modalRef.componentInstance.topologytitle = this.translateService.instant('PAGE.TOPOLOGY.INFO');
@@ -392,7 +392,9 @@ export class NSComposerComponent {
       if (result) {
         // empty
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
   /** Event to freeze the animation @public */
   public onFreeze(): void {
@@ -459,7 +461,9 @@ export class NSComposerComponent {
       this.separateAndCreatenode();
     }, (error: ERRORDATA): void => {
       if (error.error.status === HttpStatus.NOT_FOUND || error.error.status === HttpStatus.UNAUTHORIZED) {
-        this.router.navigateByUrl('404', { skipLocationChange: true }).catch();
+        this.router.navigateByUrl('404', { skipLocationChange: true }).catch((): void => {
+          // Catch Navigation Error
+      });
       } else {
         this.restService.handleError(error, 'get');
       }
@@ -535,16 +539,20 @@ export class NSComposerComponent {
       resultVLC['constituent-cpd-id'].forEach((resultCCI: CCI): void => {
         this.vnfdCopy = resultVLC['virtual-link-profile-id'];
         this.connectionPoint = resVNF.id + ':' + resultCCI['constituent-base-element-id'] + index + ':' + resultCCI['constituent-cpd-id'];
-        const connectionPointPos: number = this.nodes.map((e: COMPOSERNODES): string => { return e.id; }).indexOf(this.connectionPoint);
-        const nsdPos: number = this.nodes.map((e: COMPOSERNODES): string => { return e.id; }).indexOf(this.nsdCopy);
-        const vnfdPos: number = this.nodes.map((e: COMPOSERNODES): string => { return e.id; }).indexOf(this.vnfdCopy);
+        const connectionPointPos: number = this.nodes.map((e: COMPOSERNODES): string => e.id).indexOf(this.connectionPoint);
+        const nsdPos: number = this.nodes.map((e: COMPOSERNODES): string => e.id).indexOf(this.nsdCopy);
+        const vnfdPos: number = this.nodes.map((e: COMPOSERNODES): string => e.id).indexOf(this.vnfdCopy);
         this.links.push(
           {
+            // eslint-disable-next-line security/detect-object-injection
             source: this.nodes[connectionPointPos],
+            // eslint-disable-next-line security/detect-object-injection
             target: this.nodes[nsdPos]
           },
           {
+            // eslint-disable-next-line security/detect-object-injection
             source: this.nodes[connectionPointPos],
+            // eslint-disable-next-line security/detect-object-injection
             target: this.nodes[vnfdPos]
           });
       });
@@ -681,7 +689,7 @@ export class NSComposerComponent {
       .attr('x', graphContainerAttr.imageX)
       .attr('y', graphContainerAttr.imageY)
       .call(this.onDragDrop())
-      .attr('id', (d: COMPOSERNODES): string => { return d.selectorId; })
+      .attr('id', (d: COMPOSERNODES): string => d.selectorId)
       .attr('class', 'node').attr('width', graphContainerAttr.nodeWidth).attr('height', graphContainerAttr.nodeHeight)
       .attr('xlink:href', 'assets/images/VL.svg')
       .on('mousedown', (d: COMPOSERNODES): void => { this.mouseDown(d); })
@@ -703,7 +711,7 @@ export class NSComposerComponent {
       .attr('x', graphContainerAttr.imageX)
       .attr('y', graphContainerAttr.imageY)
       .call(this.onDragDrop())
-      .attr('id', (d: COMPOSERNODES): string => { return d.selectorId; })
+      .attr('id', (d: COMPOSERNODES): string => d.selectorId)
       .attr('class', 'node').attr('width', graphContainerAttr.nodeWidth).attr('height', graphContainerAttr.nodeHeight)
       .attr('xlink:href', 'assets/images/VNFD.svg')
       .on('mousedown', (d: COMPOSERNODES): void => { this.mouseDown(d); })
@@ -725,7 +733,7 @@ export class NSComposerComponent {
       .attr('x', graphContainerAttr.imageX)
       .attr('y', graphContainerAttr.imageY)
       .call(this.onDragDrop())
-      .attr('id', (d: COMPOSERNODES): string => { return d.selectorId; })
+      .attr('id', (d: COMPOSERNODES): string => d.selectorId)
       .attr('class', 'node').attr('width', graphContainerAttr.nodeWidth).attr('height', graphContainerAttr.nodeHeight)
       .attr('xlink:href', 'assets/images/CP.svg')
       .on('mousedown', (d: COMPOSERNODES): void => { this.mouseDown(d); })
@@ -767,6 +775,7 @@ export class NSComposerComponent {
       });
     }
     if (this.vlName !== undefined && this.setVnfdName !== undefined && this.setVnfdConnectionPointRef !== undefined) {
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
       const modalRef: NgbModalRef = this.modalService.open(ConfirmationTopologyComponent, { backdrop: 'static' });
       modalRef.componentInstance.topologyType = 'Add';
       modalRef.componentInstance.cpDetails = this.getVNFSelectedData['ext-cpd'];
@@ -785,7 +794,9 @@ export class NSComposerComponent {
         } else {
           this.deselectPath();
         }
-      }).catch();
+      }).catch((): void => {
+        // Catch Navigation Error
+    });
     } else {
       this.deselectPath();
       this.notifierService.notify('error', this.translateService.instant('ERROR'));
@@ -819,6 +830,7 @@ export class NSComposerComponent {
   }
   /** Events handles when mousedown click it will capture the selected node data @private */
   private mouseDown(d: COMPOSERNODES): void {
+    // eslint-disable-next-line deprecation/deprecation
     event.preventDefault();
     if (d3.event.ctrlKey) { return; }
     if (d3.event.shiftKey) {
@@ -895,12 +907,12 @@ export class NSComposerComponent {
     this.isShowCPDetails = cpDetails;
   }
   /** Events handles when Shift Click to perform create cp @private */
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private singleClick(nodeSelected: any, d: COMPOSERNODES): void {
     this.selectNodeExclusive(nodeSelected, d);
   }
   /** Selected nodes @private */
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private selectNodeExclusive(nodeSeleced: any, d: COMPOSERNODES): void {
     const alreadyIsActive: boolean = nodeSeleced.select('#' + d.selectorId).classed(this.activeClass);
     this.deselectAllNodes();
@@ -949,6 +961,7 @@ export class NSComposerComponent {
   }
   /** Get confirmation Before Deleting the Link in Topology @private */
   private getDeleteLinkConfirmation(d: Tick): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(ConfirmationTopologyComponent, { backdrop: 'static' });
     modalRef.componentInstance.topologyType = 'Delete';
     modalRef.componentInstance.topologyname = this.translateService.instant('PAGE.TOPOLOGY.LINK') + ' - ' + d.source.id;
@@ -957,7 +970,9 @@ export class NSComposerComponent {
       if (result) {
         this.doubleClickLink(d);
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
   /** Events handles when Double Click to Delete the link @private */
   private doubleClickLink(d: Tick): void {
@@ -995,6 +1010,7 @@ export class NSComposerComponent {
   }
   /** Get confirmation Before Deleting the Node in Topology @private */
   private getDeleteConfirmation(d: COMPOSERNODES): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(ConfirmationTopologyComponent, { backdrop: 'static' });
     modalRef.componentInstance.topologyType = 'Delete';
     modalRef.componentInstance.topologyname = d.name;
@@ -1009,7 +1025,9 @@ export class NSComposerComponent {
       if (result) {
         this.doubleClick(d);
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
   /** Events handles when Double Click to Delete @private */
   private doubleClick(d: COMPOSERNODES): void {
@@ -1018,7 +1036,7 @@ export class NSComposerComponent {
       if (res.id === d.id) {
         if (deletedNode.type === 'vld') {
           /** Remove the virtual-link-desc related to VL */
-          const pos: number = this.nsData['virtual-link-desc'].map((e: VLD): string => { return e.id; }).indexOf(d.id);
+          const pos: number = this.nsData['virtual-link-desc'].map((e: VLD): string => e.id).indexOf(d.id);
           this.nsData['virtual-link-desc'].splice(pos, 1);
           /** Remove the virtual-link-connectivity between VL and VNFD */
           this.nsData.df.forEach((resultDF: DF): void => {
@@ -1032,6 +1050,7 @@ export class NSComposerComponent {
                 if (getVLArray.length > 0) {
                   getVLArray.forEach((removeIndex: number): void => {
                     const index: string = removeIndex.toString();
+                    // eslint-disable-next-line security/detect-object-injection
                     resVNF['virtual-link-connectivity'].splice(resVNF['virtual-link-connectivity'][index], 1);
                   });
                 }
@@ -1043,19 +1062,13 @@ export class NSComposerComponent {
           this.nsData.df.forEach((resultDF: DF): void => {
             if (resultDF['vnf-profile'] !== undefined) {
               /** Remove the vnf-profile related to VNFD */
-              const posVNF: number = resultDF['vnf-profile'].findIndex((e: VNFPROFILE): boolean => {
-                return e['vnfd-id'] === d.name && e.id === d.nodeIndex;
-              });
+              const posVNF: number = resultDF['vnf-profile'].findIndex((e: VNFPROFILE): boolean => e['vnfd-id'] === d.name && e.id === d.nodeIndex);
               resultDF['vnf-profile'].splice(posVNF, 1);
               /** Check the VNFD exists in any vnf-profile */
-              const isVNFDExists: boolean = resultDF['vnf-profile'].some((e: VNFPROFILE): boolean => {
-                return e['vnfd-id'] === d.name;
-              });
+              const isVNFDExists: boolean = resultDF['vnf-profile'].some((e: VNFPROFILE): boolean => e['vnfd-id'] === d.name);
               /** If VNFD not exists in the vnf-profile remove from vnfd-id */
               if (!isVNFDExists) {
-                const posVNFD: number = this.nsData['vnfd-id'].findIndex((e: string): boolean => {
-                  return e === d.name;
-                });
+                const posVNFD: number = this.nsData['vnfd-id'].findIndex((e: string): boolean => e === d.name);
                 this.nsData['vnfd-id'].splice(posVNFD, 1);
               }
             }
@@ -1090,7 +1103,7 @@ export class NSComposerComponent {
     });
   }
   /** drag event @private */
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private onDragDrop(): any {
     return d3.drag().filter(this.dragFilter)
       .on('start', this.dragstarted)

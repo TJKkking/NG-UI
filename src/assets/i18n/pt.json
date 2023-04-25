@@ -306,7 +306,7 @@
             "DETAILS": "Detalhes do Controlador SDN"
         },
         "USERS": {
-            "CREATEUSER": "Criar usuário",
+            "CREATEUSER": "Novo usuário",
             "NEWUSER": "Novo usuário",
             "USERNAME": "Nome de Usuário",
             "PASSWORD": "Senha",
@@ -436,7 +436,7 @@
             "EXECUTEDSUCCESSFULLY": "Configuração primitiva do NS executada"
         },
         "ROLES": {
-            "CREATEROLE": "Criar função",
+            "CREATEROLE": "Novo função",
             "ROLE": "Função",
             "PERMISSIONS": "Permissões",
             "YAMLPERMISSIONS": "YAML Permissões",

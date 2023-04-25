@@ -15,6 +15,7 @@
 
  Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in)
 */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * @file Routing Module
  */
@@ -38,77 +39,77 @@ export const appRoutes: Routes = [
         children: [
             {
                 path: '',
-                // tslint:disable-next-line: no-any
+                // eslint-disable-next-line node/no-unsupported-features/es-syntax
                 loadChildren: async (): Promise<any> => import('./dashboard/DashboardModule')
                     .then((m: typeof import('./dashboard/DashboardModule')) => m.DashboardModule),
                 canActivate: [AuthGuardService]
             },
             {
                 path: 'packages',
-                // tslint:disable-next-line: no-any
+                // eslint-disable-next-line node/no-unsupported-features/es-syntax
                 loadChildren: async (): Promise<any> => import('./packages/PackagesModule')
                     .then((m: typeof import('./packages/PackagesModule')) => m.PackagesModule),
                 canActivate: [AuthGuardService]
             },
             {
                 path: 'instances',
-                // tslint:disable-next-line: no-any
+                // eslint-disable-next-line node/no-unsupported-features/es-syntax
                 loadChildren: async (): Promise<any> => import('./instances/InstancesModule')
                     .then((m: typeof import('./instances/InstancesModule')) => m.InstancesModule),
                 canActivate: [AuthGuardService]
             },
             {
                 path: 'vim',
-                // tslint:disable-next-line: no-any
+                // eslint-disable-next-line node/no-unsupported-features/es-syntax
                 loadChildren: async (): Promise<any> => import('./vim-accounts/VimAccountsModule')
                     .then((m: typeof import('./vim-accounts/VimAccountsModule')) => m.VimAccountsModule),
                 canActivate: [AuthGuardService]
             },
             {
                 path: 'wim',
-                // tslint:disable-next-line: no-any
+                // eslint-disable-next-line node/no-unsupported-features/es-syntax
                 loadChildren: async (): Promise<any> => import('./wim-accounts/WIMAccountsModule')
                     .then((m: typeof import('./wim-accounts/WIMAccountsModule')) => m.WIMAccountsModule),
                 canActivate: [AuthGuardService]
             },
             {
                 path: 'sdn',
-                // tslint:disable-next-line: no-any
+                // eslint-disable-next-line node/no-unsupported-features/es-syntax
                 loadChildren: async (): Promise<any> => import('./sdn-controller/SDNControllerModule')
                     .then((m: typeof import('./sdn-controller/SDNControllerModule')) => m.SDNControllerModule),
                 canActivate: [AuthGuardService]
             },
             {
                 path: 'users',
-                // tslint:disable-next-line: no-any
+                // eslint-disable-next-line node/no-unsupported-features/es-syntax
                 loadChildren: async (): Promise<any> => import('./users/UsersModule')
                     .then((m: typeof import('./users/UsersModule')) => m.UsersModule),
                 canActivate: [AuthGuardService]
             },
             {
                 path: 'projects',
-                // tslint:disable-next-line: no-any
+                // eslint-disable-next-line node/no-unsupported-features/es-syntax
                 loadChildren: async (): Promise<any> => import('./projects/ProjectsModule')
                     .then((m: typeof import('./projects/ProjectsModule')) => m.ProjectsModule),
                 canActivate: [AuthGuardService]
             },
             {
                 path: 'roles',
-                // tslint:disable-next-line: no-any
+                // eslint-disable-next-line node/no-unsupported-features/es-syntax
                 loadChildren: async (): Promise<any> => import('./roles/RolesModule')
                     .then((m: typeof import('./roles/RolesModule')) => m.RolesModule),
                 canActivate: [AuthGuardService]
             },
             {
                 path: 'k8s',
-                // tslint:disable-next-line: no-any
+                // eslint-disable-next-line node/no-unsupported-features/es-syntax
                 loadChildren: async (): Promise<any> => import('./k8s/K8sModule')
                     .then((m: typeof import('./k8s/K8sModule')) => m.K8sModule),
                 canActivate: [AuthGuardService]
             },
             {
                 path: 'repos',
-                // tslint:disable-next-line: no-any
+                // eslint-disable-next-line node/no-unsupported-features/es-syntax
                 loadChildren: async (): Promise<any> => import('./osm-repositories/OsmRepositoriesModule')
                     .then((m: typeof import('./osm-repositories/OsmRepositoriesModule')) => m.OsmRepositoriesModule),
                 canActivate: [AuthGuardService]

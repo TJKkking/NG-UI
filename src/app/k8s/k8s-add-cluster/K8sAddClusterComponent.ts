@@ -18,6 +18,7 @@
 /**
  * @file K8sAddClusterComponent.ts.
  */
+import { isNullOrUndefined } from 'util';
 import { HttpHeaders } from '@angular/common/http';
 import { Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -29,7 +30,6 @@ import { environment } from 'environment';
 import * as jsyaml from 'js-yaml';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 import { VimAccountDetails } from 'VimAccountModel';
 /**
  * Creating Component
@@ -209,6 +209,7 @@ export class K8sAddClusterComponent implements OnInit {
     // Transform Map to json object
     const jsonDMObject: {} = {};
     this.deploymentMethodsSubmit.forEach((value: boolean, key: string): void => {
+      // eslint-disable-next-line security/detect-object-injection
       jsonDMObject[key] = value;
     });
 
@@ -232,7 +233,6 @@ export class K8sAddClusterComponent implements OnInit {
     if (files && files.length === 1) {
       this.sharedService.getFileString(files, 'json').then((fileContent: string): void => {
         const getNetsJson: string = jsyaml.load(fileContent, { json: true });
-        // tslint:disable-next-line: no-backbone-get-set-outside-model
         this.k8sclusterForm.get('nets').setValue(JSON.stringify(getNetsJson));
       }).catch((err: string): void => {
         if (err === 'typeError') {
@@ -255,7 +255,6 @@ export class K8sAddClusterComponent implements OnInit {
     if (files && files.length === 1) {
       this.sharedService.getFileString(files, 'yaml').then((fileContent: string): void => {
         const getCredentialsJson: string = jsyaml.load(fileContent, { json: true });
-        // tslint:disable-next-line: no-backbone-get-set-outside-model
         this.k8sclusterForm.get('credentials').setValue(JSON.stringify(getCredentialsJson));
       }).catch((err: string): void => {
         if (err === 'typeError') {
@@ -272,5 +271,4 @@ export class K8sAddClusterComponent implements OnInit {
     this.fileInputCredentialsLabel.nativeElement.innerText = files[0].name;
     this.fileInputCredentials.nativeElement.value = null;
   }
-
 }

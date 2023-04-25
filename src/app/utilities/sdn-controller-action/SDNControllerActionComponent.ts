@@ -65,6 +65,7 @@ export class SDNControllerActionComponent {
 
     /** Show SDN Controller Information @public */
     public showSDNControllerInfo(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         this.modalService.open(SDNControllerInfoComponent, { backdrop: 'static' }).componentInstance.params = {
             id: this.sdnID,
             page: 'sdn-controller'
@@ -73,11 +74,14 @@ export class SDNControllerActionComponent {
 
     /** Delete SDN Controller @public */
     public deleteSDNController(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const modalRef: NgbModalRef = this.modalService.open(DeleteComponent, { backdrop: 'static' });
         modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
             if (result) {
                 this.sharedService.callData();
             }
-        }).catch();
+        }).catch((): void => {
+            // Catch Navigation Error
+        });
     }
 }

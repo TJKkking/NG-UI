@@ -18,6 +18,7 @@
 /**
  * @file VNFComposerComponent
  */
+ import { isNullOrUndefined } from 'util';
 import { HttpHeaders } from '@angular/common/http';
 import { Component, ElementRef, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -73,30 +74,30 @@ export class VNFComposerComponent {
   /** Contains sidebar open status @public */
   public sideBarOpened: boolean = false;
   /** Contains SVG attributes @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private svg: any;
   /** Contains forced node animations @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private force: any;
   /** Contains the Drag line */
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private dragLine: any;
   /** Contains id of the node @private */
   private identifier: string;
   /** Contains path information of the node */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private path: any;
   /** Contains node network @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private network: any;
   /** Contains node network @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private virutualDeploymentUnit: any;
   /** Contains node connectionPoint @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private connectionPoint: any;
   /** Contains node intConnectionPoint @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private intConnectionPoint: any;
   /** Contains the node information @private */
   private nodes: COMPOSERNODES[] = [];
@@ -117,16 +118,16 @@ export class VNFComposerComponent {
   /** Contains tranlsate instance @private */
   private translateService: TranslateService;
   /** Rendered nodes represent network @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private gNetwork: any;
   /** Rendered nodes represent VDU @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private gVirutualDeploymentUnit: any;
   /** Rendered nodes represent connection point @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private gConnectionPoint: any;
   /** Rendered nodes represent internal connection point @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private gIntConnectionPoint: any;
   /** Contains all the information about VNF Details @private */
   private vnfdPackageDetails: VNFD;
@@ -172,7 +173,6 @@ export class VNFComposerComponent {
    * Lifecyle Hooks the trigger before component is instantiate
    */
   public ngOnInit(): void {
-    // tslint:disable-next-line:no-backbone-get-set-outside-model
     this.identifier = this.activatedRoute.snapshot.paramMap.get('id');
     this.generateData();
     this.headers = new HttpHeaders({
@@ -208,7 +208,9 @@ export class VNFComposerComponent {
       }, (error: ERRORDATA): void => {
         error.error = typeof error.error === 'string' ? jsyaml.load(error.error) : error.error;
         if (error.error.status === HttpStatus.NOT_FOUND || error.error.status === HttpStatus.UNAUTHORIZED) {
-          this.router.navigateByUrl('404', { skipLocationChange: true }).catch();
+          this.router.navigateByUrl('404', { skipLocationChange: true }).catch((): void => {
+            // Catch Navigation Error
+        });
         } else {
           this.restService.handleError(error, 'get');
         }
@@ -225,7 +227,7 @@ export class VNFComposerComponent {
     this.vnfdInfo.provider = vnfdPackageDetails.provider;
   }
   /** Events handles at drag on D3 region @public */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   public drag(ev: any): void {
     ev.dataTransfer.setData('text', ev.target.id);
   }
@@ -409,10 +411,13 @@ export class VNFComposerComponent {
   }
   /** Edit topology @public */
   public onEdit(): void {
-    this.router.navigate(['/packages/vnf/edit/', this.identifier]).catch();
+    this.router.navigate(['/packages/vnf/edit/', this.identifier]).catch((): void => {
+      // Catch Navigation Error
+  });
   }
   /** Show Info @public */
   public showInfo(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(ConfirmationTopologyComponent, { backdrop: 'static' });
     modalRef.componentInstance.topologyType = 'Info';
     modalRef.componentInstance.topologytitle = this.translateService.instant('PAGE.TOPOLOGY.INFO');
@@ -420,7 +425,9 @@ export class VNFComposerComponent {
       if (result) {
         // empty
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
   /** Event to freeze the animation @public */
   public onFreeze(): void {
@@ -562,7 +569,7 @@ export class VNFComposerComponent {
       .attr('x', graphContainerAttr.imageX)
       .attr('y', graphContainerAttr.imageY)
       .call(this.onDragDrop())
-      .attr('id', (d: COMPOSERNODES): string => { return d.id; })
+      .attr('id', (d: COMPOSERNODES): string => d.id)
       .attr('class', 'node').attr('width', graphContainerAttr.nodeWidth).attr('height', graphContainerAttr.nodeHeight)
       .attr('xlink:href', 'assets/images/INTVL.svg')
       .on('mousedown', (d: COMPOSERNODES): void => { this.mouseDown(d); })
@@ -584,7 +591,7 @@ export class VNFComposerComponent {
       .attr('x', graphContainerAttr.imageX)
       .attr('y', graphContainerAttr.imageY)
       .call(this.onDragDrop())
-      .attr('id', (d: COMPOSERNODES): string => { return d.id; })
+      .attr('id', (d: COMPOSERNODES): string => d.id)
       .attr('class', 'node').attr('width', graphContainerAttr.nodeWidth).attr('height', graphContainerAttr.nodeHeight)
       .attr('xlink:href', 'assets/images/VDU.svg')
       .on('mousedown', (d: COMPOSERNODES): void => { this.mouseDown(d); })
@@ -606,7 +613,7 @@ export class VNFComposerComponent {
       .attr('x', graphContainerAttr.imageX)
       .attr('y', graphContainerAttr.imageY)
       .call(this.onDragDrop())
-      .attr('id', (d: COMPOSERNODES): string => { return d.id; })
+      .attr('id', (d: COMPOSERNODES): string => d.id)
       .attr('class', 'node').attr('width', graphContainerAttr.nodeWidth).attr('height', graphContainerAttr.nodeHeight)
       .attr('xlink:href', 'assets/images/CP-VNF.svg')
       .on('mousedown', (d: COMPOSERNODES): void => { this.mouseDown(d); })
@@ -628,7 +635,7 @@ export class VNFComposerComponent {
       .attr('x', graphContainerAttr.imageX)
       .attr('y', graphContainerAttr.imageY)
       .call(this.onDragDrop())
-      .attr('id', (d: COMPOSERNODES): string => { return d.id; })
+      .attr('id', (d: COMPOSERNODES): string => d.id)
       .attr('class', 'node').attr('width', graphContainerAttr.nodeWidth).attr('height', graphContainerAttr.nodeHeight)
       .attr('xlink:href', 'assets/images/INTCP.svg')
       .on('mousedown', (d: COMPOSERNODES): void => { this.mouseDown(d); })
@@ -716,6 +723,7 @@ export class VNFComposerComponent {
   }
   /** Events handles when mousedown click it will capture the selected node data @private */
   private mouseDown(d: COMPOSERNODES): void {
+    // eslint-disable-next-line deprecation/deprecation
     event.preventDefault();
     if (d3.event.ctrlKey) { return; }
     if (d3.event.shiftKey) {
@@ -828,6 +836,7 @@ export class VNFComposerComponent {
                     }
                   ]
                 });
+                // eslint-disable-next-line security/detect-object-injection
                 this.vnfdPackageDetails['ext-cpd'][index] = {
                   id: extcpd.id,
                   'int-cpd': {
@@ -882,7 +891,7 @@ export class VNFComposerComponent {
     this.mouseupNode = null;
   }
   /** drag event @private */
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private onDragDrop(): any {
     return d3.drag().filter(this.dragFilter)
       .on('start', this.dragstarted)
@@ -915,12 +924,13 @@ export class VNFComposerComponent {
     this.dragLine.classed('hidden', true).attr('d', 'M0,0L0,0');
   }
   /** Events handles when Shift Click to perform create cp @private */
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private singleClick(nodeSelected: any, d: COMPOSERNODES): void {
     this.selectedNode(nodeSelected, d);
   }
   /** Get confirmation Before Deleting the Node in Topology @private */
   private getDeleteNodeConfirmation(d: COMPOSERNODES): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(ConfirmationTopologyComponent, { backdrop: 'static' });
     modalRef.componentInstance.topologyType = 'Delete';
     modalRef.componentInstance.topologyname = d.name;
@@ -937,11 +947,12 @@ export class VNFComposerComponent {
       if (result) {
         this.deleteNode(d);
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
   /** Delete nodes @private */
   private deleteNode(d: COMPOSERNODES): void {
-    // tslint:disable-next-line: max-func-body-length
     this.nodes.forEach((node: VNFD): void => {
       if (node.id === d.id) {
         if (d.type === 'cp') {
@@ -963,9 +974,7 @@ export class VNFComposerComponent {
             if (getRelatedVDUCPD !== undefined && getRelatedVDUID !== undefined) {
               this.vnfdPackageDetails.vdu.forEach((vdu: VDU): void => {
                 if (vdu.id === getRelatedVDUID) {
-                  const posINTCPD: number = vdu['int-cpd'].findIndex((intCPD: VDUINTCPD): boolean => {
-                    return intCPD.id === getRelatedVDUCPD;
-                  });
+                  const posINTCPD: number = vdu['int-cpd'].findIndex((intCPD: VDUINTCPD): boolean => intCPD.id === getRelatedVDUCPD);
                   if (posINTCPD !== -1) {
                     vdu['int-cpd'].splice(posINTCPD, 1);
                   }
@@ -975,26 +984,20 @@ export class VNFComposerComponent {
           }
         } else if (d.type === 'intcp') {
           this.vnfdPackageDetails.vdu.forEach((vdu: VDU): void => {
-            const posINTCPD: number = vdu['int-cpd'].findIndex((intCPD: VDUINTCPD): boolean => {
-              return intCPD.id === d.id;
-            });
+            const posINTCPD: number = vdu['int-cpd'].findIndex((intCPD: VDUINTCPD): boolean => intCPD.id === d.id);
             if (posINTCPD !== -1) {
               vdu['int-cpd'].splice(posINTCPD, 1);
             }
           });
         } else if (d.type === 'intvl') {
-          const posINTVLD: number = this.vnfdPackageDetails['int-virtual-link-desc'].findIndex((intVLD: IVLD): boolean => {
-            return intVLD.id === d.id;
-          });
+          const posINTVLD: number = this.vnfdPackageDetails['int-virtual-link-desc'].findIndex((intVLD: IVLD): boolean => intVLD.id === d.id);
           if (posINTVLD !== -1) {
             this.vnfdPackageDetails['int-virtual-link-desc'].splice(posINTVLD, 1);
           }
           if (this.vnfdPackageDetails.vdu !== undefined) {
             this.vnfdPackageDetails.vdu.forEach((vduDetails: VDU): void => {
               if (vduDetails['int-cpd'] !== undefined) {
-                const newVDUintCPDArray: VDUINTCPD[] = vduDetails['int-cpd'].filter((item: VDUINTCPD): boolean => {
-                  return item['int-virtual-link-desc'] !== undefined ? item['int-virtual-link-desc'] !== d.id ? true : false : true;
-                });
+                const newVDUintCPDArray: VDUINTCPD[] = vduDetails['int-cpd'].filter((item: VDUINTCPD): boolean => item['int-virtual-link-desc'] !== undefined ? item['int-virtual-link-desc'] !== d.id ? true : false : true);
                 vduDetails['int-cpd'] = newVDUintCPDArray;
               }
             });
@@ -1039,7 +1042,7 @@ export class VNFComposerComponent {
     this.notifierService.notify('warning', this.translateService.instant('PAGE.VNFPACKAGE.VNFCOMPOSE.YOUCANNOTDELETELINK'));
   }
   /** Selected nodes @private */
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private selectedNode(nodeSeleced: any, d: COMPOSERNODES): void {
     const alreadyIsActive: boolean = nodeSeleced.select('#' + d.id).classed(this.activeNode);
     this.deselectAllNodes();

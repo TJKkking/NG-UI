@@ -20,6 +20,7 @@
  * @file Provider for REST Service
  */
 
+import { isNullOrUndefined } from 'util';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -28,7 +29,6 @@ import { NotifierService } from 'angular-notifier';
 import { APIURLHEADER, ERRORDATA } from 'CommonModel';
 import * as HttpStatus from 'http-status-codes';
 import { Observable } from 'rxjs';
-import { isNullOrUndefined } from 'util';
 
 /**
  * An Injectable is a class adorned with the @Injectable decorator function.
@@ -133,7 +133,6 @@ export class RestService {
      * @param error The error response reecieved from API call.
      * @param method The http request method.
      */
-    // tslint:disable-next-line: cyclomatic-complexity
     public handleError(err: ERRORDATA, method?: string): void {
         if (err.error.status === HttpStatus.UNAUTHORIZED) {
             if (method !== 'get') {

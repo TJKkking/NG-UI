@@ -45,6 +45,7 @@ export class AuthGuardService implements CanActivate {
      * Returns Observable<boolean> if authorized @public
      */
     public canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+        // eslint-disable-next-line deprecation/deprecation
         return combineLatest(
             this.authService.isLoggedIn,
             this.authService.isChangePassword
@@ -53,7 +54,9 @@ export class AuthGuardService implements CanActivate {
                 if (changePassword || isLoggedIn) {
                     return true;
                 } else {
-                    this.router.navigate(['/login']).catch();
+                    this.router.navigate(['/login']).catch((): void => {
+                        // Catch Navigation Error
+                    });
                     this.authService.destoryToken();
                     return false;
                 }

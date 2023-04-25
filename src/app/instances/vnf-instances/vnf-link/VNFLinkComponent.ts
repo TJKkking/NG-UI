@@ -42,5 +42,4 @@ export class VNFLinkComponent implements OnInit {
   public ngOnInit(): void {
     //empty
   }
-
 }

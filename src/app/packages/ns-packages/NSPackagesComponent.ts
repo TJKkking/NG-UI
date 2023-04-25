@@ -246,6 +246,7 @@ export class NSPackagesComponent implements OnInit {
     }
     /** Handle compose new ns package method  @public */
     public composeNSPackage(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         this.modalService.open(ComposePackages, { backdrop: 'static' }).componentInstance.params = { page: 'ns-package' };
     }
 

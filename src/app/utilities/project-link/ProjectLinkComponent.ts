@@ -47,6 +47,7 @@ export class ProjectLinkComponent implements OnInit {
   /** Check the project is present for the user @public */
   public isPresent: boolean = false;
   /** Set timeout @private */
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   private timeOut: number = 10;
   /** Instance of the rest service @private */
   private restService: RestService;
@@ -77,5 +78,4 @@ export class ProjectLinkComponent implements OnInit {
       }, this.timeOut);
     });
   }
-
 }

@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection */
 /*
  Copyright 2020 TATA ELXSI
 
@@ -19,6 +20,7 @@
 /**
  * @file Page for Operational View Component
  */
+import { isNullOrUndefined } from 'util';
 import { Component, Injector, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -35,7 +37,6 @@ import { Observable } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 /**
  * Creating component
  * @Component takes OperationalViewComponent.html as template url
@@ -77,19 +78,22 @@ export class OperationalViewComponent implements OnInit {
     public timeOutDefaultSeconds: number = CONSTANTNUMBER.timeOutDefaultSeconds;
 
     /** variables contains minimum seconds for the timeout @public */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     public minSeconds: number = 5;
 
     /** variables contains maximum seconds for the timeout @public */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     public maxSeconds: number = 60;
 
     /** variables contains timer calculation value of milliseconds @public */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     public timeDefaultCal: number = 1000;
 
     /** variables contains timeout @public */
     public timeOut: number;
 
     /** Set the timer button @public */
-    // tslint:disable-next-line: no-magic-numbers
+    // eslint-disable-next-line no-magic-numbers
     public setSeconds: SETTIMER[] = SET_TIMER;
 
     /** Instance of subscriptions @private */
@@ -118,7 +122,6 @@ export class OperationalViewComponent implements OnInit {
      * Lifecyle Hooks the trigger before component is instantiate
      */
     public ngOnInit(): void {
-        // tslint:disable-next-line:no-backbone-get-set-outside-model
         this.instancesID = this.activatedRoute.snapshot.paramMap.get('id');
         this.generateData();
         this.generateDataSub = this.sharedService.dataEvent.subscribe((): void => { this.generateData(); });
@@ -186,9 +189,7 @@ export class OperationalViewComponent implements OnInit {
         if (liveData) {
             NSURL = NSURL + '?vcaStatusRefresh=true';
         }
-        return this.restService.getResource(NSURL).pipe(map((operationalList: VCASTATUS): VCADETAILS => {
-            return this.vcaDetailsData(operationalList, liveData, timeOutSeconds);
-        }));
+        return this.restService.getResource(NSURL).pipe(map((operationalList: VCASTATUS): VCADETAILS => this.vcaDetailsData(operationalList, liveData, timeOutSeconds)));
     }
     /**
      * Form the VCA Details for each NS Instances
@@ -235,7 +236,9 @@ export class OperationalViewComponent implements OnInit {
             list.vcaStatus[key].units = vcaUnits;
             list.vcaStatus[key].applications = vcaApplication;
             list.vcaStatus[key].machines = vcaMachines;
+            // eslint-disable-next-line no-self-assign
             list.vcaStatus[key].relations = list.vcaStatus[key].relations;
+            // eslint-disable-next-line no-self-assign
             list.vcaStatus[key].model = list.vcaStatus[key].model;
             const getEachModelData: SETMODELS = this.assignVCAStatusOfEachModel(list.vcaStatus[key]);
             setModels.push(getEachModelData);
@@ -258,7 +261,9 @@ export class OperationalViewComponent implements OnInit {
         Object.keys(applicationData).forEach((applicationKey: string): void => {
             const charmSplitlist: string[] = applicationData[applicationKey].charm.split('/');
             const status: string = applicationData[applicationKey].status.status;
+            // eslint-disable-next-line deprecation/deprecation
             const charm: string = charmSplitlist[1].substr(0, charmSplitlist[1].lastIndexOf('-'));
+            // eslint-disable-next-line deprecation/deprecation
             const store: string = charmSplitlist[0].substr(0, charmSplitlist[0].lastIndexOf(':'));
             applicationData[applicationKey].app_id = applicationKey;
             applicationData[applicationKey].charm = charm;
@@ -298,16 +303,19 @@ export class OperationalViewComponent implements OnInit {
     }
     /** Show the Config list in modal using modalservice @public */
     public showExecutedActionsList(executeActionsList: EXECUTEDACTIONS[]): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         this.modalService.open(OperationalViewAppExecutedActionsComponent, { size: 'xl', backdrop: 'static' })
             .componentInstance.params = { executedActions: executeActionsList };
     }
     /** Show the Config list in modal using modalservice @public */
     public showConfigList(configList: object): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         this.modalService.open(OperationalViewAppConfigsComponent, { size: 'xl', backdrop: 'static' })
             .componentInstance.params = { configs: configList };
     }
     /** Show the Config list in modal using modalservice @public */
     public showActionsList(actionsList: object): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         this.modalService.open(OperationalViewAppActionsComponent, { size: 'xl', backdrop: 'static' })
             .componentInstance.params = { actions: actionsList };
     }

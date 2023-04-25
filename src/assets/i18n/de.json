@@ -306,7 +306,7 @@
             "DETAILS": "SDN-Controller-Details"
         },
         "USERS": {
-            "CREATEUSER": "Gebruiker aanmaken",
+            "CREATEUSER": "Nieuwe gebruiker",
             "NEWUSER": "Neuer Benutzer",
             "USERNAME": "Nutzername",
             "PASSWORD": "Passwort",
@@ -436,7 +436,7 @@
             "EXECUTEDSUCCESSFULLY": "NS Primitive Configuration ausgeführt"
         },
         "ROLES": {
-            "CREATEROLE": "Rolle erstellen",
+            "CREATEROLE": "Neue Rolle",
             "ROLE": "Rolle",
             "PERMISSIONS": "Berechtigungen",
             "YAMLPERMISSIONS": "YAML Berechtigungen",

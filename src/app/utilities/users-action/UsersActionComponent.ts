@@ -61,16 +61,20 @@ export class UsersActionComponent {
 
     /** Delete User Account @public */
     public deleteUser(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const modalRef: NgbModalRef = this.modalService.open(DeleteComponent, { backdrop: 'static' });
         modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
             if (result) {
                 this.sharedService.callData();
             }
-        }).catch();
+        }).catch((): void => {
+            // Catch Navigation Error
+        });
     }
 
     /** Edit User Account @public */
     public editUserModal(editType: string): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const modalRef: NgbModalRef = this.modalService.open(AddEditUserComponent, { backdrop: 'static' });
         modalRef.componentInstance.userID = this.value.identifier;
         if (editType === 'editPassword') {
@@ -84,11 +88,14 @@ export class UsersActionComponent {
             if (result) {
                 this.sharedService.callData();
             }
-        }).catch();
+        }).catch((): void => {
+            // Catch Navigation Error
+        });
     }
 
     /** Edit User Account @public */
     public projectRolesModal(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const modalRef: NgbModalRef = this.modalService.open(ProjectRoleComponent, { backdrop: 'static' });
         modalRef.componentInstance.userID = this.value.identifier;
         modalRef.componentInstance.userTitle = this.translateService.instant('PAGE.USERS.EDITPROJECTROLEMAPPING');
@@ -96,6 +103,8 @@ export class UsersActionComponent {
             if (result) {
                 this.sharedService.callData();
             }
-        }).catch();
+        }).catch((): void => {
+            // Catch Navigation Error
+        });
     }
 }

@@ -59,6 +59,7 @@ export class ChangePasswordComponent implements OnInit {
 
     /** Lifecyle Hooks the trigger before component is instantiate @public */
     public ngOnInit(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const modalRef: NgbModalRef = this.modalService.open(AddEditUserComponent, { backdrop: 'static', keyboard: false });
         modalRef.componentInstance.userID = localStorage.getItem('user_id');
         if (this.editType === 'changePassword') {
@@ -72,5 +73,4 @@ export class ChangePasswordComponent implements OnInit {
         }).catch((err: Error): void => { // catch error
         });
     }
-
 }

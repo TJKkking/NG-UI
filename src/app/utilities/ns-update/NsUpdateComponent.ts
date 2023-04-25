@@ -18,6 +18,7 @@
 /**
  * @file Ns Update Component
  */
+import { isNullOrUndefined } from 'util';
 import { HttpHeaders } from '@angular/common/http';
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -29,7 +30,6 @@ import { environment } from 'environment';
 import { NSUPDATE, TERMINATEVNF } from 'NSInstanceModel';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 import { VNFD } from 'VNFDModel';
 import { VNFInstanceDetails } from 'VNFInstanceModel';
 import { WarningComponent } from 'WarningComponent';
@@ -160,12 +160,15 @@ export class NsUpdateComponent implements OnInit {
                 vnfInstanceData.push(vnfDataObj);
             });
             const nsId: string = 'NS';
+            // eslint-disable-next-line security/detect-object-injection
             this.nsIdFilteredData = vnfInstanceData.filter((vnfdData: {}[]): boolean => vnfdData[nsId] === this.params.id);
             this.nsIdFilteredData.forEach((resVNF: {}[]): void => {
                 const memberIndex: string = 'MemberIndex';
                 const vnfinstanceID: string = 'VNFInstanceId';
                 const assignMemberIndex: {} = {
+                    // eslint-disable-next-line security/detect-object-injection
                     id: resVNF[memberIndex],
+                    // eslint-disable-next-line security/detect-object-injection
                     vnfinstanceId: resVNF[vnfinstanceID]
                 };
                 this.memberVnfIndex.push(assignMemberIndex);
@@ -187,12 +190,15 @@ export class NsUpdateComponent implements OnInit {
         let memberIndexFilteredData: {}[] = [];
         const memberIndex: string = 'MemberIndex';
         memberIndexFilteredData = this.nsIdFilteredData.filter((vnfdData: {}[]): boolean =>
+        // eslint-disable-next-line security/detect-object-injection
             vnfdData[memberIndex] === this.memberIndexValue);
         const vnfId: string = 'VNFID';
         const selectedvnfId: string = 'VNFD';
         this.selectedVnf = memberIndexFilteredData;
         for (const data of memberIndexFilteredData) {
+            // eslint-disable-next-line security/detect-object-injection
             this.vnfID = data[vnfId];
+            // eslint-disable-next-line security/detect-object-injection
             this.selectedvnfId = data[selectedvnfId];
         }
     }
@@ -238,6 +244,7 @@ export class NsUpdateComponent implements OnInit {
         if (this.nsUpdateForm.value.updateType === 'CHANGE_VNFPKG') {
             this.checkVersion();
         } else {
+            // eslint-disable-next-line security/detect-non-literal-fs-filename
             const modalRef: NgbModalRef = this.modalService.open(WarningComponent, { backdrop: 'static' });
             modalRef.componentInstance.heading = this.translateService.instant('TERMINATEVNF');
             modalRef.componentInstance.confirmationMessage = this.translateService.instant('TERMINATEVNFCONTENT');
@@ -246,8 +253,9 @@ export class NsUpdateComponent implements OnInit {
                 if (result.message === CONFIGCONSTANT.done) {
                     this.onSubmit();
                 }
-            }).catch((): void => { //empty
-             });
+            }).catch((): void => {
+                // Catch Navigation Error
+            });
         }
         this.isLoadingResults = false;
     }
@@ -272,11 +280,14 @@ export class NsUpdateComponent implements OnInit {
                 let vnfIdFilteredData: {}[] = [];
                 const vnfID: string = 'VNFID';
                 const version: string = 'version';
+                // eslint-disable-next-line security/detect-object-injection
                 vnfIdFilteredData = vnfDetails.filter((vnfdData: {}[]): boolean => vnfdData[vnfID] === this.vnfID);
                 for (const data of vnfIdFilteredData) {
+                    // eslint-disable-next-line security/detect-object-injection
                     this.vnfversion = data[version];
                 }
                 if (this.version === this.vnfversion) {
+                    // eslint-disable-next-line security/detect-non-literal-fs-filename
                     const modalRef: NgbModalRef = this.modalService.open(WarningComponent, { backdrop: 'static' });
                     modalRef.componentInstance.heading = this.translateService.instant('UPDATENS');
                     modalRef.componentInstance.confirmationMessage = this.translateService.instant('GENERICCONTENT');
@@ -289,6 +300,7 @@ export class NsUpdateComponent implements OnInit {
                      }
                     );
                 } else {
+                    // eslint-disable-next-line security/detect-non-literal-fs-filename
                     const modalRef: NgbModalRef = this.modalService.open(WarningComponent, { backdrop: 'static' });
                     modalRef.componentInstance.heading = this.translateService.instant('REDEPLOY');
                     modalRef.componentInstance.confirmationMessage = this.translateService.instant('REDEPLOYCONTENT');
@@ -323,7 +335,9 @@ export class NsUpdateComponent implements OnInit {
         };
         this.restService.postResource(apiURLHeader, nsUpdatePayload).subscribe((result: {}): void => {
             this.activeModal.close(modalData);
-            this.router.navigate(['/instances/ns/history-operations/' + this.params.id]).catch();
+            this.router.navigate(['/instances/ns/history-operations/' + this.params.id]).catch((): void => {
+                // Catch Navigation Error
+            });
         }, (error: ERRORDATA): void => {
             this.restService.handleError(error, 'post');
             this.isLoadingResults = false;
@@ -344,6 +358,7 @@ export class NsUpdateComponent implements OnInit {
 
     /** Used to get the AbstractControl of controlName passed @private */
     private getFormControl(controlName: string): AbstractControl {
+        // eslint-disable-next-line security/detect-object-injection
         return this.nsUpdateForm.controls[controlName];
     }
 }

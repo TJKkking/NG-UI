@@ -18,6 +18,7 @@
 /**
  * @file StartStopRebuild Component
  */
+import { isNullOrUndefined } from 'util';
 import { HttpHeaders } from '@angular/common/http';
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -28,7 +29,6 @@ import { environment } from 'environment';
 import { StartStopRebuild } from 'NSInstanceModel';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 import { DF, VNFD } from 'VNFDModel';
 import { VDUR, VNFInstanceDetails } from 'VNFInstanceModel';
 
@@ -135,12 +135,15 @@ export class StartStopRebuildComponent implements OnInit {
                 vnfInstanceData.push(vnfDataObj);
             });
             const nsId: string = 'NS';
+            // eslint-disable-next-line security/detect-object-injection
             this.nsIdFilteredData = vnfInstanceData.filter((vnfdData: {}[]): boolean => vnfdData[nsId] === this.params.id);
             this.nsIdFilteredData.forEach((resVNF: {}[]): void => {
                 const memberIndex: string = 'MemberIndex';
                 const vnfinstanceID: string = 'VNFInstanceId';
                 const assignMemberIndex: {} = {
+                    // eslint-disable-next-line security/detect-object-injection
                     id: resVNF[memberIndex],
+                    // eslint-disable-next-line security/detect-object-injection
                     vnfinstanceId: resVNF[vnfinstanceID]
                 };
                 this.memberVnfIndex.push(assignMemberIndex);
@@ -164,7 +167,9 @@ export class StartStopRebuildComponent implements OnInit {
                     this.instanceId = id;
                     this.selectedvnfId = vnfInstanceDetail['vnfd-ref'];
                     const VDU: string = 'vdur';
+                    // eslint-disable-next-line security/detect-object-injection
                     if (vnfInstanceDetail[VDU] !== undefined) {
+                        // eslint-disable-next-line security/detect-object-injection
                         vnfInstanceDetail[VDU].forEach((vdu: VDUR): void => {
                             const vnfInstanceDataObj: {} =
                             {
@@ -178,6 +183,7 @@ export class StartStopRebuildComponent implements OnInit {
                         const vduName: string = 'VDU';
                         this.vduId = this.vdu.filter((vdu: {}, index: number, self: {}[]): {} =>
                             index === self.findIndex((t: {}): {} => (
+                                // eslint-disable-next-line security/detect-object-injection
                                 t[vduName] === vdu[vduName]
                             ))
                         );
@@ -193,6 +199,7 @@ export class StartStopRebuildComponent implements OnInit {
     /** Getting count-index by filtering id */
     public getCountIndex(id: string): void {
         const VDU: string = 'VDU';
+        // eslint-disable-next-line security/detect-object-injection
         this.countIndex = this.vdu.filter((vnfdData: {}[]): boolean => vnfdData[VDU] === id);
     }
 
@@ -279,7 +286,9 @@ export class StartStopRebuildComponent implements OnInit {
         };
         this.restService.postResource(apiURLHeader, startPayload).subscribe((result: {}): void => {
             this.activeModal.close(modalData);
-            this.router.navigate(['/instances/ns/history-operations/' + this.params.id]).catch();
+            this.router.navigate(['/instances/ns/history-operations/' + this.params.id]).catch((): void => {
+                // Catch Navigation Error
+            });
         }, (error: ERRORDATA): void => {
             this.restService.handleError(error, 'post');
             this.isLoadingResults = false;
@@ -288,6 +297,7 @@ export class StartStopRebuildComponent implements OnInit {
 
     /** Used to get the AbstractControl of controlName passed @private */
     private getFormControl(controlName: string): AbstractControl {
+        // eslint-disable-next-line security/detect-object-injection
         return this.startForm.controls[controlName];
     }
 }

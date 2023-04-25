@@ -195,12 +195,15 @@ export class WIMAccountDetailsComponent implements OnInit, OnDestroy {
 
     /** Compose new WIM Accounts @public */
     public composeWIM(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         const modalRef: NgbModalRef = this.modalService.open(NewWIMAccountComponent, { backdrop: 'static' });
         modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
             if (result) {
                 this.sharedService.callData();
             }
-        }).catch();
+        }).catch((): void => {
+            // Catch Navigation Error
+        });
     }
 
     /** Generate generateWIMData object from loop and return for the datasource @public */
@@ -237,7 +240,9 @@ export class WIMAccountDetailsComponent implements OnInit, OnDestroy {
             }
             this.dataSource.load(this.wimData).then((data: {}) => {
                 this.isLoadingResults = false;
-            }).catch();
+            }).catch((): void => {
+                // Catch Navigation Error
+            });
         }, (error: ERRORDATA) => {
             this.restService.handleError(error, 'get');
             this.isLoadingResults = false;

@@ -26,19 +26,19 @@ import {
 import 'zone.js/dist/zone-testing';
 
 /** const variable require */
-// tslint:disable:no-reserved-keywords
-// tslint:disable-next-line:no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const require: any;
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
     BrowserDynamicTestingModule,
-    platformBrowserDynamicTesting()
+    platformBrowserDynamicTesting(), {
+    teardown: { destroyAfterEach: false }
+}
 );
 
 /** const variable context */
 // Then we find all the tests.
-// tslint:disable-next-line:typedef
 const context = require.context('./', true, /\.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);

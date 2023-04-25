@@ -63,15 +63,14 @@ const routes: Routes = [
         FlexLayoutModule, NgSelectModule, NgbModule, RouterModule.forChild(routes), PagePerRowModule, LoaderModule,
         PageReloadModule, ChangePasswordModule],
     declarations: [UsersComponent, UserDetailsComponent, ProjectRoleComponent],
-    providers: [DataService],
-    entryComponents: [ProjectRoleComponent]
+    providers: [DataService]
 })
 /** Exporting a class @exports UsersModule */
 export class UsersModule {
     /**
      * Lifecyle Hooks the trigger before component is instantiate
      */
-    public ngOnInit(): void {
-        // Empty Block
-    }
+     constructor() {
+        //Empty
+      }
 }

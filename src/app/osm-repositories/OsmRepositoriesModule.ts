@@ -62,16 +62,12 @@ const routes: Routes = [
 /**
  * Creating @NgModule component for Modules
  */
-// tslint:disable-next-line: no-stateless-class
 @NgModule({
     imports: [FormsModule, ReactiveFormsModule, CommonModule, HttpClientModule, TranslateModule,
         RouterModule.forChild(routes), NgbModule, PagePerRowModule, Ng2SmartTableModule, LoaderModule, PageReloadModule, NgSelectModule],
     declarations: [OsmRepositoriesComponent, OsmRepositoriesDetailsComponent, OsmRepositoriesActionComponent, OsmRepoCreateUpdateComponent],
     providers: [
         DataService
-    ],
-    entryComponents: [
-        OsmRepoCreateUpdateComponent
     ]
 })
 /** Exporting a class @exports OsmRepositoriesModule */

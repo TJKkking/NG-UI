@@ -18,6 +18,7 @@
 /**
  * @file Instantiate NS Modal Component.
  */
+import { isNullOrUndefined } from 'util';
 import { HttpHeaders } from '@angular/common/http';
 import { Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -33,7 +34,6 @@ import { NetworkSliceData } from 'NetworkSliceModel';
 import { NSICREATEPARAMS } from 'NSDModel';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 import { VimAccountDetails } from 'VimAccountModel';
 /**
  * Creating component
@@ -193,7 +193,6 @@ export class InstantiateNetSliceTemplateComponent implements OnInit {
       delete this.netSliceInstantiateForm.value.ssh_keys;
     } else {
       this.copySSHKey = JSON.parse(JSON.stringify(this.netSliceInstantiateForm.value.ssh_keys));
-      // tslint:disable-next-line: no-backbone-get-set-outside-model
       this.netSliceInstantiateForm.get('ssh_keys').setValue(this.copySSHKey);
     }
     if (isNullOrUndefined(this.netSliceInstantiateForm.value.config) || this.netSliceInstantiateForm.value.config === '') {
@@ -203,12 +202,14 @@ export class InstantiateNetSliceTemplateComponent implements OnInit {
       if (validJSON) {
         this.netSliceInstantiateForm.value.config = JSON.parse(this.netSliceInstantiateForm.value.config);
         Object.keys(this.netSliceInstantiateForm.value.config).forEach((item: string) => {
+          // eslint-disable-next-line security/detect-object-injection
           this.netSliceInstantiateForm.value[item] = this.netSliceInstantiateForm.value.config[item];
         });
         delete this.netSliceInstantiateForm.value.config;
       } else {
         const getConfigJson: string = jsyaml.load(this.netSliceInstantiateForm.value.config, { json: true });
         Object.keys(getConfigJson).forEach((item: string) => {
+          // eslint-disable-next-line security/detect-object-injection
           this.netSliceInstantiateForm.value[item] = getConfigJson[item];
         });
         delete this.netSliceInstantiateForm.value.config;
@@ -225,11 +226,12 @@ export class InstantiateNetSliceTemplateComponent implements OnInit {
         this.isLoadingResults = false;
         this.notifierService.notify('success', this.netSliceInstantiateForm.value.nsiName +
           this.translateService.instant('PAGE.NETSLICE.CREATEDSUCCESSFULLY'));
-        this.router.navigate(['/instances/netslice']).catch();
+        this.router.navigate(['/instances/netslice']).catch((): void => {
+          // Catch Navigation Error
+      });
       }, (error: ERRORDATA) => {
         this.restService.handleError(error, 'post');
         if (!isNullOrUndefined(this.copySSHKey)) {
-          // tslint:disable-next-line: no-backbone-get-set-outside-model
           this.netSliceInstantiateForm.get('ssh_keys').setValue(this.copySSHKey);
         }
         this.isLoadingResults = false;
@@ -241,7 +243,6 @@ export class InstantiateNetSliceTemplateComponent implements OnInit {
     if (files && files.length === 1) {
       this.sharedService.getFileString(files, 'pub').then((fileContent: string): void => {
         const getSSHJson: string = jsyaml.load(fileContent, { json: true });
-        // tslint:disable-next-line: no-backbone-get-set-outside-model
         this.netSliceInstantiateForm.get('ssh_keys').setValue(getSSHJson);
       }).catch((err: string): void => {
         if (err === 'typeError') {
@@ -266,7 +267,6 @@ export class InstantiateNetSliceTemplateComponent implements OnInit {
       if (fileFormat === 'yaml' || fileFormat === 'yml') {
         this.sharedService.getFileString(files, 'yaml').then((fileContent: string): void => {
           const getConfigJson: string = jsyaml.load(fileContent, { json: true });
-          // tslint:disable-next-line: no-backbone-get-set-outside-model
           this.netSliceInstantiateForm.get('config').setValue(JSON.stringify(getConfigJson));
         }).catch((err: string): void => {
           if (err === 'typeError') {
@@ -280,7 +280,6 @@ export class InstantiateNetSliceTemplateComponent implements OnInit {
       } else if (fileFormat === 'json') {
         this.sharedService.getFileString(files, 'json').then((fileContent: string): void => {
           const getConfigJson: string = jsyaml.load(fileContent, { json: true });
-          // tslint:disable-next-line: no-backbone-get-set-outside-model
           this.netSliceInstantiateForm.get('config').setValue(JSON.stringify(getConfigJson));
         }).catch((err: string): void => {
           if (err === 'typeError') {

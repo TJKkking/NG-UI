@@ -19,11 +19,11 @@
 /**
  * @file Page for Operational View App Executed actions Component
  */
+import { isNullOrUndefined } from 'util';
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { URLPARAMS } from 'CommonModel';
 import { EXECUTEDACTIONS } from 'OperationalModel';
-import { isNullOrUndefined } from 'util';
 /**
  * Creating component
  * @Component takes OperationalViewAppExecutedActionsComponent.html as template url

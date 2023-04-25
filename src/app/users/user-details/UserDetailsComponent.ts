@@ -18,6 +18,7 @@
 /**
  * @file users details Component.
  */
+import { isNullOrUndefined } from 'util';
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
@@ -32,7 +33,6 @@ import { Subscription } from 'rxjs';
 import { SharedService } from 'SharedService';
 import { UserData, UserDetail } from 'UserModel';
 import { UsersActionComponent } from 'UsersActionComponent';
-import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component
@@ -146,6 +146,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   /** on Navigate to Composer Page @public */
   public composeUser(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(AddEditUserComponent, { backdrop: 'static' });
     modalRef.componentInstance.userTitle = this.translateService.instant('PAGE.USERS.NEWUSER');
     modalRef.componentInstance.userType = 'add';
@@ -153,7 +154,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+    });
   }
 
   /** smart table listing manipulation @private */
@@ -206,7 +209,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       }
       this.dataSource.load(this.userData).then((data: {}) => {
         this.isLoadingResults = false;
-      }).catch();
+      }).catch((): void => {
+        // Catch Navigation Error
+      });
     }, (error: ERRORDATA) => {
       this.restService.handleError(error, 'get');
       this.isLoadingResults = false;

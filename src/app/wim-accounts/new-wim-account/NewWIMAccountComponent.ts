@@ -18,6 +18,7 @@
 /**
  * @file WIM Account Component.
  */
+import { isNullOrUndefined } from 'util';
 import { HttpHeaders } from '@angular/common/http';
 import { Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -29,7 +30,6 @@ import { environment } from 'environment';
 import * as jsyaml from 'js-yaml';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component
@@ -169,7 +169,6 @@ export class NewWIMAccountComponent implements OnInit {
     if (files && files.length === 1) {
       this.sharedService.getFileString(files, 'yaml').then((fileContent: string): void => {
         const getConfigJson: string = jsyaml.load(fileContent, { json: true });
-        // tslint:disable-next-line: no-backbone-get-set-outside-model
         this.wimNewAccountForm.get('config').setValue(JSON.stringify(getConfigJson));
       }).catch((err: string): void => {
         if (err === 'typeError') {

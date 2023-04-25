@@ -18,13 +18,13 @@
 /**
  * @file Bread Crumb component.
  */
+import { isNullOrUndefined } from 'util';
 import { Component, Injector, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router, RouterEvent, UrlSegment } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { BREADCRUMBITEM } from 'CommonModel';
 import { filter, startWith } from 'rxjs/operators';
-import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component
@@ -72,6 +72,7 @@ export class BreadcrumbComponent implements OnInit {
   /** Lifecyle Hooks the trigger before component is instantiate @public */
   public ngOnInit(): void {
     this.router.events
+      // eslint-disable-next-line deprecation/deprecation
       .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd), startWith(undefined))
       .subscribe(() => this.menuItems = this.createBreadcrumbs(this.activatedRoute.root));
   }
@@ -153,5 +154,4 @@ export class BreadcrumbComponent implements OnInit {
       return this.translateService.instant('PAGE.DASHBOARD.NETSLICEINSTANCE');
     }
   }
-
 }

@@ -167,13 +167,16 @@ export class OsmRepositoriesDetailsComponent implements OnInit {
 
   /** Create a osm repo @public */
   public addOsmrepo(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(OsmRepoCreateUpdateComponent, { backdrop: 'static' });
     modalRef.componentInstance.createupdateType = 'Add';
     modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
       if (result) {
         this.generateData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /**
@@ -194,7 +197,9 @@ export class OsmRepositoriesDetailsComponent implements OnInit {
       });
       this.dataSource.load(this.osmRepoData).then((data: boolean) => {
         this.isLoadingResults = false;
-      }).catch();
+      }).catch((): void => {
+        // Catch Navigation Error
+    });
     }, (error: ERRORDATA) => {
       this.restService.handleError(error, 'get');
       this.isLoadingResults = false;

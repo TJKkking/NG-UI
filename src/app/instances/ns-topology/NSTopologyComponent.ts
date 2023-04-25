@@ -18,7 +18,7 @@
 /**
  * @file NS Topology Component
  */
-/* tslint:disable:no-increment-decrement */
+/* eslint-disable */
 import { Component, ElementRef, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
@@ -87,22 +87,22 @@ export class NSTopologyComponent {
   /** Holds the NS Id @private */
   private nsIdentifier: string;
   /** Contains SVG attributes @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private svg: any;
   /** Contains forced node animations @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private force: any;
   /** Contains path information of the node */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private path: any;
   /** Contains node network @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private network: any;
   /** Contains node square @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private square: any;
   /** Contains node circle @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private circle: any;
   /** Contains the NS information @private */
   private nsData: NSInstanceDetails;
@@ -123,13 +123,13 @@ export class NSTopologyComponent {
   /** Set timeout @private */
   private TIMEOUT: number = 2000;
   /** Rendered nodes represent vnf @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private gSquare: any;
   /** Rendered nodes represent network @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private gNetwork: any;
   /** Rendered nodes represent network @private */
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private gCircle: any;
   /** Service holds the router information @private */
   private router: Router;
@@ -146,7 +146,6 @@ export class NSTopologyComponent {
    * Lifecyle Hooks the trigger before component is instantiate @public
    */
   public ngOnInit(): void {
-    // tslint:disable-next-line:no-backbone-get-set-outside-model
     this.nsIdentifier = this.activatedRoute.snapshot.paramMap.get('id');
     this.generateData();
   }
@@ -238,7 +237,9 @@ export class NSTopologyComponent {
       }, (error: ERRORDATA): void => {
         this.isLoadingResults = false;
         if (error.error.status === HttpStatus.NOT_FOUND || error.error.status === HttpStatus.UNAUTHORIZED) {
-          this.router.navigateByUrl('404', { skipLocationChange: true }).catch();
+          this.router.navigateByUrl('404', { skipLocationChange: true }).catch((): void => {
+            // Catch Navigation Error
+        });
         } else {
           this.restService.handleError(error, 'get');
         }
@@ -411,7 +412,7 @@ export class NSTopologyComponent {
     this.square.exit().remove();
     this.network.exit().remove();
     this.circle.exit().remove();
-    // tslint:disable-next-line:no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const gPath: any = this.path.enter().append('svg:path').attr('class', 'link');
     this.getgSquare();
     this.getgNetwork();
@@ -422,12 +423,12 @@ export class NSTopologyComponent {
     this.circle = this.gCircle.merge(this.circle);
   }
   /** Events handles when Shift Click to perform create cp @private */
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private singleClick(nodeSelected: any, d: COMPOSERNODES): void {
     this.selectNodeExclusive(nodeSelected, d);
   }
   /** Selected nodes @private */
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private selectNodeExclusive(nodeSelected: any, d: COMPOSERNODES): void {
     const alreadyIsActive: boolean = nodeSelected.select('#' + d.selectorId).classed(this.activeClass);
     this.deselectAllNodes();
@@ -513,7 +514,7 @@ export class NSTopologyComponent {
       .text((d: COMPOSERNODES): string => d.name);
   }
   /** drag event @private */
-  // tslint:disable-next-line: no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private onDragDrop(): any {
     return d3.drag().filter(this.dragFilter)
       .on('start', this.dragstarted)

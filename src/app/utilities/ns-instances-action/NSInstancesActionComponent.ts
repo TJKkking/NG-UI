@@ -18,6 +18,7 @@
 /**
  * @file NS InstancesAction Component
  */
+import { isNullOrUndefined } from 'util';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -36,7 +37,6 @@ import { ScalingComponent } from 'ScalingComponent';
 import { SharedService } from 'SharedService';
 import { ShowInfoComponent } from 'ShowInfoComponent';
 import { StartStopRebuildComponent } from 'StartStopRebuildComponent';
-import { isNullOrUndefined } from 'util';
 import { VerticalScalingComponent } from 'VerticalScalingComponent';
 import { VmMigrationComponent } from 'VmMigrationComponent';
 import { DF, VDU, VNFD } from 'VNFDModel';
@@ -65,6 +65,9 @@ export class NSInstancesActionComponent {
 
   /** Operational Status Check @public */
   public operationalStatus: string;
+
+  /** CNF Status Check @public */
+  public k8sStatus: boolean = false;
 
   /** get Admin Details @public */
   public getAdminDetails: {};
@@ -106,6 +109,7 @@ export class NSInstancesActionComponent {
   private cd: ChangeDetectorRef;
 
   /** Set timeout @private */
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   private timeOut: number = 100;
 
   constructor(injector: Injector) {
@@ -127,12 +131,27 @@ export class NSInstancesActionComponent {
     this.operationalStatus = this.value.OperationalStatus;
     this.instanceID = this.value.identifier;
     this.getAdminDetails = this.value.adminDetails;
+    for (const key of Object.keys(this.getAdminDetails)) {
+      if (key === 'deployed') {
+        // eslint-disable-next-line security/detect-object-injection
+        const adminData: {} = this.getAdminDetails[key];
+        for (const k8sData of Object.keys(adminData)) {
+          if (k8sData === 'K8s') {
+            // eslint-disable-next-line security/detect-object-injection
+            if (adminData[k8sData].length !== 0) {
+              this.k8sStatus = true;
+            }
+          }
+        }
+      }
+    }
     this.isShowOperationalDashboard = !isNullOrUndefined(this.value.vcaStatus) ?
       Object.keys(this.value.vcaStatus).length === 0 && typeof this.value.vcaStatus === 'object' : true;
   }
 
   /** Shows information using modalservice @public */
   public infoNs(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     this.modalService.open(ShowInfoComponent, { backdrop: 'static' }).componentInstance.params = {
       id: this.instanceID,
       page: 'ns-instance',
@@ -142,13 +161,16 @@ export class NSInstancesActionComponent {
 
   /** Delete NS Instanace @public */
   public deleteNSInstance(forceAction: boolean): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(DeleteComponent, { backdrop: 'static' });
     modalRef.componentInstance.params = { forceDeleteType: forceAction };
     modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /** History of operations for an Instanace @public */
@@ -167,6 +189,7 @@ export class NSInstancesActionComponent {
 
   /** Exec NS Primitive @public */
   public execNSPrimitiveModal(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     this.modalService.open(NSPrimitiveComponent, { backdrop: 'static' }).componentInstance.params = {
       memberIndex: this.value.memberIndex,
       nsConfig: this.value.nsConfig,
@@ -186,6 +209,7 @@ export class NSInstancesActionComponent {
               if (vduData['monitoring-parameter'] !== undefined && vduData['monitoring-parameter'].length > 0) {
                 this.isLoadingNSInstanceAction = false;
                 const location: string = environment.GRAFANA_URL + '/' + this.instanceID + '/osm-ns-metrics-metrics';
+                // eslint-disable-next-line security/detect-non-literal-fs-filename
                 window.open(location);
               } else {
                 this.isLoadingNSInstanceAction = false;
@@ -246,6 +270,7 @@ export class NSInstancesActionComponent {
 
   /** Open the scaling pop-up @public */
   public openScaling(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(ScalingComponent, { backdrop: 'static' });
     modalRef.componentInstance.params = {
       id: this.instanceID,
@@ -258,11 +283,14 @@ export class NSInstancesActionComponent {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /** To open VM Migration in NS Instances */
   public openVmMigration(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(VmMigrationComponent, { backdrop: 'static' });
     modalRef.componentInstance.params = {
       id: this.instanceID
@@ -271,11 +299,14 @@ export class NSInstancesActionComponent {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /** To open the Ns Update pop-up */
   public openNsUpdate(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(NsUpdateComponent, { backdrop: 'static' });
     modalRef.componentInstance.params = {
       id: this.instanceID
@@ -284,11 +315,14 @@ export class NSInstancesActionComponent {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /** To open the Start, Stop & Rebuild pop-up */
   public openStart(actionType: string): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(StartStopRebuildComponent, { backdrop: 'static' });
     modalRef.componentInstance.params = {
       id: this.instanceID
@@ -305,11 +339,14 @@ export class NSInstancesActionComponent {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /** To open the vertical Scaling pop-up */
   public openVerticalScaling(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(VerticalScalingComponent, { backdrop: 'static' });
     modalRef.componentInstance.params = {
       id: this.instanceID
@@ -318,7 +355,9 @@ export class NSInstancesActionComponent {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /**

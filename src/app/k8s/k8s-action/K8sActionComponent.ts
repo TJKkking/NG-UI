@@ -75,12 +75,15 @@ export class K8sActionComponent{
 
   /** Delete User Account @public */
   public deleteK8s(pageType: string): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(DeleteComponent, { backdrop: 'static' });
     modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /** Shows information using modalservice @public */
@@ -94,6 +97,7 @@ export class K8sActionComponent{
       pageName = 'k8s-cluster';
       title = 'PAGE.K8S.K8SCLUSTERDETAILS';
     }
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     this.modalService.open(ShowInfoComponent, { backdrop: 'static' }).componentInstance.params = {
       id: this.instanceID,
       page: pageName,

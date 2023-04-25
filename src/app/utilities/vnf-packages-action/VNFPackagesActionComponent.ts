@@ -86,6 +86,7 @@ export class VNFPackagesActionComponent {
   private cd: ChangeDetectorRef;
 
   /** Set timeout @private */
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   private timeOut: number = 1000;
 
   constructor(injector: Injector) {
@@ -113,12 +114,15 @@ export class VNFPackagesActionComponent {
 
   /** Delete VNF packages @public */
   public deleteVNFPackage(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(DeleteComponent, { backdrop: 'static' });
     modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /** Set instance for NSD Edit @public */
@@ -132,6 +136,7 @@ export class VNFPackagesActionComponent {
 
   /** list out all the file content of a descriptors @public */
   public showContent(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     this.modalService.open(ShowContentComponent, { backdrop: 'static' }).componentInstance.params = { id: this.vnfID, page: 'vnfd' };
   }
 
@@ -164,7 +169,9 @@ export class VNFPackagesActionComponent {
 
   /** Compose VNF Packages @public */
   public composeVNFPackages(): void {
-    this.router.navigate(['/packages/vnf/compose/', this.vnfID]).catch();
+    this.router.navigate(['/packages/vnf/compose/', this.vnfID]).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /** Change the detaction @public */
@@ -176,12 +183,15 @@ export class VNFPackagesActionComponent {
 
   /** Clone NS Packages @public */
   public cloneVNFPackage(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const cloneModal: NgbModalRef = this.modalService.open(ClonePackageComponent, { backdrop: 'static' });
     cloneModal.componentInstance.params = { id: this.vnfID, page: 'vnfd', name: this.vnfName };
     cloneModal.result.then((result: MODALCLOSERESPONSEDATA) => {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 }

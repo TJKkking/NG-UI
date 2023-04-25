@@ -180,12 +180,15 @@ export class K8sClusterComponent implements OnInit, OnDestroy {
 
   /** Compose new K8s Cluster Accounts @public */
   public addK8sCluster(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(K8sAddClusterComponent, { backdrop: 'static' });
     modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /**
@@ -232,5 +235,4 @@ export class K8sClusterComponent implements OnInit, OnDestroy {
       this.isLoadingResults = false;
     });
   }
-
 }

@@ -61,12 +61,15 @@ export class RolesActionComponent {
 
   /** Delete Role click handler @public */
   public deleteRole(): void {
+    // eslint-disable-next-line security/detect-non-literal-fs-filename
     const modalRef: NgbModalRef = this.modalService.open(DeleteComponent, { backdrop: 'static' });
     modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
       if (result) {
         this.sharedService.callData();
       }
-    }).catch();
+    }).catch((): void => {
+      // Catch Navigation Error
+  });
   }
 
   /** Edit Role click handler @public */
@@ -75,5 +78,4 @@ export class RolesActionComponent {
       // Catch Navigation Error
     });
   }
-
 }

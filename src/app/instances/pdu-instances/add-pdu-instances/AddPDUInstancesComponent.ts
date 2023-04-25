@@ -145,13 +145,11 @@ export class AddPDUInstancesComponent implements OnInit {
 
     /** Handle FormArray Controls @public */
     public getControls(): AbstractControl[] {
-        // tslint:disable-next-line:no-backbone-get-set-outside-model
         return (this.pduInstancesForm.get('interfaces') as FormArray).controls;
     }
 
     /** Push all primitive params on user's action @public */
     public createInterfaces(): void {
-        // tslint:disable-next-line:no-backbone-get-set-outside-model
         this.pduInterfaces = this.pduInstancesForm.get('interfaces') as FormArray;
         this.pduInterfaces.push(this.interfacesBuilder());
     }

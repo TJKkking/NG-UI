@@ -160,7 +160,9 @@ export class VNFInstancesComponent implements OnInit {
             }
             this.dataSource.load(this.vnfInstanceData).then((data: {}) => {
                 this.isLoadingResults = false;
-            }).catch();
+            }).catch((): void => {
+                // Catch Navigation Error
+            });
         }, (error: ERRORDATA) => {
             this.restService.handleError(error, 'get');
             this.isLoadingResults = false;

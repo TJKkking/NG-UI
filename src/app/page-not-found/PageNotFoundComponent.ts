@@ -38,5 +38,4 @@ export class PageNotFoundComponent implements OnInit {
     public ngOnInit(): void {
         //donothing
     }
-
 }

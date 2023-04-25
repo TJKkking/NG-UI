@@ -20,7 +20,6 @@
  * @file  Model for Operational view JUJU information.
  */
 
-// tslint:disable: completed-docs
 
 /** Interface for the VCASTATUS */
 export interface VCASTATUS {

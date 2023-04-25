@@ -18,6 +18,7 @@
 /**
  * @file NS Instance Primitive Component
  */
+import { isNullOrUndefined } from 'util';
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -30,7 +31,6 @@ import { KDUPRIMITIVELEVEL, NSData, VDUPRIMITIVELEVEL, VNFPROFILE } from 'NSDMod
 import { NSPrimitiveParams } from 'NSInstanceModel';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 import { CONFIGPRIMITIVE, DF, VDUCONFIG, VDUPROFILE, VNFCONFIG, VNFD } from 'VNFDModel';
 import { VNFInstanceDetails } from 'VNFInstanceModel';
 
@@ -217,19 +217,19 @@ export class NSPrimitiveComponent implements OnInit {
             primitive_params: this.objectPrimitiveParams
         };
         if (this.primitiveType === 'VNF_Primitive') {
-            // tslint:disable-next-line: no-string-literal
+            // eslint-disable-next-line @typescript-eslint/dot-notation
             primitiveParamsPayLoads['member_vnf_index'] = this.primitiveForm.value.member_vnf_index;
         }
         if (this.primitiveType === 'VDU_Primitive') {
-            // tslint:disable-next-line: no-string-literal
+            // eslint-disable-next-line @typescript-eslint/dot-notation
             primitiveParamsPayLoads['member_vnf_index'] = this.primitiveForm.value.member_vnf_index;
-            // tslint:disable-next-line: no-string-literal
+            // eslint-disable-next-line @typescript-eslint/dot-notation
             primitiveParamsPayLoads['vdu_id'] = this.primitiveForm.value.vdu_id;
         }
         if (this.primitiveType === 'KDU_Primitive') {
-            // tslint:disable-next-line: no-string-literal
+            // eslint-disable-next-line @typescript-eslint/dot-notation
             primitiveParamsPayLoads['member_vnf_index'] = this.primitiveForm.value.member_vnf_index;
-            // tslint:disable-next-line: no-string-literal
+            // eslint-disable-next-line @typescript-eslint/dot-notation
             primitiveParamsPayLoads['kdu_name'] = this.primitiveForm.value.kdu_name;
         }
         const apiURLHeader: APIURLHEADER = {
@@ -439,6 +439,7 @@ export class NSPrimitiveComponent implements OnInit {
     }
     /** Used to get the AbstractControl of controlName passed @private */
     private getFormControl(controlName: string): AbstractControl {
+        // eslint-disable-next-line security/detect-object-injection
         return this.primitiveForm.controls[controlName];
     }
 }

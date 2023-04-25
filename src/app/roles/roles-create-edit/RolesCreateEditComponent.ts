@@ -18,6 +18,7 @@
 /**
  * @file Roles Create and Edit Component
  */
+import { isNullOrUndefined } from 'util';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -30,7 +31,6 @@ import * as jsonpath from 'jsonpath';
 import { RestService } from 'RestService';
 import { Permission, PermissionGroup, RoleConfig, RoleData } from 'RolesModel';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 
 /**
  * Creating component
@@ -191,7 +191,9 @@ export class RolesCreateEditComponent implements OnInit {
     };
     this.restService.postResource(apiURLHeader, postData).subscribe(() => {
       this.notifierService.notify('success', this.translateService.instant('PAGE.ROLES.CREATEDSUCCESSFULLY'));
-      this.router.navigate(['/roles/details']).catch();
+      this.router.navigate(['/roles/details']).catch((): void => {
+        // Catch Navigation Error
+    });
     }, (error: ERRORDATA) => {
       this.isLoadingResults = false;
       this.restService.handleError(error, 'post');
@@ -229,7 +231,9 @@ export class RolesCreateEditComponent implements OnInit {
     };
     this.restService.patchResource(apiURLHeader, postData).subscribe(() => {
       this.notifierService.notify('success', this.translateService.instant('PAGE.ROLES.UPDATEDSUCCESSFULLY'));
-      this.router.navigate(['/roles/details']).catch();
+      this.router.navigate(['/roles/details']).catch((): void => {
+        // Catch Navigation Error
+    });
     }, (error: ERRORDATA) => {
       this.isLoadingResults = false;
       this.restService.handleError(error, 'patch');
@@ -254,7 +258,6 @@ export class RolesCreateEditComponent implements OnInit {
       }
       this.viewMode = 'text';
     }
-
   }
 
   /** Generate role permission post data @private */
@@ -282,6 +285,7 @@ export class RolesCreateEditComponent implements OnInit {
         this.roleForm.value.permissions = this.roleForm.value.permissions.replace(/'/g, '"');
         const rolePermission: {} = JSON.parse(this.roleForm.value.permissions);
         for (const key of Object.keys(rolePermission)) {
+          // eslint-disable-next-line security/detect-object-injection
           if (typeof rolePermission[key] !== 'boolean') {
             this.notifierService.notify('error', this.translateService.instant('PAGE.ROLES.ROLEKEYERROR', { roleKey: key }));
             return false;
@@ -294,7 +298,6 @@ export class RolesCreateEditComponent implements OnInit {
 
   /** Get role data from NBI based on ID and apply filter @private */
   private getRoleData(): void {
-    // tslint:disable-next-line: no-backbone-get-set-outside-model
     this.roleRef = this.activatedRoute.snapshot.paramMap.get('id');
     if (!isNullOrUndefined(this.roleRef)) {
       this.restService.getResource(environment.ROLES_URL + '/' + this.roleRef).subscribe((data: RoleData) => {
@@ -302,7 +305,9 @@ export class RolesCreateEditComponent implements OnInit {
         this.filterRoleData(data.permissions);
         this.isLoadingResults = false;
       }, (error: ERRORDATA) => {
-        this.router.navigate(['/roles/details']).catch();
+        this.router.navigate(['/roles/details']).catch((): void => {
+          // Catch Navigation Error
+      });
         this.restService.handleError(error, 'get');
       });
     }
@@ -313,6 +318,7 @@ export class RolesCreateEditComponent implements OnInit {
     Object.keys(permissions).forEach((permission: string) => {
       jsonpath.apply(this.rolePermissions, '$..permissions[?(@.operation == "' + permission + '")]', (response: Permission) => {
         if (response.operation === permission) {
+          // eslint-disable-next-line security/detect-object-injection
           response.value = permissions[permission];
         }
         return response;
@@ -331,5 +337,4 @@ export class RolesCreateEditComponent implements OnInit {
       });
     });
   }
-
 }

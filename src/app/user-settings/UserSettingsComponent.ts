@@ -83,10 +83,8 @@ export class UserSettingsComponent implements OnInit {
         });
         const setLanguage: string = localStorage.getItem('languageCode');
         if (setLanguage !== null && this.validateLanguageList(setLanguage)) {
-            // tslint:disable-next-line:no-backbone-get-set-outside-model
             this.usersettingsForm.get('selectedLanguage').setValue(setLanguage);
         } else {
-            // tslint:disable-next-line:no-backbone-get-set-outside-model
             this.usersettingsForm.get('selectedLanguage').setValue('en');
         }
     }

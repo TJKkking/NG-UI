@@ -18,6 +18,7 @@
 /**
  * @file Instantiate NS Modal Component.
  */
+import { isNullOrUndefined } from 'util';
 import { Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -31,7 +32,6 @@ import * as jsyaml from 'js-yaml';
 import { NSCREATEPARAMS, NSData, NSDDetails } from 'NSDModel';
 import { RestService } from 'RestService';
 import { SharedService } from 'SharedService';
-import { isNullOrUndefined } from 'util';
 import { VimAccountDetails } from 'VimAccountModel';
 
 /**
@@ -186,7 +186,6 @@ export class InstantiateNsComponent implements OnInit {
       delete this.instantiateForm.value.ssh_keys;
     } else {
       this.copySSHKey = JSON.parse(JSON.stringify(this.instantiateForm.value.ssh_keys));
-      // tslint:disable-next-line: no-backbone-get-set-outside-model
       this.instantiateForm.get('ssh_keys').setValue([this.copySSHKey]);
     }
     if (isNullOrUndefined(this.instantiateForm.value.config) || this.instantiateForm.value.config === '') {
@@ -196,12 +195,14 @@ export class InstantiateNsComponent implements OnInit {
       if (validJSON) {
         this.instantiateForm.value.config = JSON.parse(this.instantiateForm.value.config);
         Object.keys(this.instantiateForm.value.config).forEach((item: string) => {
+          // eslint-disable-next-line security/detect-object-injection
           this.instantiateForm.value[item] = this.instantiateForm.value.config[item];
         });
         delete this.instantiateForm.value.config;
       } else {
         const getConfigJson: string = jsyaml.load(this.instantiateForm.value.config, { json: true });
         Object.keys(getConfigJson).forEach((item: string) => {
+          // eslint-disable-next-line security/detect-object-injection
           this.instantiateForm.value[item] = getConfigJson[item];
         });
         delete this.instantiateForm.value.config;
@@ -215,12 +216,13 @@ export class InstantiateNsComponent implements OnInit {
       this.activeModal.close(modalData);
       this.notifierService.notify('success', this.instantiateForm.value.nsName +
         this.translateService.instant('PAGE.NSINSTANCE.CREATEDSUCCESSFULLY'));
-      this.router.navigate(['/instances/ns']).catch();
+      this.router.navigate(['/instances/ns']).catch((): void => {
+        // Catch Navigation Error
+    });
     }, (error: ERRORDATA) => {
       this.isLoadingResults = false;
       this.restService.handleError(error, 'post');
       if (!isNullOrUndefined(this.copySSHKey)) {
-        // tslint:disable-next-line: no-backbone-get-set-outside-model
         this.instantiateForm.get('ssh_keys').setValue(this.copySSHKey);
       }
     });
@@ -231,7 +233,6 @@ export class InstantiateNsComponent implements OnInit {
     if (files && files.length === 1) {
       this.sharedService.getFileString(files, 'pub').then((fileContent: string): void => {
         const getSSHJson: string = jsyaml.load(fileContent, { json: true });
-        // tslint:disable-next-line: no-backbone-get-set-outside-model
         this.instantiateForm.get('ssh_keys').setValue(getSSHJson);
       }).catch((err: string): void => {
         if (err === 'typeError') {
@@ -255,7 +256,6 @@ export class InstantiateNsComponent implements OnInit {
       const fileFormat: string = this.sharedService.fetchFileExtension(files).toLocaleLowerCase();
       if (fileFormat === 'yaml' || fileFormat === 'yml') {
         this.sharedService.getFileString(files, 'yaml').then((fileContent: string): void => {
-          // tslint:disable-next-line: no-backbone-get-set-outside-model
           this.instantiateForm.get('config').setValue(fileContent);
         }).catch((err: string): void => {
           if (err === 'typeError') {
@@ -269,7 +269,6 @@ export class InstantiateNsComponent implements OnInit {
       } else if (fileFormat === 'json') {
         this.sharedService.getFileString(files, 'json').then((fileContent: string): void => {
           const getConfigJson: string = jsyaml.load(fileContent, { json: true });
-          // tslint:disable-next-line: no-backbone-get-set-outside-model
           this.instantiateForm.get('config').setValue(JSON.stringify(getConfigJson));
         }).catch((err: string): void => {
           if (err === 'typeError') {

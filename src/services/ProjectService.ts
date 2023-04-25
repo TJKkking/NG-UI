@@ -108,6 +108,7 @@ export class ProjectService {
     /** Toggle projects on selection @public */
     public switchProjectModal(list: ProjectData): void {
         const username: string = localStorage.getItem('username');
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         this.modalService.open(SwitchProjectComponent, { backdrop: 'static' })
             .componentInstance.params = { projectID: list.project, username };
     }

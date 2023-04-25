@@ -138,23 +138,14 @@ const routes: Routes = [
         NetsliceInstancesComponent, HistoryOperationsComponent, NSTopologyComponent, NSPrimitiveComponent, OperationalViewComponent,
         OperationalViewAppConfigsComponent, OperationalViewAppActionsComponent, OperationalViewAppExecutedActionsComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    providers: [DataService],
-    entryComponents: [
-        NSPrimitiveComponent,
-        AddPDUInstancesComponent,
-        OperationalViewAppConfigsComponent,
-        OperationalViewAppActionsComponent,
-        OperationalViewAppExecutedActionsComponent
-    ]
+    providers: [DataService]
 })
 /** Exporting a class @exports InstancesModule */
 export class InstancesModule {
-    /** Resolves state-less class */
-    private instancesModule: string;
     /**
      * Lifecyle Hooks the trigger before component is instantiate
      */
-    public ngOnInit(): void {
-        this.instancesModule = '';
-    }
+     constructor() {
+        //Empty
+      }
 }

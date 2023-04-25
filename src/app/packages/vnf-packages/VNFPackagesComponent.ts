@@ -238,6 +238,7 @@ export class VNFPackagesComponent implements OnInit {
     }
     /** Handle compose new ns package method  @public */
     public composeVNFPackage(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         this.modalService.open(ComposePackages, { backdrop: 'static' }).componentInstance.params = { page: 'vnf-package' };
     }
 

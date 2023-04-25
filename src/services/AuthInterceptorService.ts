@@ -66,11 +66,11 @@ export class AuthInterceptorService implements HttpInterceptor {
      * @param next
      */
     public intercept(req: HttpRequest<{}>, next: HttpHandler): Observable<HttpSentEvent |
-        // tslint:disable-next-line:no-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         HttpHeaderResponse | HttpProgressEvent | HttpResponse<{}> | HttpUserEvent<any> | any> {
         const idToken: string = localStorage.getItem('id_token');
         const excludedUrl: string[] = ['osm/admin/v1/tokens', 'assets/i18n/', 'osm/version'];
-        if (excludedUrl.some((x: string): boolean => { return req.url.includes(x); })) { return next.handle(req); }
+        if (excludedUrl.some((x: string): boolean => req.url.includes(x))) { return next.handle(req); }
         if (idToken.length > 0) {
             this.setHeader(req, idToken);
             return next.handle(this.clonedReq).pipe(
@@ -85,7 +85,7 @@ export class AuthInterceptorService implements HttpInterceptor {
     }
 
     /** Set header options @public */
-    // tslint:disable-next-line:no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public setHeader(req: HttpRequest<any>, idToken: string): void {
         if (req.body !== null && req.body.byteLength !== null) {
             this.clonedReq = req.clone({

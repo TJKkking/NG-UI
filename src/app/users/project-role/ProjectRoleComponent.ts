@@ -141,7 +141,6 @@ export class ProjectRoleComponent implements OnInit {
 
     /** Handle FormArray Controls @public */
     public getControls(): AbstractControl[] {
-        // tslint:disable-next-line:no-backbone-get-set-outside-model
         return (this.projectRoleForm.get('project_role_mappings') as FormArray).controls;
     }
 
@@ -185,7 +184,6 @@ export class ProjectRoleComponent implements OnInit {
     /** Set all roles and project values to the form @public */
     public loadMapping(): void {
         this.userDetails.project_role_mappings.forEach((data: ProjectRoleMappings): void => {
-            // tslint:disable-next-line:no-backbone-get-set-outside-model
             this.projectRoleFormArray = this.projectRoleForm.get('project_role_mappings') as FormArray;
             this.projectRoleFormArray.push(this.projectRoleParamsBuilder);
         });
@@ -229,7 +227,6 @@ export class ProjectRoleComponent implements OnInit {
 
     /** Add extra mapping and set empty project and roles @public */
     public addMapping(): void {
-        // tslint:disable-next-line:no-backbone-get-set-outside-model
         this.projectRoleFormArray = this.projectRoleForm.get('project_role_mappings') as FormArray;
         this.projectRoleFormArray.push(this.projectRoleParamsBuilder);
     }
