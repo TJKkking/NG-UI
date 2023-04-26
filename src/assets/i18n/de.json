@@ -220,7 +220,17 @@
             "USERNAMEVALIDMESSAGE": "Ein Benutzername wird benötigt",
             "SIGNINMSG": "Melden Sie sich an, um Ihre Sitzung zu starten",
             "PASSWORDMINLENGTHVALIDMESSAGE": "Das Passwort muss aus 8 Zeichen bestehen und mindestens ein Groß-, Klein-, Ziffern- und Sonderzeichen enthalten",
-            "USERNAMEMINLENGTHVALIDMESSAGE": "Der Benutzername muss aus mindestens 5 Zeichen bestehen"
+            "USERNAMEMINLENGTHVALIDMESSAGE": "Der Benutzername muss aus mindestens 5 Zeichen bestehen",
+            "LASTACCESS": "Zeit des letzten Zugriffs",
+            "FAILED": "Fehlgeschlagene Anmeldeversuche",
+            "PASSWORDEXPIRE": "Passwort läuft ab in",
+            "ACCOUNTEXPIRE": "Konto läuft ab in",
+            "PASSWORDEXPIRETODAY": "Passwort läuft heute ab",
+            "ACCOUNTEXPIRETODAY": "Konto läuft heute ab",
+            "LOGINHISTORY": "Anmeldeverlauf",
+            "DAYS": "Tage",
+            "PASSWORDEXPIRETOMORROW": "Passwort läuft morgen ab",
+            "ACCOUNTEXPIRETOMORROW": "Konto läuft morgen ab"
         },
         "INSTANCEINSTANTIATE": {
             "NEWINSTANCE": "Neue Instanz",
@@ -325,7 +335,12 @@
             "EDITPROJECTROLEMAPPING": "Projektrollenzuordnung bearbeiten",
             "ADDMAPPINGS": "Mappings hinzufügen",
             "EDITPROJECTROLEERROR": "Bitte geben Sie mindestens eine Projektrollenzuordnung an, um fortzufahren",
-            "CHANGEPASSWORD": "Passwort wurde geändert. Melden Sie sich an, um Ihre Sitzung zu starten"
+            "CHANGEPASSWORD": "Passwort wurde geändert. Melden Sie sich an, um Ihre Sitzung zu starten",
+            "UNLOCK": "Benutzer entsperren",
+            "RENEW": "Benutzer erneuern",
+            "CHANGEDSUCCESSFULLY": "Das Passwort wurde erfolgreich geändert",
+            "UNLOCKUSER": "Der Benutzer wurde erfolgreich entsperrt",
+            "RENEWUSER": "Der Benutzer wurde erfolgreich erneuert"
         },
         "TOPOLOGY": {
             "SELECTELEMENT": "Element auswählen",

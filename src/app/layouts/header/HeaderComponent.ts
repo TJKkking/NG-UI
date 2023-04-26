@@ -20,8 +20,11 @@
  * @file Header Component
  */
 import { Component, Injector, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
+import { AddEditUserComponent } from 'AddEditUserComponent';
 import { AuthenticationService } from 'AuthenticationService';
+import { MODALCLOSERESPONSEDATA } from 'CommonModel';
 import { environment } from 'environment';
 import { ProjectService } from 'ProjectService';
 import { Observable } from 'rxjs';
@@ -60,11 +63,17 @@ export class HeaderComponent implements OnInit {
     /** Version holds packages version @public */
     public PACKAGEVERSION: string;
 
+    /** To check the role of the user is systemadmin or not @public */
+    public isSystemAdmin: boolean;
+
     /** Contains all methods related to shared @public */
     public sharedService: SharedService;
 
     /** Property contains to show new version tag shared @public */
     public toShowNewTag: Boolean = false;
+
+    /** handle translate @public */
+    public translateService: TranslateService;
 
     /** Utilizes auth service for any auth operations @private */
     private authService: AuthenticationService;
@@ -81,11 +90,13 @@ export class HeaderComponent implements OnInit {
         this.modalService = this.injector.get(NgbModal);
         this.projectService = this.injector.get(ProjectService);
         this.sharedService = this.injector.get(SharedService);
+        this.translateService = this.injector.get(TranslateService);
     }
 
     /** Lifecyle Hooks the trigger before component is instantiate @public */
     public ngOnInit(): void {
         this.isAdmin = (localStorage.getItem('isAdmin') === 'true') ? true : false;
+        this.isSystemAdmin = localStorage.getItem('admin_show') === 'true' ? true : false;
         this.selectedProject = this.authService.ProjectName;
         this.authService.ProjectName.subscribe((projectNameFinal: string): void => {
             this.getSelectedProject = projectNameFinal;
@@ -122,5 +133,21 @@ export class HeaderComponent implements OnInit {
     public userSettings(): void {
         // eslint-disable-next-line security/detect-non-literal-fs-filename
         this.modalService.open(UserSettingsComponent, { backdrop: 'static' });
+    }
+
+    /** ChangePassword Function @public */
+    public changePassword(): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        const modalRef: NgbModalRef = this.modalService.open(AddEditUserComponent, { backdrop: 'static' });
+        modalRef.componentInstance.userID = localStorage.getItem('user_id');
+        modalRef.componentInstance.userTitle = this.translateService.instant('PAGE.USERS.EDITCREDENTIALS');
+        modalRef.componentInstance.userType = 'changePassword';
+        modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
+            if (result) {
+                this.sharedService.callData();
+            }
+        }).catch((): void => {
+            // Catch Navigation Error
+        });
     }
 }

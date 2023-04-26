@@ -28,6 +28,7 @@ Author: SANDHYA JS (sandhya.j@tataelxsi.co.in)
 </div>
 <div class="modal-footer">
     <button (click)="closeModal('close')" class="btn btn-danger">{{'CANCEL' | translate }}</button>
-    <button (click)="closeModal('done')" class="btn btn-success">{{submitMessage}}</button>
+    <button *ngIf="!action" (click)="closeModal('done')" class="btn btn-success">{{submitMessage}}</button>
+    <button *ngIf="action" (click)="onSubmit()" class="btn btn-success">{{submitMessage}}</button>
 </div>
 <app-loader [waitingMessage]="message" *ngIf="isLoad"></app-loader>

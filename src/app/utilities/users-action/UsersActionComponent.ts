@@ -18,6 +18,7 @@
 /**
  * @file Users Action Component
  */
+import { isNullOrUndefined } from 'util';
 import { Component, Injector } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
@@ -27,6 +28,7 @@ import { DeleteComponent } from 'DeleteComponent';
 import { ProjectRoleComponent } from 'ProjectRoleComponent';
 import { SharedService } from 'SharedService';
 import { UserData } from 'UserModel';
+import { WarningComponent } from 'WarningComponent';
 /**
  * Creating component
  * @Component takes UsersActionComponent.html as template url
@@ -46,6 +48,15 @@ export class UsersActionComponent {
     /** handle translate @public */
     public translateService: TranslateService;
 
+    /** Admin Visibility Check @public */
+    public isAdminShow: boolean;
+
+    /** User Visibility Check @public */
+    public isUserShow: boolean;
+
+    /** User Status Check @public */
+    public isUserStatus: string;
+
     /** Instance of the modal service @private */
     private modalService: NgbModal;
 
@@ -57,6 +68,17 @@ export class UsersActionComponent {
         this.modalService = this.injector.get(NgbModal);
         this.sharedService = this.injector.get(SharedService);
         this.translateService = this.injector.get(TranslateService);
+    }
+
+    /**
+     * Lifecyle Hooks the trigger before component is instantiate
+     */
+    public ngOnInit(): void {
+        this.isAdminShow = localStorage.getItem('admin_show') === 'true' ? true : false;
+        this.isUserShow = localStorage.getItem('user_show') === 'true' ? true : false;
+        if (!isNullOrUndefined(this.value.user_status)) {
+            this.isUserStatus = this.value.user_status;
+        }
     }
 
     /** Delete User Account @public */
@@ -100,6 +122,36 @@ export class UsersActionComponent {
         modalRef.componentInstance.userID = this.value.identifier;
         modalRef.componentInstance.userTitle = this.translateService.instant('PAGE.USERS.EDITPROJECTROLEMAPPING');
         modalRef.result.then((result: MODALCLOSERESPONSEDATA) => {
+            if (result) {
+                this.sharedService.callData();
+            }
+        }).catch((): void => {
+            // Catch Navigation Error
+        });
+    }
+
+    /** To Unlock or Renew User @public */
+    public unlockRenewUser(editType: string): void {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
+        const modalRef: NgbModalRef = this.modalService.open(WarningComponent, { backdrop: 'static' });
+        localStorage.setItem('renew', 'true');
+        const id: string = localStorage.getItem('user_id');
+        if (editType === 'unlock') {
+            modalRef.componentInstance.heading = this.translateService.instant('Unlock User');
+            modalRef.componentInstance.confirmationMessage = this.translateService.instant('Are you sure want to unlock this user');
+            modalRef.componentInstance.submitMessage = this.translateService.instant('Unlock');
+            modalRef.componentInstance.action = Boolean(true);
+            modalRef.componentInstance.editType = editType;
+            modalRef.componentInstance.id = this.value.identifier;
+        } else {
+            modalRef.componentInstance.heading = this.translateService.instant('Renew User');
+            modalRef.componentInstance.confirmationMessage = this.translateService.instant('Are you sure want to renew this user');
+            modalRef.componentInstance.submitMessage = this.translateService.instant('Renew');
+            modalRef.componentInstance.action = Boolean(true);
+            modalRef.componentInstance.editType = editType;
+            modalRef.componentInstance.id = this.value.identifier;
+        }
+        modalRef.result.then((result: MODALCLOSERESPONSEDATA): void => {
             if (result) {
                 this.sharedService.callData();
             }

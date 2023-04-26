@@ -53,6 +53,7 @@ import { LoginComponent } from 'LoginComponent';
 import { NetsliceInstancesActionComponent } from 'NetsliceInstancesActionComponent';
 import { NetslicePackagesActionComponent } from 'NetslicePackagesAction';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { ToastrModule } from 'ngx-toastr';
 import { NSInstancesActionComponent } from 'NSInstancesActionComponent';
 import { NsPackagesActionComponent } from 'NsPackagesAction';
 import { NsUpdateComponent } from 'NsUpdateComponent';
@@ -159,7 +160,11 @@ const customNotifierOptions: NotifierOptions = {
         NgIdleKeepaliveModule.forRoot(),
         LoaderModule,
         SharedModule,
-        ChangePasswordModule
+        ChangePasswordModule,
+        ToastrModule.forRoot({
+            timeOut: 500,
+            positionClass: 'toast-bottom-right'
+        })
     ],
     providers: [
         {

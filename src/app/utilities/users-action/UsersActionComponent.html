@@ -21,20 +21,32 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
             {{'ACTION' | translate}}
         </button>
         <div class="dropdown-menu list-action-dropdown" ngbDropdownMenu>
-            <button type="button" class="btn btn-primary dropdown-item" (click)="editUserModal('editPassword')" placement="left" container="body"
-                ngbTooltip="{{'PAGE.USERS.EDITCREDENTIALS' | translate}}">
+            <button *ngIf="isAdminShow" type="button" class="btn btn-primary dropdown-item" (click)="editUserModal('editPassword')"
+                placement="left" container="body" ngbTooltip="{{'PAGE.USERS.EDITCREDENTIALS' | translate}}">
                 <i class="fa fa-edit icons"></i> {{'PAGE.USERS.EDITCREDENTIALS' | translate}}
             </button>
-            <button type="button" class="btn btn-primary dropdown-item" (click)="editUserModal('editUserName')" placement="left" container="body"
-                ngbTooltip="{{'PAGE.USERS.EDITUSERNAME' | translate}}">
+            <button *ngIf="!isAdminShow && !isUserShow" type="button" class="btn btn-primary dropdown-item" (click)="editUserModal('editPassword')"
+            placement="left" container="body" ngbTooltip="{{'PAGE.USERS.EDITCREDENTIALS' | translate}}">
+            <i class="fa fa-edit icons"></i> {{'PAGE.USERS.EDITCREDENTIALS' | translate}}
+           </button>
+            <button type="button" class="btn btn-primary dropdown-item" (click)="editUserModal('editUserName')"
+                placement="left" container="body" ngbTooltip="{{'PAGE.USERS.EDITUSERNAME' | translate}}">
                 <i class="fas fa-user-edit"></i> {{'PAGE.USERS.EDITUSERNAME' | translate}}
             </button>
-            <button type="button" class="btn btn-primary dropdown-item" (click)="projectRolesModal()" placement="left" container="body"
-                ngbTooltip="{{'PAGE.USERS.PROJECTSROLES' | translate}}">
+            <button type="button" class="btn btn-primary dropdown-item" (click)="projectRolesModal()" placement="left"
+                container="body" ngbTooltip="{{'PAGE.USERS.PROJECTSROLES' | translate}}">
                 <i class="fas fa-user-check"></i> {{'PAGE.USERS.PROJECTSROLES' | translate}}
             </button>
-            <button type="button" class="btn btn-primary dropdown-item" (click)="deleteUser()" placement="left" container="body"
-                ngbTooltip="{{'DELETE' | translate}}">
+            <button [hidden] ="!isAdminShow || isUserStatus !== 'expired'" type="button" class="btn btn-primary dropdown-item" (click)="unlockRenewUser('renew')" placement="left"
+                container="body" ngbTooltip="{{'PAGE.USERS.RENEW' | translate}}">
+                <i class="fas fa-user-clock"></i> {{'PAGE.USERS.RENEW' | translate}}
+            </button>
+            <button [hidden] ="!isAdminShow || isUserStatus !== 'locked'" type="button" class="btn btn-primary dropdown-item" (click)="unlockRenewUser('unlock')" placement="left"
+                container="body" ngbTooltip="{{'PAGE.USERS.UNLOCK' | translate}}">
+                <i class="fas fa-unlock"></i> {{'PAGE.USERS.UNLOCK' | translate}}
+            </button>
+            <button type="button" class="btn btn-primary dropdown-item" (click)="deleteUser()" placement="left"
+                container="body" ngbTooltip="{{'DELETE' | translate}}">
                 <i class="far fa-trash-alt icons" title="delete"></i> {{'DELETE' | translate}}
             </button>
         </div>

@@ -220,7 +220,17 @@
             "USERNAMEVALIDMESSAGE": "Username is required",
             "SIGNINMSG": "Sign in to start your session",
             "PASSWORDMINLENGTHVALIDMESSAGE": "Password must be 8 characters and contains at least one upper case, lower case, numeric & special character",
-            "USERNAMEMINLENGTHVALIDMESSAGE": "Username must be at least 5 characters"
+            "USERNAMEMINLENGTHVALIDMESSAGE": "Username must be at least 5 characters",
+            "LASTACCESS": "Last Access Time",
+            "FAILED": "Failed Login Attempts",
+            "PASSWORDEXPIRE": "Password Expires in",
+            "ACCOUNTEXPIRE": "Account Expires in",
+            "PASSWORDEXPIRETODAY": "Password Expires Today",
+            "ACCOUNTEXPIRETODAY": "Account Expires Today",
+            "LOGINHISTORY": "Login History",
+            "DAYS": "days",
+            "PASSWORDEXPIRETOMORROW": "Password Expires Tomorrow",
+            "ACCOUNTEXPIRETOMORROW": "Account Expires Tomorrow"
         },
         "INSTANCEINSTANTIATE": {
             "NEWINSTANCE": "New Instance",
@@ -325,7 +335,12 @@
             "EDITPROJECTROLEMAPPING": "Edit Project Role Mapping",
             "ADDMAPPINGS": "Add Mappings",
             "EDITPROJECTROLEERROR": "Please provide at least one project role mapping to continue",
-            "CHANGEPASSWORD": "Password is changed, Sign in to start your session"
+            "CHANGEPASSWORD": "Password is changed, Sign in to start your session",
+            "UNLOCK": "Unlock User",
+            "RENEW": "Renew User",
+            "CHANGEDSUCCESSFULLY": "Password has been changed successfully",
+            "UNLOCKUSER": "User has been unlocked successfully",
+            "RENEWUSER": "User has been renewed successfully"
         },
         "TOPOLOGY": {
             "SELECTELEMENT": "Select Element",

@@ -154,3 +154,8 @@
     }
   }
 }
+::ng-deep #toast-container > div {
+  width: 400px;
+  @include background(null, $primary, null, null, null);
+  color: $white;
+}

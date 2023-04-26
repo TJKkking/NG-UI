@@ -28,6 +28,7 @@
         .dropdown-item{
             &.project-item{
                 @include flexbox(flex, space-between, row, null, center, null);
+                @include padding-value(10, 5, 10, 5);
             }
             &:active, &:hover, &.active{
                 @include background(null, $theme-bg-color, null, null, null);

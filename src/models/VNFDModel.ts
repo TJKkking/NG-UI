@@ -33,6 +33,17 @@ export interface ProjectModel {
     admin: boolean;
     message?: string;
     user_id?: string;
+    roles?: RolesData[];
+    last_login?: number;
+    login_count?: string;
+    user_show?: boolean;
+    admin_show?: boolean;
+}
+
+/** Interface for Roles */
+export interface RolesData {
+    name?: string;
+    id?: string;
 }
 
 /** Interface for ProjectDetails */

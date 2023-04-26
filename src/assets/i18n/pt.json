@@ -220,7 +220,17 @@
             "USERNAMEVALIDMESSAGE": "Nome de usuário é requerido",
             "SIGNINMSG": "Faça login para iniciar sua sessão",
             "PASSWORDMINLENGTHVALIDMESSAGE": "A senha deve ter 8 caracteres e conter pelo menos um caractere maiúsculo, minúsculo, numérico e especial",
-            "USERNAMEMINLENGTHVALIDMESSAGE": "O nome de usuário deve ter pelo menos 5 caracteres"
+            "USERNAMEMINLENGTHVALIDMESSAGE": "O nome de usuário deve ter pelo menos 5 caracteres",
+            "LASTACCESS": "Hora do último acesso",
+            "FAILED": "Tentativas de login com falha",
+            "PASSWORDEXPIRE": "A senha expira em",
+            "ACCOUNTEXPIRE": "Conta expira em",
+            "PASSWORDEXPIRETODAY": "A senha expira hoje",
+            "ACCOUNTEXPIRETODAY": "A conta expira hoje",
+            "LOGINHISTORY": "Histórico de login",
+            "DAYS": "dias",
+            "PASSWORDEXPIRETOMORROW": "A senha expira amanhã",
+            "ACCOUNTEXPIRETOMORROW": "A conta expira amanhã"
         },
         "INSTANCEINSTANTIATE": {
             "NEWINSTANCE": "Nova Instância",
@@ -325,7 +335,12 @@
             "EDITPROJECTROLEMAPPING": "Editar mapeamento de função do projeto",
             "ADDMAPPINGS": "Adicionar mapeamentos",
             "EDITPROJECTROLEERROR": "Forneça pelo menos um mapeamento de função do projeto para continuar",
-            "CHANGEPASSWORD": "A senha foi alterada, faça login para iniciar sua sessão"
+            "CHANGEPASSWORD": "A senha foi alterada, faça login para iniciar sua sessão",
+            "UNLOCK": "Desbloquear usuário",
+            "RENEW": "Renovar usuário",
+            "CHANGEDSUCCESSFULLY": "A senha foi alterada com sucesso",
+            "UNLOCKUSER": "O usuário foi desbloqueado com sucesso",
+            "RENEWUSER": "O usuário foi renovado com sucesso"
         },
         "TOPOLOGY": {
             "SELECTELEMENT": "Selecionar elemento",

@@ -18,8 +18,14 @@
 /**
  * @file WarningConfiguration Model
  */
+import { HttpHeaders } from '@angular/common/http';
 import { Component, Injector, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
+import { NotifierService } from 'angular-notifier';
+import { APIURLHEADER, ERRORDATA, MODALCLOSERESPONSEDATA, UNLOCKPARAMS } from 'CommonModel';
+import { environment } from 'environment';
+import { RestService } from 'RestService';
 /**
  * Creating component
  * @Component takes WarningComponent.html as template url
@@ -55,9 +61,36 @@ export class WarningComponent {
     /** Give the message for the loading @public */
     public message: string = 'PLEASEWAIT';
 
+    /** Contains id of the admin user @public */
+    @Input()
+    public id: string;
+
+    /** Holds which action to perform @public */
+    @Input()
+    public action: boolean = false;
+
+    /** Contains editType data @public */
+    @Input()
+    public editType: string;
+
+    /** handle translate @public */
+    public translateService: TranslateService;
+
+    /** Controls the header form @private */
+    private headers: HttpHeaders;
+
+    /** Instance of the rest service @private */
+    private restService: RestService;
+
+    /** Notifier service to popup notification @private */
+    private notifierService: NotifierService;
+
     constructor(injector: Injector) {
         this.injector = injector;
         this.activeModal = this.injector.get(NgbActiveModal);
+        this.restService = this.injector.get(RestService);
+        this.translateService = this.injector.get(TranslateService);
+        this.notifierService = this.injector.get(NotifierService);
     }
 
     /**
@@ -70,5 +103,42 @@ export class WarningComponent {
     /** Close the modal  @public */
     public closeModal(getMessage: string): void {
         this.activeModal.close({ message: getMessage });
+    }
+
+    /**
+     * called on submit @private onSubmit
+     */
+    public onSubmit(): void {
+        this.isLoad = true;
+        const modalData: MODALCLOSERESPONSEDATA = {
+            message: 'Done'
+        };
+        const id: string = localStorage.getItem('user_id');
+        const payLoad: UNLOCKPARAMS = {};
+        if (this.editType === 'unlock') {
+            payLoad.system_admin_id = id;
+            payLoad.unlock = true;
+        } else {
+            payLoad.system_admin_id = id;
+            payLoad.renew = true;
+        }
+        const apiURLHeader: APIURLHEADER = {
+            url: environment.USERS_URL + '/' + this.id,
+            httpOptions: { headers: this.headers }
+        };
+        this.restService.patchResource(apiURLHeader, payLoad).subscribe((result: {}): void => {
+            this.activeModal.close(modalData);
+            this.isLoad = false;
+            if (this.editType === 'unlock') {
+                this.notifierService.notify('success', this.translateService.instant('PAGE.USERS.UNLOCKUSER'));
+            } else {
+                this.notifierService.notify('success', this.translateService.instant('PAGE.USERS.RENEWUSER'));
+            }
+        }, (error: ERRORDATA): void => {
+            this.restService.handleError(error, 'put');
+            this.isLoad = false;
+        }, (): void => {
+            this.isLoad = false;
+        });
     }
 }

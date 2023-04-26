@@ -220,7 +220,17 @@
             "USERNAMEVALIDMESSAGE": "Se requiere nombre de usuario",
             "SIGNINMSG": "Inicie la sesión para comenzar",
             "PASSWORDMINLENGTHVALIDMESSAGE": "La contraseña debe tener 8 caracteres y al menos una mayúscula, una minúscula, un número y un carácter especial",
-            "USERNAMEMINLENGTHVALIDMESSAGE": "El nombre de usuario debe tener al menos 5 caracteres"
+            "USERNAMEMINLENGTHVALIDMESSAGE": "El nombre de usuario debe tener al menos 5 caracteres",
+            "LASTACCESS": "Última hora de acceso",
+            "FAILED": "Intentos de inicio de sesión fallidos",
+            "PASSWORDEXPIRE": "La contraseña caduca en",
+            "ACCOUNTEXPIRE": "La cuenta caduca en",
+            "PASSWORDEXPIRETODAY": "La contraseña caduca hoy",
+            "ACCOUNTEXPIRETODAY": "La cuenta vence hoy",
+            "LOGINHISTORY": "Historial de inicio de sesión",
+            "DAYS": "días",
+            "PASSWORDEXPIRETOMORROW": "La contraseña caduca mañana",
+            "ACCOUNTEXPIRETOMORROW": "La cuenta vence mañana"
         },
         "INSTANCEINSTANTIATE": {
             "NEWINSTANCE": "Nueva instancia",
@@ -325,7 +335,12 @@
             "EDITPROJECTROLEMAPPING": "Editar asignación de roles de proyecto",
             "ADDMAPPINGS": "Agregar asignaciones",
             "EDITPROJECTROLEERROR": "Proporcione al menos un mapeo de roles del proyecto para continuar",
-            "CHANGEPASSWORD": "Se cambió la contraseña, inicie sesión para iniciar su sesión"
+            "CHANGEPASSWORD": "Se cambió la contraseña, inicie sesión para iniciar su sesión",
+            "UNLOCK": "Desbloquear usuario",
+            "RENEW": "Renovar usuario",
+            "CHANGEDSUCCESSFULLY": "La contraseña ha sido cambiada con éxito",
+            "UNLOCKUSER": "El usuario ha sido desbloqueado con éxito",
+            "RENEWUSER": "El usuario ha sido renovado con éxito"
         },
         "TOPOLOGY": {
             "SELECTELEMENT": "Seleccionar elemento",

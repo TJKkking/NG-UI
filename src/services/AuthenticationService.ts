@@ -28,6 +28,7 @@ import { APIURLHEADER, ERRORDATA } from 'CommonModel';
 import { environment } from 'environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { SharedService } from 'SharedService';
 import { ProjectModel } from '../models/VNFDModel';
 import { RestService } from './RestService';
 
@@ -76,6 +77,9 @@ export class AuthenticationService {
     /** handle idle time out service @private */
     private idle: Idle;
 
+    /** Contains all methods related to shared @private */
+    private sharedService: SharedService;
+
     /** create the instance of the component */
     constructor(injector: Injector) {
         this.injector = injector;
@@ -83,6 +87,7 @@ export class AuthenticationService {
         this.restService = this.injector.get(RestService);
         this.modalService = this.injector.get(NgbModal);
         this.idle = this.injector.get(Idle);
+        this.sharedService = this.injector.get(SharedService);
         if (localStorage.getItem('username') !== null) {
             this.loggedIn.next(true);
             this.changePassword.next(false);
@@ -181,6 +186,11 @@ export class AuthenticationService {
         localStorage.setItem('project_id', data.project_id);
         localStorage.setItem('project', data.project_name);
         localStorage.setItem('token_state', data.id);
+        localStorage.setItem('user_id', data.user_id);
+        localStorage.setItem('user_show', String(data.user_show));
+        localStorage.setItem('admin_show', String(data.admin_show));
+        localStorage.setItem('last_login', this.sharedService.convertEpochTime(!isNullOrUndefined(data.last_login) ? data.last_login : null));
+        localStorage.setItem('failed_count', data.login_count);
         this.projectName$.next(data.project_name);
     }
     /** Destory tokens API response handling @public */

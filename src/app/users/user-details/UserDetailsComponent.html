@@ -26,6 +26,14 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
   </span>
 </div>
 <div class="row mt-2 mb-0 form-group justify-content-end list-utilites-actions">
+  <div *ngIf="isAdminShow" class="col-auto mr-auto">
+    <nav class="custom-items-config">
+      <span><i class="fas fa-user-check text-success"></i>{{userActive}}</span>
+      <span><i class="fas fa-user-lock text-danger"></i>{{userLocked}}</span>
+      <span><i class="fas fa-user-times text-warning"></i>{{userExpired}}</span>
+      <span><i class="fas fa-user-shield text-info"></i>{{userAlwaysActive}}</span>
+    </nav>
+  </div>
   <page-per-row class="mr-2" (pagePerRow)="onChange($event)"></page-per-row>
   <page-reload></page-reload>
 </div>

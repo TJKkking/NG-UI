@@ -227,6 +227,8 @@ export class AddEditUserComponent implements OnInit {
             if (this.isFirstLogin) {
                 this.notifierService.notify('success', this.translateService.instant('PAGE.USERS.CHANGEPASSWORD'));
                 this.authService.destoryToken();
+            } else if (this.userType === 'changePassword' && (!this.isFirstLogin)) {
+                this.notifierService.notify('success', this.translateService.instant('PAGE.USERS.CHANGEDSUCCESSFULLY'));
             } else {
                 this.notifierService.notify('success', this.translateService.instant('PAGE.USERS.EDITEDSUCCESSFULLY'));
             }

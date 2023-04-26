@@ -73,7 +73,11 @@ export enum CONFIGCONSTANT {
     k8OperationalStateStateSecondStep = 'ENABLED',
     k8OperationalStateThirdStep = 'ERROR',
     done = 'done',
-    close = 'close'
+    close = 'close',
+    userActive = 'active',
+    userLocked = 'locked',
+    userExpired = 'expired',
+    userAlwaysActive = 'always-active'
 }
 /** Interface for Post options */
 export interface POSTAPIRESOURCE {
@@ -341,4 +345,10 @@ export interface LOGINPARAMS {
 export interface LABELVALUE {
     label: string;
     value: string;
+}
+/** Interface for Login */
+export interface UNLOCKPARAMS {
+    system_admin_id?: string;
+    unlock?: boolean;
+    renew?: boolean;
 }

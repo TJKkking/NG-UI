@@ -37,6 +37,8 @@ export interface UserDetail {
     identifier: string;
     projectListName?: string;
     project_role_mappings?: ProjectRoleMappings[];
+    account_expire_time: string;
+    password_expire_time?: string;
 }
 
 /** Interface for user role mappings */
@@ -50,6 +52,9 @@ interface Admin {
     salt: string;
     created: number;
     modified: number;
+    user_status?: string;
+    account_expire_time?: number;
+    password_expire_time?: number;
 }
 /** Interface for UserDetail */
 export interface UserData {
@@ -58,6 +63,8 @@ export interface UserData {
     modified: string;
     created: string;
     identifier: string;
+    user_status: string;
+    account_expire_time?: string;
 }
 
 /** Interface for Project Roles Mappings */

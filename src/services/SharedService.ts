@@ -39,6 +39,7 @@ import {
 import { environment } from 'environment';
 import * as HttpStatus from 'http-status-codes';
 import * as untar from 'js-untar';
+import { ActiveToast, ToastrService } from 'ngx-toastr';
 import * as pako from 'pako';
 import { RestService } from 'RestService';
 import { Observable } from 'rxjs';
@@ -98,6 +99,15 @@ export class SharedService {
     /** Holds OSM Version value @public */
     public osmVersion: string;
 
+    /** Holds Last Login Toaster Message @public */
+    public lastLoginMessage: string;
+
+    /** Holds Failed Attempts Toaster Message @public */
+    public failedAttemptsMessage: string;
+
+    /** Holds No Of Days Toaster Message @public */
+    public daysMessage: string;
+
     /** express number for time manupulation -2 */
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     private epochTimeMinus2: number = -2;
@@ -106,9 +116,21 @@ export class SharedService {
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     private epochTime1000: number = 1000;
 
+    /** express number for time manupulation 60 */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    private epochTime60: number = 60;
+
+    /** express number for time manupulation 24 */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    private epochTime24: number = 24;
+
     /** Random string generator length */
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     private randomStringLength: number = 4;
+
+    /** Max length of Uint8Array */
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    private unit8Array: number = 255;
 
     /** Instance of the rest service @private */
     private restService: RestService;
@@ -124,13 +146,24 @@ export class SharedService {
     // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     private directoryCount: number = 2;
 
+    /** express number for time manupulation 1000 */
+    private toasterSettings: {} = {
+        enableHtml: true,
+        closeButton: true,
+        timeOut: 2000
+    };
+
     /** Contains tranlsate instance @private */
     private translateService: TranslateService;
 
-    constructor(restService: RestService, router: Router, translateService: TranslateService) {
+    /** Contains toaster instance @private */
+    private toaster: ToastrService;
+
+    constructor(restService: RestService, router: Router, translateService: TranslateService, toaster: ToastrService) {
         this.restService = restService;
         this.router = router;
         this.translateService = translateService;
+        this.toaster = toaster;
     }
 
     /** convert epoch time function @public */
@@ -151,6 +184,52 @@ export class SharedService {
                 + seconds.substr(this.epochTimeMinus2);
         }
         return this.translateService.instant('NODATE');
+    }
+
+    /** convert epoch time function to No of days @public */
+    public converEpochToDays(date: string): number {
+        if (!isNullOrUndefined(date)) {
+            const today: Date = new Date();
+            const accountDate: Date = new Date(date);
+            return Math.floor((accountDate.getTime() -
+                today.getTime()) / this.epochTime1000 / this.epochTime60 / this.epochTime60 / this.epochTime24);
+        }
+        return this.translateService.instant('N/A');
+    }
+
+    /** show toaster for password & account expiry @public */
+    public showToaster(lastLogin: string, failedAttempts: string, passwordNoOfDays: string,
+        accountNoOfDays: string, passwordExpireMessage: string, accountExpireMessage: string,
+        passwordMessage: string, accountMessage: string): ActiveToast<string> {
+        this.lastLoginMessage = this.translateService.instant('PAGE.LOGIN.LASTACCESS');
+        this.failedAttemptsMessage = this.translateService.instant('PAGE.LOGIN.FAILED');
+        return this.toaster.info(this.lastLoginMessage + ':' + '&nbsp' + lastLogin +
+            '</br>' + this.failedAttemptsMessage + ':' + '&nbsp' + failedAttempts +
+            '</br>' + passwordExpireMessage + '&nbsp' + passwordNoOfDays + '&nbsp' + passwordMessage +
+            '</br>' + accountExpireMessage + '&nbsp' + accountNoOfDays + '&nbsp' + accountMessage,
+            this.translateService.instant('PAGE.LOGIN.LOGINHISTORY'), this.toasterSettings);
+    }
+
+    /** show toaster for password expiry @public */
+    public passwordToaster(lastLogin: string, failedAttempts: string, passwordNoOfDays: string,
+        passwordExpireMessage: string, passwordMessage: string): ActiveToast<string> {
+        this.lastLoginMessage = this.translateService.instant('PAGE.LOGIN.LASTACCESS');
+        this.failedAttemptsMessage = this.translateService.instant('PAGE.LOGIN.FAILED');
+        return this.toaster.info(this.lastLoginMessage + ':' + '&nbsp' + lastLogin +
+            '</br>' + this.failedAttemptsMessage + ':' + '&nbsp' + failedAttempts +
+            '</br>' + passwordExpireMessage + '&nbsp' + passwordNoOfDays + '&nbsp' + passwordMessage,
+            this.translateService.instant('PAGE.LOGIN.LOGINHISTORY'), this.toasterSettings);
+    }
+
+    /** show toaster for account expiry @public */
+    public accountToaster(lastLogin: string, failedAttempts: string,
+        accountNoOfDays: string, accountExpireMessage: string, accountMessage: string): ActiveToast<string> {
+        this.lastLoginMessage = this.translateService.instant('PAGE.LOGIN.LASTACCESS');
+        this.failedAttemptsMessage = this.translateService.instant('PAGE.LOGIN.FAILED');
+        return this.toaster.info(this.lastLoginMessage + ':' + '&nbsp' + lastLogin +
+            '</br>' + this.failedAttemptsMessage + ':' + '&nbsp' + failedAttempts +
+            '</br>' + accountExpireMessage + '&nbsp' + accountNoOfDays + '&nbsp' + accountMessage,
+            this.translateService.instant('PAGE.LOGIN.LOGINHISTORY'), this.toasterSettings);
     }
 
     /** Download Files function @public */

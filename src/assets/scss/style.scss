@@ -44,3 +44,5 @@ $roboto-font-path: "~roboto-fontface/fonts" !default;
 @import "../../../node_modules/angular-notifier/styles/types/type-warning.scss";
 @import "../../../node_modules/angular-notifier/styles/types/type-default.scss";
 @import "../../../node_modules/angular-notifier/styles/types/type-info.scss";
+/*toastr styles*/
+@import '~ngx-toastr/toastr.css';
