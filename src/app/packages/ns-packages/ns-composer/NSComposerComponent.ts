@@ -73,6 +73,8 @@ export class NSComposerComponent {
   };
   /** Contains the information of the type of modification @public  */
   public putType: string;
+  /** Contains index of old VLD @public  */
+  public getOldVLDIndex: string[];
   /** Conatins mousedown action @public */
   public mousedownNode: COMPOSERNODES = null;
   /** Conatins mouseup action @public */
@@ -394,7 +396,7 @@ export class NSComposerComponent {
       }
     }).catch((): void => {
       // Catch Navigation Error
-  });
+    });
   }
   /** Event to freeze the animation @public */
   public onFreeze(): void {
@@ -463,7 +465,7 @@ export class NSComposerComponent {
       if (error.error.status === HttpStatus.NOT_FOUND || error.error.status === HttpStatus.UNAUTHORIZED) {
         this.router.navigateByUrl('404', { skipLocationChange: true }).catch((): void => {
           // Catch Navigation Error
-      });
+        });
       } else {
         this.restService.handleError(error, 'get');
       }
@@ -796,7 +798,7 @@ export class NSComposerComponent {
         }
       }).catch((): void => {
         // Catch Navigation Error
-    });
+      });
     } else {
       this.deselectPath();
       this.notifierService.notify('error', this.translateService.instant('ERROR'));
@@ -849,14 +851,14 @@ export class NSComposerComponent {
     if (!this.mousedownNode) { return; }
     this.dragLine.classed('hidden', true).style('marker-end', '');
     this.mouseupNode = d;
-    if (this.mousedownNode.type === 'vld' && this.mouseupNode.type === 'vnfd') {
-      const getOldVLDIndex: string[] = this.mouseupNode.id.split(':');
-      const setOldVLDindex: string = getOldVLDIndex[1];
-      this.putType = 'cpAdded';
-      this.getAddConfirmation(this.mousedownNode, this.nsData, this.putType, setOldVLDindex);
-    } else if (this.mousedownNode.type === 'vnfd' && this.mouseupNode.type === 'vld') {
-      const getOldVLDIndex: string[] = this.mousedownNode.id.split(':');
-      const setOldVLDindex: string = getOldVLDIndex[1];
+    if ((this.mousedownNode.type === 'vld' && this.mouseupNode.type === 'vnfd') ||
+      (this.mousedownNode.type === 'vnfd' && this.mouseupNode.type === 'vld')) {
+      if (this.mouseupNode.type === 'vnfd') {
+        this.getOldVLDIndex = this.mouseupNode.id.split(':');
+      } else if (this.mousedownNode.type === 'vnfd') {
+        this.getOldVLDIndex = this.mousedownNode.id.split(':');
+      }
+      const setOldVLDindex: string = this.getOldVLDIndex[1];
       this.putType = 'cpAdded';
       this.getAddConfirmation(this.mousedownNode, this.nsData, this.putType, setOldVLDindex);
     } else if (this.mousedownNode.type === 'vnfd' && this.mouseupNode.type === 'ns') {
@@ -972,7 +974,7 @@ export class NSComposerComponent {
       }
     }).catch((): void => {
       // Catch Navigation Error
-  });
+    });
   }
   /** Events handles when Double Click to Delete the link @private */
   private doubleClickLink(d: Tick): void {
@@ -1027,7 +1029,7 @@ export class NSComposerComponent {
       }
     }).catch((): void => {
       // Catch Navigation Error
-  });
+    });
   }
   /** Events handles when Double Click to Delete @private */
   private doubleClick(d: COMPOSERNODES): void {
