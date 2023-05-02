@@ -18,7 +18,7 @@ Source: osm-ngui
 Section: devel
 Priority: optional
 Maintainer: Gerardo Garcia <gerardo.garciadeblas@telefonica.com>
-Build-Depends: debhelper (>=9)
+Build-Depends: debhelper-compat (=13)
 Standards-Version: 3.9.6
 Homepage: http://osm.etsi.org
 

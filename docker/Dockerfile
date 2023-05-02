@@ -15,7 +15,7 @@
 #
 # Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.in), BARATH KUMAR R (barath.r@tataelxsi.co.in), VIJAY NAG (vijaynag.bs@tataelxsi.co.in)
 
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 # Installing node dependencies.
 RUN apt-get update && apt-get install -y curl xz-utils gnupg2 \
     && apt-get update && apt-get install -y apt-transport-https \

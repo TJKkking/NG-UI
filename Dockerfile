@@ -21,7 +21,7 @@
 #   devops-stages/stage-build.sh
 #
 
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ARG APT_PROXY
 RUN if [ ! -z $APT_PROXY ] ; then \
