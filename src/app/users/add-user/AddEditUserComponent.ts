@@ -79,7 +79,7 @@ export class AddEditUserComponent implements OnInit {
     public isPassword: boolean;
 
     /** Variable holds value for first login user @public */
-    public isFirstLogin: boolean = Boolean(localStorage.getItem('firstLogin') === 'true');
+    public isFirstLogin: boolean = Boolean(sessionStorage.getItem('firstLogin') === 'true');
 
     /** Instance of the rest service @private */
     private restService: RestService;
@@ -270,10 +270,10 @@ export class AddEditUserComponent implements OnInit {
 
     /** Method to check loggedin username and update  @private */
     private checkUsername(payLoad: LOGINPARAMS): void {
-        const logUsername: string = localStorage.getItem('username');
+        const logUsername: string = sessionStorage.getItem('username');
         if (this.userType === 'editUserName' && logUsername === this.userName) {
             this.authService.userName.next(payLoad.username);
-            localStorage.setItem('username', payLoad.username);
+            sessionStorage.setItem('username', payLoad.username);
         }
     }
 }

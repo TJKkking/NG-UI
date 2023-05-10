@@ -60,7 +60,7 @@ export class ChangePasswordComponent implements OnInit {
     /** Lifecyle Hooks the trigger before component is instantiate @public */
     public ngOnInit(): void {
         const modalRef: NgbModalRef = this.modalService.open(AddEditUserComponent, { backdrop: 'static', keyboard: false });
-        modalRef.componentInstance.userID = localStorage.getItem('user_id');
+        modalRef.componentInstance.userID = sessionStorage.getItem('user_id');
         if (this.editType === 'changePassword') {
             modalRef.componentInstance.userTitle = this.translateService.instant('PAGE.USERS.EDITCREDENTIALS');
         }

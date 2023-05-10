@@ -124,12 +124,12 @@ export class SwitchProjectComponent implements OnInit {
       };
       this.restService.postResource(apiURLHeader, payLoad).subscribe((data: LOCALSTORAGE) => {
         if (data) {
-          localStorage.setItem('id_token', data.id);
-          localStorage.setItem('project_id', this.params.projectID);
-          localStorage.setItem('expires', data.expires.toString());
-          localStorage.setItem('username', data.username);
-          localStorage.setItem('project', data.project_name);
-          localStorage.setItem('token_state', data.id);
+          sessionStorage.setItem('id_token', data.id);
+          sessionStorage.setItem('project_id', this.params.projectID);
+          sessionStorage.setItem('expires', data.expires.toString());
+          sessionStorage.setItem('username', data.username);
+          sessionStorage.setItem('project', data.project_name);
+          sessionStorage.setItem('token_state', data.id);
           this.activeModal.close();
           if (this.router.url.includes('history-operations')) {
             this.router.navigate(['/instances/ns']).then((): void => {

@@ -37,7 +37,7 @@ import { SDNControllerDetailsComponent } from 'SDNControllerDetailsComponent';
 import { SDNControllerInfoComponent } from 'SDNControllerInfoComponent';
 
 /** To halndle project information */
-const projectInfo: {} = localStorage.getItem('project') !== null ? { title: localStorage.getItem('project'), url: '/' } : {};
+const projectInfo: {} = sessionStorage.getItem('project') !== null ? { title: sessionStorage.getItem('project'), url: '/' } : {};
 
 /**
  * configures  routers

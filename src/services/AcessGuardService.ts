@@ -34,7 +34,7 @@ export class AcessGuardService implements CanLoad {
      */
     public canLoad(route: Route): Observable<boolean> | Promise<boolean> | boolean {
         // Need to get the Role and valid here for authorization
-        if (localStorage.getItem('role') === 'Admin') {
+        if (sessionStorage.getItem('role') === 'Admin') {
             return true;
         } else {
             return false;

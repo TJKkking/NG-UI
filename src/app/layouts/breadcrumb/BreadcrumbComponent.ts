@@ -98,7 +98,7 @@ export class BreadcrumbComponent implements OnInit {
           if (!isNullOrUndefined(item.title)) {
             item.title = item.title.replace('{type}', this.checkTitle(item, child.snapshot.params.type));
             item.title = item.title.replace('{id}', child.snapshot.params.id);
-            item.title = item.title.replace('{project}', localStorage.getItem('project'));
+            item.title = item.title.replace('{project}', sessionStorage.getItem('project'));
           }
           if (!isNullOrUndefined(item.url)) {
             item.url = item.url.replace('{type}', child.snapshot.params.type);

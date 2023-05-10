@@ -85,7 +85,7 @@ export class HeaderComponent implements OnInit {
 
     /** Lifecyle Hooks the trigger before component is instantiate @public */
     public ngOnInit(): void {
-        this.isAdmin = (localStorage.getItem('isAdmin') === 'true') ? true : false;
+        this.isAdmin = (sessionStorage.getItem('isAdmin') === 'true') ? true : false;
         this.selectedProject = this.authService.ProjectName;
         this.authService.ProjectName.subscribe((projectNameFinal: string): void => {
             this.getSelectedProject = projectNameFinal;
@@ -94,7 +94,7 @@ export class HeaderComponent implements OnInit {
         this.projectService.setHeaderProjects();
         this.projectList$ = this.projectService.projectList;
         this.PACKAGEVERSION = environment.packageVersion;
-        const getLocalStorageVersion: string = localStorage.getItem('osmVersion');
+        const getLocalStorageVersion: string = sessionStorage.getItem('osmVersion');
         if (getLocalStorageVersion === null) {
             this.showNewVersion();
         } else if (getLocalStorageVersion !== this.sharedService.osmVersion) {
@@ -115,7 +115,7 @@ export class HeaderComponent implements OnInit {
     /** Close Version and add in local storage  @public */
     public closeVersion(): void {
         this.toShowNewTag = false;
-        localStorage.setItem('osmVersion', this.sharedService.osmVersion);
+        sessionStorage.setItem('osmVersion', this.sharedService.osmVersion);
     }
 
     /** Implementation of model for UserSettings options.@public */

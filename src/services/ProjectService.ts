@@ -77,13 +77,13 @@ export class ProjectService {
 
     /** Get current project details from local storage @public */
     public getCurrentProjectDetails(): Observable<{}> {
-        const project: string = localStorage.getItem('project_id');
+        const project: string = sessionStorage.getItem('project_id');
         return this.restService.getResource(environment.PROJECTS_URL + '/' + project);
     }
 
     /** Returns all the projects for a particular users @public */
     public getUserProjects(): Observable<{}> {
-        const username: string = localStorage.getItem('username');
+        const username: string = sessionStorage.getItem('username');
         return this.restService.getResource(environment.USERS_URL + '/' + username);
     }
 
@@ -92,8 +92,8 @@ export class ProjectService {
         this.getUserProjects().subscribe((projects: UserDetail) => {
             const projectList: {}[] = projects.project_role_mappings;
             projectList.filter((list: ProjectModel) => {
-                if (list.project === localStorage.getItem('project_id')) {
-                    localStorage.setItem('project', list.project_name);
+                if (list.project === sessionStorage.getItem('project_id')) {
+                    sessionStorage.setItem('project', list.project_name);
                     this.authService.projectName$.next(list.project_name);
                 }
             });
@@ -107,7 +107,7 @@ export class ProjectService {
 
     /** Toggle projects on selection @public */
     public switchProjectModal(list: ProjectData): void {
-        const username: string = localStorage.getItem('username');
+        const username: string = sessionStorage.getItem('username');
         this.modalService.open(SwitchProjectComponent, { backdrop: 'static' })
             .componentInstance.params = { projectID: list.project, username };
     }

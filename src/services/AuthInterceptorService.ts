@@ -68,7 +68,7 @@ export class AuthInterceptorService implements HttpInterceptor {
     public intercept(req: HttpRequest<{}>, next: HttpHandler): Observable<HttpSentEvent |
         // tslint:disable-next-line:no-any
         HttpHeaderResponse | HttpProgressEvent | HttpResponse<{}> | HttpUserEvent<any> | any> {
-        const idToken: string = localStorage.getItem('id_token');
+        const idToken: string = sessionStorage.getItem('id_token');
         const excludedUrl: string[] = ['osm/admin/v1/tokens', 'assets/i18n/', 'osm/version'];
         if (excludedUrl.some((x: string): boolean => { return req.url.includes(x); })) { return next.handle(req); }
         if (idToken.length > 0) {

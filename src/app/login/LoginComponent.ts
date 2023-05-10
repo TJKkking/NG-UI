@@ -125,7 +125,7 @@ export class LoginComponent implements OnInit {
             userName: ['', [Validators.required]],
             password: ['', [Validators.required]]
         });
-        this.returnUrl = isNullOrUndefined(localStorage.getItem('returnUrl')) ? '/' : localStorage.getItem('returnUrl');
+        this.returnUrl = isNullOrUndefined(sessionStorage.getItem('returnUrl')) ? '/' : sessionStorage.getItem('returnUrl');
     }
 
     /**
@@ -150,7 +150,7 @@ export class LoginComponent implements OnInit {
                         // Catch Navigation Error
                     });
                 }
-                localStorage.removeItem('returnUrl');
+                sessionStorage.removeItem('returnUrl');
             }, (err: HttpErrorResponse): void => {
                 this.isLoadingResults = false;
                 this.restService.handleError(err, 'post');

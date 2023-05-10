@@ -83,16 +83,16 @@ export class AuthenticationService {
         this.restService = this.injector.get(RestService);
         this.modalService = this.injector.get(NgbModal);
         this.idle = this.injector.get(Idle);
-        if (localStorage.getItem('username') !== null) {
+        if (sessionStorage.getItem('username') !== null) {
             this.loggedIn.next(true);
             this.changePassword.next(false);
-        } else if (localStorage.getItem('firstLogin') !== null) {
+        } else if (sessionStorage.getItem('firstLogin') !== null) {
             this.changePassword.next(true);
             this.loggedIn.next(false);
         } else {
             this.loggedIn.next(false);
         }
-        this.userName.next(localStorage.getItem('username'));
+        this.userName.next(sessionStorage.getItem('username'));
         this.redirectToPage();
     }
 
@@ -136,9 +136,9 @@ export class AuthenticationService {
         return this.restService.postResource(apiURLHeader, this.payLoad)
             .pipe(map((data: ProjectModel): BehaviorSubject<boolean> => {
                 if (data.message === 'change_password') {
-                    localStorage.setItem('firstLogin', 'true');
-                    localStorage.setItem('id_token', data.id);
-                    localStorage.setItem('user_id', data.user_id);
+                    sessionStorage.setItem('firstLogin', 'true');
+                    sessionStorage.setItem('id_token', data.id);
+                    sessionStorage.setItem('user_id', data.user_id);
                     this.idle.watch(true);
                     this.changePassword.next(true);
                     this.loggedIn.next(false);
@@ -174,27 +174,27 @@ export class AuthenticationService {
 
     /** set local storage on auth process @public */
     public setLocalStorage(data: ProjectModel): void {
-        localStorage.setItem('id_token', data.id);
-        localStorage.setItem('expires', data.expires.toString());
-        localStorage.setItem('username', data.username);
-        localStorage.setItem('isAdmin', (data.admin) ? 'true' : 'false');
-        localStorage.setItem('project_id', data.project_id);
-        localStorage.setItem('project', data.project_name);
-        localStorage.setItem('token_state', data.id);
+        sessionStorage.setItem('id_token', data.id);
+        sessionStorage.setItem('expires', data.expires.toString());
+        sessionStorage.setItem('username', data.username);
+        sessionStorage.setItem('isAdmin', (data.admin) ? 'true' : 'false');
+        sessionStorage.setItem('project_id', data.project_id);
+        sessionStorage.setItem('project', data.project_name);
+        sessionStorage.setItem('token_state', data.id);
         this.projectName$.next(data.project_name);
     }
     /** Destory tokens API response handling @public */
     public logoutResponse(): void {
         this.loggedIn.next(false);
         this.changePassword.next(false);
-        const langCode: string = localStorage.getItem('languageCode');
-        const redirecturl: string = isNullOrUndefined(localStorage.getItem('returnUrl')) ? '/' : localStorage.getItem('returnUrl');
-        const osmVersion: string = isNullOrUndefined(localStorage.getItem('osmVersion')) ? '' : localStorage.getItem('osmVersion');
-        localStorage.clear();
-        localStorage.setItem('languageCode', langCode);
-        localStorage.setItem('returnUrl', redirecturl);
-        localStorage.setItem('token_state', null);
-        localStorage.setItem('osmVersion', osmVersion);
+        const langCode: string = sessionStorage.getItem('languageCode');
+        const redirecturl: string = isNullOrUndefined(sessionStorage.getItem('returnUrl')) ? '/' : sessionStorage.getItem('returnUrl');
+        const osmVersion: string = isNullOrUndefined(sessionStorage.getItem('osmVersion')) ? '' : sessionStorage.getItem('osmVersion');
+        sessionStorage.clear();
+        sessionStorage.setItem('languageCode', langCode);
+        sessionStorage.setItem('returnUrl', redirecturl);
+        sessionStorage.setItem('token_state', null);
+        sessionStorage.setItem('osmVersion', osmVersion);
         this.idle.stop();
         this.router.navigate(['login']).catch();
     }
@@ -203,13 +203,13 @@ export class AuthenticationService {
      */
     public logout(): void {
         this.returnUrl = this.router.url;
-        localStorage.setItem('returnUrl', this.returnUrl);
+        sessionStorage.setItem('returnUrl', this.returnUrl);
         this.modalService.dismissAll();
         this.destoryToken();
     }
     /** Destory tokens on logout @public */
     public destoryToken(): void {
-        const tokenID: string = localStorage.getItem('id_token');
+        const tokenID: string = sessionStorage.getItem('id_token');
         if (tokenID !== null) {
             const deletingURl: string = environment.GENERATETOKEN_URL + '/' + tokenID;
             this.restService.deleteResource(deletingURl).subscribe((res: {}): void => {
@@ -222,9 +222,9 @@ export class AuthenticationService {
 
     /** Return to previous page deny access to changepassword */
     public redirectToPage(): void {
-        if (window.location.pathname === '/changepassword' && localStorage.getItem('username') !== null) {
+        if (window.location.pathname === '/changepassword' && sessionStorage.getItem('username') !== null) {
             window.history.back();
-        } else if (window.location.pathname === '/' && localStorage.getItem('firstLogin') === 'true') {
+        } else if (window.location.pathname === '/' && sessionStorage.getItem('firstLogin') === 'true') {
             this.router.navigate(['/login']).catch();
         }
     }

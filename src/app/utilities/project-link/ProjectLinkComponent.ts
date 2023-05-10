@@ -62,13 +62,13 @@ export class ProjectLinkComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.selectedProject = localStorage.getItem('project');
+    this.selectedProject = sessionStorage.getItem('project');
     this.getAdminProjects();
   }
 
   /** Get the admin projects to be selectable @public */
   public getAdminProjects(): void {
-    const username: string = localStorage.getItem('username');
+    const username: string = sessionStorage.getItem('username');
     this.restService.getResource(environment.USERS_URL + '/' + username).subscribe((projects: UserDetail) => {
       this.projectList = projects.project_role_mappings;
       this.isPresent = this.projectList.some((item: ProjectData) => item.project === this.value.project);

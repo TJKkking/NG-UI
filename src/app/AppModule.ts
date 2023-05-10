@@ -243,14 +243,14 @@ export function appInitializerFactory(translate: TranslateService, injector: Inj
     return async (): Promise<any> => {
         await injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
         translate.setDefaultLang('en');
-        const languageCode: string = localStorage.getItem('languageCode');
+        const languageCode: string = sessionStorage.getItem('languageCode');
         if (languageCode !== null && languageCode !== undefined && languageCode !== '') {
             await translate.use(languageCode).toPromise().catch((): void => {
                 translate.setDefaultLang('en');
             });
         } else {
             await translate.use('en').toPromise();
-            localStorage.setItem('languageCode', 'en');
+            sessionStorage.setItem('languageCode', 'en');
         }
     };
 }

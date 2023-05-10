@@ -81,7 +81,7 @@ export class UserSettingsComponent implements OnInit {
         this.usersettingsForm = this.formBuilder.group({
             selectedLanguage: [null, [Validators.required]]
         });
-        const setLanguage: string = localStorage.getItem('languageCode');
+        const setLanguage: string = sessionStorage.getItem('languageCode');
         if (setLanguage !== null && this.validateLanguageList(setLanguage)) {
             // tslint:disable-next-line:no-backbone-get-set-outside-model
             this.usersettingsForm.get('selectedLanguage').setValue(setLanguage);
@@ -99,7 +99,7 @@ export class UserSettingsComponent implements OnInit {
         this.submitted = true;
         if (!this.usersettingsForm.invalid) {
             const selectedLanguage: string = this.usersettingsForm.value.selectedLanguage;
-            localStorage.setItem('languageCode', this.usersettingsForm.value.selectedLanguage);
+            sessionStorage.setItem('languageCode', this.usersettingsForm.value.selectedLanguage);
             this.translateService.use(selectedLanguage);
             location.reload();
         }

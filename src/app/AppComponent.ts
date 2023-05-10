@@ -86,7 +86,7 @@ export class AppComponent {
     public idleTimeOut(): void {
         this.idle.onTimeout.subscribe(() => {
             this.idle.stop();
-            if (localStorage.getItem('id_token') !== null) {
+            if (sessionStorage.getItem('id_token') !== null) {
                 this.authService.logout();
             }
         });

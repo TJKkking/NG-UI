@@ -198,7 +198,7 @@ export class DashboardComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.username$ = this.authService.username;
-        this.isAdmin = (localStorage.getItem('isAdmin') === 'true') ? true : false;
+        this.isAdmin = (sessionStorage.getItem('isAdmin') === 'true') ? true : false;
         this.selectedProject = this.authService.ProjectName;
         this.checkAdminPrivilege();
         this.getUserAccessedProjects();
