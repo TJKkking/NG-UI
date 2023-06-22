@@ -242,15 +242,19 @@ export function appInitializerFactory(translate: TranslateService, injector: Inj
     // tslint:disable-next-line: no-any
     return async (): Promise<any> => {
         await injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
-        translate.setDefaultLang('en');
+        //translate.setDefaultLang('en');
+        translate.setDefaultLang('cn');
         const languageCode: string = sessionStorage.getItem('languageCode');
         if (languageCode !== null && languageCode !== undefined && languageCode !== '') {
             await translate.use(languageCode).toPromise().catch((): void => {
-                translate.setDefaultLang('en');
+                // translate.setDefaultLang('en');
+                translate.setDefaultLang('cn');
             });
         } else {
-            await translate.use('en').toPromise();
-            sessionStorage.setItem('languageCode', 'en');
+            // await translate.use('en').toPromise();
+            // sessionStorage.setItem('languageCode', 'en');
+            await translate.use('cn').toPromise();
+            sessionStorage.setItem('languageCode', 'cn');
         }
     };
 }

@@ -87,7 +87,8 @@ export class UserSettingsComponent implements OnInit {
             this.usersettingsForm.get('selectedLanguage').setValue(setLanguage);
         } else {
             // tslint:disable-next-line:no-backbone-get-set-outside-model
-            this.usersettingsForm.get('selectedLanguage').setValue('en');
+            // this.usersettingsForm.get('selectedLanguage').setValue('en');
+            this.usersettingsForm.get('selectedLanguage').setValue('cn');
         }
     }
 

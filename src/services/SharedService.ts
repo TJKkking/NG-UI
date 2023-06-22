@@ -309,10 +309,12 @@ export class SharedService {
     /** Method to return all languages name and its code @public */
     public languageCodeList(): {}[] {
         return [
+            { code: 'cn', language: 'Chinese' },
             { code: 'en', language: 'English' },
             { code: 'es', language: 'Spanish' },
             { code: 'pt', language: 'Portuguese' },
             { code: 'de', language: 'German' }
+            
         ];
     }
 
