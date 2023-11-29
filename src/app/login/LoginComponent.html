@@ -18,7 +18,7 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
 <div class="login-container">
     <div class="wrap-login">
         <div class="login-logo">
-            <img src="assets/images/logo.png" alt="Logo">
+            <img src="assets/images/logo_pure.png" alt="Logo">
         </div>
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" autocomplete="off">
             <div class="wrap-input">
@@ -53,5 +53,5 @@ Author: KUMARAN M (kumaran.m@tataelxsi.co.in), RAJESH S (rajesh.s@tataelxsi.co.i
 </div>
 <app-loader [waitingMessage]="message" *ngIf="isLoadingResults"></app-loader>
 <div class="login-footer">
-   <a href="https://osm.etsi.org" target="_blank">{{'OSMSOURCEMANO' | translate}} {{sharedService.osmVersion}}</a>
+    <span class="footer-text-left">卫星5G信关站虚拟化平台</span>
 </div>

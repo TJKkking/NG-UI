@@ -21,7 +21,7 @@
 .login-container {
   @include wh-value(100%, 100vh);
   @include flexbox(flex, center, null, null, center, null);
-  @include background(url("../../images/login_background.jpg"), null, cover, no-repeat, center);
+  @include background(url("../../images/satellite_bg2.png"), null, cover, no-repeat, center);
   background-attachment: fixed;
   flex-wrap: wrap;
   .wrap-login {
@@ -63,7 +63,7 @@
       @include background(null, $white, null, null, null);
       @include roundedCornersPercentage(50%);
       img {
-        @include wh-value(130px, auto);
+        @include wh-value(90px, auto);
         @include position_value(null, 50px, null, null, null);
       }
     }
