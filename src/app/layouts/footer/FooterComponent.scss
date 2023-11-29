@@ -1,0 +1,24 @@
+// FooterComponent.html should be pinned to the bottom of the page
+
+@import '../../../assets/scss/mixins/mixin';
+@import '../../../assets/scss/variable';
+
+.footer {
+    @include box-shadow(0px, 0px, 12px, 0px, rgba($black,0.14));
+    @include border(all, 0, solid, $gray-80);
+    height: 60px;
+}
+
+.container {
+    padding-top: 10px; /* 调整上边距大小 */
+}
+
+.footer-content-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* 根据需要调整间距 */
+}
+
+.footer-content-inline p {
+    margin: 0; /* 移除段落默认的外边距 */
+}

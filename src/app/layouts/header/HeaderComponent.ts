@@ -94,12 +94,13 @@ export class HeaderComponent implements OnInit {
         this.projectService.setHeaderProjects();
         this.projectList$ = this.projectService.projectList;
         this.PACKAGEVERSION = environment.packageVersion;
-        const getLocalStorageVersion: string = sessionStorage.getItem('osmVersion');
-        if (getLocalStorageVersion === null) {
-            this.showNewVersion();
-        } else if (getLocalStorageVersion !== this.sharedService.osmVersion) {
-            this.showNewVersion();
-        }
+        // dont show new version
+        // const getLocalStorageVersion: string = sessionStorage.getItem('osmVersion');
+        // if (getLocalStorageVersion === null) {
+        //     this.showNewVersion();
+        // } else if (getLocalStorageVersion !== this.sharedService.osmVersion) {
+        //     this.showNewVersion();
+        // }
     }
 
     /** Logout function  @public */

@@ -31,6 +31,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { AuthInterceptorService } from 'AuthInterceptorService';
 import { HeaderComponent } from 'HeaderComponent';
+import { FooterComponent } from 'FooterComponent';
 import { LayoutComponent } from 'LayoutComponent';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { RestService } from 'RestService';
@@ -105,6 +106,7 @@ const customNotifierOptions: NotifierOptions = {
         LayoutComponent,
         HeaderComponent,
         SidebarComponent,
+        FooterComponent,
         LoginComponent,
         PageNotFoundComponent,
         VNFPackagesActionComponent,

@@ -40,6 +40,7 @@
             "LayoutComponent": ["src/app/layouts/LayoutComponent"],
             "SidebarComponent": ["src/app/layouts/sidebar/SidebarComponent"],
             "HeaderComponent": ["src/app/layouts/header/HeaderComponent"],
+            "FooterComponent": ["src/app/layouts/footer/FooterComponent"],
             "UserSettingsComponent": ["src/app/user-settings/UserSettingsComponent"],
             "LoginComponent": ["src/app/login/LoginComponent"],
             "DashboardComponent": ["src/app/dashboard/DashboardComponent"],
