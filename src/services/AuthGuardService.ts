@@ -56,6 +56,8 @@ export class AuthGuardService implements CanActivate {
                     this.router.navigate(['/login']).catch();
                     this.authService.destoryToken();
                     return false;
+                    // For debugging purpose
+                    //return true;
                 }
             })
         );
