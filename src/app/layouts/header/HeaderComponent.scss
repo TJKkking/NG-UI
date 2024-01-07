@@ -24,6 +24,12 @@
     .osm-logo{
         cursor: pointer;
     }
+    .software-name {
+        font-size: 16px; /* 设置字体大小 */
+        margin-left: 7px; /* 设置与logo之间的间距 */
+        font-weight: bold; /* 设置文字粗细 */
+    }
+    
     .small-logo{
         width: 38px;
     }
